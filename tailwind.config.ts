@@ -15,18 +15,19 @@ const config: Config = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       colors: {
-        "primary": "#002A50",
-        "secondary": "#0D66B7",
-        "white": "#FFFFFF",
-        "gray": "#4E4E4E",
-        "background": "#EEF7FF",
-        "black": "#000000"
+        primary: "#002A50",
+        secondary: "#0D66B7",
+        white: "#FFFFFF",
+        gray: "#4E4E4E",
+        background: "#EEF7FF",
+        black: "#000000",
+        "gray-100": "#131B22",
       },
       fontFamily: {
-        sans: [' "Open Sans" ', "sans-serif" ]
+        sans: [' "Open Sans" ', "sans-serif"],
       },
       boxShadow: {
-        'custom-shadow': '3px 3px 31px -9px rgba(0, 0, 0, 0.15)',
+        "custom-shadow": "3px 3px 31px -9px rgba(0, 0, 0, 0.15)",
       },
     },
   },
