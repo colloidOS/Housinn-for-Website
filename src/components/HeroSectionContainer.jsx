@@ -4,7 +4,7 @@ import HeroSection from './HeroSection';
 
 const HeroContainer = () => {
   return (
-    <div className="relative h-screen bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/images/hero.png')" }}>
+    <div className="relative h-full bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/images/hero.png')" }}>
       <Navbar />
       <HeroSection />
     </div>
