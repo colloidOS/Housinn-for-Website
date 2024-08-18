@@ -22,6 +22,7 @@ const config: Config = {
         background: "#EEF7FF",
         black: "#000000",
         "gray-100": "#131B22",
+        "gray-500": "#909090",
       },
       fontFamily: {
         sans: [' "Open Sans" ', "sans-serif"],
