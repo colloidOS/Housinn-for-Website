@@ -12,8 +12,8 @@ import Mail from "../../public/icons/mail.svg";
 import Image from "next/image";
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-gray-100 flex flex-col p-2 text-white ">
-      <div className=" grid grid-cols-3">
+    <footer className="bg-gray-100 px-[104px] pb-[73px] pt-[31px] gap-[97px] flex flex-col p-2 text-white ">
+      <div className=" grid gap-[131px] grid-cols-3">
         <div className=" gap-[11px]">
           <h1 className="font-semibold text-[24px]">About</h1>
           <p className="font-normal text-[16px]">
