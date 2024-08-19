@@ -20,9 +20,13 @@ const config: Config = {
         white: "#FFFFFF",
         gray: "#4E4E4E",
         background: "#EEF7FF",
+        "background-2": "#F5F5F5",
         black: "#000000",
         "gray-100": "#131B22",
+        "gray-300": "#DDDDDD",
         "gray-500": "#909090",
+        "gray-600": "#4E4E4E",
+        "gray-700": "#1E1E1E",
       },
       fontFamily: {
         sans: [' "Open Sans" ', "sans-serif"],
