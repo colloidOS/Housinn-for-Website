@@ -5,6 +5,8 @@ import Services from "../components/services/page";
 import HeroContainer from "../components/HeroSectionContainer";
 import WhyChooseUs from "@/components/OurServices";
 import GetOurApp from "@/components/GetOurApp";
+import Reviews from "@/components/Reviews";
+import MultipleItems from "@/components/Reviews";
 
 export default function Home() {
   return (
@@ -13,7 +15,8 @@ export default function Home() {
       <AboutUs />
       <Services />
       <WhyChooseUs />
-      <GetOurApp/>
+      <MultipleItems/>
+      <GetOurApp />
       <Footer />
     </main>
   );
