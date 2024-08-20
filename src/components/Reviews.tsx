@@ -7,6 +7,8 @@ import "slick-carousel/slick/slick-theme.css";
 import NextArrow from "../../public/icons/next-arrow.svg";
 import PreviousArrow from "../../public/icons/previous-arrow.svg";
 import PersonCircle from "../../public/icons/person-circle.svg";
+
+
 import Image from "next/image";
 
 interface Testimonial {
@@ -82,7 +84,6 @@ const Reviews: React.FC = () => {
     autoplay: false,
     prevArrow: <CustomPrevArrow />,
     nextArrow: <CustomNextArrow />,
-    
   };
 
   return (
@@ -92,29 +93,27 @@ const Reviews: React.FC = () => {
         <p className="font-semibold text-2xl text-gray-600">
           Here are what some of our customers are saying
         </p>
-        
       </div>
-      <div >
-        <Slider {...settings} >
+      <div>
+        <Slider {...settings}>
           {testimonials.map((testimonial, index) => (
-            <div
-              key={index}
-              className="h-[400px] w-[400px]  rounded-lg "
-            >
-             <div className="flex flex-col items-center  justify-start bg-blue-400  px-[56px] pb-[42px] pt-[32px] w-full h-full text-center">
-             <Image
-                src={testimonial.image}
-                alt="image"
-                width={100}
-                height={100}
-                className="mb-3"
-              />
-              <h3 className="text-lg font-semibold mb-1">{testimonial.name}</h3>
-              <p className="text-sm text-gray-500 mb-4">{testimonial.location}</p>
-              <p className=" text-gray-700 ">
-                "{testimonial.message}"
-              </p>
-             </div>
+            <div key={index} className="h-[400px] w-[400px]  rounded-lg ">
+              <div className="flex flex-col items-center  justify-start bg-blue-400  px-[56px] pb-[42px] pt-[32px] w-full h-full text-center">
+                <Image
+                  src={testimonial.image}
+                  alt="image"
+                  width={100}
+                  height={100}
+                  className="mb-3"
+                />
+                <h3 className="text-lg font-semibold mb-1">
+                  {testimonial.name}
+                </h3>
+                <p className="text-sm text-gray-500 mb-4">
+                  {testimonial.location}
+                </p>
+                <p className=" text-gray-700 ">"{testimonial.message}"</p>
+              </div>
             </div>
           ))}
         </Slider>
