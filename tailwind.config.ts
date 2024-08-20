@@ -33,6 +33,7 @@ const config: Config = {
       },
       boxShadow: {
         "custom-shadow": "3px 3px 31px -9px rgba(0, 0, 0, 0.15)",
+        "custom-shadow-review": "3px 3px 31px -9px #00000040",
       },
     },
   },

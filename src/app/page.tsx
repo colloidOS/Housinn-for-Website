@@ -3,10 +3,8 @@ import Image from "next/image";
 import AboutUs from "../components/aboutus/page";
 import Services from "../components/services/page";
 import HeroContainer from "../components/HeroSectionContainer";
-import WhyChooseUs from "@/components/OurServices";
 import GetOurApp from "@/components/GetOurApp";
-import Reviews from "@/components/Reviews";
-import MultipleItems from "@/components/Reviews";
+import ChooseUsReviewContainer from "@/components/ChooseUsReviewContainer";
 
 export default function Home() {
   return (
@@ -14,8 +12,7 @@ export default function Home() {
       <HeroContainer />
       <AboutUs />
       <Services />
-      <WhyChooseUs />
-      <MultipleItems/>
+      <ChooseUsReviewContainer />
       <GetOurApp />
       <Footer />
     </main>
