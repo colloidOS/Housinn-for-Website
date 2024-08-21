@@ -1,6 +1,6 @@
-import React from 'react';
-import Image from 'next/image';
-import Search from '../../public/icons/search.svg'
+import React from "react";
+import Image from "next/image";
+import Search from "../../public/icons/search.svg";
 
 const HeroSection = () => {
   return (
@@ -14,15 +14,8 @@ const HeroSection = () => {
           placeholder="Search by address, neighborhood, city or state"
           className="px-6 py-[19px] sm:w-[608px] rounded-md text-gray-800 text-black placeholder:text-gray-500 focus:outline-none  appearance-none"
         />
-        <button
-          className="relative right-8 top-1/2 transform -translate-y-1/2  bg-transparent focus:outline-none"
-        >
-          <Image
-            src={Search}
-            width={18}
-            height={18}
-            alt="search-icon"
-          />
+        <button className="relative right-8 top-1/2 transform -translate-y-1/2  bg-transparent focus:outline-none">
+          <Image src={Search} width={18} height={18} alt="search-icon" />
         </button>
       </div>
     </div>

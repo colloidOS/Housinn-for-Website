@@ -4,14 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-
 const NotFoundPage = () => {
   const router = useRouter();
 
   return (
     <section className="grid h-screen w-full place-items-center bg-white">
       <div className="fixed left-0 top-0 min-h-[100dvh] w-screen bg-white" />
-      
+
       <div className="pointer-events-none relative z-30 flex flex-col gap-y-6">
         <p className="text-center font-medium uppercase text-secondary sm:text-2xl md:text-3xl lg:text-4xl lg:font-bold xl:font-bold">
           Page Not Found
@@ -30,7 +29,6 @@ const NotFoundPage = () => {
             onClick={() => router.back()}
             className="hover:text-accent-color pointer-events-auto flex items-center gap-x-2 rounded-xl border border-gray-200 bg-white px-4 py-2 transition-colors duration-300"
           >
-            
             Back
           </button>
           <Link

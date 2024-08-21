@@ -16,6 +16,7 @@ const config: Config = {
       },
       colors: {
         primary: "#002A50",
+        "primary-2": "#7EC2FF",
         secondary: "#0D66B7",
         white: "#FFFFFF",
         "white-200": "#FBFBFB",
@@ -24,6 +25,7 @@ const config: Config = {
         "background-2": "#F5F5F5",
         black: "#000000",
         "gray-100": "#131B22",
+        "gray-200": "#E8E8E8",
         "gray-300": "#DDDDDD",
         "gray-500": "#909090",
         "gray-600": "#4E4E4E",

@@ -12,7 +12,7 @@ export default function AdminLayout({
     <div className="grid grid-rows-[auto_1fr]">
       <UserNavbar />
       <div className="relative w-full flex  max-lg:overflow-hidden ">
-        <SettingsSidebar/>
+        <SettingsSidebar />
         <Suspense>{children}</Suspense>
       </div>
     </div>

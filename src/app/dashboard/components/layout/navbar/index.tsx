@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-import Notification from '../../../../../../public/icons/notifications.svg'
+import Notification from "../../../../../../public/icons/notifications.svg";
 
 const navlinks = [
   {
@@ -21,7 +21,6 @@ const navlinks = [
     link: "/",
     id: "short let",
   },
-  
 ];
 
 const UserNavbar = () => {
@@ -39,31 +38,27 @@ const UserNavbar = () => {
               <Link
                 key={index}
                 href={item.link}
-                className={`text-base font-semibold transition-all p-[10px] duration-200 text-gray-500 hover:text-primary ${currentPath === item.id ? "text-primary" : "text-gray-500"}`}
+                className={`text-base font-semibold transition-all p-[10px] duration-200 text-gray-500 hover:text-primary ${
+                  currentPath === item.id ? "text-primary" : "text-gray-500"
+                }`}
               >
                 {item.route}
               </Link>
             ))}
           </div>
-          <Image
-          src={`/icons/logo.svg`}
-          alt='Housinn logo'
-          width={80}
-          height={48}
-          />            
-          <div className='flex gap-5'>
-              <Image
-              src={Notification}
-              alt='info'
-              width={20}
-              height={21}
-              /> 
-              <div className="w-[115px] border-[1.5px] border-gray-600 rounded-3xl  ">
-
-              </div>
+          <Link href={`/`}>
+            <Image
+              src={`/icons/logo.svg`}
+              alt="Housinn logo"
+              width={80}
+              height={48}
+            />
+          </Link>
+          <div className="flex gap-5">
+            <Image src={Notification} alt="info" width={20} height={21} />
+            <div className="w-[115px] border-[1.5px] border-gray-600 rounded-3xl  "></div>
           </div>
         </div>
-        
       </div>
     </nav>
   );
