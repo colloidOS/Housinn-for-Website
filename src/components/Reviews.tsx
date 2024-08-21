@@ -89,20 +89,21 @@ const Reviews: React.FC = () => {
   };
 
   return (
-    <section className="relative flex flex-col gap-8 mx-[104px] pt-[71px] pb-[131px]" >
+    <section className="relative flex flex-col gap-8 mx-[104px] pt-[71px] pb-[131px]">
       <Image
         src={CurvedArrowTop}
         alt="image"
         width={80}
         height={86}
         className="absolute top-[110px] -left-[60px] "
-      /> <Image
-      src={CurvedArrowBottom}
-      alt="image"
-      width={80}
-      height={86}
-      className="absolute bottom-[40px] -right-[60px] "
-    />
+      />{" "}
+      <Image
+        src={CurvedArrowBottom}
+        alt="image"
+        width={80}
+        height={86}
+        className="absolute bottom-[40px] -right-[60px] "
+      />
       <div className="flex flex-col gap-3 w-full text-center ">
         <h1 className="font-semibold text-4xl text-primary">Reviews</h1>
         <p className="font-semibold text-2xl text-gray-600">
@@ -112,10 +113,7 @@ const Reviews: React.FC = () => {
       <div className="">
         <Slider {...settings}>
           {testimonials.map((testimonial, index) => (
-            <div
-              key={index}
-              className="h-[400px] w-[400px]  m-2  rounded-lg "
-            >
+            <div key={index} className="h-[400px] w-[400px]  m-2  rounded-lg ">
               <div className="flex flex-col items-center  justify-start  px-[56px] pb-[42px] pt-[32px] w-full h-full text-center">
                 <Image
                   src={testimonial.image}

@@ -4,7 +4,10 @@ import Reviews from "./Reviews";
 
 const ChooseUsReviewContainer = () => {
   return (
-    <section className="relative h-full bg-contain bg-center bg-repeat" style={{ backgroundImage: "url('/images/chooseus&review.png')" }}>
+    <section
+      className="relative h-full bg-contain bg-center bg-repeat"
+      style={{ backgroundImage: "url('/images/chooseus&review.png')" }}
+    >
       <WhyChooseUs />
       <Reviews />
     </section>
