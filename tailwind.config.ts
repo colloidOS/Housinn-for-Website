@@ -36,7 +36,7 @@ const config: Config = {
       boxShadow: {
         "custom-shadow": "3px 3px 31px -9px rgba(0, 0, 0, 0.15)",
         'custom-blue-shadow': '0px 4px 20px 0px rgba(18, 129, 229, 0.2)',
-        'custom-negative-shadow': '0px 2px 20px 0px rgba(0, 0, 0, 0.5)'
+        'custom-negative-shadow': '0px 2px 20px 0px rgba(0, 0, 0, 0.5)' 
       },
     },
   },
