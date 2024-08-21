@@ -12,9 +12,9 @@ import Mail from "../../public/icons/mail.svg";
 import Image from "next/image";
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-gray-100 px-[104px] pb-[73px] pt-[31px] gap-[97px] flex flex-col p-2 text-white w-full">
-      <div className=" grid gap-[50px] grid-cols-7">
-        <div className="flex flex-col gap-[11px] col-span-2">
+    <footer className="bg-gray-100 px-[104px] pb-[50px] pt-[31px] gap-[50px] flex flex-col p-2 text-white w-full">
+      <div className="  gap-[30px] flex flex-col md:flex-row ">
+        <div className="flex flex-col flex-1 gap-[11px] ">
           <h1 className="font-semibold text-[24px]">About</h1>
           <p className="font-normal text-[16px]">
             Welcome to Housinn, your trusted partner in the world of real
@@ -23,7 +23,7 @@ const Footer: React.FC = () => {
             or the most suitable buyer or tenant.
           </p>
         </div>{" "}
-        <div className="flex flex-col gap-[21px] col-span-2">
+        <div className="flex flex-col gap-[21px] flex-1 ">
           <h1 className="font-semibold text-2xl">Contact Us</h1>
 
           <a href="" target="_blank">
@@ -49,7 +49,7 @@ const Footer: React.FC = () => {
             </div>
           </a>
         </div>
-        <div className="flex flex-col gap-[21px] w-fit items-start col-span-3">
+        <div className="flex flex-col gap-[21px] flex-1 items-start ">
           <h1 className="font-semibold text-2xl">Download Our Mobile App</h1>
           <div className="flex justify-center gap-[21px]">
             {" "}
@@ -57,7 +57,7 @@ const Footer: React.FC = () => {
               {" "}
               <Image
                 src={GoogleDownloadButton}
-                width={180}
+                width={140}
                 height={52}
                 alt="Google-download-button"
               />
@@ -66,7 +66,7 @@ const Footer: React.FC = () => {
               {" "}
               <Image
                 src={AppleDownloadButton}
-                width={180}
+                width={140}
                 height={52}
                 alt="Apple-download-button"
               />
