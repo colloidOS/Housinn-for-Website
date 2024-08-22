@@ -16,7 +16,7 @@ function Pricing() {
         motto: "For Starters and Testers",
         currency: "₦",
         price: "0",
-        duration: "free",
+        duration: "/free",
         listings: "10 Listings",
         images: "Unlimited images / listing",
         badge: "",
@@ -104,12 +104,12 @@ function Pricing() {
               thoughtfully designed to meet your needs, cancel anytime.
             </p>
           </div>
-          <div className="flex gap-6 mx-auto rounded-sm border border-gray-300 p-1">
+          <div className="flex gap-6 mx-auto rounded-lg border border-gray-300 p-1">
             <div
               onClick={() => setBillingCycle("monthly")}
               className={`cursor-pointer px-4 py-2 rounded-sm ${
                 billingCycle === "monthly"
-                  ? "bg-blue-500 text-white duration-300"
+                  ? "bg-primary-2 text-primary duration-300"
                   : "text-gray-600"
               }`}
             >
@@ -117,13 +117,22 @@ function Pricing() {
             </div>
             <div
               onClick={() => setBillingCycle("annually")}
-              className={`cursor-pointer px-4 py-2 rounded-sm ${
+              className={`cursor-pointer px-4 py-2 rounded-sm flex gap-5 items-center ${
                 billingCycle === "annually"
-                  ? "bg-blue-500 text-white duration-300"
+                  ? "bg-primary-2 text-primary duration-300"
                   : "text-gray-600"
               }`}
             >
-              Annually (25% off)
+              Annually{" "}
+              <span
+                className={`px-2 py-1 text-[10px] rounded-2xl ${
+                  billingCycle === "annually"
+                    ? "bg-white text-primary"
+                    : "bg-primary-2 text-white"
+                }`}
+              >
+                (25% off)
+              </span>
             </div>
           </div>
         </div>
@@ -144,9 +153,17 @@ function Pricing() {
                     </span>
                   </div>
                 </div>
-                <p className="text-4xl text-secondary font-semibold">
-                  {plans[billingCycle][0].price}
-                </p>
+                <div className="flex">
+                  <span className="text-gray-500 pr-1">
+                    {plans[billingCycle][0].currency}
+                  </span>
+                  <p className="text-4xl text-secondary font-semibold">
+                    {plans[billingCycle][0].price}
+                  </p>
+                  <span className="flex flex-col text-gray-500 justify-end">
+                    {plans[billingCycle][0].duration}
+                  </span>
+                </div>
                 <hr className="text-gray-200" />
               </div>
               <ul className="text-gray-600 flex flex-col gap-3">
@@ -182,9 +199,17 @@ function Pricing() {
                     </span>
                   </div>
                 </div>
-                <p className="text-4xl font-semibold">
-                  {plans[billingCycle][1].price}
-                </p>
+                <div className="flex">
+                  <span className="text-primary-1 pr-1">
+                    {plans[billingCycle][1].currency}
+                  </span>
+                  <p className="text-4xl  font-semibold">
+                    {plans[billingCycle][1].price}
+                  </p>
+                  <span className="flex flex-col text-primary-1 justify-end">
+                    {plans[billingCycle][1].duration}
+                  </span>
+                </div>
                 <hr className="text-primary-2" />
               </div>
               <ul className="flex flex-col gap-3">
@@ -203,6 +228,7 @@ function Pricing() {
                 <li className="flex gap-1">
                   <CheckCircle2Icon />
                   {plans[billingCycle][1].badge}
+                  <img src="/icons/blue-badge.svg" />
                 </li>
               </ul>
             </div>
@@ -225,9 +251,17 @@ function Pricing() {
                     </span>
                   </div>
                 </div>
-                <p className="text-4xl text-secondary font-semibold">
-                  {plans[billingCycle][2].price}
-                </p>
+                <div className="flex">
+                  <span className="text-gray-500 pr-1">
+                    {plans[billingCycle][2].currency}
+                  </span>
+                  <p className="text-4xl text-secondary font-semibold">
+                    {plans[billingCycle][2].price}
+                  </p>
+                  <span className="flex flex-col text-gray-500 justify-end">
+                    {plans[billingCycle][2].duration}
+                  </span>
+                </div>
                 <hr className="text-gray-200" />
               </div>
               <ul className="text-gray-600 flex flex-col gap-3">
@@ -250,6 +284,7 @@ function Pricing() {
                 <li className="flex gap-1">
                   <CheckCircle2Icon />
                   {plans[billingCycle][2].badge}
+                  <img src="/icons/gold-badge.svg" />
                 </li>
               </ul>
             </div>
