@@ -20,6 +20,7 @@ const config: Config = {
         secondary: "#0D66B7",
         white: "#FFFFFF",
         "white-200": "#FBFBFB",
+        "white-300": "#D9D9D9",
         gray: "#4E4E4E",
         background: "#EEF7FF",
         "background-2": "#F5F5F5",
@@ -30,6 +31,7 @@ const config: Config = {
         "gray-500": "#909090",
         "gray-600": "#4E4E4E",
         "gray-700": "#1E1E1E",
+
         active: "#E5F3FF",
       },
       fontFamily: {
