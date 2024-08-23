@@ -1,9 +1,30 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import Image from "next/image";
 import profile from "../../../../public/icons/profile.svg";
 import Button from "./Button";
 
 function Profile() {
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file && file.type.startsWith("image/")) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSelectedImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveFile = () => {
+    setSelectedImage(null);
+  };
+
+  const triggerImageUpload = () => {
+    document.getElementById("profileImageInput").click();
+  };
   return (
     <>
       <div className="flex flex-col px-12 py-10 gap-8 bg-background-2 w-full">
@@ -20,20 +41,39 @@ function Profile() {
               </p>
             </div>
             <div className="flex flex-col justify-center items-center gap-[33px] px-[28px] pt-[62px] pb-[14px]">
-              <div>
-                <Image
-                  src={profile}
-                  alt="select-profile"
-                  height={137}
-                  width={137}
-                  className="border border-gray-300 rounded-full"
-                />
+              <div className="relative">
+                {selectedImage ? (
+                  <div>
+                    <img
+                      src={selectedImage}
+                      alt="Profile Photo"
+                      className="border max-w-[137px] max-h-[137px] border-gray-300 relative rounded-full object-cover"
+                    />
+                  </div>
+                ) : (
+                  <Image
+                    src={profile}
+                    alt="select-profile"
+                    height={137}
+                    width={137}
+                    className="border border-gray-300 rounded-full"
+                  />
+                )}
               </div>
               <div className="flex flex-col gap-4 items-center">
-                <Button>Upload Profile Image/Photo</Button>
+                <Button onClick={triggerImageUpload}>
+                  Upload Profile Image/Photo
+                </Button>
                 <span className="text-gray-500 text-sm font-normal">
                   *minimum 500px x 500px
                 </span>
+                <input
+                  type="file"
+                  id="profileImageInput"
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  onChange={handleImageUpload}
+                />
               </div>
             </div>
           </div>
@@ -178,13 +218,6 @@ function Profile() {
                       placeholder="Confirm your new password"
                       className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
                     />
-                    <select
-                      name=""
-                      id=""
-                      className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                    >
-                      Select
-                    </select>
                   </div>
                 </div>
                 <div className="flex flex-col gap-1">
