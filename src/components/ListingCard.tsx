@@ -6,6 +6,9 @@ import Address from "../../public/icons/ph-address.svg";
 import Share from "../../public/icons/ph-share.svg";
 import Add from "../../public/icons/ph-add.svg";
 import Icon from "../../public/icons/ph-icon.svg";
+import Bed from "../../public/icons/ph_bed.svg";
+import Bath from "../../public/icons/ph_bath.svg";
+import Feet from "../../public/icons/ph_feet.svg";
 import Image from "next/image";
 
 const ListingCard: React.FC<{ listing: Listing }> = ({ listing }) => {
@@ -57,7 +60,7 @@ const ListingCard: React.FC<{ listing: Listing }> = ({ listing }) => {
           <span>{listing.baths} Baths</span>
           <span>{listing.area}</span>
         </div>
-        <div className="flex justify-between w-full">
+        <div className="flex pt-3 justify-between w-full">
           {" "}
           <Image
             src={Icon}
