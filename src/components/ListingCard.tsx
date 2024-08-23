@@ -1,14 +1,14 @@
 import React from "react";
 import { Listing } from "../data/listings";
-import Camera from "../../public/icons/ph_camera.svg";
-import Heart from "../../public/icons/ph_heart.svg";
+import Camera from "../../public/icons/ph-camera.svg";
+import Heart from "../../public/icons/ph-heart.svg";
 import Address from "../../public/icons/ph-address.svg";
 import Share from "../../public/icons/ph-share.svg";
 import Add from "../../public/icons/ph-add.svg";
 import Icon from "../../public/icons/ph-icon.svg";
-import Bed from "../../public/icons/ph_bed.svg";
-import Bath from "../../public/icons/ph_bath.svg";
-import Feet from "../../public/icons/ph_feet.svg";
+import Bed from "../../public/icons/ph-bed.svg";
+import Bath from "../../public/icons/ph-bath.svg";
+import Feet from "../../public/icons/ph-feet.svg";
 import Image from "next/image";
 
 const ListingCard: React.FC<{ listing: Listing }> = ({ listing }) => {
