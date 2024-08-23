@@ -6,7 +6,6 @@ import Filter from "../components/Filter";
 const ListingsPage: React.FC = () => {
   const [activeTag, setActiveTag] = useState<string | null>(null);
 
-  // Function to handle filter change
   const handleFilterChange = (tag: string) => {
     setActiveTag(tag === activeTag ? null : tag); // Toggle the filter
   };
