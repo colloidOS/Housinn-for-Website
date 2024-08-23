@@ -56,8 +56,32 @@ const ListingCard: React.FC<{ listing: Listing }> = ({ listing }) => {
           <p className="text-gray-500 text-[12px]">{listing.location}</p>
         </div>
         <div className="flex gap-2 text-gray-500 text-[12px]">
-          <span>{listing.beds} Beds</span>
-          <span>{listing.baths} Baths</span>
+          <span className="flex gap-1">
+            <span>
+              {" "}
+              <Image
+                src={Bed}
+                alt="image"
+                width={15}
+                height={15}
+                className=" cursor-pointer"
+              />{" "}
+            </span>
+            {listing.beds} Beds
+          </span>
+          <span className="flex gap-1">
+            <span>
+              {" "}
+              <Image
+                src={Bed}
+                alt="image"
+                width={15}
+                height={15}
+                className=" cursor-pointer"
+              />{" "}
+            </span>
+            {listing.baths} Baths
+          </span>
           <span>{listing.area}</span>
         </div>
         <div className="flex pt-3 justify-between w-full">
