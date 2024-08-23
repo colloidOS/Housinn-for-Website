@@ -29,7 +29,7 @@ const ListingsPage: React.FC = () => {
           <ListingCard key={listing.id} listing={listing} />
         ))}
       </div>
-      <button className="mt-8 px-4 py-2 bg-blue-500 text-white rounded">
+      <button className="mt-8 px-4 py-2 bg-primary text-white rounded">
         View all Listings
       </button>
     </div>
