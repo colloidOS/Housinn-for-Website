@@ -4,7 +4,6 @@ import ListingCard from "../components/ListingCard";
 import Filter from "../components/Filter";
 
 const ListingsPage: React.FC = () => {
-  // State to track the active filter tag
   const [activeTag, setActiveTag] = useState<string | null>(null);
 
   // Function to handle filter change
