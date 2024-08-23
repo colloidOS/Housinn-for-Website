@@ -7,7 +7,7 @@ const ListingsPage: React.FC = () => {
   const [activeTag, setActiveTag] = useState<string | null>(null);
 
   const handleFilterChange = (tag: string) => {
-    setActiveTag(tag === activeTag ? null : tag); // Toggle the filter
+    setActiveTag(tag === activeTag ? null : tag); 
   };
 
   // Filtered listings based on the active tag
