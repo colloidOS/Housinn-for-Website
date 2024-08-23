@@ -73,7 +73,7 @@ const ListingCard: React.FC<{ listing: Listing }> = ({ listing }) => {
             <span>
               {" "}
               <Image
-                src={Bed}
+                src={Bath}
                 alt="image"
                 width={15}
                 height={15}
@@ -82,7 +82,19 @@ const ListingCard: React.FC<{ listing: Listing }> = ({ listing }) => {
             </span>
             {listing.baths} Baths
           </span>
-          <span>{listing.area}</span>
+          <span className="flex gap-1">
+            <span>
+              {" "}
+              <Image
+                src={Feet}
+                alt="image"
+                width={15}
+                height={15}
+                className=" cursor-pointer"
+              />{" "}
+            </span>
+            {listing.area}
+          </span>
         </div>
         <div className="flex pt-3 justify-between w-full">
           {" "}
