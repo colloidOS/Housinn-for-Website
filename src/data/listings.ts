@@ -65,7 +65,7 @@ const listings: Listing[] = [
     imageUrl: "/images/property-card.png",
     tag: "For Sale",
   },
-  // Add more listings as needed
+  
 ];
 
 // Export the listings array (named export)
