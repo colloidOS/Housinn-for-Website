@@ -19,7 +19,7 @@ const ListingsPage: React.FC = () => {
 
   return (
     <div className="px-[104px] pt-[35px] pb-[48px]">
-      <div className="flex justify-between">
+      <div className="flex justify-between mb-5">
         <h2 className="text-2xl font-bold">New Listings</h2>
         <Filter activeTag={activeTag || ""} onChange={handleFilterChange}  />
       </div>
