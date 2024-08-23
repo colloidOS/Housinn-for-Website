@@ -34,7 +34,8 @@ const listings: Listing[] = [
     area: "580.00 ft²",
     imageUrl: "/images/property-card.png",
     tag: "For Rent",
-  }, {
+  },
+  {
     id: 3,
     price: "₦160,000,000",
     title: "Brand new Luxury 4 Bedroom duplex",
@@ -44,7 +45,8 @@ const listings: Listing[] = [
     area: "580.00 ft²",
     imageUrl: "/images/property-card.png",
     tag: "Short-let",
-  }, {
+  },
+  {
     id: 4,
     price: "₦160,000,000",
     title: "Brand new Luxury 4 Bedroom duplex",
@@ -54,7 +56,8 @@ const listings: Listing[] = [
     area: "580.00 ft²",
     imageUrl: "/images/property-card.png",
     tag: "Lands",
-  }, {
+  },
+  {
     id: 5,
     price: "₦160,000,000",
     title: "Brand new Luxury 4 Bedroom duplex",
@@ -65,8 +68,5 @@ const listings: Listing[] = [
     imageUrl: "/images/property-card.png",
     tag: "For Sale",
   },
-  
 ];
-
-// Export the listings array (named export)
 export { listings };
