@@ -10,7 +10,6 @@ const ListingsPage: React.FC = () => {
     setActiveTag(tag === activeTag ? null : tag); 
   };
 
-  // Filtered listings based on the active tag
   const filteredListings = activeTag
     ? listings.filter((listing) => listing.tag === activeTag)
     : listings;
