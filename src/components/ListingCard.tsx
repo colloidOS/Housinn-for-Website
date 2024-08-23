@@ -38,7 +38,7 @@ const ListingCard: React.FC<{ listing: Listing }> = ({ listing }) => {
           alt="image"
           width={15}
           height={15}
-          className="absolute top-[14.5rem] left-1"
+          className="absolute top-[14.5rem] left-1 cursor-pointer"
         />{" "}
         <Image
           src={Heart}
