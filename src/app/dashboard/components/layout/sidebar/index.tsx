@@ -11,7 +11,6 @@ import {
   SquarePlus,
 } from "lucide-react";
 import Link from "next/link";
-// import Home from '../../../../../../public/icons/home-icon.svg';
 import { usePathname } from "next/navigation";
 import { FC, ForwardRefExoticComponent, RefAttributes } from "react";
 
@@ -74,7 +73,10 @@ interface Iproperties {
   }[];
   currenPathName?: string;
 }
-const SettingsSidebar: FC<Iproperties> = ({ sideNavitems = sideItems }) => {
+const SettingsSidebar: FC<Iproperties> = ({
+  sideNavitems = sideItems,
+  className,
+}) => {
   const pathname = usePathname();
   const currentPath =
     pathname?.split("/").length === 2 ? "dashboard" : pathname?.split("/")[2];
@@ -83,7 +85,9 @@ const SettingsSidebar: FC<Iproperties> = ({ sideNavitems = sideItems }) => {
     currentPath === "dashboard" && organizationPath === undefined;
 
   return (
-    <div className="h-screen flex w-[50px] flex-col gap-11 items-center justify-center bg-white-200 pt-6  md:w-[275px] md:justify-start ">
+    <div
+      className={` ${className} h-screen flex w-[50px] flex-col gap-11 items-center justify-center bg-white-200 pt-6  md:w-[275px] md:justify-start `}
+    >
       <section className="pr-4  flex flex-col  gap-y-3">
         {sideNavitems.map((item, index) => (
           <Link
@@ -91,7 +95,12 @@ const SettingsSidebar: FC<Iproperties> = ({ sideNavitems = sideItems }) => {
             href={item.link}
             data-testid={item.id}
             role="sidebar-link"
-            className={`${currentPath === item.id || (isDashboard && item.id === "dashboard") ? "bg-active text-primary" : "bg-transparent text-gray-500 hover:bg-gray-300"} flex cursor-pointer items-center justify-center gap-5 rounded-full pl-11 pr-6 py-3 text-lg transition-all duration-300 ease-in md:h-auto md:w-auto md:justify-start md:rounded-sm`}
+            className={`${
+              currentPath === item.id ||
+              (isDashboard && item.id === "dashboard")
+                ? "bg-active text-primary"
+                : "bg-transparent text-gray-500 hover:bg-gray-300"
+            } flex cursor-pointer items-center justify-center gap-5 rounded-full pl-11 pr-6 py-3 text-lg transition-all duration-300 ease-in md:h-auto md:w-auto md:justify-start md:rounded-sm`}
           >
             {item.icon && <item.icon className="h-5 w-5" role="sidebar-icon" />}
             <span className="text-nowrap">{item.route}</span>
@@ -106,7 +115,11 @@ const SettingsSidebar: FC<Iproperties> = ({ sideNavitems = sideItems }) => {
             href={item.link}
             data-testid={item.id}
             role="sidebar-link"
-            className={`${organizationPath === item.id ? "shadow-custom-negative-shadow" : " text-gray-500 hover:bg- "} px-6 py-[11px]  w-fit bg-secondary text-white rounded-md text-base font-semibold flex items-center justify-center cursor-pointer transition-all duration-200 ease-in md:justify-between `}
+            className={`${
+              organizationPath === item.id
+                ? "shadow-custom-negative-shadow"
+                : " text-gray-500 hover:bg- "
+            } px-6 py-[11px]  w-fit bg-secondary text-white rounded-md text-base font-semibold flex items-center justify-center cursor-pointer transition-all duration-200 ease-in md:justify-between `}
           >
             <div className="flex items-center justify-start gap-2">
               {item.icon && (

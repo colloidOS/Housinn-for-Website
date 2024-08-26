@@ -1,5 +1,5 @@
 import React from "react";
-import Subscription from "./components/layout/pricing/index";
+import Subscription from "./components/layout/pricing";
 import PieChart from "./components/layout/recent-listing/index";
 import MessageList from "./components/layout/messages";
 import Image from "next/image";
