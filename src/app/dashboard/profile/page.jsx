@@ -61,7 +61,10 @@ function Profile() {
                 )}
               </div>
               <div className="flex flex-col gap-4 items-center">
-                <Button onClick={triggerImageUpload}>
+                <Button
+                  onClick={triggerImageUpload}
+                  className="focus:outline-none"
+                >
                   Upload Profile Image/Photo
                 </Button>
                 <span className="text-gray-500 text-sm font-normal">

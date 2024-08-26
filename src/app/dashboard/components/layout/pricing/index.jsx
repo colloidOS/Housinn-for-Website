@@ -5,7 +5,7 @@ import Link from "next/link";
 
 function Subscription() {
   return (
-    <div className="flex flex-col gap-5 w-[350px] px-3 pt-6 pb-4 text-white bg-secondary rounded-2xl">
+    <div className="flex flex-col gap-5 w-full px-3 pt-6 pb-4 text-white bg-secondary rounded-2xl">
       <div className="flex flex-col  gap-1 text-white">
         <div className="flex flex-col gap-0">
           <h2 className="text-lg font-semibold px-3">Subscription</h2>
