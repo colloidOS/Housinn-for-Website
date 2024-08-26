@@ -56,7 +56,14 @@ const UserNavbar = () => {
           </Link>
           <div className="flex gap-5">
             <Image src={Notification} alt="info" width={20} height={21} />
-            <div className="w-[115px] border-[1.5px] border-gray-600 rounded-3xl  "></div>
+            <div className="w-[115px] border-[1.5px] border-gray-600 rounded-3xl flex gap-2.5 justify-center items-center ">
+              <img
+                src="/icons/profile.svg"
+                className="w-[18px] h-[18px]"
+                alt=""
+              />
+              <span className="text-sm text-gray-600">Chinedu</span>
+            </div>
           </div>
         </div>
       </div>

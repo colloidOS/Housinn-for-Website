@@ -33,7 +33,7 @@ const Navbar = () => {
       <div className="flex gap-4">
         <Image src={Like} alt="heart" width={18} height={16} />
         <button className="bg-primary text-white px-6 py-[11px] rounded ">
-          Sign in
+          <Link href={`/auth/`}>Sign in</Link>
         </button>
       </div>
     </nav>
