@@ -22,13 +22,16 @@ const navlinks = [
     id: "short let",
   },
 ];
+interface UserNavbarProps {
+  className?: string; // Explicitly typing the className prop as string
+}
 
-const UserNavbar = () => {
+const UserNavbar: React.FC<UserNavbarProps> = ({ className }) => {
   const pathname = usePathname();
   const currentPath = pathname?.split("/")[2];
   return (
     <nav
-      className=" bg-white px-[74px] py-2.5 md:left-[220px] lg:left-[252px]"
+      className={` ${className} bg-white px-[74px] py-2.5 md:left-[220px] lg:left-[252px]`}
       role="navbar"
     >
       <div className="flex items-center justify-between gap-2">
