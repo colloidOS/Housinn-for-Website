@@ -1,11 +1,82 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import profile from "../../../../public/icons/profile.svg";
 import Button from "./Button";
 
+// Zod schemas for each section
+const profileSchema = z.object({
+  firstName: z.string().min(3, "First Name is required"),
+  lastName: z.string().min(3, "Last Name is required"),
+  company: z.string().optional(),
+  email: z.string().email("Invalid email address"),
+  phoneNumber: z.string().min(1, "Phone Number is required"),
+});
+
+const verificationSchema = z.object({
+  street: z.string().min(1, "Street is required"),
+  cacNumber: z.string().min(1, "CAC Number is required"),
+});
+
+const passwordSchema = z
+  .object({
+    currentPassword: z.string().min(1, "Current Password is required"),
+    newPassword: z
+      .string()
+      .min(6, "New Password must be at least 6 characters"),
+    confirmPassword: z
+      .string()
+      .min(6, "Confirm Password must be at least 6 characters"),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
+
+const pronounsOptions = ["He/Him", "She/Her", "Other"];
+const nounsOptions = ["He/Him", "She/Her", "Other"];
+
 function Profile() {
   const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedPronoun, setSelectedPronoun] = useState("");
+  const [selectedNoun, setSelectedNoun] = useState("");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(null);
+
+  const handlePronounSelect = (pronoun) => {
+    setSelectedPronoun(pronoun);
+    setIsDropdownOpen(null);
+  };
+  const handleNounSelect = (noun) => {
+    setSelectedNoun(noun);
+    setIsDropdownOpen(null);
+  };
+
+  const {
+    register: registerProfile,
+    handleSubmit: handleProfileSubmit,
+    formState: { errors: profileErrors },
+  } = useForm({
+    resolver: zodResolver(profileSchema),
+  });
+
+  const {
+    register: registerVerification,
+    handleSubmit: handleVerificationSubmit,
+    formState: { errors: verificationErrors },
+  } = useForm({
+    resolver: zodResolver(verificationSchema),
+  });
+
+  const {
+    register: registerPassword,
+    handleSubmit: handlePasswordSubmit,
+    formState: { errors: passwordErrors },
+  } = useForm({
+    resolver: zodResolver(passwordSchema),
+  });
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -25,6 +96,19 @@ function Profile() {
   const triggerImageUpload = () => {
     document.getElementById("profileImageInput").click();
   };
+
+  const onSubmitProfile = (data) => {
+    console.log("Profile Data:", data);
+  };
+
+  const onSubmitVerification = (data) => {
+    console.log("Verification Data:", data);
+  };
+
+  const onSubmitPassword = (data) => {
+    console.log("Password Data:", data);
+  };
+
   return (
     <>
       <div className="flex flex-col px-12 py-10 gap-8 bg-background-2 w-full">
@@ -82,7 +166,10 @@ function Profile() {
           </div>
           <hr className="text-gray-300" />
         </div>
-        <div className="flex flex-col gap-6">
+        <form
+          className="flex flex-col gap-6"
+          onSubmit={handleProfileSubmit(onSubmitProfile)}
+        >
           <div className="flex">
             <div className="flex flex-col gap-2">
               <p className="text-lg font-semibold">Edit Your Profile</p>
@@ -114,7 +201,13 @@ function Profile() {
                           type="text"
                           placeholder="Michael"
                           className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
+                          {...registerProfile("lastName")}
                         />
+                        {profileErrors.firstName && (
+                          <span className="text-red-500 text-sm">
+                            {profileErrors.firstName.message}
+                          </span>
+                        )}
                       </div>
                       <div className="w-full gap-1">
                         <label
@@ -128,7 +221,13 @@ function Profile() {
                           type="text"
                           placeholder="Chukwueke"
                           className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
+                          {...registerProfile("lastName")}
                         />
+                        {profileErrors.lastName && (
+                          <span className="text-red-500 text-sm">
+                            {profileErrors.lastName.message}
+                          </span>
+                        )}
                       </div>
                     </div>
                     <div className="flex gap-6 w-full">
@@ -182,8 +281,11 @@ function Profile() {
             </div>
           </div>
           <hr className="text-gray-300" />
-        </div>
-        <div className="flex flex-col gap-4 w-full">
+        </form>
+        <form
+          className="flex flex-col gap-4 w-full"
+          onClick={handlePasswordSubmit(onSubmitPassword)}
+        >
           <div className="flex gap-[140px]">
             <div className="flex flex-col gap-2 text-nowrap">
               <p className="text-lg font-semibold">Verification</p>
@@ -194,33 +296,64 @@ function Profile() {
             <div className="px-12 py-8 flex flex-col gap-8 w-full">
               <div className="flex flex-col gap-4">
                 <div className="flex gap-6 w-full">
-                  <div className="flex flex-col gap-1 w-full">
+                  <div className="flex flex-col gap-1 relative w-full">
                     <label
                       className="block text-gray-700 text-sm font-bold"
                       htmlFor="newPassword"
                     >
-                      New Password
+                      State
                     </label>
-                    <input
-                      id="newPass"
-                      type="text"
-                      placeholder="Enter your new password"
-                      className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                    />
+                    <div
+                      className="w-full px-4 py-2 border border-gray-300
+                      placeholder:text-gray-500 text-gray-600 rounded-[4px]
+                      focus:outline relative"
+                      onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    >
+                      {selectedPronoun}
+                    </div>
+                    {isDropdownOpen && (
+                      <div className="absolute left-0 top-full z-10 mt-1 w-full rounded-md border border-border bg-white">
+                        {pronounsOptions.map((option) => (
+                          <div
+                            key={option}
+                            className="cursor-pointer px-3 py-2 hover:bg-gray-300"
+                            onClick={() => handlePronounSelect(option)}
+                          >
+                            {option}
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                  <div className="flex flex-col gap-1 w-full">
+
+                  <div className="flex flex-col gap-1 relative w-full">
                     <label
                       className="block text-gray-700 text-sm font-bold"
-                      htmlFor="updatePass"
+                      htmlFor="newPassword"
                     >
-                      Confirm Password
+                      State
                     </label>
-                    <input
-                      id="updatePassword"
-                      type=""
-                      placeholder="Confirm your new password"
-                      className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                    />
+                    <div
+                      className="w-full px-4 py-2 border border-gray-300
+                      placeholder:text-gray-500 text-gray-600 rounded-[4px]
+                      focus:outline relative"
+                      onClick={() => setIsDropdownOpen(null)}
+                    >
+                      {selectedNoun}
+                    </div>
+                    {isDropdownOpen && (
+                      <div className="absolute left-0 top-full z-10 mt-1 w-full rounded-md border border-border bg-white">
+                        {nounsOptions.map((option) => (
+                          <div
+                            key={option}
+                            className="cursor-pointer px-3 py-2 hover:bg-gray-300"
+                            onClick={() => handleNounSelect(option)}
+                          >
+                            {option}
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="flex flex-col gap-1">
@@ -313,7 +446,7 @@ function Profile() {
             </div>
           </div>
           <hr className="text-gray-300 py-2" />
-        </div>
+        </form>
         <div>
           <hr className="text-gray-300" />
           <div className="flex gap-[202px]">
