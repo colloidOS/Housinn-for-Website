@@ -1,15 +1,15 @@
 import React from "react";
-import { Listing } from "../data/listings";
-import Camera from "../../public/icons/ph-camera.svg";
-import Heart from "../../public/icons/ph-heart.svg";
-import Address from "../../public/icons/ph-address.svg";
-import Share from "../../public/icons/ph-share.svg";
-import Add from "../../public/icons/ph-add.svg";
-import Icon from "../../public/icons/ph-icon.svg";
-import Bed from "../../public/icons/ph-bed.svg";
-import Bath from "../../public/icons/ph-bath.svg";
-import Feet from "../../public/icons/ph-feet.svg";
-
+import { Listing } from "../../../data/myListing";
+import Camera from "../../../../public/icons/ph-camera.svg";
+import Heart from "../../../../public/icons/ph-heart.svg";
+import Address from "../../../../public/icons/ph-address.svg";
+import Share from "../../../../public/icons/ph-share.svg";
+import Add from "../../../../public/icons/ph-add.svg";
+import Icon from "../../../../public/icons/ph-icon.svg";
+import Bed from "../../../../public/icons/ph-bed.svg";
+import Bath from "../../../../public/icons/ph-bath.svg";
+import Feet from "../../../../public/icons/ph-feet.svg";
+import Menu from "../../../../public/icons/menu.svg";
 import Image from "next/image";
 
 const ListingCard: React.FC<{ listing: Listing }> = ({ listing }) => {
@@ -22,7 +22,7 @@ const ListingCard: React.FC<{ listing: Listing }> = ({ listing }) => {
       />
       <div className="mt-4 mb-2 flex flex-col gap-2  mx-5 ">
         <span
-          className={`text-xs px-2 py-1 pr-4 clip-triangle-right absolute top-0 rounded-ss-[7px] left-0 ${
+          className={`text-xs px-2 pr-4 py-1  absolute top-0 rounded-ss-[7px] left-0 clip-triangle-right ${
             listing.tag === "For Sale"
               ? "bg-green-200 text-green-700"
               : listing.tag === "For Rent"
@@ -41,21 +41,31 @@ const ListingCard: React.FC<{ listing: Listing }> = ({ listing }) => {
           height={15}
           className="absolute top-[14.5rem] left-1 cursor-pointer"
         />{" "}
+       <div className="flex justify-between">
+       <h3 className=" text-xl text-primary font-semibold">{listing.price}</h3>
         <Image
-          src={Heart}
+          src={Menu}
           alt="image"
-          width={18}
-          height={18}
-          className="absolute top-[14.5rem] right-1 cursor-pointer"
+          width={15}
+          height={15}
+          className="cursor-pointer"
         />{" "}
-        <h3 className=" text-xl text-primary font-semibold">{listing.price}</h3>
+       </div>
         <p className="text-gray-700 text-[12px] font-semibold">
           {listing.title}
         </p>
-        <div className="flex items-start gap-1">
-          <Image src={Address} width={15} height={15} alt="Address" />
-          <p className="text-gray-500 text-[12px]">{listing.location}</p>
+        <div
+          className="flex justify-between text-gray-500 text-[10px]
+"
+        >
+          <div className="flex clip items-start gap-1">
+            <p className="">Listed: {listing.listed}</p>
+          </div>
+          <div className="flex items-start gap-1">
+            <p className="">Status:{listing.status}</p>
+          </div>
         </div>
+        <hr className="text-gray-300" />
         <div className="flex gap-2 text-gray-500 text-[12px]">
           <span className="flex gap-1">
             <span>
@@ -96,33 +106,6 @@ const ListingCard: React.FC<{ listing: Listing }> = ({ listing }) => {
             </span>
             {listing.area}
           </span>
-        </div>
-        <div className="flex pt-3 justify-between w-full">
-          {" "}
-          <Image
-            src={Icon}
-            alt="image"
-            width={85}
-            height={32}
-            className=" cursor-pointer"
-          />{" "}
-          <div className="flex gap-2">
-            {" "}
-            <Image
-              src={Share}
-              alt="image"
-              width={18}
-              height={18}
-              className=" cursor-pointer"
-            />{" "}
-            <Image
-              src={Add}
-              alt="image"
-              width={18}
-              height={18}
-              className=" cursor-pointer"
-            />{" "}
-          </div>
         </div>
       </div>
     </div>
