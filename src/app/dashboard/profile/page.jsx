@@ -6,6 +6,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import profile from "../../../../public/icons/profile.svg";
 import Button from "./Button";
+import { ChevronDown } from "lucide-react";
+import Dropdown from "./Dropdown";
 
 // Zod schemas for each section
 const profileSchema = z.object({
@@ -17,13 +19,15 @@ const profileSchema = z.object({
 });
 
 const verificationSchema = z.object({
-  street: z.string().min(1, "Street is required"),
+  state: z.string().min(1, "State is required"),
+  city: z.string().min(0, "City is required"),
+  street: z.string().min(4, "Street is required"),
   cacNumber: z.string().min(1, "CAC Number is required"),
 });
 
 const passwordSchema = z
   .object({
-    currentPassword: z.string().min(1, "Current Password is required"),
+    currentPassword: z.string().min(3, "Current Password is required"),
     newPassword: z
       .string()
       .min(6, "New Password must be at least 6 characters"),
@@ -36,23 +40,13 @@ const passwordSchema = z
     path: ["confirmPassword"],
   });
 
-const pronounsOptions = ["He/Him", "She/Her", "Other"];
-const nounsOptions = ["He/Him", "She/Her", "Other"];
+const stateOptions = ["Lagos", "Enugu", "Osun"];
+const cityOptions = ["Surulere", "Maitama", "Victoria Island"];
 
 function Profile() {
   const [selectedImage, setSelectedImage] = useState(null);
-  const [selectedPronoun, setSelectedPronoun] = useState("");
-  const [selectedNoun, setSelectedNoun] = useState("");
-  const [isDropdownOpen, setIsDropdownOpen] = useState(null);
-
-  const handlePronounSelect = (pronoun) => {
-    setSelectedPronoun(pronoun);
-    setIsDropdownOpen(null);
-  };
-  const handleNounSelect = (noun) => {
-    setSelectedNoun(noun);
-    setIsDropdownOpen(null);
-  };
+  const [selectedState, setSelectedState] = useState("");
+  const [selectedCity, setSelectedCity] = useState("");
 
   const {
     register: registerProfile,
@@ -89,10 +83,6 @@ function Profile() {
     }
   };
 
-  const handleRemoveFile = () => {
-    setSelectedImage(null);
-  };
-
   const triggerImageUpload = () => {
     document.getElementById("profileImageInput").click();
   };
@@ -116,177 +106,189 @@ function Profile() {
           <h3 className="text-2xl font-bold text-black">Profile</h3>
           <hr className="text-gray-300" />
         </div>
-        <div className="flex flex-col gap-3">
-          <div className="flex gap-[164px]">
-            <div className="flex flex-col gap-0">
-              <p className="text-lg font-semibold">Profile Photo</p>
-              <p className="text-sm font-normal text-gray-600">
-                upload your profile photo
-              </p>
-            </div>
-            <div className="flex flex-col justify-center items-center gap-[33px] px-[28px] pt-[62px] pb-[14px]">
-              <div className="relative">
-                {selectedImage ? (
-                  <div>
-                    <img
-                      src={selectedImage}
-                      alt="Profile Photo"
-                      className="border max-w-[137px] max-h-[137px] border-gray-300 relative rounded-full object-cover"
-                    />
-                  </div>
-                ) : (
-                  <Image
-                    src={profile}
-                    alt="select-profile"
-                    height={137}
-                    width={137}
-                    className="border border-gray-300 rounded-full"
-                  />
-                )}
+        <form onSubmit={handleProfileSubmit(onSubmitProfile)}>
+          <div className="flex flex-col gap-3">
+            <div className="flex gap-[164px]">
+              <div className="flex flex-col gap-0">
+                <p className="text-lg font-semibold">Profile Photo</p>
+                <p className="text-sm font-normal text-gray-600">
+                  upload your profile photo
+                </p>
               </div>
-              <div className="flex flex-col gap-4 items-center">
-                <Button
-                  onClick={triggerImageUpload}
-                  className="focus:outline-none"
-                >
-                  Upload Profile Image/Photo
-                </Button>
-                <span className="text-gray-500 text-sm font-normal">
-                  *minimum 500px x 500px
-                </span>
-                <input
-                  type="file"
-                  id="profileImageInput"
-                  accept="image/*"
-                  style={{ display: "none" }}
-                  onChange={handleImageUpload}
-                />
-              </div>
-            </div>
-          </div>
-          <hr className="text-gray-300" />
-        </div>
-        <form
-          className="flex flex-col gap-6"
-          onSubmit={handleProfileSubmit(onSubmitProfile)}
-        >
-          <div className="flex">
-            <div className="flex flex-col gap-2">
-              <p className="text-lg font-semibold">Edit Your Profile</p>
-              <p className="text-sm font-normal w-[308px] text-gray-600">
-                Change your account type, edit your contact information, add
-                your social media details and your user details.
-              </p>
-            </div>
-            <div className="flex flex-col px-12 pt-8 gap-16">
-              <div className="flex flex-col gap-8">
-                <div>
-                  <p className="text-primary font-semibold">Account Type</p>
-                </div>
-                <div className="flex flex-col gap-3">
-                  <p className="text-primary font-semibold">
-                    Contact Information
-                  </p>
-                  <div className="flex flex-wrap gap-6">
-                    <div className="flex gap-6 w-full">
-                      <div className="w-full gap-1">
-                        <label
-                          className="block text-gray-700 text-sm font-bold"
-                          htmlFor="firstName"
-                        >
-                          First Name
-                        </label>
-                        <input
-                          id="firstName"
-                          type="text"
-                          placeholder="Michael"
-                          className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                          {...registerProfile("lastName")}
-                        />
-                        {profileErrors.firstName && (
-                          <span className="text-red-500 text-sm">
-                            {profileErrors.firstName.message}
-                          </span>
-                        )}
-                      </div>
-                      <div className="w-full gap-1">
-                        <label
-                          className="block text-gray-700 text-sm font-bold"
-                          htmlFor="lastName"
-                        >
-                          Last Name
-                        </label>
-                        <input
-                          id="LastName"
-                          type="text"
-                          placeholder="Chukwueke"
-                          className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                          {...registerProfile("lastName")}
-                        />
-                        {profileErrors.lastName && (
-                          <span className="text-red-500 text-sm">
-                            {profileErrors.lastName.message}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                    <div className="flex gap-6 w-full">
-                      <div className="w-full gap-1">
-                        <label
-                          className="block text-gray-700 text-sm font-bold"
-                          htmlFor="companyName"
-                        >
-                          Company Name (optional)
-                        </label>
-                        <input
-                          id="company"
-                          type="text"
-                          placeholder="Mike’s Realties"
-                          className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                        />
-                      </div>
-                      <div className="w-full gap-1">
-                        <label
-                          className="block text-gray-700 text-sm font-bold"
-                          htmlFor="email"
-                        >
-                          Email
-                        </label>
-                        <input
-                          id="email"
-                          type="email"
-                          placeholder="mikesrealties@gmail.com"
-                          className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                        />
-                      </div>
-                    </div>
-                    <div className="w-full gap-1">
-                      <label
-                        className="block text-gray-700 text-sm font-bold"
-                        htmlFor="phoneNumber"
-                      >
-                        Phone Number
-                      </label>
-                      <input
-                        id="number"
-                        type="text"
-                        placeholder="08012345678"
-                        className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
+              <div className="flex flex-col justify-center items-center gap-[33px] px-[28px] pt-[62px] pb-[14px]">
+                <div className="relative">
+                  {selectedImage ? (
+                    <div>
+                      <img
+                        src={selectedImage}
+                        alt="Profile Photo"
+                        className="border max-w-[137px] max-h-[137px] border-gray-300 relative rounded-full object-cover"
                       />
                     </div>
-                  </div>
+                  ) : (
+                    <Image
+                      src={profile}
+                      alt="select-profile"
+                      height={137}
+                      width={137}
+                      className="border border-gray-300 rounded-full"
+                    />
+                  )}
+                </div>
+                <div className="flex flex-col gap-4 items-center">
+                  <Button
+                    onClick={triggerImageUpload}
+                    className="focus:outline-none"
+                  >
+                    Upload Profile Image/Photo
+                  </Button>
+                  <span className="text-gray-500 text-sm font-normal">
+                    *minimum 500px x 500px
+                  </span>
+                  <input
+                    type="file"
+                    id="profileImageInput"
+                    accept="image/*"
+                    style={{ display: "none" }}
+                    onChange={handleImageUpload}
+                  />
                 </div>
               </div>
-              <Button className="w-fit">Upload Profile</Button>
             </div>
+            <hr className="text-gray-300" />
           </div>
-          <hr className="text-gray-300" />
+          <div className="flex flex-col gap-6">
+            <div className="flex">
+              <div className="flex flex-col gap-2">
+                <p className="text-lg font-semibold">Edit Your Profile</p>
+                <p className="text-sm font-normal w-[308px] text-gray-600">
+                  Change your account type, edit your contact information, add
+                  your social media details and your user details.
+                </p>
+              </div>
+              <div className="flex flex-col px-12 pt-8 gap-16">
+                <div className="flex flex-col gap-8">
+                  <div>
+                    <p className="text-primary font-semibold">Account Type</p>
+                  </div>
+                  <div className="flex flex-col gap-3">
+                    <p className="text-primary font-semibold">
+                      Contact Information
+                    </p>
+                    <div className="flex flex-wrap gap-6">
+                      <div className="flex gap-6 w-full">
+                        <div className="w-full gap-1">
+                          <label
+                            className="block text-gray-700 text-sm font-bold"
+                            htmlFor="firstName"
+                          >
+                            First Name
+                          </label>
+                          <input
+                            id="firstName"
+                            type="text"
+                            placeholder="Michael"
+                            className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
+                            {...registerProfile("firstName")}
+                          />
+                          {profileErrors.firstName && (
+                            <span className="text-red-500 text-sm">
+                              {profileErrors.firstName.message}
+                            </span>
+                          )}
+                        </div>
+                        <div className="w-full gap-1">
+                          <label
+                            className="block text-gray-700 text-sm font-bold"
+                            htmlFor="lastName"
+                          >
+                            Last Name{" "}
+                            {profileErrors.lastName && (
+                              <span className="text-red-500 text-sm">
+                                {profileErrors.lastName.message}
+                              </span>
+                            )}
+                          </label>
+                          <input
+                            id="LastName"
+                            type="text"
+                            placeholder="Chukwueke"
+                            className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
+                            {...registerProfile("lastName")}
+                          />
+                        </div>
+                      </div>
+                      <div className="flex gap-6 w-full">
+                        <div className="w-full gap-1">
+                          <label
+                            className="block text-gray-700 text-sm font-bold"
+                            htmlFor="companyName"
+                          >
+                            Company Name (optional)
+                          </label>
+                          <input
+                            id="company"
+                            type="text"
+                            placeholder="Mike’s Realties"
+                            className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
+                            {...registerProfile("company")}
+                          />
+                        </div>
+                        <div className="w-full gap-1">
+                          <label
+                            className="block text-gray-700 text-sm font-bold"
+                            htmlFor="email"
+                          >
+                            Email
+                          </label>
+                          <input
+                            id="email"
+                            type="email"
+                            placeholder="mikesrealties@gmail.com"
+                            className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
+                            {...registerProfile("email")}
+                          />
+                          {profileErrors.email && (
+                            <span className="text-red-500 text-sm">
+                              {profileErrors.email.message}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      <div className="w-full gap-1">
+                        <label
+                          className="block text-gray-700 text-sm font-bold"
+                          htmlFor="phoneNumber"
+                        >
+                          Phone Number
+                        </label>
+                        <input
+                          id="number"
+                          type="text"
+                          placeholder="08012345678"
+                          className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
+                          {...registerProfile("phoneNumber")}
+                        />
+                        {profileErrors.phoneNumber && (
+                          <span className="text-red-500 text-sm">
+                            {profileErrors.phoneNumber.message}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <Button className="w-fit">Upload Profile</Button>
+              </div>
+            </div>
+            <hr className="text-gray-300 pb-8" />
+          </div>
         </form>
-        <form
-          className="flex flex-col gap-4 w-full"
-          onClick={handlePasswordSubmit(onSubmitPassword)}
-        >
-          <div className="flex gap-[140px]">
+        <div className="flex flex-col gap-4 w-full">
+          <form
+            className="flex gap-[140px]"
+            onClick={handleVerificationSubmit(onSubmitVerification)}
+          >
             <div className="flex flex-col gap-2 text-nowrap">
               <p className="text-lg font-semibold">Verification</p>
               <p className="text-sm font-normal text-gray-600">
@@ -303,26 +305,16 @@ function Profile() {
                     >
                       State
                     </label>
-                    <div
-                      className="w-full px-4 py-2 border border-gray-300
-                      placeholder:text-gray-500 text-gray-600 rounded-[4px]
-                      focus:outline relative"
-                      onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                    >
-                      {selectedPronoun}
-                    </div>
-                    {isDropdownOpen && (
-                      <div className="absolute left-0 top-full z-10 mt-1 w-full rounded-md border border-border bg-white">
-                        {pronounsOptions.map((option) => (
-                          <div
-                            key={option}
-                            className="cursor-pointer px-3 py-2 hover:bg-gray-300"
-                            onClick={() => handlePronounSelect(option)}
-                          >
-                            {option}
-                          </div>
-                        ))}
-                      </div>
+                    <Dropdown
+                      options={stateOptions}
+                      value={selectedState}
+                      onChange={(option) => setSelectedState(option)}
+                      placeholder="State"
+                    />
+                    {verificationErrors.state && (
+                      <span className="text-red-500 text-sm">
+                        {verificationErrors.state.message}
+                      </span>
                     )}
                   </div>
 
@@ -331,28 +323,18 @@ function Profile() {
                       className="block text-gray-700 text-sm font-bold"
                       htmlFor="newPassword"
                     >
-                      State
+                      City
                     </label>
-                    <div
-                      className="w-full px-4 py-2 border border-gray-300
-                      placeholder:text-gray-500 text-gray-600 rounded-[4px]
-                      focus:outline relative"
-                      onClick={() => setIsDropdownOpen(null)}
-                    >
-                      {selectedNoun}
-                    </div>
-                    {isDropdownOpen && (
-                      <div className="absolute left-0 top-full z-10 mt-1 w-full rounded-md border border-border bg-white">
-                        {nounsOptions.map((option) => (
-                          <div
-                            key={option}
-                            className="cursor-pointer px-3 py-2 hover:bg-gray-300"
-                            onClick={() => handleNounSelect(option)}
-                          >
-                            {option}
-                          </div>
-                        ))}
-                      </div>
+                    <Dropdown
+                      options={cityOptions}
+                      value={selectedCity}
+                      onChange={(option) => setSelectedCity(option)}
+                      placeholder="City"
+                    />
+                    {verificationErrors.city && (
+                      <span className="text-red-500 text-sm">
+                        {verificationErrors.city.message}
+                      </span>
                     )}
                   </div>
                 </div>
@@ -368,7 +350,13 @@ function Profile() {
                     type="text"
                     placeholder="e.g No 25 Asokoro Street"
                     className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
+                    {...registerVerification("street")}
                   />
+                  {verificationErrors.street && (
+                    <span className="text-red-500 text-sm">
+                      {verificationErrors.street.message}
+                    </span>
+                  )}
                 </div>
                 <div className="flex flex-col gap-1">
                   <label
@@ -382,13 +370,24 @@ function Profile() {
                     type="text"
                     placeholder="Enter your CAC Registration Code(RC Number)"
                     className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
+                    {...registerVerification("cacNumber")}
                   />
+                  {verificationErrors.cacNumber && (
+                    <span className="text-red-500 text-sm">
+                      {verificationErrors.cacNumber.message}
+                    </span>
+                  )}
                 </div>
               </div>
-              <Button className="w-fit">Verify Account</Button>
+              <Button type="submit" className="w-fit">
+                Verify Account
+              </Button>
             </div>
-          </div>
-          <div className="flex gap-3 w-full">
+          </form>
+          <form
+            className="flex gap-3 w-full"
+            onSubmit={handlePasswordSubmit(onSubmitPassword)}
+          >
             <div className="flex flex-col gap-0 ">
               <p className="text-lg font-semibold">Change Password</p>
               <p className="text-sm font-normal text-gray-600 w-[300px]">
@@ -405,11 +404,17 @@ function Profile() {
                     Current Password
                   </label>
                   <input
-                    id="currentPass"
+                    id="currentPassword"
                     type="text"
                     placeholder="Enter your current password"
                     className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
+                    {...registerPassword("currentPassword")}
                   />
+                  {passwordErrors.currentPassword && (
+                    <span className="text-red-500 text-sm">
+                      {passwordErrors.currentPassword.message}
+                    </span>
+                  )}
                 </div>
                 <div className="flex gap-6 w-full">
                   <div className="flex flex-col gap-1 w-full">
@@ -424,7 +429,13 @@ function Profile() {
                       type="text"
                       placeholder="Enter your new password"
                       className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
+                      {...registerPassword("newPassword")}
                     />
+                    {passwordErrors.newPassword && (
+                      <span className="text-red-500 text-sm">
+                        {passwordErrors.newPassword.message}
+                      </span>
+                    )}
                   </div>
                   <div className="flex flex-col gap-1 w-full">
                     <label
@@ -438,15 +449,21 @@ function Profile() {
                       type="text"
                       placeholder="Confirm your new password"
                       className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
+                      {...registerPassword("confirmPassword")}
                     />
+                    {passwordErrors.confirmPassword && (
+                      <span className="text-red-500 text-sm">
+                        {passwordErrors.confirmPassword.message}
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
               <Button className="w-fit">Reset Password</Button>
             </div>
-          </div>
+          </form>
           <hr className="text-gray-300 py-2" />
-        </form>
+        </div>
         <div>
           <hr className="text-gray-300" />
           <div className="flex gap-[202px]">
