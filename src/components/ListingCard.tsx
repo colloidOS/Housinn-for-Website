@@ -9,6 +9,7 @@ import Icon from "../../public/icons/ph-icon.svg";
 import Bed from "../../public/icons/ph-bed.svg";
 import Bath from "../../public/icons/ph-bath.svg";
 import Feet from "../../public/icons/ph-feet.svg";
+
 import Image from "next/image";
 
 const ListingCard: React.FC<{ listing: Listing }> = ({ listing }) => {
@@ -21,7 +22,7 @@ const ListingCard: React.FC<{ listing: Listing }> = ({ listing }) => {
       />
       <div className="mt-4 mb-2 flex flex-col gap-2  mx-5 ">
         <span
-          className={`text-xs px-2 py-1  absolute top-0 rounded-ss-[7px] left-0 ${
+          className={`text-xs px-2 py-1 pr-4 clip-triangle-right absolute top-0 rounded-ss-[7px] left-0 ${
             listing.tag === "For Sale"
               ? "bg-green-200 text-green-700"
               : listing.tag === "For Rent"

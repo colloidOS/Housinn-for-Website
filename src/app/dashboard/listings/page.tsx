@@ -5,6 +5,8 @@ import { listings, Listing } from "../../../data/myListing";
 import ListingCard from "./ListingCard";
 import ListingListItem from "./ListingListItem"; // For list view
 import Search from "../../../../public/icons/search-listing.svg";
+import Grid_view from "../../../../public/icons/grid-view.svg";
+import List_view from "../../../../public/icons/list-view.svg";
 import Filter from "./Filter";
 import Image from "next/image";
 
@@ -85,9 +87,25 @@ const ListingsPage: React.FC = () => {
           {/* Toggle View */}
           <button
             onClick={toggleView}
-            className="text-[14px] p-2 border border-gray-300 rounded-[7px]"
+            className=""
           >
-            {isListView ? "Card View" : "List View"}
+            {isListView ? (
+              <Image
+                src={Grid_view}
+                alt="image"
+                width={60}
+                height={34}
+                className=" cursor-pointer"
+              />
+            ) : (
+              <Image
+                src={List_view}
+                alt="image"
+                width={60}
+                height={34}
+                className=" cursor-pointer"
+              />
+            )}
           </button>
         </div>
       </div>
