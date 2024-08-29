@@ -31,7 +31,7 @@ const UserNavbar: React.FC<UserNavbarProps> = ({ className }) => {
   const currentPath = pathname?.split("/")[2];
   return (
     <nav
-      className={` ${className} bg-white px-[74px] py-2.5 md:left-[220px] lg:left-[252px]`}
+      className={` ${className} bg-white px-[74px] py-2.5 md:left-[220px] lg:left-[252px] w-full`}
       role="navbar"
     >
       <div className="flex items-center justify-between gap-2">
