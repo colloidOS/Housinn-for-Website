@@ -7,7 +7,7 @@ import Search from "../../../public/icons/search.svg";
 
 function Dashboard() {
   return (
-    <div className="flex flex-col gap-6 relative w-full bg-background-2 px-12 py-10">
+    <div className="flex flex-col gap-6 relative w-full h-full bg-background-2 px-12 py-10">
       <div className="flex flex-col gap-4">
         <h2 className="text-2xl font-bold text-black">Dashboard</h2>
         <div className="flex flex-col justify-center items-center">

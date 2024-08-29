@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import Pfp from "@/../../public/icons/pfp.svg";
+import Pfp from "@/../../public/images/pfp.png";
 import Image from "next/image";
 import Search from "../../../../public/icons/search.svg";
 
@@ -11,7 +11,7 @@ const dummyData = [
     name: "Deborah Grandy",
     message:
       "Hello Sir. I would like to make an enquiry corncerning your recent listings",
-    time: "11:59 PM",
+    time: "10:59 PM",
     read: true,
   },
   {
@@ -20,13 +20,37 @@ const dummyData = [
     image: Pfp,
     message:
       "Hello Sir. I would like to make an enquiry relating to the house postings",
-    time: "11:59 PM",
+    time: "11:53 PM",
     read: false,
   },
   {
     id: 3,
     image: Pfp,
     name: "Mike Realties",
+    message: "Hello there. Welcome to Mikes Realties. How may we assist you?",
+    time: "11:59 PM",
+    read: true,
+  },
+  {
+    id: 4,
+    image: Pfp,
+    name: "Mike Realties",
+    message: "Hello there. Welcome to Mikes Realties. How may we assist you?",
+    time: "11:56 PM",
+    read: false,
+  },
+  {
+    id: 5,
+    image: Pfp,
+    name: "James Rodulf",
+    message: "Hello there. Welcome to Mikes Realties. How may we assist you?",
+    time: "11:59 PM",
+    read: false,
+  },
+  {
+    id: 6,
+    image: Pfp,
+    name: "Agent Henry",
     message: "Hello there. Welcome to Mikes Realties. How may we assist you?",
     time: "11:59 PM",
     read: true,
@@ -74,7 +98,7 @@ function MessagePage() {
   };
 
   return (
-    <div className="w-full flex flex-col bg-background-2 gap-5 px-12 py-10">
+    <div className="w-full flex flex-col bg-background-2 gap-5 h-auto px-8 pt-8">
       <div className="flex flex-col gap-4 border-b border-gray-400">
         <h2 className="text-2xl font-bold text-black">Messages</h2>
         <div className=" flex gap-6 w-fit bg-white p-1">
@@ -101,8 +125,8 @@ function MessagePage() {
         </div>
       </div>
       {/* Left Side: Message List and Category Bar */}
-      <div className="flex gap-5 w-full">
-        <div className="flex flex-col gap-6 max-w-[400px] rounded-lg px-6 py-3 bg-white">
+      <div className="flex gap-5 w-full h-[500px]">
+        <div className="flex flex-col gap-6 w-2/5 rounded-lg px-3 lg:px-6 py-3 bg-white">
           <div className="flex justify-between border border-gray-300 items-center w-full pl-4 pr-8 py-2 text-sm rounded-lg text-gray-800  text-black">
             <input
               type="text"
@@ -115,24 +139,30 @@ function MessagePage() {
               <Image src={Search} width={20} height={20} alt="search-icon" />
             </span>
           </div>
-          <div>
+          <div className="w-full overflow-y-auto custom-scrollbar duration-300">
             {filteredMessages.map((message) => (
               <div
                 key={message.id}
                 onClick={() => handleSelectMessage(message)}
-                className={`p-4 cursor-pointer flex gap-6 hover:bg-gray-300 border-t ${
-                  selectedMessage?.id === message.id ? "bg-blue-100" : ""
+                className={`px-1 py-3 cursor-pointer w-full flex items-center lg:gap-6 hover:bg-white-200 duration-100 border-t ${
+                  selectedMessage?.id === message.id
+                    ? "bg-background duration-150 hover:bg-background"
+                    : ""
                 }`}
               >
                 {" "}
                 <Image src={Pfp} alt="pfp" width={60} height={60} />
-                <div>
-                  <div className="flex justify-between items-center">
-                    <div className="font-semibold">{message.name}</div>
-                    <div className="text-xs text-gray-500">{message.time}</div>
+                <div className="flex flex-col gap-1 w-full">
+                  <div className="flex justify-between items-center gap-2 relative">
+                    <div className="font-semibold text-base">
+                      {message.name}
+                    </div>
+                    <div className="text-[10px] text-gray-500 ">
+                      {message.time}
+                    </div>
                   </div>
                   <div
-                    className={`text-sm text-gray-600 truncate`}
+                    className={`text-sm w-full text-gray-600 truncate`}
                     style={{ width: "280px" }}
                   >
                     {message.message}
@@ -143,21 +173,21 @@ function MessagePage() {
           </div>
         </div>
         {/* Right Side: Chat Window */}
-        <div className="w-2/3 p-4 flex bg-white rounded-lg flex-col">
+        <div className="w-3/5 flex bg-white rounded-lg flex-col">
           {selectedMessage ? (
             <>
-              <div className="bg-blue-100 p-2 rounded mb-4">
+              <div className="flex gap-6 items-center bg-blue-100 px-10 py-2 rounded ">
+                <Image src={Pfp} alt="pfp" width={60} height={60} />
+
                 <div className="font-semibold">{selectedMessage.name}</div>
               </div>
-              <div className="flex-grow overflow-y-auto bg-white-200 ">
+              <div className="flex-grow overflow-y-auto bg-white-200 px-10">
                 <div className="mb-2">
-                  <div className="text-sm">
-                    <div className="flex bg-white py-2">
-                      <span className="block">{selectedMessage.message}</span>
-                      <span className=" text-xs text-gray-500 flex justify-end">
-                        {selectedMessage.time}
-                      </span>
-                    </div>
+                  <div className="flex justify-between bg-white py-2 w-[350px] relative">
+                    <p className="block px-5">{selectedMessage.message}</p>
+                    <span className=" text-[10px] text-gray-500 flex items-end absolute bottom-1 right-1 text-nowrap">
+                      {selectedMessage.time}
+                    </span>
                   </div>
                 </div>
                 {/* Add your chat history rendering here if needed */}

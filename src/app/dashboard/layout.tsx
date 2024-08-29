@@ -9,9 +9,11 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="grid grid-rows-[auto_1fr]">
-      <UserNavbar />
-      <div className="relative w-full flex  max-lg:overflow-hidden ">
+    <div className="flex flex-col relative">
+      <div className="sticky top-0 z-10 w-full">
+        <UserNavbar />
+      </div>
+      <div className="relative w-full flex h-full max-lg:overflow-hidden ">
         <SettingsSidebar />
         <Suspense>{children}</Suspense>
       </div>
