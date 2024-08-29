@@ -1,9 +1,9 @@
-"use client";
 
+"use client"
 import React, { useState } from "react";
-import { listings, Listing } from "../../../data/myListing";
+import { listings } from "../../../data/myListing";
 import ListingCard from "./ListingCard";
-import ListingListItem from "./ListingListItem"; // For list view
+import ListingListItem from "./ListingListItem";
 import Search from "../../../../public/icons/search-listing.svg";
 import Grid_view from "../../../../public/icons/grid-view.svg";
 import List_view from "../../../../public/icons/list-view.svg";
@@ -13,7 +13,7 @@ import Image from "next/image";
 const ListingsPage: React.FC = () => {
   const [activeTag, setActiveTag] = useState<string | null>("All Properties");
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [isListView, setIsListView] = useState<boolean>(false); // State to toggle between card and list view
+  const [isListView, setIsListView] = useState<boolean>(false);
 
   const handleFilterChange = (tag: string) => {
     setActiveTag(tag === activeTag ? null : tag);
@@ -27,16 +27,13 @@ const ListingsPage: React.FC = () => {
     setIsListView(!isListView);
   };
 
-  // Search function that filters by multiple fields
   const handleSearch = () => {
     return listings.filter((listing) => {
       const matchesTag =
         activeTag === "All Properties" || listing.tag === activeTag;
 
-      // Convert the search term to lowercase for case-insensitive comparison
       const lowerCaseSearchTerm = searchTerm.toLowerCase();
 
-      // Check if the search term matches any of the relevant fields
       const matchesSearch = [
         listing.title,
         listing.location,
@@ -59,43 +56,34 @@ const ListingsPage: React.FC = () => {
         <h1 className="font-bold text-2xl mb-4">My Listings</h1>
       </div>
       <div className="flex justify-between mb-5 items-center">
-        {/* Filters */}
         <div className="flex items-center gap-4">
           <Filter activeTag={activeTag || ""} onChange={handleFilterChange} />
-          {/* Search bar */}
           <div className="flex relative items-center w-[150px] h-2">
             <input
               type="text"
               placeholder="Search listings..."
               value={searchTerm}
               onChange={handleSearchInputChange}
-              className=" pl-6 border rounded w-full placeholder:text-[12px] placeholder:flex placeholder:items-center justify-center"
+              className="pl-6 border rounded w-full placeholder:text-[12px] placeholder:flex placeholder:items-center justify-center"
             />
-            <button
-              onClick={handleSearch}
-              className="   rounded-[5px] absolute left-2"
-            >
+            <button className="rounded-[5px] absolute left-2">
               <Image
                 src={Search}
                 alt="image"
                 width={12}
                 height={12}
-                className=" cursor-pointer"
-              />{" "}
+                className="cursor-pointer"
+              />
             </button>
           </div>
-          {/* Toggle View */}
-          <button
-            onClick={toggleView}
-            className=""
-          >
+          <button onClick={toggleView} className="">
             {isListView ? (
               <Image
                 src={Grid_view}
                 alt="image"
                 width={60}
                 height={34}
-                className=" cursor-pointer"
+                className="cursor-pointer"
               />
             ) : (
               <Image
@@ -103,34 +91,37 @@ const ListingsPage: React.FC = () => {
                 alt="image"
                 width={60}
                 height={34}
-                className=" cursor-pointer"
+                className="cursor-pointer"
               />
             )}
           </button>
         </div>
       </div>
 
-      {/* Listings Grid */}
-      <div
-        className={`grid ${
-          isListView
-            ? "grid-cols-1"
-            : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-        } gap-4 mt-4`}
-      >
-        {filteredListings.map((listing) =>
-          isListView ? (
-            <ListingListItem key={listing.id} listing={listing} />
-          ) : (
+      {isListView ? (
+        <table className="min-w-full table-auto border-collapse">
+          <thead>
+            <tr className="bg-gray-200 text-left">
+              <th className="py-2 px-4">Property Title</th>
+              <th className="py-2 px-4">Category</th>
+              <th className="py-2 px-4">Price</th>
+              <th className="py-2 px-4">Date</th>
+              <th className="py-2 px-4">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredListings.map((listing) => (
+              <ListingListItem key={listing.id} listing={listing} />
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+          {filteredListings.map((listing) => (
             <ListingCard key={listing.id} listing={listing} />
-          )
-        )}
-      </div>
-      <div className="w-full flex justify-center">
-        <button className="mt-8 px-4 py-2 bg-primary text-white rounded-[5px]">
-          View all Listings
-        </button>
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

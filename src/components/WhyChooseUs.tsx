@@ -49,7 +49,7 @@ const sections = [
 
 const WhyChooseUs: React.FC = () => {
   return (
-    <section className="flex flex-col gap-[32px] pt-[48px] pb-[170px] px-[104px]">
+    <section className="flex flex-col gap-8 pt-12 pb-[10.625rem] font-sans px-[6.5rem]">
       <div className="flex flex-col gap-3 w-full text-center ">
         <h1 className="font-semibold text-4xl text-secondary">
           Why Choose Us?
@@ -58,9 +58,9 @@ const WhyChooseUs: React.FC = () => {
           Get the best real estate services here at Housinn
         </p>
       </div>
-      <div className="grid grid-cols-2 gap-[31px]">
+      <div className="grid grid-cols-2 gap-8">
         {sections.map((section, index) => (
-          <div key={index} className="flex flex-col gap-[32px]">
+          <div key={index} className="flex flex-col gap-8">
             <div className="flex gap-4 items-start">
               <Image
                 src={section.image}
@@ -69,8 +69,8 @@ const WhyChooseUs: React.FC = () => {
                 alt={section.title}
               />
               <div>
-                <h2 className="font-semibold text-[18px]">{section.title}</h2>
-                <p>{section.description}</p>
+                <h2 className="font-semibold text-[1.125rem]">{section.title}</h2>
+                <p className="text-base">{section.description}</p>
               </div>
             </div>
           </div>
