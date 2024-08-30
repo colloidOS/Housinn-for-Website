@@ -1,14 +1,13 @@
-
 "use client"
 import React, { useState } from "react";
 import { listings } from "../../../data/myListing";
 import ListingCard from "./ListingCard";
-import ListingListItem from "./ListingListItem";
 import Search from "../../../../public/icons/search-listing.svg";
 import Grid_view from "../../../../public/icons/grid-view.svg";
 import List_view from "../../../../public/icons/list-view.svg";
 import Filter from "./Filter";
 import Image from "next/image";
+import Sort from "./Sort";
 
 const ListingsPage: React.FC = () => {
   const [activeTag, setActiveTag] = useState<string | null>("All Properties");
@@ -99,22 +98,7 @@ const ListingsPage: React.FC = () => {
       </div>
 
       {isListView ? (
-        <table className="min-w-full table-auto border-collapse">
-          <thead>
-            <tr className="bg-gray-200 text-left">
-              <th className="py-2 px-4">Property Title</th>
-              <th className="py-2 px-4">Category</th>
-              <th className="py-2 px-4">Price</th>
-              <th className="py-2 px-4">Date</th>
-              <th className="py-2 px-4">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredListings.map((listing) => (
-              <ListingListItem key={listing.id} listing={listing} />
-            ))}
-          </tbody>
-        </table>
+        <Sort listings={filteredListings} />
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
           {filteredListings.map((listing) => (
