@@ -84,11 +84,11 @@ const AuthPage = () => {
       ></div>
 
       <div className="flex flex-col items-center justify-center w-full md:w-1/2">
-        <div className="flex flex-col gap-7 px-[65px] pt-[62px] pb-[140px] text-center md:px-[114px] md:pt-9">
+        <div className="flex flex-col gap-7 px-[65px] pt-[62px] pb-[8.75rem] text-center md:px-[7.125rem] md:pt-9">
           <h1 className="text-2xl font-bold">Welcome To Housinn</h1>
           <div className="flex justify-center w-full px-[13px]">
             <button
-              className={`flex-1 px-6 py-2 text-[14px] border-b-2 focus:outline-none ${
+              className={` px-8 py-2 text-[14px] border-b-2 focus:outline-none ${
                 isSignIn ? "border-primary" : "border-white-300"
               }`}
               onClick={() => setIsSignIn(true)}
@@ -105,7 +105,7 @@ const AuthPage = () => {
             </button>
           </div>
           {isSignIn ? (
-            <form className="px-[13px]">
+            <form className="px-[13px] flex flex-col w-full">
               {signInFields.map((field) => (
                 <div key={field.id} className="mb-3 text-left">
                   <label
@@ -158,9 +158,9 @@ const AuthPage = () => {
               </div>
             </form>
           ) : (
-            <form className="flex flex-col gap-3 px-[13px] text-left">
+            <form className="px-[13px] flex flex-col w-full">
               {newAccountFields.map((field) => (
-                <div key={field.id}>
+                <div key={field.id} className="mb-3 text-left">
                   <label
                     htmlFor={field.id}
                     className="text-[14px] font-semibold"
@@ -181,7 +181,7 @@ const AuthPage = () => {
                   {accountTypes.map((type) => (
                     <label
                       key={type.id}
-                      className="flex items-center gap-1 text-[11px]"
+                      className="flex items-center gap-1  text-[14px]"
                     >
                       <input
                         type="radio"
