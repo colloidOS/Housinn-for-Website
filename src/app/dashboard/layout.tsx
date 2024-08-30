@@ -14,7 +14,9 @@ export default function AdminLayout({
         <UserNavbar />
       </div>
       <div className="relative w-full flex h-full max-lg:overflow-hidden ">
-        <SettingsSidebar />
+        <div className="sticky left-0 top-0 z-8">
+          <SettingsSidebar />
+        </div>
         <Suspense>{children}</Suspense>
       </div>
     </div>
