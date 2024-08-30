@@ -1,8 +1,9 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Pfp from "@/../../public/images/pfp.png";
 import Image from "next/image";
 import Search from "../../../../public/icons/search.svg";
+import { Link } from "lucide-react";
 
 const dummyData = [
   {
@@ -60,7 +61,7 @@ const dummyData = [
 
 function MessagePage() {
   const [selectedMessage, setSelectedMessage] = useState(null);
-  const [category, setCategory] = useState("all"); // 'all', 'read', 'unread'
+  const [category, setCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [newMessageText, setNewMessageText] = useState("");
 
@@ -74,6 +75,19 @@ function MessagePage() {
       return false;
     return true;
   });
+
+  const fileInputRef = useRef(null); // Create a ref to access the file input
+
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      console.log(file); // Handle the file here (e.g., upload to server or display preview)
+    }
+  };
+
+  const handleLinkClick = () => {
+    fileInputRef.current.click(); // Trigger file input click on Link click
+  };
 
   const handleSelectMessage = (message) => {
     setSelectedMessage(message);
@@ -178,10 +192,9 @@ function MessagePage() {
             <>
               <div className="flex gap-6 items-center bg-blue-100 px-10 py-2 rounded ">
                 <Image src={Pfp} alt="pfp" width={60} height={60} />
-
                 <div className="font-semibold">{selectedMessage.name}</div>
               </div>
-              <div className="flex-grow overflow-y-auto bg-white-200 px-10">
+              <div className="flex-grow overflow-y-auto bg-white-200 px-10 py-5">
                 <div className="mb-2">
                   <div className="flex justify-between bg-white py-2 w-[350px] relative">
                     <p className="block px-5">{selectedMessage.message}</p>
@@ -192,13 +205,16 @@ function MessagePage() {
                 </div>
                 {/* Add your chat history rendering here if needed */}
               </div>
-              <div className="message-compose flex gap-4 ">
+              <div className="message-compose flex items-center gap-2 border-y border-primary-2 bg-white-200 p-2">
+                <div onClick={handleLinkClick} className="cursor-pointer">
+                  <Link />
+                </div>
                 <input
                   type="text"
                   value={newMessageText}
-                  onChange={(e) => setNewMessageText(e.target.value)} // Update state on input change
+                  onChange={(e) => setNewMessageText(e.target.value)}
                   placeholder="Type a message..."
-                  className="p-2 border rounded w-full"
+                  className="p-2 rounded-lg w-full bg-white placeholder:text-gray-500 focus:outline-none focus:text-wrap"
                 />
                 <button
                   onClick={handleSendMessage} // Use the state value
@@ -207,6 +223,14 @@ function MessagePage() {
                   Send
                 </button>
               </div>
+              {/* Hidden file input */}
+              <input
+                type="file"
+                ref={fileInputRef}
+                style={{ display: "block " }}
+                onChange={handleFileUpload}
+                accept="*"
+              />
             </>
           ) : (
             <div className="flex justify-center items-center font-semibold text-black text-xl h-full">
