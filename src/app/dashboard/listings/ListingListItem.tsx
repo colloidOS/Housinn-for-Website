@@ -21,7 +21,7 @@ const ListingListItem: React.FC<ListingListItemProps> = ({ listing }) => {
               ? "bg-yellow-100 text-yellow-800"
               : listing.status === "Unpublished"
               ? "bg-red-100 text-red-800"
-              : "bg-gray-100 text-gray-800"
+              : "bg-gray-200 text-gray-800"
           }`}
         >
           {listing.status}

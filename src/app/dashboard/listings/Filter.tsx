@@ -20,12 +20,12 @@ const Filter: React.FC<FilterProps> = ({ activeTag, onChange }) => {
 
   return (
     <div className="flex items-center gap-4">
-      <div className="flex border-[1px] border-gray-300 p-[2px] rounded-[7px] bg-background-2 ">
+      <div className="flex border-[1px] gap-6 border-gray-300 p-[2px] rounded-[7px] bg-background-2 ">
         {tags.map((tag) => (
           <button
             key={tag}
             onClick={() => onChange(tag)}
-            className={`text-[9px] rounded-[7px] p-2 ${
+            className={`text-[1rem] rounded-[7px] p-2 ${
               activeTag === tag
                 ? "bg-primary-100 text-primary"
                 : "text-gray-700"

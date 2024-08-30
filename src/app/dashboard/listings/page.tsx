@@ -50,7 +50,7 @@ const ListingsPage: React.FC = () => {
   const filteredListings = handleSearch();
 
   return (
-    <div className="px-12 pt-10 pb-12 w-full">
+    <div className="px-12 text-gray-600  pt-10 pb-12 w-full">
       <div>
         <h1 className="font-bold text-2xl mb-4">My Listings</h1>
       </div>
