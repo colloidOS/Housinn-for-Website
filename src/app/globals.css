@@ -11,10 +11,12 @@ input[type="search"]::-webkit-search-cancel-button {
   background: linear-gradient(95.75deg, #094cb1 -12.7%, #1281e5 100%);
   box-shadow: 2px -2px 41px -11px #00000040;
 }
+
 .custom-scrollbar {
   max-height: 400px; /* Set the height of the scrollable container */
   transition: overflow-y 0.3s ease-in-out; /* Smooth transition for the scrollbar */
 }
+
 .custom-scrollbar:hover {
   overflow-y: auto; /* Show the scrollbar on hover */
   transition: opacity 200ms ease-in-out; /* Smooth transition for the scrollbar appearance */
@@ -46,3 +48,8 @@ input[type="search"]::-webkit-search-cancel-button {
   width: 8px;
   background-color: #555; /* Color of the scrollbar handle on hover */
 }
+
+.clip-triangle-right {
+  clip-path: polygon(0 0, 100% 0, 80% 50%, 100% 100%, 0 100%);
+}
+
