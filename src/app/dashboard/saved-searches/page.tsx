@@ -21,21 +21,21 @@ const SavedSearches: React.FC = () => {
 
   return (
     <div className="w-full bg-background-2">
-      <h2 className="text-2xl font-bold pl-12 pt-4 pb-[39px] w-full text-left ">
+      <h2 className="w-full pt-4 pl-12 pb-[2.4375rem] text-left text-2xl font-bold">
         Saved Searches
       </h2>
       <hr />
-      <div className="pt-[39px] pl-[37px] pr-[146px]">
+      <div className="pt-[2.4375rem] pl-[2.3125rem] pr-[9.125rem]">
         {savedSearches.map((search) => (
           <div
             key={search.id}
-            className="flex flex-col gap-10 border pl-6 pt-5 pr-5 pb-4 border-blue-400  mb-6 rounded-md"
+            className="mb-6 flex flex-col gap-10 rounded-md border border-blue-400 pl-6 pt-5 pr-5 pb-4"
           >
-            <div className="flex justify-between items-center">
-              <h3 className="text-blue-600 font-bold">{search.type}</h3>
+            <div className="flex items-center justify-between">
+              <h3 className="font-bold text-blue-600">{search.type}</h3>
 
               <div className="flex items-center">
-                <span className="mr-2 ">Receive Alerts</span>
+                <span className="mr-2">Receive Alerts</span>
                 <Switch
                   checked={search.receiveAlerts}
                   onChange={() => handleToggle(search.id)}
@@ -53,17 +53,17 @@ const SavedSearches: React.FC = () => {
                 />
               </div>
             </div>
-            <div className="flex justify-between text-base ">
+            <div className="flex justify-between text-base">
               <p>
                 House type: {search.houseType} | State: {search.state} |
                 Bedroom: {search.bedroom} | Price: {search.price}
               </p>
-              <button className="  flex gap-1 items-center">
+              <button className="flex items-center gap-1">
                 <Image
                   src={Trash}
                   alt="image"
-                  width={16}
-                  height={16}
+                  width={1} // 16px to rem
+                  height={1} // 16px to rem
                   className="cursor-pointer"
                 />
                 Delete
