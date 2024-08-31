@@ -7,7 +7,7 @@ export const savedSearches = [
       state: "Abuja",
       bedroom: 4,
       price: "N38,000,000",
-      receiveAlerts: true,
+      receiveAlerts: false,
     },
     {
       id: 2,
@@ -16,7 +16,7 @@ export const savedSearches = [
       state: "Enugu",
       bedroom: 5,
       price: "N5,000,000",
-      receiveAlerts: true,
+      receiveAlerts: false,
     },
     {
       id: 3,
@@ -25,7 +25,7 @@ export const savedSearches = [
       state: "Abuja",
       bedroom: 2,
       price: "N200,000",
-      receiveAlerts: true,
+      receiveAlerts: false,
     },
     {
       id: 4,
@@ -34,7 +34,7 @@ export const savedSearches = [
       state: "Lagos",
       bedroom: 8,
       price: "N90,000,000",
-      receiveAlerts: true,
+      receiveAlerts: false,
     },
   ];
   

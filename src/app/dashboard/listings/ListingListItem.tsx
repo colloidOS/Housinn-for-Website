@@ -7,7 +7,7 @@ interface ListingListItemProps {
 
 const ListingListItem: React.FC<ListingListItemProps> = ({ listing }) => {
   return (
-    <tr className="border-b">
+    <tr className="border-b text-[14px]">
       <td className="py-2 px-4">{listing.title}</td>
       <td className="py-2 px-4">{listing.tag}</td>
       <td className="py-2 px-4">{listing.price}</td>
@@ -21,7 +21,7 @@ const ListingListItem: React.FC<ListingListItemProps> = ({ listing }) => {
               ? "bg-yellow-100 text-yellow-800"
               : listing.status === "Unpublished"
               ? "bg-red-100 text-red-800"
-              : "bg-gray-100 text-gray-800"
+              : "bg-gray-200 text-gray-800"
           }`}
         >
           {listing.status}

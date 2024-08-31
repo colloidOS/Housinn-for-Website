@@ -50,7 +50,7 @@ const ListingsPage: React.FC = () => {
   const filteredListings = handleSearch();
 
   return (
-    <div className="px-12 pt-10 pb-12 w-full">
+    <div className="px-12 text-gray-600  pt-10 pb-12 w-full">
       <div>
         <h1 className="font-bold text-2xl mb-4">My Listings</h1>
       </div>
@@ -80,8 +80,8 @@ const ListingsPage: React.FC = () => {
               <Image
                 src={Grid_view}
                 alt="image"
-                width={60}
-                height={34}
+                width={86}
+                height={44}
                 className="cursor-pointer"
               />
             ) : (
@@ -89,7 +89,7 @@ const ListingsPage: React.FC = () => {
                 src={List_view}
                 alt="image"
                 width={60}
-                height={34}
+                height={44}
                 className="cursor-pointer"
               />
             )}
