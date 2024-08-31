@@ -7,7 +7,7 @@ interface ListingListItemProps {
 
 const ListingListItem: React.FC<ListingListItemProps> = ({ listing }) => {
   return (
-    <tr className="border-b">
+    <tr className="border-b text-[14px]">
       <td className="py-2 px-4">{listing.title}</td>
       <td className="py-2 px-4">{listing.tag}</td>
       <td className="py-2 px-4">{listing.price}</td>
