@@ -5,7 +5,7 @@ import Image from "next/image";
 import Search from "../../../../public/icons/search.svg";
 import { Link } from "lucide-react";
 
-const dummyData = [
+const initialDummyData = [
   {
     id: 1,
     image: Pfp,
@@ -14,6 +14,7 @@ const dummyData = [
       "Hello Sir. I would like to make an enquiry corncerning your recent listings",
     time: "10:59 PM",
     read: true,
+    chats: [],
   },
   {
     id: 2,
@@ -23,6 +24,7 @@ const dummyData = [
       "Hello Sir. I would like to make an enquiry relating to the house postings",
     time: "11:53 PM",
     read: false,
+    chats: [],
   },
   {
     id: 3,
@@ -31,6 +33,7 @@ const dummyData = [
     message: "Hello there. Welcome to Mikes Realties. How may we assist you?",
     time: "11:59 PM",
     read: true,
+    chats: [],
   },
   {
     id: 4,
@@ -39,6 +42,7 @@ const dummyData = [
     message: "Hello there. Welcome to Mikes Realties. How may we assist you?",
     time: "11:56 PM",
     read: false,
+    chats: [],
   },
   {
     id: 5,
@@ -47,6 +51,7 @@ const dummyData = [
     message: "Hello there. Welcome to Mikes Realties. How may we assist you?",
     time: "11:59 PM",
     read: false,
+    chats: [],
   },
   {
     id: 6,
@@ -55,17 +60,21 @@ const dummyData = [
     message: "Hello there. Welcome to Mikes Realties. How may we assist you?",
     time: "11:59 PM",
     read: true,
+    chats: [],
   },
   // Add more messages as needed
 ];
 
 function MessagePage() {
+  const [messages, setMessages] = useState(initialDummyData);
   const [selectedMessage, setSelectedMessage] = useState(null);
   const [category, setCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [newMessageText, setNewMessageText] = useState("");
+  const [fileName, setFileName] = useState("");
+  const fileInputRef = useRef(null);
 
-  const filteredMessages = dummyData.filter((message) => {
+  const filteredMessages = messages.filter((message) => {
     if (category === "read" && !message.read) return false;
     if (category === "unread" && message.read) return false;
     if (
@@ -76,17 +85,15 @@ function MessagePage() {
     return true;
   });
 
-  const fileInputRef = useRef(null); // Create a ref to access the file input
-
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      console.log(file); // Handle the file here (e.g., upload to server or display preview)
+      setFileName(file.name);
     }
   };
 
   const handleLinkClick = () => {
-    fileInputRef.current.click(); // Trigger file input click on Link click
+    fileInputRef.current.click();
   };
 
   const handleSelectMessage = (message) => {
@@ -99,15 +106,28 @@ function MessagePage() {
         sender: "Mike",
         text: newMessageText,
         time: new Date().toLocaleTimeString(),
+        file: fileName,
       };
 
-      if (!selectedMessage.chats) {
-        selectedMessage.chats = [];
-      }
+      const updatedMessages = messages.map((msg) =>
+        msg.id === selectedMessage.id
+          ? { ...msg, chats: [...msg.chats, newChat] }
+          : msg
+      );
 
-      selectedMessage.chats.push(newChat);
-      setSelectedMessage({ ...selectedMessage });
-      setNewMessageText(""); // Clear the input field after sending
+      setMessages(updatedMessages);
+      setSelectedMessage(
+        updatedMessages.find((msg) => msg.id === selectedMessage.id)
+      );
+      setNewMessageText("");
+      setFileName("");
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSendMessage();
     }
   };
 
@@ -138,10 +158,9 @@ function MessagePage() {
           </div>
         </div>
       </div>
-      {/* Left Side: Message List and Category Bar */}
       <div className="flex gap-5 w-full h-[500px]">
         <div className="flex flex-col gap-6 w-2/5 rounded-lg px-3 lg:px-6 py-3 bg-white">
-          <div className="flex justify-between border border-gray-300 items-center w-full pl-4 pr-8 py-2 text-sm rounded-lg text-gray-800  text-black">
+          <div className="flex justify-between border border-gray-300 items-center w-full pl-4 pr-8 py-2 text-sm rounded-lg text-gray-800 text-black">
             <input
               type="text"
               placeholder="Search Messages"
@@ -158,13 +177,12 @@ function MessagePage() {
               <div
                 key={message.id}
                 onClick={() => handleSelectMessage(message)}
-                className={`px-1 py-3 cursor-pointer w-full flex items-center lg:gap-6 hover:bg-white-200 duration-100 border-t ${
+                className={`px-1 py-3 cursor-pointer w-full flex items-center lg:gap-6 duration-100 border-t ${
                   selectedMessage?.id === message.id
                     ? "bg-background duration-150 hover:bg-background"
-                    : ""
+                    : "hover:bg-white-200"
                 }`}
               >
-                {" "}
                 <Image src={Pfp} alt="pfp" width={60} height={60} />
                 <div className="flex flex-col gap-1 w-full">
                   <div className="flex justify-between items-center gap-2 relative">
@@ -186,24 +204,40 @@ function MessagePage() {
             ))}
           </div>
         </div>
-        {/* Right Side: Chat Window */}
-        <div className="w-3/5 flex bg-white rounded-lg flex-col">
+        <div className="w-3/5 flex bg-white-200 rounded-lg flex-col">
           {selectedMessage ? (
             <>
               <div className="flex gap-6 items-center bg-blue-100 px-10 py-2 rounded ">
                 <Image src={Pfp} alt="pfp" width={60} height={60} />
                 <div className="font-semibold">{selectedMessage.name}</div>
               </div>
-              <div className="flex-grow overflow-y-auto bg-white-200 px-10 py-5">
-                <div className="mb-2">
+              <div className="flex-grow overflow-y-auto gap-3  px-10 py-5">
+                <div className="flex justify-start">
                   <div className="flex justify-between bg-white py-2 w-[350px] relative">
-                    <p className="block px-5">{selectedMessage.message}</p>
-                    <span className=" text-[10px] text-gray-500 flex items-end absolute bottom-1 right-1 text-nowrap">
+                    <p>{selectedMessage.message} </p>
+                    <span className="text-[10px] text-gray-500 flex items-end absolute bottom-1 right-1 text-nowrap">
                       {selectedMessage.time}
                     </span>
                   </div>
                 </div>
-                {/* Add your chat history rendering here if needed */}
+                <div className="mb-2 flex flex-col gap-2 bg-white-200 justify-end items-end">
+                  {selectedMessage.chats.map((chat, index) => (
+                    <div
+                      key={index}
+                      className="flex justify-between bg-white px-4 py-2 w-[350px] relative"
+                    >
+                      <p className="block px-">{chat.text}</p>
+                      {chat.file && (
+                        <span className="  w-full items-end  text-blue-600 ">
+                          {chat.file}
+                        </span>
+                      )}
+                      <span className=" text-[10px] text-gray-500 flex items-end absolute bottom-1 right-1 text-nowrap">
+                        {chat.time}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
               <div className="message-compose flex items-center gap-2 border-y border-primary-2 bg-white-200 p-2">
                 <div onClick={handleLinkClick} className="cursor-pointer">
@@ -213,21 +247,21 @@ function MessagePage() {
                   type="text"
                   value={newMessageText}
                   onChange={(e) => setNewMessageText(e.target.value)}
+                  onKeyDown={handleKeyPress}
                   placeholder="Type a message..."
                   className="p-2 rounded-lg w-full bg-white placeholder:text-gray-500 focus:outline-none focus:text-wrap"
                 />
                 <button
-                  onClick={handleSendMessage} // Use the state value
+                  onClick={handleSendMessage}
                   className="p-2 bg-blue-500 text-white rounded ml-2"
                 >
                   Send
                 </button>
               </div>
-              {/* Hidden file input */}
               <input
                 type="file"
                 ref={fileInputRef}
-                style={{ display: "block " }}
+                style={{ display: "none " }}
                 onChange={handleFileUpload}
                 accept="*"
               />
