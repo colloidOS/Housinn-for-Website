@@ -1,86 +1,91 @@
 "use client";
+
 import Image from "next/image";
+import axios, { AxiosError } from 'axios';
 import React, { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import { useRouter } from "next/navigation";
+import { ClipLoader } from "react-spinners";
 import Apple from "../../../public/icons/apple.svg";
 import Google from "../../../public/icons/google.svg";
+import api from "../../lib/api"; // Ensure you have your API module correctly configured
 
 const AuthPage = () => {
   const [isSignIn, setIsSignIn] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const toggleView = () => {
     setIsSignIn(!isSignIn);
   };
+  
 
+ 
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+  
+    const formData = new FormData(e.target as HTMLFormElement);
+    const data = Object.fromEntries(formData.entries());
+
+    if (data.userType) {
+      data.userType = (data.userType as string).toLowerCase();
+    }
+  
+    try {
+      let response;
+      if (isSignIn) {
+        response = await api.post("/auth/login", data);
+        toast.success("Signed in successfully!");
+      } else {
+        response = await api.post("/auth/register", data); // Ensure endpoint is correct
+        toast.success("Account created successfully!");
+      }
+      router.push("/dashboard");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        // Handle AxiosError
+        const errorMessage = error.response?.data?.message || error.message;
+        console.error("Submission Error:", error.response?.data || error.message);
+        toast.error(`Error: ${errorMessage}`);
+      } else {
+      
+        toast.error("An unexpected error occurred. Please try again.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  
+  
   const signInFields = [
-    {
-      id: "signin-email",
-      type: "email",
-      placeholder: "Enter your email",
-      label: "Email",
-    },
-    {
-      id: "signin-password",
-      type: "password",
-      placeholder: "Enter your password",
-      label: "Password",
-    },
+    { id: "signin-email", name: "email", type: "email", placeholder: "Enter your email", label: "Email" },
+    { id: "signin-password", name: "password", type: "password", placeholder: "Enter your password", label: "Password" },
   ];
 
   const newAccountFields = [
-    {
-      id: "first-name",
-      type: "text",
-      placeholder: "Enter your first name",
-      label: "First name",
-    },
-    {
-      id: "last-name",
-      type: "text",
-      placeholder: "Enter your last name",
-      label: "Last name",
-    },
-    {
-      id: "signup-email",
-      type: "email",
-      placeholder: "Enter your email",
-      label: "Email",
-    },
-    {
-      id: "signup-password",
-      type: "password",
-      placeholder: "Create password",
-      label: "Password",
-    },
-    {
-      id: "confirm-password",
-      type: "password",
-      placeholder: "Confirm your password",
-      label: "Confirm Password",
-    },
+    { id: "first-name", name: "firstName", type: "text", placeholder: "Enter your first name", label: "First name" },
+    { id: "last-name", name: "lastName", type: "text", placeholder: "Enter your last name", label: "Last name" },
+    { id: "signup-email", name: "email", type: "email", placeholder: "Enter your email", label: "Email" },
+    { id: "signup-password", name: "password", type: "password", placeholder: "Create password", label: "Password" },
   ];
 
   const accountTypes = [
     { id: "account-type-individual", value: "Individual", label: "Individual" },
-    {
-      id: "account-type-property-owner",
-      value: "Property Owner",
-      label: "Property Owner",
-    },
+    { id: "account-type-property-owner", value: "Property Owner", label: "Property Owner" },
     { id: "account-type-agent", value: "Agent", label: "Agent" },
-    {
-      id: "account-type-property-developer",
-      value: "Property Developer",
-      label: "Property Developer",
-    },
+    { id: "account-type-property-developer", value: "Property Developer", label: "Property Developer" },
   ];
 
   return (
-    <div className="relative flex w-full ">
+    <div className="relative flex w-full">
+      <ToastContainer />
       <div
         className="sticky top-0 hidden w-1/2 h-screen bg-center bg-no-repeat bg-cover md:flex"
-        style={{
-          backgroundImage: `url('/images/sign-in.png')`,
-        }}
+        style={{ backgroundImage: `url('/images/sign-in.png')` }}
       ></div>
 
       <div className="flex flex-col items-center justify-center w-full md:w-1/2">
@@ -88,149 +93,86 @@ const AuthPage = () => {
           <h1 className="text-2xl font-bold">Welcome To Housinn</h1>
           <div className="flex justify-center w-full px-[13px]">
             <button
-              className={` px-8 py-2 text-[14px] border-b-2 focus:outline-none ${
-                isSignIn ? "border-primary" : "border-white-300"
-              }`}
-              onClick={() => setIsSignIn(true)}
+              className={`px-8 py-2 text-[14px] border-b-2 focus:outline-none ${isSignIn ? "border-primary" : "border-white-300"}`}
+              onClick={toggleView}
             >
               Sign in
             </button>
             <button
-              className={`px-6 py-2 text-[14px] border-b-2 focus:outline-none ${
-                !isSignIn ? "border-primary" : "border-white-300"
-              }`}
-              onClick={() => setIsSignIn(false)}
+              className={`px-6 py-2 text-[14px] border-b-2 focus:outline-none ${!isSignIn ? "border-primary" : "border-white-300"}`}
+              onClick={toggleView}
             >
               New Account
             </button>
           </div>
-          {isSignIn ? (
-            <form className="px-[13px] flex flex-col w-full">
-              {signInFields.map((field) => (
+          <form className="px-[13px] flex flex-col w-full" onSubmit={handleSubmit}>
+            {isSignIn ? (
+              signInFields.map((field) => (
                 <div key={field.id} className="mb-3 text-left">
-                  <label
-                    htmlFor={field.id}
-                    className="text-[14px] font-semibold"
-                  >
-                    {field.label}
-                  </label>
+                  <label htmlFor={field.id} className="text-[14px] font-semibold">{field.label}</label>
                   <input
                     id={field.id}
+                    name={field.name}
                     type={field.type}
                     placeholder={field.placeholder}
                     className="w-full px-2 py-2 placeholder:text-[14px] border border-white-300 rounded focus:outline-none"
                   />
                 </div>
-              ))}
-              <button className="w-full py-2 mt-8 mb-4 text-base text-white bg-primary rounded">
-                Sign in
-              </button>
+              ))
+            ) : (
+              <>
+                {newAccountFields.map((field) => (
+                  <div key={field.id} className="mb-3 text-left">
+                    <label htmlFor={field.id} className="text-[14px] font-semibold">{field.label}</label>
+                    <input
+                      id={field.id}
+                      name={field.name}
+                      type={field.type}
+                      placeholder={field.placeholder}
+                      className="w-full px-2 py-2 placeholder:text-[14px] border border-white-300 rounded focus:outline-none"
+                    />
+                  </div>
+                ))}
+                <div className="pt-3">
+                  <p className="text-[14px] font-semibold">Account Type</p>
+                  <div className="grid grid-cols-2 grid-rows-2 mt-2">
+                    {accountTypes.map((type) => (
+                      <label key={type.id} className="flex items-center gap-1 text-[14px]">
+                        <input type="radio" id={type.id} name="userType" value={type.value} />
+                        {type.label}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+            <button
+              className="w-full py-2 mt-8 mb-4 text-base text-white bg-primary rounded"
+              disabled={loading}
+            >
+              {loading ? <ClipLoader color="#fff" size={20} /> : isSignIn ? "Sign in" : "Create Account"}
+            </button>
+            {isSignIn && (
               <div className="mb-2 text-center">
-                <a href="#" className="text-[14px] text-primary">
-                  Forgot your password?
-                </a>
+                <a href="#" className="text-[14px] text-primary">Forgot your password?</a>
               </div>
-              <div className="flex items-center justify-center gap-2 text-white-300">
-                <div className="flex-1 border-[1px] border-white-300"></div>
-                or <div className="flex-1 border-[1px] border-white-300"></div>
+            )}
+            <div className="flex items-center justify-center gap-2 text-white-300">
+              <div className="flex-1 border-[1px] border-white-300"></div>
+              or
+              <div className="flex-1 border-[1px] border-white-300"></div>
+            </div>
+            <div className="flex flex-col w-full gap-[14px] pt-3">
+              <div className="flex items-center justify-between px-[7.6px] py-[6px] pr-[30px] border-[1px] rounded-[5px]">
+                <Image src={Google} width={30} height={30} alt="Sign in with Google" />
+                <p className="text-[14px] font-semibold">Sign in with Google</p>
               </div>
-              <div className="flex flex-col w-full gap-[14px] pt-3">
-                <div className="flex items-center justify-between px-[7.6px] py-[6px] pr-[30px] border-[1px] rounded-[5px]">
-                  <Image
-                    src={Google}
-                    width={30}
-                    height={30}
-                    alt="Sign in with Google"
-                  />
-                  <p className="text-[14px] font-semibold">
-                    Sign in with Google
-                  </p>
-                </div>
-                <div className="flex items-center justify-between px-[7.6px] py-[6px] pr-[34px] border-[1px] rounded-[5px]">
-                  <Image
-                    src={Apple}
-                    width={30}
-                    height={30}
-                    alt="Sign in with Apple"
-                  />
-                  <p className="text-[14px] font-semibold">Sign in with Apple</p>
-                </div>
+              <div className="flex items-center justify-between px-[7.6px] py-[6px] pr-[34px] border-[1px] rounded-[5px]">
+                <Image src={Apple} width={30} height={30} alt="Sign in with Apple" />
+                <p className="text-[14px] font-semibold">Sign in with Apple</p>
               </div>
-            </form>
-          ) : (
-            <form className="px-[13px] flex flex-col w-full">
-              {newAccountFields.map((field) => (
-                <div key={field.id} className="mb-3 text-left">
-                  <label
-                    htmlFor={field.id}
-                    className="text-[14px] font-semibold"
-                  >
-                    {field.label}
-                  </label>
-                  <input
-                    id={field.id}
-                    type={field.type}
-                    placeholder={field.placeholder}
-                    className="w-full px-[10px] py-2 placeholder:text-[14px] border border-white-300 rounded focus:outline-none"
-                  />
-                </div>
-              ))}
-              <div className="pt-3">
-                <p className="text-[14px] font-semibold">Account Type</p>
-                <div className="grid grid-cols-2 grid-rows-2 mt-2">
-                  {accountTypes.map((type) => (
-                    <label
-                      key={type.id}
-                      className="flex items-center gap-1  text-[14px]"
-                    >
-                      <input
-                        type="radio"
-                        id={type.id}
-                        name="accountType"
-                        value={type.value}
-                      />
-                      {type.label}
-                    </label>
-                  ))}
-                </div>
-                <p className="p-2 my-3 text-[12px] text-center">
-                  By submitting, I accept Housinn’s{" "}
-                  <span className="font-semibold text-primary">
-                    Terms of Use and Privacy
-                  </span>
-                </p>
-              </div>
-              <button className="w-full py-2 text-white bg-primary rounded">
-                Create Account
-              </button>
-              <div className="flex items-center justify-center gap-2 text-white-300">
-                <div className="flex-1 border-[1px] border-white-300"></div>
-                or <div className="flex-1 border-[1px] border-white-300"></div>
-              </div>
-              <div className="flex flex-col w-full gap-[14px] pt-3">
-                <div className="flex items-center justify-between px-[7.6px] py-[6px] pr-[30px] border-[1px] rounded-[5px]">
-                  <Image
-                    src={Google}
-                    width={30}
-                    height={30}
-                    alt="Sign in with Google"
-                  />
-                  <p className="text-[14px] font-semibold">
-                    Sign in with Google
-                  </p>
-                </div>
-                <div className="flex items-center justify-between px-[7.6px] py-[6px] pr-[34px] border-[1px] rounded-[5px]">
-                  <Image
-                    src={Apple}
-                    width={30}
-                    height={30}
-                    alt="Sign in with Apple"
-                  />
-                  <p className="text-[14px] font-semibold">Sign in with Apple</p>
-                </div>
-              </div>
-            </form>
-          )}
+            </div>
+          </form>
         </div>
       </div>
     </div>
