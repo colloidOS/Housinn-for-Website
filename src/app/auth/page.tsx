@@ -44,13 +44,21 @@ const AuthPage = () => {
         // Store user data and token in localStorage
         localStorage.setItem('user', JSON.stringify(response.data.data));
         localStorage.setItem('token', response.data.data.token);
+
+        // Set the user in the context
+        setUser(response.data.data);
+
+        // Redirect based on userType
+        if (response.data.data.userType === "individual") {
+          router.push("/");
+        } else {
+          router.push("/dashboard");
+        }
       } else {
         response = await api.post("/auth/register", data);
         toast.success("Account created successfully!");
+        setIsSignIn(true);
       }
-      
-      // Redirect to dashboard or another page after successful login/registration
-      router.push("/dashboard");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         // Handle AxiosError
@@ -65,7 +73,6 @@ const AuthPage = () => {
       setLoading(false);
     }
   };
-
   const signInFields = [
     {
       id: "signin-email",
