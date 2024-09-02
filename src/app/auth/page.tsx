@@ -1,3 +1,4 @@
+// src/pages/AuthPage.tsx
 "use client";
 
 import Image from "next/image";
@@ -10,11 +11,13 @@ import { ClipLoader } from "react-spinners";
 import Apple from "../../../public/icons/apple.svg";
 import Google from "../../../public/icons/google.svg";
 import api from "../../lib/api"; // Ensure you have your API module correctly configured
+import { useAuth } from "@/context/AuthContext"; // Import the useAuth hook
 
 const AuthPage = () => {
   const [isSignIn, setIsSignIn] = useState(true);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { setUser } = useAuth(); // Access the setUser function
 
   const toggleView = () => {
     setIsSignIn(!isSignIn);
@@ -27,6 +30,7 @@ const AuthPage = () => {
     const formData = new FormData(e.target as HTMLFormElement);
     const data = Object.fromEntries(formData.entries());
 
+    // Normalize userType if present
     if (data.userType) {
       data.userType = (data.userType as string).toLowerCase();
     }
@@ -36,10 +40,16 @@ const AuthPage = () => {
       if (isSignIn) {
         response = await api.post("/auth/login", data);
         toast.success("Signed in successfully!");
+
+        // Store user data and token in localStorage
+        localStorage.setItem("user", JSON.stringify(response.data.data));
+        localStorage.setItem("token", response.data.data.token);
       } else {
-        response = await api.post("/auth/register", data); // Ensure endpoint is correct
+        response = await api.post("/auth/register", data);
         toast.success("Account created successfully!");
       }
+
+      // Redirect to dashboard or another page after successful login/registration
       router.push("/dashboard");
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -51,6 +61,7 @@ const AuthPage = () => {
         );
         toast.error(`Error: ${errorMessage}`);
       } else {
+        // Handle unexpected errors
         toast.error("An unexpected error occurred. Please try again.");
       }
     } finally {
