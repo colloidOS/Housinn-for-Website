@@ -1,11 +1,20 @@
+"use client";
 import React from "react";
 import Subscription from "./components/layout/pricing";
 import PieChart from "./components/layout/recent-listing/index";
 import MessageList from "./components/layout/messages";
 import Image from "next/image";
 import Search from "../../../public/icons/search.svg";
-
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 function Dashboard() {
+  const router = useRouter();
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/auth"); // Redirect to auth if not signed in
+    }
+  }, []);
   return (
     <div className="flex flex-col gap-6 relative w-full h-full bg-background-2 px-12 py-10">
       <div className="flex flex-col gap-4">

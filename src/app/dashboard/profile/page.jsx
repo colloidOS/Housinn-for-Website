@@ -8,6 +8,10 @@ import profile from "../../../../public/icons/profile.svg";
 import Button from "./Button";
 import { ChevronDown } from "lucide-react";
 import Dropdown from "./Dropdown";
+import axios from "axios";
+import api from "@/lib/api";
+import { toast, ToastContainer } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 // Zod schemas for each section
 const profileSchema = z.object({
@@ -87,8 +91,56 @@ function Profile() {
     document.getElementById("profileImageInput").click();
   };
 
-  const onSubmitProfile = (data) => {
-    console.log("Profile Data:", data);
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      const response = await api.post("/auth/logout", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      localStorage.removeItem("token");
+      localStorage.removeItem("userId");
+
+      toast.success("Logged out successfully!");
+      console.log("Logged out successfully:", response.data);
+
+      // Delay of 2 seconds before redirecting
+      setTimeout(() => {
+        router.push("/auth");
+      }, 2000);
+    } catch (error) {
+      toast.error("Failed to log out. Please try again.");
+    }
+  };
+
+  const onSubmitProfile = async (data) => {
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await api.put(
+        `/users/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+          },
+        },
+        {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          phoneNumber: data.phoneNumber,
+          userType: "agent", // Or other user type
+          avatar: selectedImage,
+        }
+      );
+      console.log("Profile updated successfully:", response.data);
+    } catch (error) {
+      console.error("Error updating profile:", error);
+    }
   };
 
   const onSubmitVerification = (data) => {
@@ -101,6 +153,7 @@ function Profile() {
 
   return (
     <>
+      <ToastContainer />
       <div className="flex flex-col px-12 py-10 gap-8 bg-background-2 w-full">
         <div className="flex flex-col gap-4">
           <h3 className="text-2xl font-bold text-black">Profile</h3>
@@ -140,7 +193,7 @@ function Profile() {
                     onClick={triggerImageUpload}
                     className="focus:outline-none"
                   >
-                    Upload Profile Image/Photo
+                    Select your Image/Photo
                   </Button>
                   <span className="text-gray-500 text-sm font-normal">
                     *minimum 500px x 500px
@@ -475,6 +528,7 @@ function Profile() {
             </div>
             <div>
               <button
+                onClick={handleLogout}
                 className={`px-6 py-[11px] flex gap-2 items-center focus:outline-primary bg-primary text-white rounded-md text-base font-semibold`}
               >
                 {" "}

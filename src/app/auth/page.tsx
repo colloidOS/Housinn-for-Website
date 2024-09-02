@@ -2,7 +2,7 @@
 "use client";
 
 import Image from "next/image";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import React, { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -26,24 +26,24 @@ const AuthPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-  
+
     const formData = new FormData(e.target as HTMLFormElement);
     const data = Object.fromEntries(formData.entries());
-  
+
     // Normalize userType if present
     if (data.userType) {
       data.userType = (data.userType as string).toLowerCase();
     }
-  
+
     try {
       let response;
       if (isSignIn) {
         response = await api.post("/auth/login", data);
         toast.success("Signed in successfully!");
-  
+
         // Store user data and token in localStorage
-        localStorage.setItem('user', JSON.stringify(response.data.data));
-        localStorage.setItem('token', response.data.data.token);
+        localStorage.setItem("user", JSON.stringify(response.data.data));
+        localStorage.setItem("token", response.data.data.token);
 
         // Set the user in the context
         setUser(response.data.data);
@@ -63,7 +63,10 @@ const AuthPage = () => {
       if (axios.isAxiosError(error)) {
         // Handle AxiosError
         const errorMessage = error.response?.data?.message || error.message;
-        console.error("Submission Error:", error.response?.data || error.message);
+        console.error(
+          "Submission Error:",
+          error.response?.data || error.message
+        );
         toast.error(`Error: ${errorMessage}`);
       } else {
         // Handle unexpected errors
