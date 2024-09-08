@@ -41,22 +41,20 @@ const AuthPage = () => {
         response = await api.post("/auth/login", data);
         toast.success("Signed in successfully!");
 
-        // Store user data and token in localStorage
-        localStorage.setItem("user", JSON.stringify(response.data.data));
-        localStorage.setItem("token", response.data.data.token);
-
         // Set the user in the context
         setUser(response.data.data);
+        console.log(response.data.data);
+
+        // Set token and id cookies with additional parameters
+        document.cookie = `token=${response.data.data.token}; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT`;
+        document.cookie = `id=${response.data.data.id}; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT`;
 
         // Redirect based on userType
-        if (response.data.data.userType === "individual") {
-          router.push("/");
-        } else {
-          router.push("/dashboard");
-        }
+        router.push("/dashboard");
       } else {
         response = await api.post("/auth/register", data);
         toast.success("Account created successfully!");
+
         setIsSignIn(true);
       }
     } catch (error) {

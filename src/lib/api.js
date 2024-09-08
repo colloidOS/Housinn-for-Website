@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 
 // Create an Axios instance with the base URL
 const api = axios.create({
@@ -10,7 +11,7 @@ const api = axios.create({
 
 // Ensure this runs only on the client side
 if (typeof window !== "undefined") {
-  const token = localStorage.getItem("token");
+  const token = Cookies.get("token");
 
   if (token) {
     api.defaults.headers.common["Authorization"] = `Bearer ${token}`;

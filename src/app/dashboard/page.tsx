@@ -11,9 +11,8 @@ import Cookies from "js-cookie";
 function Dashboard() {
   const router = useRouter();
   useEffect(() => {
-    const localToken = localStorage.getItem("token");
     const token = Cookies.get("token");
-    if (!token || !localToken) {
+    if (!token) {
       router.push("/auth"); // Redirect to auth if not signed in
     }
   }, []);

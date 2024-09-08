@@ -1,12 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { z } from "zod";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import profile from "../../../../public/icons/profile.svg";
 import Button from "./Button";
-import { ChevronDown } from "lucide-react";
 import Dropdown from "./Dropdown";
 import axios from "axios";
 import api from "@/lib/api";
@@ -14,60 +10,8 @@ import { toast, ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 
-// Zod schemas for each section
-const profileSchema = z.object({
-  firstName: z.string().min(3, "First Name is required"),
-  lastName: z.string().min(3, "Last Name is required"),
-  company: z.string().optional(),
-  email: z.string().email("Invalid email address"),
-  phoneNumber: z.string().min(1, "Phone Number is required"),
-});
-
-const verificationSchema = z.object({
-  state: z.string().min(1, "State is required"),
-  city: z.string().min(0, "City is required"),
-  street: z.string().min(4, "Street is required"),
-  cacNumber: z.string().min(1, "CAC Number is required"),
-});
-
-const passwordSchema = z
-  .object({
-    currentPassword: z.string().min(3, "Current Password is required"),
-    newPassword: z
-      .string()
-      .min(6, "New Password must be at least 6 characters"),
-    confirmPassword: z
-      .string()
-      .min(6, "Confirm Password must be at least 6 characters"),
-  })
-  .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-  });
-
 const stateOptions = ["Lagos", "Enugu", "Osun"];
 const cityOptions = ["Surulere", "Maitama", "Victoria Island"];
-
-interface ProfileData {
-  firstName: string;
-  lastName: string;
-  town?: string;
-  email: string;
-  phoneNumber: string;
-}
-
-interface VerificationData {
-  state: string;
-  city: string;
-  street: string;
-  cacNumber: string;
-}
-
-interface PasswordData {
-  currentPassword: string;
-  newPassword: string;
-  confirmPassword: string;
-}
 
 function Profile() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -76,27 +20,12 @@ function Profile() {
   const [updatedProfile, setUpdatedProfile] = useState({
     firstName: "",
     lastName: "",
-    town: "",
     email: "",
-    phoneNumber: "",
+    town: "",
+    userType: "agent", // Set default value for userType
+    password: "", // Add password field to match Postman
   });
   const [userData, setUserData] = useState<any>(null);
-
-  const {
-    register: registerVerification,
-    handleSubmit: handleVerificationSubmit,
-    formState: { errors: verificationErrors },
-  } = useForm<VerificationData>({
-    resolver: zodResolver(verificationSchema),
-  });
-
-  const {
-    register: registerPassword,
-    handleSubmit: handlePasswordSubmit,
-    formState: { errors: passwordErrors },
-  } = useForm<PasswordData>({
-    resolver: zodResolver(passwordSchema),
-  });
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -118,31 +47,6 @@ function Profile() {
   };
 
   const router = useRouter();
-
-  const handleLogout = async () => {
-    try {
-      await api.post("/auth/logout", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-
-      clearCookie("token");
-      clearCookie("id");
-
-      localStorage.removeItem("token");
-      localStorage.removeItem("userId");
-      localStorage.removeItem("user");
-
-      toast.success("Logged out successfully!");
-
-      setTimeout(() => {
-        router.push("/auth");
-      }, 2000);
-    } catch (error) {
-      toast.error("Failed to log out. Please try again.");
-    }
-  };
 
   const token = Cookies.get("token");
   const id = Cookies.get("id");
@@ -179,34 +83,51 @@ function Profile() {
   }, [token, id]);
 
   const handleUpdateSubmit = async (e: React.FormEvent) => {
-    const token = Cookies.get("token");
-    const id = Cookies.get("id");
     e.preventDefault();
+    const profileData = {
+      ...updatedProfile,
+      userType: "agent", // or from state if dynamic
+      password: updatedProfile.password || "coal", // Assign default password or user's input
+    };
+    console.log(updatedProfile);
+    console.log(token);
+    console.log("ID:", id);
     try {
       const response = await axios.put(
         `https://housinn.onrender.com/api/users/${id}`,
-        updatedProfile,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        profileData,
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       console.log("Response:", response.data); // Check if the response is valid
       toast.success("Successfully updated profile");
-      console.log("Update Response:", response.data);
     } catch (error) {
       console.error("Error updating:", error);
     }
   };
+  const handleLogout = async () => {
+    try {
+      await api.post("/auth/logout", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
 
-  const onSubmitVerification: SubmitHandler<VerificationData> = (data) => {
-    console.log("Verification Data:", data);
-  };
+      clearCookie("token");
+      clearCookie("id");
 
-  const onSubmitPassword: SubmitHandler<PasswordData> = (data) => {
-    console.log("Password Data:", data);
+      localStorage.removeItem("token");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("user");
+
+      toast.success("Logged out successfully!");
+
+      setTimeout(() => {
+        router.push("/auth");
+      }, 2000);
+    } catch (error) {
+      toast.error("Failed to log out. Please try again.");
+    }
   };
 
   return (
@@ -217,7 +138,7 @@ function Profile() {
           <h3 className="text-2xl font-bold text-black">Profile</h3>
           <hr className="text-gray-300" />
         </div>
-        <form onSubmit={handleUpdateSubmit}>
+        <div>
           <div className="flex flex-col gap-3">
             <div className="flex gap-[164px]">
               <div className="flex flex-col gap-0">
@@ -268,7 +189,7 @@ function Profile() {
             </div>
             <hr className="text-gray-300" />
           </div>
-          <div className="flex flex-col gap-6">
+          <form className="flex flex-col gap-6" onSubmit={handleUpdateSubmit}>
             <div className="flex">
               <div className="flex flex-col gap-2">
                 <p className="text-lg font-semibold">Edit Your Profile</p>
@@ -308,11 +229,6 @@ function Profile() {
                               })
                             }
                           />
-                          {/* {profileErrors.firstName && (
-                            <span className="text-red-500 text-sm">
-                              {profileErrors.firstName.message}
-                            </span>
-                          )} */}
                         </div>
                         <div className="w-full gap-1">
                           <label
@@ -320,11 +236,6 @@ function Profile() {
                             htmlFor="lastName"
                           >
                             Last Name{" "}
-                            {/* {profileErrors.lastName && (
-                              <span className="text-red-500 text-sm">
-                                {profileErrors.lastName.message}
-                              </span>
-                            )} */}
                           </label>
                           <input
                             id="LastName"
@@ -354,6 +265,13 @@ function Profile() {
                             type="text"
                             placeholder="Mike’s Realties"
                             className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
+                            value={updatedProfile.town}
+                            onChange={(e) =>
+                              setUpdatedProfile({
+                                ...updatedProfile,
+                                town: e.target.value,
+                              })
+                            }
                           />
                         </div>
                         <div className="w-full gap-1">
@@ -376,11 +294,6 @@ function Profile() {
                               })
                             }
                           />
-                          {/* {profileErrors.email && (
-                            <span className="text-red-500 text-sm">
-                              {profileErrors.email.message}
-                            </span>
-                          )} */}
                         </div>
                       </div>
                       <div className="w-full gap-1">
@@ -395,19 +308,28 @@ function Profile() {
                           type="text"
                           placeholder="08012345678"
                           className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                          value={updatedProfile.phoneNumber}
+                        />
+                      </div>
+                      <div className="w-full gap-1">
+                        <label
+                          className="block text-gray-700 text-sm font-bold"
+                          htmlFor="password"
+                        >
+                          Password
+                        </label>
+                        <input
+                          id="number"
+                          type="text"
+                          placeholder="08012345678"
+                          className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
+                          value={updatedProfile.password}
                           onChange={(e) =>
                             setUpdatedProfile({
                               ...updatedProfile,
-                              phoneNumber: e.target.value,
+                              password: e.target.value,
                             })
                           }
                         />
-                        {/* {profileErrors.phoneNumber && (
-                          <span className="text-red-500 text-sm">
-                            {profileErrors.phoneNumber.message}
-                          </span>
-                        )} */}
                       </div>
                     </div>
                   </div>
@@ -418,13 +340,10 @@ function Profile() {
               </div>
             </div>
             <hr className="text-gray-300 pb-8" />
-          </div>
-        </form>
+          </form>
+        </div>
         <div className="flex flex-col gap-4 w-full">
-          <form
-            className="flex gap-[140px]"
-            onClick={handleVerificationSubmit(onSubmitVerification)}
-          >
+          <form className="flex gap-[140px]">
             <div className="flex flex-col gap-2 text-nowrap">
               <p className="text-lg font-semibold">Verification</p>
               <p className="text-sm font-normal text-gray-600">
@@ -444,14 +363,9 @@ function Profile() {
                     <Dropdown
                       options={stateOptions}
                       value={selectedState}
-                      onChange={(option) => setSelectedState(option)}
+                      onChange={``}
                       placeholder="State"
                     />
-                    {verificationErrors.state && (
-                      <span className="text-red-500 text-sm">
-                        {verificationErrors.state.message}
-                      </span>
-                    )}
                   </div>
 
                   <div className="flex flex-col gap-1 relative w-full">
@@ -464,14 +378,9 @@ function Profile() {
                     <Dropdown
                       options={cityOptions}
                       value={selectedCity}
-                      onChange={(option) => setSelectedCity(option)}
+                      onChange={``}
                       placeholder="City"
                     />
-                    {verificationErrors.city && (
-                      <span className="text-red-500 text-sm">
-                        {verificationErrors.city.message}
-                      </span>
-                    )}
                   </div>
                 </div>
                 <div className="flex flex-col gap-1">
@@ -486,13 +395,7 @@ function Profile() {
                     type="text"
                     placeholder="e.g No 25 Asokoro Street"
                     className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                    {...registerVerification("street")}
                   />
-                  {verificationErrors.street && (
-                    <span className="text-red-500 text-sm">
-                      {verificationErrors.street.message}
-                    </span>
-                  )}
                 </div>
                 <div className="flex flex-col gap-1">
                   <label
@@ -506,24 +409,15 @@ function Profile() {
                     type="text"
                     placeholder="Enter your CAC Registration Code(RC Number)"
                     className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                    {...registerVerification("cacNumber")}
                   />
-                  {verificationErrors.cacNumber && (
-                    <span className="text-red-500 text-sm">
-                      {verificationErrors.cacNumber.message}
-                    </span>
-                  )}
                 </div>
               </div>
-              <Button type="submit" className="w-fit">
+              <Button type="submit" className="w-fit" onClick={``}>
                 Verify Account
               </Button>
             </div>
           </form>
-          <form
-            className="flex gap-3 w-full"
-            onSubmit={handlePasswordSubmit(onSubmitPassword)}
-          >
+          <form className="flex gap-3 w-full">
             <div className="flex flex-col gap-0 ">
               <p className="text-lg font-semibold">Change Password</p>
               <p className="text-sm font-normal text-gray-600 w-[300px]">
@@ -544,13 +438,7 @@ function Profile() {
                     type="text"
                     placeholder="Enter your current password"
                     className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                    {...registerPassword("currentPassword")}
                   />
-                  {passwordErrors.currentPassword && (
-                    <span className="text-red-500 text-sm">
-                      {passwordErrors.currentPassword.message}
-                    </span>
-                  )}
                 </div>
                 <div className="flex gap-6 w-full">
                   <div className="flex flex-col gap-1 w-full">
@@ -565,13 +453,7 @@ function Profile() {
                       type="text"
                       placeholder="Enter your new password"
                       className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                      {...registerPassword("newPassword")}
                     />
-                    {passwordErrors.newPassword && (
-                      <span className="text-red-500 text-sm">
-                        {passwordErrors.newPassword.message}
-                      </span>
-                    )}
                   </div>
                   <div className="flex flex-col gap-1 w-full">
                     <label
@@ -585,17 +467,13 @@ function Profile() {
                       type="text"
                       placeholder="Confirm your new password"
                       className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                      {...registerPassword("confirmPassword")}
                     />
-                    {passwordErrors.confirmPassword && (
-                      <span className="text-red-500 text-sm">
-                        {passwordErrors.confirmPassword.message}
-                      </span>
-                    )}
                   </div>
                 </div>
               </div>
-              <Button className="w-fit">Reset Password</Button>
+              <Button onClick={``} className="w-fit">
+                Reset Password
+              </Button>
             </div>
           </form>
           <hr className="text-gray-300 py-2" />
