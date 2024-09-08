@@ -1,5 +1,3 @@
-// utils/api.js
-
 import axios from "axios";
 
 // Create an Axios instance with the base URL
@@ -10,13 +8,16 @@ const api = axios.create({
   },
 });
 
-const token = localStorage.getItem("token");
-if (token) {
-  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-} else {
-  console.error("No token found in localStorage.");
-}
+// Ensure this runs only on the client side
+if (typeof window !== "undefined") {
+  const token = localStorage.getItem("token");
 
-// You can also add interceptors here for request or response
+  if (token) {
+    api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    console.log("Token found and set in headers:", token);
+  } else {
+    console.error("No token found in localStorage.");
+  }
+}
 
 export default api;
