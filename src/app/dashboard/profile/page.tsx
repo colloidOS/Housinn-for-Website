@@ -1,154 +1,133 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import profile from "../../../../public/icons/profile.svg";
 import Button from "./Button";
-import { ChevronDown } from "lucide-react";
 import Dropdown from "./Dropdown";
 import axios from "axios";
 import api from "@/lib/api";
 import { toast, ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
-
-// Zod schemas for each section
-const profileSchema = z.object({
-  firstName: z.string().min(3, "First Name is required"),
-  lastName: z.string().min(3, "Last Name is required"),
-  company: z.string().optional(),
-  email: z.string().email("Invalid email address"),
-  phoneNumber: z.string().min(1, "Phone Number is required"),
-});
-
-const verificationSchema = z.object({
-  state: z.string().min(1, "State is required"),
-  city: z.string().min(0, "City is required"),
-  street: z.string().min(4, "Street is required"),
-  cacNumber: z.string().min(1, "CAC Number is required"),
-});
-
-const passwordSchema = z
-  .object({
-    currentPassword: z.string().min(3, "Current Password is required"),
-    newPassword: z
-      .string()
-      .min(6, "New Password must be at least 6 characters"),
-    confirmPassword: z
-      .string()
-      .min(6, "Confirm Password must be at least 6 characters"),
-  })
-  .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-  });
+import Cookies from "js-cookie";
 
 const stateOptions = ["Lagos", "Enugu", "Osun"];
 const cityOptions = ["Surulere", "Maitama", "Victoria Island"];
 
 function Profile() {
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [selectedState, setSelectedState] = useState("");
-  const [selectedCity, setSelectedCity] = useState("");
-
-  const {
-    register: registerProfile,
-    handleSubmit: handleProfileSubmit,
-    formState: { errors: profileErrors },
-  } = useForm({
-    resolver: zodResolver(profileSchema),
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedState, setSelectedState] = useState<string>("");
+  const [selectedCity, setSelectedCity] = useState<string>("");
+  const [updatedProfile, setUpdatedProfile] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    town: "",
+    userType: "agent", // Set default value for userType
+    password: "", // Add password field to match Postman
   });
+  const [userData, setUserData] = useState<any>(null);
 
-  const {
-    register: registerVerification,
-    handleSubmit: handleVerificationSubmit,
-    formState: { errors: verificationErrors },
-  } = useForm({
-    resolver: zodResolver(verificationSchema),
-  });
-
-  const {
-    register: registerPassword,
-    handleSubmit: handlePasswordSubmit,
-    formState: { errors: passwordErrors },
-  } = useForm({
-    resolver: zodResolver(passwordSchema),
-  });
-
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
     if (file && file.type.startsWith("image/")) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setSelectedImage(reader.result);
+        setSelectedImage(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
   };
 
+  const clearCookie = (name: string) => {
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+  };
+
   const triggerImageUpload = () => {
-    document.getElementById("profileImageInput").click();
+    document.getElementById("profileImageInput")?.click();
   };
 
   const router = useRouter();
 
+  const token = Cookies.get("token");
+  const id = Cookies.get("id");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (token) {
+        const base64Url = token.split(".")[1];
+        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+        const jsonPayload = decodeURIComponent(
+          atob(base64)
+            .split("")
+            .map(function (c) {
+              return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+            })
+            .join("")
+        );
+        console.log(JSON.parse(jsonPayload)); // This will show the contents of the token
+      }
+      try {
+        const response = await axios.get(
+          `https://housinn.onrender.com/api/users/search/${id}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        setUserData(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+    fetchData();
+  }, [token, id]);
+
+  const handleUpdateSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const profileData = {
+      ...updatedProfile,
+      userType: "agent", // or from state if dynamic
+      password: updatedProfile.password || "coal", // Assign default password or user's input
+    };
+    console.log(updatedProfile);
+    console.log(token);
+    console.log("ID:", id);
+    try {
+      const response = await axios.put(
+        `https://housinn.onrender.com/api/users/${id}`,
+        profileData,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      console.log("Response:", response.data); // Check if the response is valid
+      toast.success("Successfully updated profile");
+    } catch (error) {
+      console.error("Error updating:", error);
+    }
+  };
   const handleLogout = async () => {
     try {
-      const response = await api.post("/auth/logout", {
+      await api.post("/auth/logout", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
 
+      clearCookie("token");
+      clearCookie("id");
+
       localStorage.removeItem("token");
       localStorage.removeItem("userId");
+      localStorage.removeItem("user");
 
       toast.success("Logged out successfully!");
-      console.log("Logged out successfully:", response.data);
 
-      // Delay of 2 seconds before redirecting
       setTimeout(() => {
         router.push("/auth");
       }, 2000);
     } catch (error) {
       toast.error("Failed to log out. Please try again.");
     }
-  };
-
-  const onSubmitProfile = async (data) => {
-    const userId = localStorage.getItem("userId");
-    const token = localStorage.getItem("token");
-
-    try {
-      const response = await api.put(
-        `/users/${userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Include the token in the Authorization header
-          },
-        },
-        {
-          firstName: data.firstName,
-          lastName: data.lastName,
-          email: data.email,
-          phoneNumber: data.phoneNumber,
-          userType: "agent", // Or other user type
-          avatar: selectedImage,
-        }
-      );
-      console.log("Profile updated successfully:", response.data);
-    } catch (error) {
-      console.error("Error updating profile:", error);
-    }
-  };
-
-  const onSubmitVerification = (data) => {
-    console.log("Verification Data:", data);
-  };
-
-  const onSubmitPassword = (data) => {
-    console.log("Password Data:", data);
   };
 
   return (
@@ -159,7 +138,7 @@ function Profile() {
           <h3 className="text-2xl font-bold text-black">Profile</h3>
           <hr className="text-gray-300" />
         </div>
-        <form onSubmit={handleProfileSubmit(onSubmitProfile)}>
+        <div>
           <div className="flex flex-col gap-3">
             <div className="flex gap-[164px]">
               <div className="flex flex-col gap-0">
@@ -210,7 +189,7 @@ function Profile() {
             </div>
             <hr className="text-gray-300" />
           </div>
-          <div className="flex flex-col gap-6">
+          <form className="flex flex-col gap-6" onSubmit={handleUpdateSubmit}>
             <div className="flex">
               <div className="flex flex-col gap-2">
                 <p className="text-lg font-semibold">Edit Your Profile</p>
@@ -242,13 +221,14 @@ function Profile() {
                             type="text"
                             placeholder="Michael"
                             className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                            {...registerProfile("firstName")}
+                            value={updatedProfile.firstName}
+                            onChange={(e) =>
+                              setUpdatedProfile({
+                                ...updatedProfile,
+                                firstName: e.target.value,
+                              })
+                            }
                           />
-                          {profileErrors.firstName && (
-                            <span className="text-red-500 text-sm">
-                              {profileErrors.firstName.message}
-                            </span>
-                          )}
                         </div>
                         <div className="w-full gap-1">
                           <label
@@ -256,18 +236,19 @@ function Profile() {
                             htmlFor="lastName"
                           >
                             Last Name{" "}
-                            {profileErrors.lastName && (
-                              <span className="text-red-500 text-sm">
-                                {profileErrors.lastName.message}
-                              </span>
-                            )}
                           </label>
                           <input
                             id="LastName"
                             type="text"
                             placeholder="Chukwueke"
                             className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                            {...registerProfile("lastName")}
+                            value={updatedProfile.lastName}
+                            onChange={(e) =>
+                              setUpdatedProfile({
+                                ...updatedProfile,
+                                lastName: e.target.value,
+                              })
+                            }
                           />
                         </div>
                       </div>
@@ -284,7 +265,13 @@ function Profile() {
                             type="text"
                             placeholder="Mike’s Realties"
                             className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                            {...registerProfile("company")}
+                            value={updatedProfile.town}
+                            onChange={(e) =>
+                              setUpdatedProfile({
+                                ...updatedProfile,
+                                town: e.target.value,
+                              })
+                            }
                           />
                         </div>
                         <div className="w-full gap-1">
@@ -299,13 +286,14 @@ function Profile() {
                             type="email"
                             placeholder="mikesrealties@gmail.com"
                             className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                            {...registerProfile("email")}
+                            value={updatedProfile.email}
+                            onChange={(e) =>
+                              setUpdatedProfile({
+                                ...updatedProfile,
+                                email: e.target.value,
+                              })
+                            }
                           />
-                          {profileErrors.email && (
-                            <span className="text-red-500 text-sm">
-                              {profileErrors.email.message}
-                            </span>
-                          )}
                         </div>
                       </div>
                       <div className="w-full gap-1">
@@ -320,28 +308,42 @@ function Profile() {
                           type="text"
                           placeholder="08012345678"
                           className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                          {...registerProfile("phoneNumber")}
                         />
-                        {profileErrors.phoneNumber && (
-                          <span className="text-red-500 text-sm">
-                            {profileErrors.phoneNumber.message}
-                          </span>
-                        )}
+                      </div>
+                      <div className="w-full gap-1">
+                        <label
+                          className="block text-gray-700 text-sm font-bold"
+                          htmlFor="password"
+                        >
+                          Password
+                        </label>
+                        <input
+                          id="number"
+                          type="text"
+                          placeholder="08012345678"
+                          className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
+                          value={updatedProfile.password}
+                          onChange={(e) =>
+                            setUpdatedProfile({
+                              ...updatedProfile,
+                              password: e.target.value,
+                            })
+                          }
+                        />
                       </div>
                     </div>
                   </div>
                 </div>
-                <Button className="w-fit">Upload Profile</Button>
+                <button type="submit" className="w-fit">
+                  Upload Profile
+                </button>
               </div>
             </div>
             <hr className="text-gray-300 pb-8" />
-          </div>
-        </form>
+          </form>
+        </div>
         <div className="flex flex-col gap-4 w-full">
-          <form
-            className="flex gap-[140px]"
-            onClick={handleVerificationSubmit(onSubmitVerification)}
-          >
+          <form className="flex gap-[140px]">
             <div className="flex flex-col gap-2 text-nowrap">
               <p className="text-lg font-semibold">Verification</p>
               <p className="text-sm font-normal text-gray-600">
@@ -361,14 +363,9 @@ function Profile() {
                     <Dropdown
                       options={stateOptions}
                       value={selectedState}
-                      onChange={(option) => setSelectedState(option)}
+                      onChange={``}
                       placeholder="State"
                     />
-                    {verificationErrors.state && (
-                      <span className="text-red-500 text-sm">
-                        {verificationErrors.state.message}
-                      </span>
-                    )}
                   </div>
 
                   <div className="flex flex-col gap-1 relative w-full">
@@ -381,14 +378,9 @@ function Profile() {
                     <Dropdown
                       options={cityOptions}
                       value={selectedCity}
-                      onChange={(option) => setSelectedCity(option)}
+                      onChange={``}
                       placeholder="City"
                     />
-                    {verificationErrors.city && (
-                      <span className="text-red-500 text-sm">
-                        {verificationErrors.city.message}
-                      </span>
-                    )}
                   </div>
                 </div>
                 <div className="flex flex-col gap-1">
@@ -403,13 +395,7 @@ function Profile() {
                     type="text"
                     placeholder="e.g No 25 Asokoro Street"
                     className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                    {...registerVerification("street")}
                   />
-                  {verificationErrors.street && (
-                    <span className="text-red-500 text-sm">
-                      {verificationErrors.street.message}
-                    </span>
-                  )}
                 </div>
                 <div className="flex flex-col gap-1">
                   <label
@@ -423,24 +409,15 @@ function Profile() {
                     type="text"
                     placeholder="Enter your CAC Registration Code(RC Number)"
                     className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                    {...registerVerification("cacNumber")}
                   />
-                  {verificationErrors.cacNumber && (
-                    <span className="text-red-500 text-sm">
-                      {verificationErrors.cacNumber.message}
-                    </span>
-                  )}
                 </div>
               </div>
-              <Button type="submit" className="w-fit">
+              <Button type="submit" className="w-fit" onClick={``}>
                 Verify Account
               </Button>
             </div>
           </form>
-          <form
-            className="flex gap-3 w-full"
-            onSubmit={handlePasswordSubmit(onSubmitPassword)}
-          >
+          <form className="flex gap-3 w-full">
             <div className="flex flex-col gap-0 ">
               <p className="text-lg font-semibold">Change Password</p>
               <p className="text-sm font-normal text-gray-600 w-[300px]">
@@ -461,13 +438,7 @@ function Profile() {
                     type="text"
                     placeholder="Enter your current password"
                     className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                    {...registerPassword("currentPassword")}
                   />
-                  {passwordErrors.currentPassword && (
-                    <span className="text-red-500 text-sm">
-                      {passwordErrors.currentPassword.message}
-                    </span>
-                  )}
                 </div>
                 <div className="flex gap-6 w-full">
                   <div className="flex flex-col gap-1 w-full">
@@ -482,13 +453,7 @@ function Profile() {
                       type="text"
                       placeholder="Enter your new password"
                       className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                      {...registerPassword("newPassword")}
                     />
-                    {passwordErrors.newPassword && (
-                      <span className="text-red-500 text-sm">
-                        {passwordErrors.newPassword.message}
-                      </span>
-                    )}
                   </div>
                   <div className="flex flex-col gap-1 w-full">
                     <label
@@ -502,17 +467,13 @@ function Profile() {
                       type="text"
                       placeholder="Confirm your new password"
                       className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                      {...registerPassword("confirmPassword")}
                     />
-                    {passwordErrors.confirmPassword && (
-                      <span className="text-red-500 text-sm">
-                        {passwordErrors.confirmPassword.message}
-                      </span>
-                    )}
                   </div>
                 </div>
               </div>
-              <Button className="w-fit">Reset Password</Button>
+              <Button onClick={``} className="w-fit">
+                Reset Password
+              </Button>
             </div>
           </form>
           <hr className="text-gray-300 py-2" />

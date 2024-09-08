@@ -7,10 +7,11 @@ import Image from "next/image";
 import Search from "../../../public/icons/search.svg";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 function Dashboard() {
   const router = useRouter();
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = Cookies.get("token");
     if (!token) {
       router.push("/auth"); // Redirect to auth if not signed in
     }
