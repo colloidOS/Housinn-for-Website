@@ -1,62 +1,237 @@
-// src/app/test/page.tsx
 "use client";
-import React from 'react';
-import { useAuth } from '@/context/AuthContext';
+import React, { useState, useEffect } from "react";
+import api from "@/lib/api"; // The Axios instance
+import { useAuth } from "../../context/AuthContext"; // Assuming the AuthContext is set up
 
-const ExampleComponent: React.FC = () => {
-  const { user } = useAuth(); // Access user from context
-  if (user) {
-    console.log("User ID:", user.id);
-    console.log("User Email:", user.email);
-    console.log("User Type:", user.userType);
-    console.log("User Avatar:", user.avatar);
-    console.log("User Number:", user.number);
-    console.log("User First Name:", user.firstName);
-    console.log("User Last Name:", user.lastName);
-    console.log("User State:", user.state);
-    console.log("User Town:", user.town);
-    console.log("User Address:", user.address);
-    console.log("User Position:", user.position);
-    console.log("User Company:", user.company);
-    console.log("User Is Verified:", user.isVerified);
-    console.log("User Password Reset Token:", user.passwordResetToken);
-    console.log("User Password Reset Expiry:", user.passwordResetExpiry);
-    console.log("User Created At:", user.createdAt);
-    console.log("User Chat IDs:", user.chatIDs);
-    console.log("User Token:", user.token);
-  } else {
-    console.log("No user data available.");
-  }
+// Interfaces
+interface UpdateUserResponse {
+  status: string;
+  message: string;
+  data: {
+    id: string;
+    email: string;
+    userType: string;
+    avatar: string | null;
+    number: string | null;
+    firstName: string;
+    lastName: string;
+    state: string | null;
+    town: string | null;
+    address: string | null;
+    position: string | null;
+    company: string | null;
+    isVerified: boolean;
+    createdAt: string;
+    chatIDs: string[];
+  };
+}
+
+interface Post {
+  id: string;
+  content: string;
+  createdAt: string;
+}
+
+interface ProfilePosts {
+  userPosts: Post[];
+  savedPosts: Post[];
+}
+
+// Main Component
+const ProfilePage: React.FC = () => {
+  const { user, setUser } = useAuth(); // Get user and setUser from AuthContext
+
+  // State for update user form
+  const [formData, setFormData] = useState({
+    userType: "",
+    avatar: "",
+    firstName: "",
+    lastName: "",
+    password: "",
+  });
+  const [responseMessage, setResponseMessage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  // State for profile posts
+  const [profilePosts, setProfilePosts] = useState<ProfilePosts | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [postsError, setPostsError] = useState<string | null>(null);
+
+  // Populate form with existing user data on mount
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        userType: user.userType || "",
+        avatar: user.avatar || "",
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+        password: "", // Not fetched from backend; user inputs new password if needed
+      });
+    }
+  }, [user]);
+
+  // Handle form input changes
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // Handle form submission to update the user
+  const handleUpdateUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!user) {
+      setError("User not found. Please log in.");
+      return;
+    }
+
+    try {
+      const userId = user.id;
+      const response = await api.put<UpdateUserResponse>(`/users/${userId}`, formData);
+      console.log("Response from server:", response.data);
+
+      if (response.data.status === "success") {
+        setResponseMessage(response.data.message);
+        setUser({ ...user, ...response.data.data }); // Update the user in context with the new data
+      }
+    } catch (err) {
+      console.error("Error updating user:", err);
+      setError("Failed to update user.");
+    }
+  };
+
+  // Fetch profile posts when component mounts
+  useEffect(() => {
+    const fetchProfilePosts = async () => {
+      try {
+        const response = await api.get("/users/profilePosts");
+
+        if (response.data.status === "success") {
+          setProfilePosts(response.data.data);
+        } else {
+          setPostsError("Failed to retrieve profile posts.");
+        }
+      } catch (err) {
+        setPostsError("An error occurred while fetching profile posts.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfilePosts();
+  }, []);
 
   return (
-    <div>
-      {user ? (
-        <>
-          <h1>User Details</h1>
-          <p><strong>ID:</strong> {user.id}</p>
-          <p><strong>Email:</strong> {user.email}</p>
-          <p><strong>User Type:</strong> {user.userType}</p>
-          <p><strong>Avatar:</strong> {user.avatar ?? "N/A"}</p>
-          <p><strong>Number:</strong> {user.number ?? "N/A"}</p>
-          <p><strong>First Name:</strong> {user.firstName}</p>
-          <p><strong>Last Name:</strong> {user.lastName}</p>
-          <p><strong>State:</strong> {user.state ?? "N/A"}</p>
-          <p><strong>Town:</strong> {user.town ?? "N/A"}</p>
-          <p><strong>Address:</strong> {user.address ?? "N/A"}</p>
-          <p><strong>Position:</strong> {user.position ?? "N/A"}</p>
-          <p><strong>Company:</strong> {user.company ?? "N/A"}</p>
-          <p><strong>Is Verified:</strong> {user.isVerified ? "Yes" : "No"}</p>
-          <p><strong>Password Reset Token:</strong> {user.passwordResetToken ?? "N/A"}</p>
-          <p><strong>Password Reset Expiry:</strong> {user.passwordResetExpiry ?? "N/A"}</p>
-          <p><strong>Created At:</strong> {new Date(user.createdAt).toLocaleString()}</p>
-          <p><strong>Chat IDs:</strong> {user.chatIDs.length > 0 ? user.chatIDs.join(", ") : "None"}</p>
-          <p><strong>Token:</strong> {user.token}</p>
-        </>
-      ) : (
-        <p>No user data available.</p>
-      )}
+    <div className="p-4">
+      <h1 className="text-lg font-bold">Profile Page</h1>
+
+      {/* User Update Form */}
+      <section>
+        <h2 className="text-md font-semibold">Update User Information</h2>
+        <form onSubmit={handleUpdateUser} className="space-y-4">
+          <div>
+            <label className="block">First Name:</label>
+            <input
+              type="text"
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleChange}
+              className="border p-2 rounded w-full"
+            />
+          </div>
+          <div>
+            <label className="block">Last Name:</label>
+            <input
+              type="text"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleChange}
+              className="border p-2 rounded w-full"
+            />
+          </div>
+          <div>
+            <label className="block">User Type:</label>
+            <input
+              type="text"
+              name="userType"
+              value={formData.userType}
+              onChange={handleChange}
+              className="border p-2 rounded w-full"
+            />
+          </div>
+          <div>
+            <label className="block">Avatar URL:</label>
+            <input
+              type="text"
+              name="avatar"
+              value={formData.avatar}
+              onChange={handleChange}
+              className="border p-2 rounded w-full"
+            />
+          </div>
+          <div>
+            <label className="block">Password (optional):</label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="Enter new password"
+              className="border p-2 rounded w-full"
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="bg-blue-500 text-white px-4 py-2 mt-4 rounded"
+          >
+            Update User
+          </button>
+        </form>
+
+        {responseMessage && <p className="text-green-500 mt-4">{responseMessage}</p>}
+        {error && <p className="text-red-500 mt-4">{error}</p>}
+      </section>
+
+      {/* Profile Posts Section */}
+      <section className="mt-8">
+        <h2 className="text-md font-semibold">Profile Posts</h2>
+        {loading ? (
+          <p>Loading posts...</p>
+        ) : postsError ? (
+          <p className="text-red-500">{postsError}</p>
+        ) : (
+          <>
+            <h3>User Posts</h3>
+            {profilePosts?.userPosts.length ? (
+              profilePosts.userPosts.map((post) => (
+                <div key={post.id}>
+                  <p>{post.content}</p>
+                  <small>{new Date(post.createdAt).toLocaleDateString()}</small>
+                </div>
+              ))
+            ) : (
+              <p>No user posts available.</p>
+            )}
+
+            <h3 className="mt-4">Saved Posts</h3>
+            {profilePosts?.savedPosts.length ? (
+              profilePosts.savedPosts.map((post) => (
+                <div key={post.id}>
+                  <p>{post.content}</p>
+                  <small>{new Date(post.createdAt).toLocaleDateString()}</small>
+                </div>
+              ))
+            ) : (
+              <p>No saved posts available.</p>
+            )}
+          </>
+        )}
+      </section>
     </div>
   );
 };
 
-export default ExampleComponent;
+export default ProfilePage;
