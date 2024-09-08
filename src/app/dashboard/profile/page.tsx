@@ -1,8 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { z } from "zod";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import profile from "../../../../public/icons/profile.svg";
 import Button from "./Button";
@@ -12,6 +12,7 @@ import axios from "axios";
 import api from "@/lib/api";
 import { toast, ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 // Zod schemas for each section
 const profileSchema = z.object({
@@ -47,24 +48,45 @@ const passwordSchema = z
 const stateOptions = ["Lagos", "Enugu", "Osun"];
 const cityOptions = ["Surulere", "Maitama", "Victoria Island"];
 
-function Profile() {
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [selectedState, setSelectedState] = useState("");
-  const [selectedCity, setSelectedCity] = useState("");
+interface ProfileData {
+  firstName: string;
+  lastName: string;
+  town?: string;
+  email: string;
+  phoneNumber: string;
+}
 
-  const {
-    register: registerProfile,
-    handleSubmit: handleProfileSubmit,
-    formState: { errors: profileErrors },
-  } = useForm({
-    resolver: zodResolver(profileSchema),
+interface VerificationData {
+  state: string;
+  city: string;
+  street: string;
+  cacNumber: string;
+}
+
+interface PasswordData {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+function Profile() {
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedState, setSelectedState] = useState<string>("");
+  const [selectedCity, setSelectedCity] = useState<string>("");
+  const [updatedProfile, setUpdatedProfile] = useState({
+    firstName: "",
+    lastName: "",
+    town: "",
+    email: "",
+    phoneNumber: "",
   });
+  const [userData, setUserData] = useState<any>(null);
 
   const {
     register: registerVerification,
     handleSubmit: handleVerificationSubmit,
     formState: { errors: verificationErrors },
-  } = useForm({
+  } = useForm<VerificationData>({
     resolver: zodResolver(verificationSchema),
   });
 
@@ -72,42 +94,48 @@ function Profile() {
     register: registerPassword,
     handleSubmit: handlePasswordSubmit,
     formState: { errors: passwordErrors },
-  } = useForm({
+  } = useForm<PasswordData>({
     resolver: zodResolver(passwordSchema),
   });
 
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
     if (file && file.type.startsWith("image/")) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setSelectedImage(reader.result);
+        setSelectedImage(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
   };
 
+  const clearCookie = (name: string) => {
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+  };
+
   const triggerImageUpload = () => {
-    document.getElementById("profileImageInput").click();
+    document.getElementById("profileImageInput")?.click();
   };
 
   const router = useRouter();
 
   const handleLogout = async () => {
     try {
-      const response = await api.post("/auth/logout", {
+      await api.post("/auth/logout", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
 
+      clearCookie("token");
+      clearCookie("id");
+
       localStorage.removeItem("token");
       localStorage.removeItem("userId");
+      localStorage.removeItem("user");
 
       toast.success("Logged out successfully!");
-      console.log("Logged out successfully:", response.data);
 
-      // Delay of 2 seconds before redirecting
       setTimeout(() => {
         router.push("/auth");
       }, 2000);
@@ -116,38 +144,68 @@ function Profile() {
     }
   };
 
-  const onSubmitProfile = async (data) => {
-    const userId = localStorage.getItem("userId");
-    const token = localStorage.getItem("token");
+  const token = Cookies.get("token");
+  const id = Cookies.get("id");
 
+  useEffect(() => {
+    const fetchData = async () => {
+      if (token) {
+        const base64Url = token.split(".")[1];
+        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+        const jsonPayload = decodeURIComponent(
+          atob(base64)
+            .split("")
+            .map(function (c) {
+              return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+            })
+            .join("")
+        );
+        console.log(JSON.parse(jsonPayload)); // This will show the contents of the token
+      }
+      try {
+        const response = await axios.get(
+          `https://housinn.onrender.com/api/users/search/${id}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        setUserData(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+    fetchData();
+  }, [token, id]);
+
+  const handleUpdateSubmit = async (e: React.FormEvent) => {
+    const token = Cookies.get("token");
+    const id = Cookies.get("id");
+    e.preventDefault();
     try {
-      const response = await api.put(
-        `/users/${userId}`,
+      const response = await axios.put(
+        `https://housinn.onrender.com/api/users/${id}`,
+        updatedProfile,
         {
           headers: {
-            Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+            Authorization: `Bearer ${token}`,
           },
-        },
-        {
-          firstName: data.firstName,
-          lastName: data.lastName,
-          email: data.email,
-          phoneNumber: data.phoneNumber,
-          userType: "agent", // Or other user type
-          avatar: selectedImage,
         }
       );
-      console.log("Profile updated successfully:", response.data);
+
+      console.log("Response:", response.data); // Check if the response is valid
+      toast.success("Successfully updated profile");
+      console.log("Update Response:", response.data);
     } catch (error) {
-      console.error("Error updating profile:", error);
+      console.error("Error updating:", error);
     }
   };
 
-  const onSubmitVerification = (data) => {
+  const onSubmitVerification: SubmitHandler<VerificationData> = (data) => {
     console.log("Verification Data:", data);
   };
 
-  const onSubmitPassword = (data) => {
+  const onSubmitPassword: SubmitHandler<PasswordData> = (data) => {
     console.log("Password Data:", data);
   };
 
@@ -159,7 +217,7 @@ function Profile() {
           <h3 className="text-2xl font-bold text-black">Profile</h3>
           <hr className="text-gray-300" />
         </div>
-        <form onSubmit={handleProfileSubmit(onSubmitProfile)}>
+        <form onSubmit={handleUpdateSubmit}>
           <div className="flex flex-col gap-3">
             <div className="flex gap-[164px]">
               <div className="flex flex-col gap-0">
@@ -242,13 +300,19 @@ function Profile() {
                             type="text"
                             placeholder="Michael"
                             className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                            {...registerProfile("firstName")}
+                            value={updatedProfile.firstName}
+                            onChange={(e) =>
+                              setUpdatedProfile({
+                                ...updatedProfile,
+                                firstName: e.target.value,
+                              })
+                            }
                           />
-                          {profileErrors.firstName && (
+                          {/* {profileErrors.firstName && (
                             <span className="text-red-500 text-sm">
                               {profileErrors.firstName.message}
                             </span>
-                          )}
+                          )} */}
                         </div>
                         <div className="w-full gap-1">
                           <label
@@ -256,18 +320,24 @@ function Profile() {
                             htmlFor="lastName"
                           >
                             Last Name{" "}
-                            {profileErrors.lastName && (
+                            {/* {profileErrors.lastName && (
                               <span className="text-red-500 text-sm">
                                 {profileErrors.lastName.message}
                               </span>
-                            )}
+                            )} */}
                           </label>
                           <input
                             id="LastName"
                             type="text"
                             placeholder="Chukwueke"
                             className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                            {...registerProfile("lastName")}
+                            value={updatedProfile.lastName}
+                            onChange={(e) =>
+                              setUpdatedProfile({
+                                ...updatedProfile,
+                                lastName: e.target.value,
+                              })
+                            }
                           />
                         </div>
                       </div>
@@ -284,7 +354,6 @@ function Profile() {
                             type="text"
                             placeholder="Mike’s Realties"
                             className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                            {...registerProfile("company")}
                           />
                         </div>
                         <div className="w-full gap-1">
@@ -299,13 +368,19 @@ function Profile() {
                             type="email"
                             placeholder="mikesrealties@gmail.com"
                             className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                            {...registerProfile("email")}
+                            value={updatedProfile.email}
+                            onChange={(e) =>
+                              setUpdatedProfile({
+                                ...updatedProfile,
+                                email: e.target.value,
+                              })
+                            }
                           />
-                          {profileErrors.email && (
+                          {/* {profileErrors.email && (
                             <span className="text-red-500 text-sm">
                               {profileErrors.email.message}
                             </span>
-                          )}
+                          )} */}
                         </div>
                       </div>
                       <div className="w-full gap-1">
@@ -320,18 +395,26 @@ function Profile() {
                           type="text"
                           placeholder="08012345678"
                           className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                          {...registerProfile("phoneNumber")}
+                          value={updatedProfile.phoneNumber}
+                          onChange={(e) =>
+                            setUpdatedProfile({
+                              ...updatedProfile,
+                              phoneNumber: e.target.value,
+                            })
+                          }
                         />
-                        {profileErrors.phoneNumber && (
+                        {/* {profileErrors.phoneNumber && (
                           <span className="text-red-500 text-sm">
                             {profileErrors.phoneNumber.message}
                           </span>
-                        )}
+                        )} */}
                       </div>
                     </div>
                   </div>
                 </div>
-                <Button className="w-fit">Upload Profile</Button>
+                <button type="submit" className="w-fit">
+                  Upload Profile
+                </button>
               </div>
             </div>
             <hr className="text-gray-300 pb-8" />
