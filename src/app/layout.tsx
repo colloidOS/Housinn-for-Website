@@ -16,8 +16,8 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
-      <body className={`${sans.className}`}>
+    <html lang="en" className='w-full'>
+      <body className={`${sans.className} w-full`}>
         <AuthProvider>
           {children}
         </AuthProvider>
