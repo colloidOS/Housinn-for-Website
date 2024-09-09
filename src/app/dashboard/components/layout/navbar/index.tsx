@@ -4,7 +4,17 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Notification from "../../../../../../public/icons/notifications.svg";
-import { useAuth } from "../../../../../context/AuthContext"; // Import the useAuth hook
+
+// Function to parse cookies into an object
+const parseCookies = (): Record<string, string> => {
+  return document.cookie
+    .split("; ")
+    .reduce((acc, cookie) => {
+      const [name, value] = cookie.split("=");
+      acc[name] = decodeURIComponent(value);
+      return acc;
+    }, {} as Record<string, string>);
+};
 
 const navlinks = [
   {
@@ -31,7 +41,10 @@ interface UserNavbarProps {
 const UserNavbar: React.FC<UserNavbarProps> = ({ className }) => {
   const pathname = usePathname();
   const currentPath = pathname?.split("/")[2];
-  const { user } = useAuth();
+
+  // Parse cookies to get the user data
+  const cookies = parseCookies();
+  const firstName = cookies.firstName || "User"; // Get the firstName from cookies or fallback to 'User'
 
   return (
     <nav
@@ -39,7 +52,7 @@ const UserNavbar: React.FC<UserNavbarProps> = ({ className }) => {
       role="navbar"
     >
       <div className="flex items-center justify-between gap-2">
-        <div className="flex w-full  justify-between gap-1">
+        <div className="flex w-full justify-between gap-1">
           <div className="flex items-center justify-between gap-1">
             {navlinks.map((item, index) => (
               <Link
@@ -70,9 +83,7 @@ const UserNavbar: React.FC<UserNavbarProps> = ({ className }) => {
                 alt=""
               />
 
-              <span className="text-sm text-gray-600">
-                {user?.firstName || "User"}
-              </span>
+              <span className="text-sm text-gray-600">{firstName}</span>
             </div>
           </div>
         </div>

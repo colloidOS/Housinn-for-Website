@@ -1,6 +1,6 @@
 // Export the Listing interface
 export interface Listing {
-  id: number;
+  id: string;
   price: string;
   title: string;
   location: string;
@@ -8,15 +8,15 @@ export interface Listing {
   baths: number;
   area: string;
   imageUrl: string;
-  tag: "For Sale" | "For Rent" | "Short-let" | "Lands";
+  tag:string;
   listed: string; // Date when the listing was added
-  status: "Published" | "Unpublished" | "Expired" | "Pending"; // Status of the listing
+  status: string; // Status of the listing
 }
 
 // Define the listings array
 const listings: Listing[] = [
   {
-    id: 1,
+    id: "1",
     price: "₦160,000,000",
     title: "Brand new Luxury 4 Bedroom duplex",
     location: "Abuja, Abuja FCT, Katampe Extension, KATAMPE EXTENSION",
@@ -29,7 +29,7 @@ const listings: Listing[] = [
     status: "Published",
   },
   {
-    id: 2,
+    id: "2",
     price: "₦190,000,000",
     title: "Brad new Luxury 4 Bedroom duplex",
     location: "Abuja, Abuja FCT, Katampe Extension, KATAMPE EXTENSION",
@@ -42,7 +42,7 @@ const listings: Listing[] = [
     status: "Pending",
   },
   {
-    id: 3,
+    id: "3",
     price: "₦1,000,000",
     title: "Bran new Luxury 4 Bedroom duplex",
     location: "Abuja, Abuja FCT, Katampe Extension, KATAMPE EXTENSION",
@@ -55,7 +55,7 @@ const listings: Listing[] = [
     status: "Unpublished",
   },
   {
-    id: 4,
+    id: "4",
     price: "₦16,000,000",
     title: "Band new Luxury 4 Bedroom duplex",
     location: "Abuja, Abuja FCT, Katampe Extension, KATAMPE EXTENSION",
@@ -68,7 +68,7 @@ const listings: Listing[] = [
     status: "Expired",
   },
   {
-    id: 5,
+    id: "5",
     price: "₦10,000,000",
     title: "rand new Luxury 4 Bedroom duplex",
     location: "Abuja, Abuja FCT, Katampe Extension, KATAMPE EXTENSION",
@@ -80,7 +80,7 @@ const listings: Listing[] = [
     listed: "9-11-2023",
     status: "Published",
   },  {
-    id: 6,
+    id: "6",
     price: "₦10,000,000",
     title: "rand new Luxury 4 Bedroom duplex",
     location: "Abuja, Abuja FCT, Katampe Extension, KATAMPE EXTENSION",
