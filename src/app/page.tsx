@@ -11,7 +11,7 @@ import { listings } from "../data/listings";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col w-full ">
+    <div className="flex min-h-screen flex-col min-w-full ">
       <HeroContainer />
       <ListingsPage listings={listings} />
       <AboutUs />
@@ -19,6 +19,6 @@ export default function Home() {
       <ChooseUsReviewContainer />
       <GetOurApp />
       <Footer />
-    </main>
+    </div>
   );
 }

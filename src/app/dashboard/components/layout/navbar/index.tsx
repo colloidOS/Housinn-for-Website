@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Notification from "../../../../../../public/icons/notifications.svg";
+import { useAuth } from "../../../../../context/AuthContext"; // Import the useAuth hook
 
 const navlinks = [
   {
@@ -22,6 +23,7 @@ const navlinks = [
     id: "short let",
   },
 ];
+
 interface UserNavbarProps {
   className?: string; // Explicitly typing the className prop as string
 }
@@ -29,6 +31,8 @@ interface UserNavbarProps {
 const UserNavbar: React.FC<UserNavbarProps> = ({ className }) => {
   const pathname = usePathname();
   const currentPath = pathname?.split("/")[2];
+  const { user } = useAuth();
+
   return (
     <nav
       className={` ${className} bg-white px-[74px] py-2.5 md:left-[220px] lg:left-[252px] w-full`}
@@ -65,7 +69,10 @@ const UserNavbar: React.FC<UserNavbarProps> = ({ className }) => {
                 className="w-[18px] h-[18px]"
                 alt=""
               />
-              <span className="text-sm text-gray-600">Chinedu</span>
+
+              <span className="text-sm text-gray-600">
+                {user?.firstName || "User"}
+              </span>
             </div>
           </div>
         </div>
