@@ -1,49 +1,39 @@
-import React, { useState, useEffect } from "react";
-import ListingListItem from "./ListingListItem"; // Your existing component to display each listing
+// Sort.tsx
+import React, { useState } from "react";
+import ListingListItem from "./ListingListItem";
 
-// Define the structure of a listing (if not already defined elsewhere)
 interface Listing {
   id: string;
-  title: string;
-  tag: string;
   price: number;
+  title: string;
+  location: string;
+  beds: number;
+  baths: number;
+  area: string;
+  imageUrl: string;
+  tag: string;
   listed: string;
   status: string;
 }
 
-// Define the props interface for Sort component
-const Sort: React.FC = () => {
-  const [listings, setListings] = useState<Listing[]>([]);
+interface SortProps {
+  listings: Listing[]; // Receive listings as prop
+}
+
+const Sort: React.FC<SortProps> = ({ listings }) => {
   const [sortConfig, setSortConfig] = useState<{
     key: keyof Listing;
     direction: "asc" | "desc";
   } | null>(null);
 
-  // Fetch data from the API
-  useEffect(() => {
-    const fetchListings = async () => {
-      try {
-        const response = await fetch("API_URL"); // Replace with your API URL
-        const data = await response.json();
-        setListings(data);
-      } catch (error) {
-        console.error("Error fetching listings:", error);
-      }
-    };
-
-    fetchListings();
-  }, []); // Fetch listings when the component mounts
-
-  // Memoized sorted listings logic
   const sortedListings = React.useMemo(() => {
-    let sortableListings = [...listings]; // Create a copy of listings for sorting
+    let sortableListings = [...listings];
 
     if (sortConfig !== null) {
       sortableListings.sort((a, b) => {
         const fieldA = a[sortConfig.key];
         const fieldB = b[sortConfig.key];
 
-        // Compare the field values and apply sorting based on the direction
         if (fieldA < fieldB) {
           return sortConfig.direction === "asc" ? -1 : 1;
         }
@@ -54,10 +44,9 @@ const Sort: React.FC = () => {
       });
     }
 
-    return sortableListings; // Return sorted or original listings
+    return sortableListings;
   }, [listings, sortConfig]);
 
-  // Handle sorting request when header is clicked
   const requestSort = (key: keyof Listing) => {
     let direction: "asc" | "desc" = "asc";
     if (sortConfig && sortConfig.key === key && sortConfig.direction === "asc") {
@@ -66,7 +55,6 @@ const Sort: React.FC = () => {
     setSortConfig({ key, direction });
   };
 
-  // Get class names for sorting direction
   const getClassNamesFor = (key: keyof Listing) => {
     if (!sortConfig) {
       return "";

@@ -1,4 +1,5 @@
-"use client";
+"use client"
+// ListingsPage.tsx
 import React, { useState, useEffect } from "react";
 import ListingCard from "./ListingCard";
 import Search from "../../../../public/icons/search-listing.svg";
@@ -7,13 +8,12 @@ import List_view from "../../../../public/icons/list-view.svg";
 import Filter from "./Filter";
 import Image from "next/image";
 import Sort from "./Sort";
-import api from "../../../lib/api"; // Import the axios instance
-import { useAuth } from "../../../context/AuthContext"; // Import useAuth to get user data
+import api from "../../../lib/api";
+import { useAuth } from "../../../context/AuthContext";
 
-// Define the Listing type
 type Listing = {
   id: string;
-  price: string;
+  price: number;
   title: string;
   location: string;
   beds: number;
@@ -30,7 +30,7 @@ const ListingsPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isListView, setIsListView] = useState<boolean>(false);
   const [listings, setListings] = useState<Listing[]>([]);
-  const { user } = useAuth(); // Access user from AuthContext
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchListings = async () => {
@@ -43,16 +43,16 @@ const ListingsPage: React.FC = () => {
         const response = await api.get("/users/profilePosts");
         const data = response.data.data.userPosts.map((post: any) => ({
           id: post.id,
-          price: `₦${post.price.toLocaleString()}`, // Format price
+          price: post.price,
           title: post.title,
           location: `${post.city}, ${post.state}, ${post.address}`,
           beds: post.bedroom,
           baths: post.bathroom,
-          area: `${post.latitude} x ${post.longitude}`, // Example of area
-          imageUrl: post.images[0] || "/images/default-image.png", // Default image if none provided
-          tag: post.category === "apartment" ? "For Rent" : "For Sale", // Example mapping
+          area: `${post.latitude} x ${post.longitude}`,
+          imageUrl: post.images[0] || "/images/default-image.png",
+          tag: post.category === "apartment" ? "For Rent" : "For Sale",
           listed: new Date(post.createdAt).toLocaleDateString(),
-          status: "Published", // Example default status
+          status: "Published",
         }));
         setListings(data);
         console.log("Fetched data:", data);
@@ -62,7 +62,7 @@ const ListingsPage: React.FC = () => {
     };
 
     fetchListings();
-  }, [user]); // Ensure it runs after user is set
+  }, [user]);
 
   const handleFilterChange = (tag: string) => {
     setActiveTag(tag === activeTag ? null : tag);
@@ -125,11 +125,11 @@ const ListingsPage: React.FC = () => {
               />
             </button>
           </div>
-          <button onClick={toggleView} className="">
+          <button onClick={toggleView}>
             {isListView ? (
               <Image
                 src={Grid_view}
-                alt="image"
+                alt="Grid view"
                 width={86}
                 height={44}
                 className="cursor-pointer"
@@ -137,7 +137,7 @@ const ListingsPage: React.FC = () => {
             ) : (
               <Image
                 src={List_view}
-                alt="image"
+                alt="List view"
                 width={60}
                 height={44}
                 className="cursor-pointer"
@@ -148,7 +148,7 @@ const ListingsPage: React.FC = () => {
       </div>
 
       {isListView ? (
-        <Sort listings={filteredListings} />
+        <Sort listings={filteredListings} /> 
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
           {filteredListings.map((listing) => (
