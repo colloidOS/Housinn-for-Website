@@ -1,4 +1,3 @@
-// src/pages/AuthPage.tsx
 "use client";
 
 import Image from "next/image";
@@ -11,13 +10,11 @@ import { ClipLoader } from "react-spinners";
 import Apple from "../../../public/icons/apple.svg";
 import Google from "../../../public/icons/google.svg";
 import api from "../../lib/api"; // Ensure you have your API module correctly configured
-import { useAuth } from "@/context/AuthContext"; // Import the useAuth hook
 
 const AuthPage = () => {
   const [isSignIn, setIsSignIn] = useState(true);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { setUser } = useAuth(); // Access the setUser function
 
   const toggleView = () => {
     setIsSignIn(!isSignIn);
@@ -41,25 +38,25 @@ const AuthPage = () => {
         response = await api.post("/auth/login", data);
         toast.success("Signed in successfully!");
 
-        // Set the user in the context
-        setUser(response.data.data);
-        console.log(response.data.data);
+        const userData = response.data.data;
 
-        // Set token and id cookies with additional parameters
-        document.cookie = `token=${response.data.data.token}; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT`;
-        document.cookie = `id=${response.data.data.id}; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT`;
+        // Set all user data in cookies
+        Object.entries(userData).forEach(([key, value]) => {
+          document.cookie = `${key}=${value}; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT`;
+        });
+
+        // Log all cookies for verification
+        console.log("Cookies: ", document.cookie);
 
         // Redirect based on userType
         router.push("/dashboard");
       } else {
         response = await api.post("/auth/register", data);
         toast.success("Account created successfully!");
-
         setIsSignIn(true);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        // Handle AxiosError
         const errorMessage = error.response?.data?.message || error.message;
         console.error(
           "Submission Error:",
@@ -67,13 +64,13 @@ const AuthPage = () => {
         );
         toast.error(`Error: ${errorMessage}`);
       } else {
-        // Handle unexpected errors
         toast.error("An unexpected error occurred. Please try again.");
       }
     } finally {
       setLoading(false);
     }
   };
+
   const signInFields = [
     {
       id: "signin-email",
@@ -136,7 +133,6 @@ const AuthPage = () => {
       label: "Property Developer",
     },
   ];
-
   return (
     <div className="relative flex w-full">
       <ToastContainer />
