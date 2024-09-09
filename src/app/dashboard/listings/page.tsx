@@ -1,6 +1,5 @@
-"use client"
-import React, { useState } from "react";
-import { listings } from "../../../data/myListing";
+"use client";
+import React, { useState, useEffect } from "react";
 import ListingCard from "./ListingCard";
 import Search from "../../../../public/icons/search-listing.svg";
 import Grid_view from "../../../../public/icons/grid-view.svg";
@@ -8,11 +7,62 @@ import List_view from "../../../../public/icons/list-view.svg";
 import Filter from "./Filter";
 import Image from "next/image";
 import Sort from "./Sort";
+import api from "../../../lib/api"; // Import the axios instance
+import { useAuth } from "../../../context/AuthContext"; // Import useAuth to get user data
+
+// Define the Listing type
+type Listing = {
+  id: string;
+  price: string;
+  title: string;
+  location: string;
+  beds: number;
+  baths: number;
+  area: string;
+  imageUrl: string;
+  tag: string;
+  listed: string;
+  status: string;
+};
 
 const ListingsPage: React.FC = () => {
   const [activeTag, setActiveTag] = useState<string | null>("All Properties");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isListView, setIsListView] = useState<boolean>(false);
+  const [listings, setListings] = useState<Listing[]>([]);
+  const { user } = useAuth(); // Access user from AuthContext
+
+  useEffect(() => {
+    const fetchListings = async () => {
+      if (!user) {
+        console.error("User not authenticated.");
+        return;
+      }
+
+      try {
+        const response = await api.get("/users/profilePosts");
+        const data = response.data.data.userPosts.map((post: any) => ({
+          id: post.id,
+          price: `₦${post.price.toLocaleString()}`, // Format price
+          title: post.title,
+          location: `${post.city}, ${post.state}, ${post.address}`,
+          beds: post.bedroom,
+          baths: post.bathroom,
+          area: `${post.latitude} x ${post.longitude}`, // Example of area
+          imageUrl: post.images[0] || "/images/default-image.png", // Default image if none provided
+          tag: post.category === "apartment" ? "For Rent" : "For Sale", // Example mapping
+          listed: new Date(post.createdAt).toLocaleDateString(),
+          status: "Published", // Example default status
+        }));
+        setListings(data);
+        console.log("Fetched data:", data);
+      } catch (error) {
+        console.error("Error fetching listings:", error);
+      }
+    };
+
+    fetchListings();
+  }, [user]); // Ensure it runs after user is set
 
   const handleFilterChange = (tag: string) => {
     setActiveTag(tag === activeTag ? null : tag);
@@ -50,7 +100,7 @@ const ListingsPage: React.FC = () => {
   const filteredListings = handleSearch();
 
   return (
-    <div className="px-12 text-gray-600  pt-10 pb-12 w-full">
+    <div className="px-12 text-gray-600 pt-10 pb-12 w-full">
       <div>
         <h1 className="font-bold text-2xl mb-4">My Listings</h1>
       </div>
