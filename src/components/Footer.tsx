@@ -12,18 +12,18 @@ import Mail from "../../public/icons/mail.svg";
 import Image from "next/image";
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-gray-100 px-[104px] pb-[50px] pt-[31px] gap-[50px] flex flex-col p-2 text-white w-full">
-      <div className="  gap-[30px] flex flex-col md:flex-row ">
-        <div className="flex flex-col flex-1 gap-[11px] ">
-          <h1 className="font-semibold text-[24px]">About</h1>
-          <p className="font-normal text-[16px]">
+    <footer className="bg-gray-100 px-6 md:px-[104px] pb-12 pt-7 gap-16 md:gap-12 flex flex-col p-2 text-white w-full">
+      <div className="gap-12  md:gap-7 flex flex-col md:flex-row ">
+        <div className="flex flex-col flex-1 gap-3 ">
+          <h1 className="font-semibold text-2xl">About</h1>
+          <p className="font-normal text-base">
             Welcome to Housinn, your trusted partner in the world of real
             estate. We are more than just a real estate company; we are your
             gateway to finding the perfect home, the ideal investment property,
             or the most suitable buyer or tenant.
           </p>
         </div>{" "}
-        <div className="flex flex-col gap-[21px] flex-1 ">
+        <div className="flex flex-col gap-5 flex-1 ">
           <h1 className="font-semibold text-2xl">Contact Us</h1>
 
           <a href="" target="_blank">
@@ -49,9 +49,9 @@ const Footer: React.FC = () => {
             </div>
           </a>
         </div>
-        <div className="flex flex-col gap-[21px] flex-1 items-start ">
+        <div className="flex flex-col gap-5 flex-1 items-start ">
           <h1 className="font-semibold text-2xl">Download Our Mobile App</h1>
-          <div className="flex justify-center gap-[21px]">
+          <div className="flex justify-center gap-5">
             {" "}
             <a href="" target="_blank">
               {" "}
@@ -74,7 +74,7 @@ const Footer: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="flex w-full items-center justify-center gap-[34px]">
+      <div className="flex w-full items-center justify-center gap-8">
         {" "}
         <a href="" target="_blank">
           <Image src={Twitter} width={21} height={21} alt="Twitter" />
