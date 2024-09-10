@@ -10,15 +10,15 @@ import Ellipse3 from "../../public/icons/ellipse-3.svg";
 
 const GetOurApp: React.FC = () => {
   return (
-    <div className=" grid grid-cols-2 justify-between max-h-[385px] get-our-app mx-[104px] rounded-[36px] text-white mb-[286px] mt-[68px]">
-      <div className="col-span-1 flex flex-col gap-5 pl-[50px] pt-[60px] pb-[63px]">
+    <div className=" grid md:grid-cols-2 grid-cols-1 justify-between  md:h-[385px] h-[80vh] get-our-app lg:mx-[104px] mx-6 sm:mx-8 rounded-[36px] text-white mb-[286px] mt-16">
+      <div className="text-center md:text-left flex flex-col gap-5 md:pl-12 pt-14 pb-16">
         {" "}
         <h1 className="font-bold text-4xl">Get Our App</h1>
         <p className="font-normal text-[18px] leading-6">
           Download our Android app or iOS app to get quick access to property on
           Housinn from your mobile phone.
         </p>
-        <div className="flex justify-between gap-[21px]">
+        <div className="flex justify-center md:justify-start gap-4">
           {" "}
           <Image
             src={GoogleDownloadButton}
@@ -34,7 +34,7 @@ const GetOurApp: React.FC = () => {
           />
         </div>
       </div>
-      <div className="col-span-1 w-full h-full relative">
+      <div className="text-center md:text-left w-full h-full relative">
         <div className="overflow-hidden relative w-full h-full ">
           <Image
             src={Ellipse1}
