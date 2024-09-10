@@ -4,12 +4,16 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Notification from "../../../../../../public/icons/notifications.svg";
-import React, { useEffect, useState } from "react";
-import Cookies from "js-cookie";
-import axios from "axios";
 
-// const [userData, setUserData] = useState(null);
-// const [loading, setLoading] = useState(true); // Loa
+// Function to parse cookies into an object
+const parseCookies = (): Record<string, string> => {
+  return document.cookie.split("; ").reduce((acc, cookie) => {
+    const [name, value] = cookie.split("=");
+    acc[name] = decodeURIComponent(value);
+    return acc;
+  }, {} as Record<string, string>);
+};
+
 const navlinks = [
   {
     route: "For Sale",
@@ -27,6 +31,7 @@ const navlinks = [
     id: "short let",
   },
 ];
+
 interface UserNavbarProps {
   className?: string; // Explicitly typing the className prop as string
 }
@@ -71,13 +76,18 @@ const id = Cookies.get("id");
 const UserNavbar: React.FC<UserNavbarProps> = ({ className }) => {
   const pathname = usePathname();
   const currentPath = pathname?.split("/")[2];
+
+  // Parse cookies to get the user data
+  const cookies = parseCookies();
+  const firstName = cookies.firstName || "User"; // Get the firstName from cookies or fallback to 'User'
+
   return (
     <nav
       className={` ${className} bg-white px-[74px] py-2.5 md:left-[220px] lg:left-[252px] w-full`}
       role="navbar"
     >
       <div className="flex items-center justify-between gap-2">
-        <div className="flex w-full  justify-between gap-1">
+        <div className="flex w-full justify-between gap-1">
           <div className="flex items-center justify-between gap-1">
             {navlinks.map((item, index) => (
               <Link
@@ -107,7 +117,8 @@ const UserNavbar: React.FC<UserNavbarProps> = ({ className }) => {
                 className="w-[18px] h-[18px]"
                 alt=""
               />
-              <span className="text-sm text-gray-600">Chinedu</span>
+
+              <span className="text-sm text-gray-600">{firstName}</span>
             </div>
           </div>
         </div>

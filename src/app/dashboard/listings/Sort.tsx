@@ -1,9 +1,23 @@
+// Sort.tsx
 import React, { useState } from "react";
-import { Listing } from "../../../data/myListing";
 import ListingListItem from "./ListingListItem";
 
+interface Listing {
+  id: string;
+  price: number;
+  title: string;
+  location: string;
+  beds: number;
+  baths: number;
+  area: string;
+  imageUrl: string;
+  tag: string;
+  listed: string;
+  status: string;
+}
+
 interface SortProps {
-  listings: Listing[];
+  listings: Listing[]; // Receive listings as prop
 }
 
 const Sort: React.FC<SortProps> = ({ listings }) => {
@@ -14,6 +28,7 @@ const Sort: React.FC<SortProps> = ({ listings }) => {
 
   const sortedListings = React.useMemo(() => {
     let sortableListings = [...listings];
+
     if (sortConfig !== null) {
       sortableListings.sort((a, b) => {
         const fieldA = a[sortConfig.key];
@@ -28,16 +43,13 @@ const Sort: React.FC<SortProps> = ({ listings }) => {
         return 0;
       });
     }
+
     return sortableListings;
   }, [listings, sortConfig]);
 
   const requestSort = (key: keyof Listing) => {
     let direction: "asc" | "desc" = "asc";
-    if (
-      sortConfig &&
-      sortConfig.key === key &&
-      sortConfig.direction === "asc"
-    ) {
+    if (sortConfig && sortConfig.key === key && sortConfig.direction === "asc") {
       direction = "desc";
     }
     setSortConfig({ key, direction });
