@@ -36,9 +36,6 @@ interface UserNavbarProps {
   className?: string; // Explicitly typing the className prop as string
 }
 
-const token = Cookies.get("token");
-const id = Cookies.get("id");
-
 // useEffect(() => {
 //   const fetchData = async () => {
 //     if (token) {
