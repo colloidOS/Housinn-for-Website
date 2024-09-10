@@ -15,19 +15,19 @@ const ListingsPage: React.FC = () => {
     : listings;
 
   return (
-    <div className="px-[104px] pt-[35px] pb-[48px] w-full">
-      <div className="flex justify-between mb-5">
+    <div className="lg:px-[104px] sm:px-14 px-6  pt-9 pb-12 w-full">
+      <div className="flex flex-col md:flex-row gap-2 justify-between mb-5">
         <h2 className="text-2xl font-bold">New Listings</h2>
         <Filter activeTag={activeTag || ""} onChange={handleFilterChange}  />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
         {filteredListings.map((listing) => (
           <ListingCard key={listing.id} listing={listing} />
         ))}
       </div>
     <div className="w-full flex justify-center">
-    <button className="mt-8 px-4 py-2 bg-primary text-white rounded-[5px]">
+    <button className="mt-8 px-4 py-2 bg-primary text-white rounded">
         View all Listings
       </button>
     </div>
