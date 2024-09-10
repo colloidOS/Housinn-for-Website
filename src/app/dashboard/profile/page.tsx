@@ -10,8 +10,9 @@ import { toast, ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 
-const stateOptions = ["Lagos", "Enugu", "Osun"];
-const cityOptions = ["Surulere", "Maitama", "Victoria Island"];
+import ProfileFields from "./ProfileFields";
+import PasswordFields from "./PasswordFields";
+import AddressFields from "./AddressFields";
 
 function Profile() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -20,12 +21,22 @@ function Profile() {
   const [updatedProfile, setUpdatedProfile] = useState({
     firstName: "",
     lastName: "",
-    email: "",
-    town: "",
-    userType: "agent", // Set default value for userType
-    password: "", // Add password field to match Postman
+    number: "",
+    company: "",
   });
+  const [updateVerification, setUpdateVerification] = useState({
+    state: selectedState,
+    town: selectedCity,
+    address: "",
+    number: "",
+  });
+  const [updatePassword, setUpdatedPassword] = useState({
+    oldPassword: "",
+    newPassword: "",
+  });
+
   const [userData, setUserData] = useState<any>(null);
+  const [loading, setLoading] = useState(true); // Loading state
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -67,40 +78,96 @@ function Profile() {
         console.log(JSON.parse(jsonPayload)); // This will show the contents of the token
       }
       try {
-        const response = await axios.get(
-          `https://housinn.onrender.com/api/users/search/${id}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        setUserData(response.data);
-        console.log(response.data);
+        const response = await api.get(`/users/search/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const userData = response.data;
+        setUserData(userData);
+
+        // Populate form fields
+        setUpdatedProfile({
+          firstName: userData.data.firstName || "",
+          lastName: userData.data.lastName || "",
+          number: userData.data.number || "",
+          company: userData.data.company || "",
+        });
+
+        setUpdateVerification({
+          state: userData.data.state || "",
+          town: userData.data.town || "",
+          address: userData.data.address || "",
+          number: userData.data.number || "",
+        });
+
+        setSelectedState(userData.state || ""); // Populate state dropdown
+        setSelectedCity(userData.town || ""); // Populate city dropdown
+
+        setLoading(false);
+        console.log(userData);
       } catch (error) {
         console.error("Error:", error);
       }
     };
     fetchData();
-  }, [token, id]);
-
+  }, [id, token]);
   const handleUpdateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const profileData = {
       ...updatedProfile,
-      userType: "agent", // or from state if dynamic
-      password: updatedProfile.password || "coal", // Assign default password or user's input
     };
     console.log(updatedProfile);
-    console.log(token);
-    console.log("ID:", id);
+
     try {
-      const response = await axios.put(
-        `https://housinn.onrender.com/api/users/${id}`,
-        profileData,
-        { headers: { Authorization: `Bearer ${token}` } }
+      const response = await api.put(`/users/${id}`, profileData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      console.log("Response:", response.data); // Check if the response is valid
+      toast.success("Updated profile successfully!");
+    } catch (error) {
+      console.error("Error updating:", error);
+    }
+  };
+
+  const handleVerificationSubmit = async (e: React.FormEvent) => {
+    e.preventDefault(); // Prevent the default form submission behavior
+    const verificationData = {
+      ...updateVerification,
+      state: selectedState,
+      town: selectedCity,
+    };
+
+    console.log(verificationData);
+
+    try {
+      const response = await api.put(`/users/${id}`, verificationData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      console.log("Response:", response.data);
+      toast.success("Updated profile successfully!");
+    } catch (error) {
+      console.error("Error updating:", error);
+    }
+  };
+
+  const handlePasswordChange = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const passwordChange = {
+      ...updatePassword,
+    };
+    console.log(passwordChange);
+    try {
+      const response = await api.put(
+        `/users/changePassword/${id}`,
+        updatePassword,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
 
       console.log("Response:", response.data); // Check if the response is valid
-      toast.success("Successfully updated profile");
+      toast.success("Updated profile successfully!");
     } catch (error) {
       console.error("Error updating:", error);
     }
@@ -109,7 +176,7 @@ function Profile() {
     try {
       await api.post("/auth/logout", {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -207,131 +274,14 @@ function Profile() {
                     <p className="text-primary font-semibold">
                       Contact Information
                     </p>
-                    <div className="flex flex-wrap gap-6">
-                      <div className="flex gap-6 w-full">
-                        <div className="w-full gap-1">
-                          <label
-                            className="block text-gray-700 text-sm font-bold"
-                            htmlFor="firstName"
-                          >
-                            First Name
-                          </label>
-                          <input
-                            id="firstName"
-                            type="text"
-                            placeholder="Michael"
-                            className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                            value={updatedProfile.firstName}
-                            onChange={(e) =>
-                              setUpdatedProfile({
-                                ...updatedProfile,
-                                firstName: e.target.value,
-                              })
-                            }
-                          />
-                        </div>
-                        <div className="w-full gap-1">
-                          <label
-                            className="block text-gray-700 text-sm font-bold"
-                            htmlFor="lastName"
-                          >
-                            Last Name{" "}
-                          </label>
-                          <input
-                            id="LastName"
-                            type="text"
-                            placeholder="Chukwueke"
-                            className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                            value={updatedProfile.lastName}
-                            onChange={(e) =>
-                              setUpdatedProfile({
-                                ...updatedProfile,
-                                lastName: e.target.value,
-                              })
-                            }
-                          />
-                        </div>
-                      </div>
-                      <div className="flex gap-6 w-full">
-                        <div className="w-full gap-1">
-                          <label
-                            className="block text-gray-700 text-sm font-bold"
-                            htmlFor="companyName"
-                          >
-                            Company Name (optional)
-                          </label>
-                          <input
-                            id="company"
-                            type="text"
-                            placeholder="Mike’s Realties"
-                            className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                            value={updatedProfile.town}
-                            onChange={(e) =>
-                              setUpdatedProfile({
-                                ...updatedProfile,
-                                town: e.target.value,
-                              })
-                            }
-                          />
-                        </div>
-                        <div className="w-full gap-1">
-                          <label
-                            className="block text-gray-700 text-sm font-bold"
-                            htmlFor="email"
-                          >
-                            Email
-                          </label>
-                          <input
-                            id="email"
-                            type="email"
-                            placeholder="mikesrealties@gmail.com"
-                            className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                            value={updatedProfile.email}
-                            onChange={(e) =>
-                              setUpdatedProfile({
-                                ...updatedProfile,
-                                email: e.target.value,
-                              })
-                            }
-                          />
-                        </div>
-                      </div>
-                      <div className="w-full gap-1">
-                        <label
-                          className="block text-gray-700 text-sm font-bold"
-                          htmlFor="phoneNumber"
-                        >
-                          Phone Number
-                        </label>
-                        <input
-                          id="number"
-                          type="text"
-                          placeholder="08012345678"
-                          className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                        />
-                      </div>
-                      <div className="w-full gap-1">
-                        <label
-                          className="block text-gray-700 text-sm font-bold"
-                          htmlFor="password"
-                        >
-                          Password
-                        </label>
-                        <input
-                          id="number"
-                          type="text"
-                          placeholder="08012345678"
-                          className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                          value={updatedProfile.password}
-                          onChange={(e) =>
-                            setUpdatedProfile({
-                              ...updatedProfile,
-                              password: e.target.value,
-                            })
-                          }
-                        />
-                      </div>
-                    </div>
+                    {loading ? (
+                      <p>Loading...</p> // Show loading indicator
+                    ) : (
+                      <ProfileFields
+                        updatedProfile={updatedProfile}
+                        setUpdatedProfile={setUpdatedProfile}
+                      />
+                    )}
                   </div>
                 </div>
                 <button type="submit" className="w-fit">
@@ -343,7 +293,10 @@ function Profile() {
           </form>
         </div>
         <div className="flex flex-col gap-4 w-full">
-          <form className="flex gap-[140px]">
+          <form
+            className="flex gap-[140px]"
+            onSubmit={handleVerificationSubmit}
+          >
             <div className="flex flex-col gap-2 text-nowrap">
               <p className="text-lg font-semibold">Verification</p>
               <p className="text-sm font-normal text-gray-600">
@@ -352,72 +305,25 @@ function Profile() {
             </div>
             <div className="px-12 py-8 flex flex-col gap-8 w-full">
               <div className="flex flex-col gap-4">
-                <div className="flex gap-6 w-full">
-                  <div className="flex flex-col gap-1 relative w-full">
-                    <label
-                      className="block text-gray-700 text-sm font-bold"
-                      htmlFor="newPassword"
-                    >
-                      State
-                    </label>
-                    <Dropdown
-                      options={stateOptions}
-                      value={selectedState}
-                      onChange={``}
-                      placeholder="State"
-                    />
-                  </div>
-
-                  <div className="flex flex-col gap-1 relative w-full">
-                    <label
-                      className="block text-gray-700 text-sm font-bold"
-                      htmlFor="newPassword"
-                    >
-                      City
-                    </label>
-                    <Dropdown
-                      options={cityOptions}
-                      value={selectedCity}
-                      onChange={``}
-                      placeholder="City"
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <label
-                    className="block text-gray-700 text-sm font-bold"
-                    htmlFor="currentPassword"
-                  >
-                    Street
-                  </label>
-                  <input
-                    id="street"
-                    type="text"
-                    placeholder="e.g No 25 Asokoro Street"
-                    className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
+                {loading ? (
+                  <p>Loading...</p>
+                ) : (
+                  <AddressFields
+                    updateVerification={updateVerification}
+                    setUpdateVerification={setUpdateVerification}
+                    selectedState={selectedState}
+                    setSelectedState={setSelectedState}
+                    selectedCity={selectedCity}
+                    setSelectedCity={setSelectedCity}
                   />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <label
-                    className="block text-gray-700 text-sm font-bold"
-                    htmlFor="currentPassword"
-                  >
-                    CAC Number
-                  </label>
-                  <input
-                    id="cacNumber"
-                    type="text"
-                    placeholder="Enter your CAC Registration Code(RC Number)"
-                    className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                  />
-                </div>
+                )}
               </div>
               <Button type="submit" className="w-fit" onClick={``}>
                 Verify Account
               </Button>
             </div>
           </form>
-          <form className="flex gap-3 w-full">
+          <form className="flex gap-3 w-full" onSubmit={handlePasswordChange}>
             <div className="flex flex-col gap-0 ">
               <p className="text-lg font-semibold">Change Password</p>
               <p className="text-sm font-normal text-gray-600 w-[300px]">
@@ -426,49 +332,11 @@ function Profile() {
             </div>
             <div className="px-12 py-8 flex flex-col gap-8 w-full">
               <div className="flex flex-col gap-4">
-                <div className="flex flex-col gap-1">
-                  <label
-                    className="block text-gray-700 text-sm font-bold"
-                    htmlFor="currentPassword"
-                  >
-                    Current Password
-                  </label>
-                  <input
-                    id="currentPassword"
-                    type="text"
-                    placeholder="Enter your current password"
-                    className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                  />
-                </div>
                 <div className="flex gap-6 w-full">
-                  <div className="flex flex-col gap-1 w-full">
-                    <label
-                      className="block text-gray-700 text-sm font-bold"
-                      htmlFor="newPassword"
-                    >
-                      New Password
-                    </label>
-                    <input
-                      id="newPass"
-                      type="text"
-                      placeholder="Enter your new password"
-                      className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1 w-full">
-                    <label
-                      className="block text-gray-700 text-sm font-bold"
-                      htmlFor="updatePass"
-                    >
-                      Confirm Password
-                    </label>
-                    <input
-                      id="updatePassword"
-                      type="text"
-                      placeholder="Confirm your new password"
-                      className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-                    />
-                  </div>
+                  <PasswordFields
+                    updatePassword={updatePassword}
+                    setUpdatedPassword={setUpdatedPassword}
+                  />
                 </div>
               </div>
               <Button onClick={``} className="w-fit">
