@@ -4,27 +4,86 @@ import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 import Upload from "../../../../public/icons/upload.svg";
 import Button from "../profile/Button";
+import {
+  categories,
+  states,
+  cities,
+  amenities,
+  propertyTypes,
+} from "../../../data/new-listing"; // Adjust the path as needed
 
 function AddNewListing() {
-  const [uploadedFile, setUploadedFile] = useState(null);
+  const [formData, setFormData] = useState({
+    images: null,
+    state: "",
+    city: "",
+    type: "",
+    selectedAmenity: "",
+    propertySize: "",
+    bedroom: "",
+    price: "",
+    description: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleStateChange = (e) => {
+    const state = e.target.value;
+    setFormData((prevState) => ({
+      ...prevState,
+      state: state,
+      city: "", // Clear city selection when state changes
+    }));
+  };
+
+  const handleCityChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      city: e.target.value,
+    }));
+  };
 
   const handleDrop = (e) => {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
     if (file && (file.type === "image/jpeg" || file.type === "video/mp4")) {
-      setUploadedFile(file);
+      setFormData((prevState) => ({
+        ...prevState,
+        images: file,
+      }));
     }
   };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file && (file.type === "image/jpeg" || file.type === "video/mp4")) {
-      setUploadedFile(file);
+      setFormData((prevState) => ({
+        ...prevState,
+        images: file,
+      }));
     }
   };
 
   const handleRemoveFile = () => {
-    setUploadedFile(null);
+    setFormData((prevState) => ({
+      ...prevState,
+      images: null,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    console.log("Form Data:", formData);
+
+
+    // Perform actual form submission here (e.g., POST request to server)
   };
 
   return (
@@ -32,82 +91,56 @@ function AddNewListing() {
       <h1 className="py-4 px-12 text-2xl font-bold border-b border-gray-500">
         Add New Listing
       </h1>
-      <div className="flex flex-col gap-[70px] items-center justify-center px-6 w-full">
+      <form className="flex flex-col gap-[70px] items-center justify-center px-6 w-full" onSubmit={handleSubmit}>
         <section className="flex flex-col gap-10">
           <h2 className="font-bold text-lg text-primary text-center">
             Property Information
           </h2>
           <div className="flex flex-col gap-5">
             <div className="flex flex-col gap-6">
-              <div className="flex flex-col gap-6">
-                <div className="flex flex-col gap-3">
-                  <h1 className="font-semibold text-base text-primary">
-                    Category
-                  </h1>
-                  <div className="flex gap-9 text-gray-600 w-full">
-                    <label className="flex items-center gap-1 text-sm">
+              <div className="flex flex-col gap-3">
+                <h1 className="font-semibold text-base text-primary">
+                  Category
+                </h1>
+                <div className="flex gap-9 text-gray-600 w-full">
+                  {categories.map((category) => (
+                    <label
+                      key={category.value}
+                      className="flex items-center gap-1 text-sm"
+                    >
                       <input
                         type="radio"
                         name="category"
-                        value="apartment"
-                        className=" border  border-gray-400  rounded-full checked:bg-gray-500 checked:border-transparent focus:outline-none focus:ring-0 focus:ring-offet-2  "
+                        value={category.value}
+                        className="border border-gray-400 rounded-full checked:bg-gray-500 checked:border-transparent focus:outline-none focus:ring-0 focus:ring-offset-2"
+                        onChange={handleChange}
                       />
-                      Apartment
+                      {category.label}
                     </label>
-                    <label className="flex items-center gap-1 text-sm">
-                      <input type="radio" name="category" value="land" />
-                      Land
-                    </label>
-                    <label className="flex items-center gap-1 text-sm">
-                      <input type="radio" name="category" value="duplex" />
-                      Duplex
-                    </label>
-                    <label className="flex items-center gap-1 text-sm">
-                      <input type="radio" name="category" value="office" />
-                      Office
-                    </label>
-                    <label className="flex items-center gap-1 text-sm">
-                      <input type="radio" name="category" value="condo" />
-                      Condo
-                    </label>
-                    <label className="flex items-center gap-1 text-sm">
-                      <input type="radio" name="category" value="store" />
-                      Store
-                    </label>
-                  </div>
-                </div>
-                <div className="flex gap-20 text-gray-600 w-full">
-                  <label className="flex items-center gap-1 text-sm">
-                    <input
-                      type="radio"
-                      name="category"
-                      value="apartment"
-                      className=" border border-gray-400 h-2.5 w-2.5 rounded-full checked:bg-gray-500 checked:border-transparent focus:outline-none focus:ring-0 focus:ring-offet-2  "
-                    />
-                    Apartment
-                  </label>
-                  <label className="flex items-center gap-1 text-sm">
-                    <input type="radio" name="category" value="land" />
-                    Land
-                  </label>
-                  <label className="flex items-center gap-1 text-sm">
-                    <input type="radio" name="category" value="duplex" />
-                    Duplex
-                  </label>
+                  ))}
                 </div>
               </div>
+              
               <div className="flex flex-col gap-8">
                 <div className="flex gap-12">
                   <div className="flex flex-col gap-1 w-full">
                     <label className="text-sm font-semibold">
                       Property Type <span className="text-red-600">*</span>
                     </label>
-
                     <div className="relative">
-                      <div className="w-[300px] bg-white flex justify-between cursor-pointer p-[10px] border border-gray-300 rounded-md">
-                        <span>Eg. Duplex, Flats, Selfcon</span>
-                        <ChevronDown />
-                      </div>
+                      <select
+                        className="w-[300px] bg-white p-[10px] border border-gray-300 rounded-md"
+                        name="type"
+                        value={formData.type}
+                        onChange={handleChange}
+                      >
+                        <option value="">Select a Property Type</option>
+                        {propertyTypes.map((type) => (
+                          <option key={type} value={type}>
+                            {type}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   </div>
                   <div className="flex flex-col gap-1">
@@ -119,6 +152,8 @@ function AddNewListing() {
                       name="propertySize"
                       placeholder="Eg.50ft x 100ft, 156ft x 100ft"
                       className="p-[10px] w-[300px] border border-gray-300 rounded-md"
+                      value={formData.propertySize}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
@@ -128,19 +163,36 @@ function AddNewListing() {
                       Number of bedroom
                     </label>
                     <div className="relative">
-                      <div className="w-[300px] bg-white cursor-pointer p-[10px] border border-gray-300 rounded-md">
-                        Eg. 1, 2, 4
-                      </div>
+                      
+                      <input
+                      type="number"
+                      name="bedroom"
+                      placeholder=" Eg. 1, 2, 4"
+                      className="p-[10px] w-[300px] border border-gray-300 rounded-md"
+                      value={formData.bedroom}
+                      onChange={handleChange}
+                    />
                     </div>
                   </div>
                   <div className="flex flex-col gap-1">
-                    <label className="text-sm font-semibold">Amenities</label>
-                    <input
-                      type="text"
-                      name="amenities"
-                      placeholder="Eg. Parking space, CCTV camera, water "
-                      className="p-[10px] w-[300px] border border-gray-300 rounded-md"
-                    />
+                    <label className="text-sm font-semibold">
+                      Amenities
+                    </label>
+                    <div className="relative">
+                      <select
+                        className="p-[10px] w-[300px] border border-gray-300 rounded-md"
+                        name="selectedAmenity"
+                        value={formData.selectedAmenity}
+                        onChange={handleChange}
+                      >
+                        <option value="">Select Amenities</option>
+                        {amenities.map((amenity) => (
+                          <option key={amenity} value={amenity}>
+                            {amenity}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -150,41 +202,46 @@ function AddNewListing() {
                 <h2 className="text-base text-primary font-semibold">
                   Location
                 </h2>
-                <div className="flex flex-col gap-7">
-                  <div className="flex gap-12">
-                    <div className="flex flex-col gap-1">
-                      <div className="relative">
-                        <div className="w-[300px] bg-white flex justify-between cursor-pointer p-[10px] border border-gray-300 rounded-md">
-                          <span>State</span>
-                          <ChevronDown />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <div className="relative">
-                        <div className="w-[300px] bg-white flex justify-between cursor-pointer p-[10px] border border-gray-300 rounded-md">
-                          <span>City</span>
-                          <ChevronDown />
-                        </div>
-                      </div>
+                <div className="flex gap-12">
+                  {/* State Dropdown */}
+                  <div className="flex flex-col gap-1">
+                    <label className="text-sm font-semibold">State</label>
+                    <div className="relative">
+                      <select
+                        className="w-[300px] bg-white p-[10px] border border-gray-300 rounded-md"
+                        name="state"
+                        value={formData.state}
+                        onChange={handleStateChange}
+                      >
+                        <option value="">Select a State</option>
+                        {states.map((state) => (
+                          <option key={state} value={state}>
+                            {state}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   </div>
-                  <div className="flex gap-12">
-                    <div className="flex flex-col gap-1">
-                      <input
-                        type="text"
-                        name="streetAddress"
-                        placeholder="Street Address"
-                        className="p-[10px] w-[300px] border border-gray-300 rounded-md"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <input
-                        type="text"
-                        name="landmarks"
-                        placeholder="Popular Landmarks"
-                        className="p-[10px] w-[300px] border border-gray-300 rounded-md"
-                      />
+
+                  {/* City Dropdown */}
+                  <div className="flex flex-col gap-1">
+                    <label className="text-sm font-semibold">City</label>
+                    <div className="relative">
+                      <select
+                        className="w-[300px] bg-white p-[10px] border border-gray-300 rounded-md"
+                        name="city"
+                        value={formData.city}
+                        onChange={handleCityChange}
+                        disabled={!formData.state}
+                      >
+                        <option value="">Select a City</option>
+                        {formData.state &&
+                          cities[formData.state]?.map((city) => (
+                            <option key={city} value={city}>
+                              {city}
+                            </option>
+                          ))}
+                      </select>
                     </div>
                   </div>
                 </div>
@@ -195,9 +252,11 @@ function AddNewListing() {
                     Price of Property <span className="text-red-600">*</span>
                   </label>
                   <input
-                    type="text"
-                    name="propertyPrice"
+                    type="number"
+                    name="price"
                     className="p-[10px] w-[300px] border border-gray-300 rounded-md"
+                    value={formData.price}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="flex flex-col gap-1">
@@ -205,6 +264,8 @@ function AddNewListing() {
                   <textarea
                     name="description"
                     className="p-[10px] w-[520px] h-[110px] resize-none border border-gray-300 rounded-md"
+                    value={formData.description}
+                    onChange={handleChange}
                   ></textarea>
                 </div>
               </div>
@@ -223,10 +284,10 @@ function AddNewListing() {
             >
               <Image src={Upload} width={42} height={42} alt="Upload Icon" />
               <span>
-                {uploadedFile ? (
+                {formData.images ? (
                   <div className="flex items-center justify-center gap-7 w-[540px]">
                     <span className="text-base">
-                      Filename: {uploadedFile.name}
+                      Filename: {formData.images.name}
                     </span>
                     <button
                       onClick={handleRemoveFile}
@@ -251,7 +312,6 @@ function AddNewListing() {
                 className="hidden"
                 onChange={handleFileChange}
               />
-              <span></span>
               <label
                 htmlFor="fileUpload"
                 className="px-6 py-2 border-2 border-secondary rounded-lg text-secondary cursor-pointer"
@@ -269,9 +329,9 @@ function AddNewListing() {
           <button className="border border-secondary py-[11px] px-6 rounded-md text-secondary bg-secondary/10">
             Save and Continue
           </button>
-          <Button>List Property</Button>
+          <Button type="submit">List Property</Button>
         </section>
-      </div>
+      </form>
     </div>
   );
 }
