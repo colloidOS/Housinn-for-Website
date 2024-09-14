@@ -17,8 +17,8 @@ function Services() {
           process seamless, enjoyable, and tailored to your specific needs.
         </p>
       </div>
-      <div className="flex flex-row gap-4 items-center justify-center w-full px-[104px] ">
-        <div className="flex flex-col gap-4 justify-center  iems-center mb-[54px]">
+      <div className="flex flex-col sm:flex-row gap-4 items-center justify-center w-full px-11 lg:px-[104px] ">
+        <div className="flex flex-col gap-4 justify-center  iems-center sm:mb-[54px]">
           <div className="shadow-custom-shadow bg-white py-10 px-[74px] flex flex-col items-center gap-6 max-w-[600px]">
             <h2 className="text-black text-center text-2xl font-bold">
               Buy a Property
@@ -52,7 +52,7 @@ function Services() {
             </button>
           </div>
         </div>
-        <div className="flex flex-col gap-4  items-center mt-[104px]">
+        <div className="flex flex-col gap-4  items-center sm:mt-[104px]">
           <div className="shadow-custom-shadow bg-white py-10 px-[74px] flex flex-col items-center gap-6 max-w-[600px]">
             <div className="flex flex-col gap-[81px]">
               <h2 className="text-black text-center text-2xl font-bold">

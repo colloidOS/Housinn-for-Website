@@ -85,8 +85,8 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className=" w-full flex justify-between items-center px-[104px] py-[14px]">
-      <ul className="flex gap-2 text-white">
+    <nav className=" w-full flex justify-between items-center px-9 md:px-[104px] py-[14px]">
+      <ul className="sm:flex gap-2 text-white hidden">
         <li>
           <Link href="#" className="hover:text-primary p-[10px]">
             Buy

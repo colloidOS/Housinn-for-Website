@@ -99,8 +99,8 @@ function Profile() {
           number: userData.data.number || "",
         });
 
-        setSelectedState(userData.state || ""); // Populate state dropdown
-        setSelectedCity(userData.town || ""); // Populate city dropdown
+        setSelectedState(userData.data.state || ""); // Populate state dropdown
+        setSelectedCity(userData.data.town || ""); // Populate city dropdown
 
         setLoading(false);
         console.log(userData);
@@ -145,7 +145,7 @@ function Profile() {
       });
 
       console.log("Response:", response.data);
-      toast.success("Updated profile successfully!");
+      toast.success("Updated location successfully!");
     } catch (error) {
       console.error("Error updating:", error);
     }
@@ -167,7 +167,7 @@ function Profile() {
       );
 
       console.log("Response:", response.data); // Check if the response is valid
-      toast.success("Updated profile successfully!");
+      toast.success("Password changed!");
     } catch (error) {
       console.error("Error updating:", error);
     }
@@ -180,14 +180,10 @@ function Profile() {
         },
       });
 
-      clearCookie("token");
-      clearCookie("id");
+      clearCookie("Htoken");
+      clearCookie("Hid");
 
-      localStorage.removeItem("token");
-      localStorage.removeItem("userId");
-      localStorage.removeItem("user");
-
-      toast.success("Logged out successfully!");
+      toast.success("You have been logged out. Rerouting..");
 
       setTimeout(() => {
         router.push("/auth");
