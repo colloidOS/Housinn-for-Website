@@ -9,13 +9,13 @@ import api from "@/lib/api";
 import { toast, ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
-
 import ProfileFields from "./ProfileFields";
 import PasswordFields from "./PasswordFields";
 import AddressFields from "./AddressFields";
 
 function Profile() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedImageFile, setSelectedImageFile] = useState(null); // For uploading the image file
   const [selectedState, setSelectedState] = useState<string>("");
   const [selectedCity, setSelectedCity] = useState<string>("");
   const [updatedProfile, setUpdatedProfile] = useState({
@@ -56,6 +56,14 @@ function Profile() {
   const triggerImageUpload = () => {
     document.getElementById("profileImageInput")?.click();
   };
+
+  // const handleImageUpload = (e) => {
+  //   const file = e.target.files[0]; // Get the selected file
+  //   if (file) {
+  //     setSelectedImageFile(file); // Store the actual file for submission
+  //     setSelectedImage(URL.createObjectURL(file)); // Store the image URL for preview
+  //   }
+  // };
 
   const router = useRouter();
 
@@ -112,14 +120,26 @@ function Profile() {
   }, [id, token]);
   const handleUpdateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const profileData = {
-      ...updatedProfile,
-    };
-    console.log(updatedProfile);
+    // Create FormData object to send both text data and image
+    const formData = new FormData();
+
+    // Append profile data
+    formData.append("firstName", updatedProfile.firstName);
+    formData.append("lastName", updatedProfile.lastName);
+    formData.append("number", updatedProfile.number);
+    formData.append("company", updatedProfile.company);
+
+    // Append image if one was selected
+    if (selectedImageFile) {
+      formData.append("avatar", selectedImageFile); // Add image to the form data
+    }
 
     try {
-      const response = await api.put(`/users/${id}`, profileData, {
-        headers: { Authorization: `Bearer ${token}` },
+      const response = await api.put(`/users/${id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
       });
 
       console.log("Response:", response.data); // Check if the response is valid
@@ -130,7 +150,7 @@ function Profile() {
   };
 
   const handleVerificationSubmit = async (e: React.FormEvent) => {
-    e.preventDefault(); // Prevent the default form submission behavior
+    e.preventDefault();
     const verificationData = {
       ...updateVerification,
       state: selectedState,
@@ -169,7 +189,16 @@ function Profile() {
       console.log("Response:", response.data); // Check if the response is valid
       toast.success("Password changed!");
     } catch (error) {
-      console.error("Error updating:", error);
+      if (axios.isAxiosError(error)) {
+        const errorMessage = error.response?.data?.message || error.message;
+        console.error(
+          "Submission Error:",
+          error.response?.data || error.message
+        );
+        toast.error(`Error: ${errorMessage}`);
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+      }
     }
   };
   const handleLogout = async () => {
@@ -201,7 +230,7 @@ function Profile() {
           <h3 className="text-2xl font-bold text-black">Profile</h3>
           <hr className="text-gray-300" />
         </div>
-        <div>
+        <form onSubmit={handleUpdateSubmit}>
           <div className="flex flex-col gap-3">
             <div className="flex gap-[164px]">
               <div className="flex flex-col gap-0">
@@ -232,6 +261,7 @@ function Profile() {
                 </div>
                 <div className="flex flex-col gap-4 items-center">
                   <Button
+                    type="button"
                     onClick={triggerImageUpload}
                     className="focus:outline-none"
                   >
@@ -252,7 +282,7 @@ function Profile() {
             </div>
             <hr className="text-gray-300" />
           </div>
-          <form className="flex flex-col gap-6" onSubmit={handleUpdateSubmit}>
+          <div className="flex flex-col gap-6">
             <div className="flex">
               <div className="flex flex-col gap-2">
                 <p className="text-lg font-semibold">Edit Your Profile</p>
@@ -286,8 +316,8 @@ function Profile() {
               </div>
             </div>
             <hr className="text-gray-300 pb-8" />
-          </form>
-        </div>
+          </div>
+        </form>
         <div className="flex flex-col gap-4 w-full">
           <form
             className="flex gap-[140px]"
@@ -314,7 +344,7 @@ function Profile() {
                   />
                 )}
               </div>
-              <Button type="submit" className="w-fit" onClick={``}>
+              <Button type="submit" className="w-fit" onClick={null}>
                 Verify Account
               </Button>
             </div>
@@ -335,7 +365,7 @@ function Profile() {
                   />
                 </div>
               </div>
-              <Button onClick={``} className="w-fit">
+              <Button onClick={null} className="w-fit" type="submit">
                 Reset Password
               </Button>
             </div>
