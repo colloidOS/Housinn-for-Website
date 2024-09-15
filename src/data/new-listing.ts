@@ -12,13 +12,9 @@ export const categories = [
 // data/propertyTypes.ts
 
 export const propertyTypes = [
-  "Apartment",
-  "Land",
-  "Duplex",
-  "Office",
-  "Condo",
-  "Store",
-  // Add more property types if needed
+  { value: "sale", label: "Sale" },
+  { value: "rent", label: "Rent" },
+  { value: "shortlet", label: "Shortlet" },
 ];
 // data/amenities.ts
 
