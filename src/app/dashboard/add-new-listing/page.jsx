@@ -1,9 +1,12 @@
 "use client";
 import React, { useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Landmark } from "lucide-react";
 import Image from "next/image";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Upload from "../../../../public/icons/upload.svg";
 import Button from "../profile/Button";
+import api from "../../../lib/api"; // Adjust the import path accordingly
 import {
   categories,
   states,
@@ -18,11 +21,14 @@ function AddNewListing() {
     state: "",
     city: "",
     type: "",
-    selectedAmenity: "",
+    amenities: [], // Ensure amenities is an array
     propertySize: "",
-    bedroom: "",
-    price: "",
+    bedroom: "", // Initialize as an empty string
+    price: "", // Initialize as an empty string
     description: "",
+    category: "",
+    address: "",
+    landmark: "",
   });
 
   const handleChange = (e) => {
@@ -77,21 +83,55 @@ function AddNewListing() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Form Data:", formData);
+    // Helper function to format strings
+    const formatString = (str) => str.toLowerCase().replace(/\s+/g, "_");
 
+    // Transform city and state
+    const formattedCity = formatString(formData.city);
+    const formattedState = formatString(formData.state);
+    const bedroom = Number(formData.bedroom);
+    const price = Number(formData.price);
+    // Prepare payload with formatted city and state
+    const payload = {
+      postData: {
+        price: price,
+        address: formData.address,
+        city: formattedCity, // Use formatted city
+        state: formattedState, // Use formatted state
+        type: formData.type,
+        category: formData.category,
+        bedroom: bedroom,
+      },
+      postDetail: {
+        propertySize: formData.propertySize,
+        desc: formData.description,
+        landmark: formData.landmark,
+      },
+    };
 
-    // Perform actual form submission here (e.g., POST request to server)
+    try {
+      const response = await api.post("/posts", payload);
+      toast.success("Post created successfully!");
+    } catch (error) {
+      toast.error(
+        "An error occurred while creating the post. Please try again."
+      );
+    }
   };
 
   return (
     <div className="w-full flex flex-col gap-5 bg-background-2">
+      <ToastContainer />
       <h1 className="py-4 px-12 text-2xl font-bold border-b border-gray-500">
         Add New Listing
       </h1>
-      <form className="flex flex-col gap-[70px] items-center justify-center px-6 w-full" onSubmit={handleSubmit}>
+      <form
+        className="flex flex-col gap-[70px] items-center justify-center px-6 w-full"
+        onSubmit={handleSubmit}
+      >
         <section className="flex flex-col gap-10">
           <h2 className="font-bold text-lg text-primary text-center">
             Property Information
@@ -112,15 +152,21 @@ function AddNewListing() {
                         type="radio"
                         name="category"
                         value={category.value}
+                        required
                         className="border border-gray-400 rounded-full checked:bg-gray-500 checked:border-transparent focus:outline-none focus:ring-0 focus:ring-offset-2"
-                        onChange={handleChange}
+                        onChange={(e) =>
+                          setFormData((prevState) => ({
+                            ...prevState,
+                            category: e.target.value, // Update the formData with selected category
+                          }))
+                        }
                       />
                       {category.label}
                     </label>
                   ))}
                 </div>
               </div>
-              
+
               <div className="flex flex-col gap-8">
                 <div className="flex gap-12">
                   <div className="flex flex-col gap-1 w-full">
@@ -131,15 +177,23 @@ function AddNewListing() {
                       <select
                         className="w-[300px] bg-white p-[10px] border border-gray-300 rounded-md"
                         name="type"
-                        value={formData.type}
+                        value={formData.type} // Corrected to use formData.type
                         onChange={handleChange}
+                        required
                       >
                         <option value="">Select a Property Type</option>
-                        {propertyTypes.map((type) => (
-                          <option key={type} value={type}>
-                            {type}
-                          </option>
-                        ))}
+                        {propertyTypes.map(
+                          (
+                            propertyType // Rename to propertyType to avoid confusion
+                          ) => (
+                            <option
+                              key={propertyType.value}
+                              value={propertyType.value}
+                            >
+                              {propertyType.label}
+                            </option>
+                          )
+                        )}
                       </select>
                     </div>
                   </div>
@@ -163,26 +217,23 @@ function AddNewListing() {
                       Number of bedroom
                     </label>
                     <div className="relative">
-                      
                       <input
-                      type="number"
-                      name="bedroom"
-                      placeholder=" Eg. 1, 2, 4"
-                      className="p-[10px] w-[300px] border border-gray-300 rounded-md"
-                      value={formData.bedroom}
-                      onChange={handleChange}
-                    />
+                        type="number"
+                        name="bedroom"
+                        placeholder=" Eg. 1, 2, 4"
+                        className="p-[10px] w-[300px] border border-gray-300 rounded-md"
+                        value={formData.bedroom}
+                        onChange={handleChange}
+                      />
                     </div>
                   </div>
                   <div className="flex flex-col gap-1">
-                    <label className="text-sm font-semibold">
-                      Amenities
-                    </label>
+                    <label className="text-sm font-semibold">Amenities</label>
                     <div className="relative">
                       <select
                         className="p-[10px] w-[300px] border border-gray-300 rounded-md"
-                        name="selectedAmenity"
-                        value={formData.selectedAmenity}
+                        name="amenities"
+                        value={formData.amenities}
                         onChange={handleChange}
                       >
                         <option value="">Select Amenities</option>
@@ -202,46 +253,72 @@ function AddNewListing() {
                 <h2 className="text-base text-primary font-semibold">
                   Location
                 </h2>
-                <div className="flex gap-12">
-                  {/* State Dropdown */}
-                  <div className="flex flex-col gap-1">
-                    <label className="text-sm font-semibold">State</label>
-                    <div className="relative">
-                      <select
-                        className="w-[300px] bg-white p-[10px] border border-gray-300 rounded-md"
-                        name="state"
-                        value={formData.state}
-                        onChange={handleStateChange}
-                      >
-                        <option value="">Select a State</option>
-                        {states.map((state) => (
-                          <option key={state} value={state}>
-                            {state}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-
-                  {/* City Dropdown */}
-                  <div className="flex flex-col gap-1">
-                    <label className="text-sm font-semibold">City</label>
-                    <div className="relative">
-                      <select
-                        className="w-[300px] bg-white p-[10px] border border-gray-300 rounded-md"
-                        name="city"
-                        value={formData.city}
-                        onChange={handleCityChange}
-                        disabled={!formData.state}
-                      >
-                        <option value="">Select a City</option>
-                        {formData.state &&
-                          cities[formData.state]?.map((city) => (
-                            <option key={city} value={city}>
-                              {city}
+                <div className="flex flex-col gap-7">
+                  <div className="flex gap-12">
+                    {/* State Dropdown */}
+                    <div className="flex flex-col gap-1">
+                      <label className="text-sm font-semibold">State</label>
+                      <div className="relative">
+                        <select
+                          className="w-[300px] bg-white p-[10px] border border-gray-300 rounded-md"
+                          name="state"
+                          required
+                          value={formData.state}
+                          onChange={handleStateChange}
+                        >
+                          <option value="">Select a State</option>
+                          {states.map((state) => (
+                            <option key={state} value={state}>
+                              {state}
                             </option>
                           ))}
-                      </select>
+                        </select>
+                      </div>
+                    </div>
+
+                    {/* City Dropdown */}
+                    <div className="flex flex-col gap-1">
+                      <label className="text-sm font-semibold">City</label>
+                      <div className="relative">
+                        <select
+                          className="w-[300px] bg-white p-[10px] border border-gray-300 rounded-md"
+                          name="city"
+                          required
+                          value={formData.city}
+                          onChange={handleCityChange}
+                          disabled={!formData.state}
+                        >
+                          <option value="">Select a City</option>
+                          {formData.state &&
+                            cities[formData.state]?.map((city) => (
+                              <option key={city} value={city}>
+                                {city}
+                              </option>
+                            ))}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex gap-12">
+                    <div className="flex flex-col gap-1">
+                      <input
+                        type="text"
+                        name="address"
+                        required
+                        placeholder="Street Address"
+                        className="p-[10px] w-[300px] border border-gray-300 rounded-md"
+                        value={formData.address}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <input
+                        type="text"
+                        name="landmark"
+                        placeholder="Popular Landmarks"
+                        className="p-[10px] w-[300px] border border-gray-300 rounded-md"
+                        onChange={handleChange}
+                      />
                     </div>
                   </div>
                 </div>
@@ -254,6 +331,7 @@ function AddNewListing() {
                   <input
                     type="number"
                     name="price"
+                    required
                     className="p-[10px] w-[300px] border border-gray-300 rounded-md"
                     value={formData.price}
                     onChange={handleChange}
@@ -265,6 +343,7 @@ function AddNewListing() {
                     name="description"
                     className="p-[10px] w-[520px] h-[110px] resize-none border border-gray-300 rounded-md"
                     value={formData.description}
+                    required
                     onChange={handleChange}
                   ></textarea>
                 </div>
