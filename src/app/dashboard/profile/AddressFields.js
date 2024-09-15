@@ -1,5 +1,5 @@
 import React from "react";
-import { nigeriaStateCityOptions } from "./StateAndCities"; // You already imported it here, no need to pass as a prop
+import { nigeriaStateCityOptions } from "./StateAndCities"; // Already imported here
 
 const AddressFields = ({
   updateVerification,
@@ -54,55 +54,72 @@ const AddressFields = ({
           address: e.target.value,
         }),
     },
-    // {
-    //   label: "CAC Number",
-    //   id: "cacNumber",
-    //   type: "text",
-    //   placeholder: "Enter your CAC Registration Code",
-    //   value: updateVerification.cacNumber,
-    //   onChange: (e) =>
-    //     setUpdateVerification({
-    //       ...updateVerification,
-    //       cacNumber: e.target.value,
-    //     }),
-    // },
+    {
+      label: "CAC Number",
+      id: "cacNumber",
+      type: "text",
+      placeholder: "Enter your CAC Registration Code",
+      value: updateVerification.cacNumber,
+      onChange: (e) =>
+        setUpdateVerification({
+          ...updateVerification,
+          cacNumber: e.target.value,
+        }),
+    },
   ];
 
-  return addressFields.map((field) => (
-    <div key={field.id} className="w-full gap-1">
-      <label
-        className="block text-gray-700 text-sm font-bold"
-        htmlFor={field.id}
-      >
-        {field.label}
-      </label>
-      {field.type === "dropdown" ? (
-        <select
-          id={field.id}
-          className="w-full px-4 py-2 border border-gray-300 rounded"
-          value={field.value}
-          onChange={(e) => field.onChange(e.target.value)} // Make sure the value updates properly
-        >
-          <option value="">Select {field.label}</option>{" "}
-          {/* Optional placeholder */}
-          {field.options.map((option, index) => (
-            <option key={index} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-      ) : (
-        <input
-          id={field.id}
-          type={field.type}
-          placeholder={field.placeholder}
-          className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-          value={field.value}
-          onChange={(e) => field.onChange(e)} // Properly handle the input change event
-        />
-      )}
+  return (
+    <div className="w-full">
+      <div className="flex flex-wrp gap-6 mb-4">
+        {/* Display the dropdown fields (State and City) in a row */}
+        {addressFields.slice(0, 2).map((field) => (
+          <div key={field.id} className="w-full md:w-1/2 gap-1">
+            <label
+              className="block text-gray-700 text-sm font-bold"
+              htmlFor={field.id}
+            >
+              {field.label}
+            </label>
+            <select
+              id={field.id}
+              className="w-full px-4 py-2 border border-gray-300 rounded"
+              value={field.value}
+              onChange={(e) => field.onChange(e.target.value)}
+            >
+              <option value="">Select {field.label}</option>
+              {field.options.map((option, index) => (
+                <option key={index} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
+        ))}
+      </div>
+
+      <div className="flex md:flex-col flex-row gap-6">
+        {/* Display the text fields (Street and CAC Number) in columns */}
+        {addressFields.slice(2, 4).map((field) => (
+          <div key={field.id} className="w-full">
+            <label
+              className="block text-gray-700 text-sm font-bold"
+              htmlFor={field.id}
+            >
+              {field.label}
+            </label>
+            <input
+              id={field.id}
+              type={field.type}
+              placeholder={field.placeholder}
+              className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
+              value={field.value}
+              onChange={(e) => field.onChange(e)}
+            />
+          </div>
+        ))}
+      </div>
     </div>
-  ));
+  );
 };
 
 export default AddressFields;

@@ -77,24 +77,28 @@ const ProfileFields = ({ updatedProfile, setUpdatedProfile }) => {
     // },
   ];
 
-  return profileFields.map((field) => (
-    <div key={field.id} className="w-full gap-1">
-      <label
-        className="block text-gray-700 text-sm font-bold"
-        htmlFor={field.id}
-      >
-        {field.label}
-      </label>
-      <input
-        id={field.id}
-        type={field.type}
-        placeholder={field.placeholder}
-        className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-        value={field.value}
-        onChange={field.onChange}
-      />
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+      {profileFields.map((field) => (
+        <div key={field.id} className="w-full gap-1">
+          <label
+            className="block text-gray-700 text-sm font-bold"
+            htmlFor={field.id}
+          >
+            {field.label}
+          </label>
+          <input
+            id={field.id}
+            type={field.type}
+            placeholder={field.placeholder}
+            className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
+            value={field.value}
+            onChange={field.onChange}
+          />
+        </div>
+      ))}
     </div>
-  ));
+  );
 };
 
 export default ProfileFields;

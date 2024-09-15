@@ -81,18 +81,18 @@ function AddNewListing() {
                     <input
                       type="radio"
                       name="category"
-                      value="apartment"
+                      value="rent"
                       className=" border border-gray-400 h-2.5 w-2.5 rounded-full checked:bg-gray-500 checked:border-transparent focus:outline-none focus:ring-0 focus:ring-offet-2  "
                     />
-                    Apartment
+                    Rent
                   </label>
                   <label className="flex items-center gap-1 text-sm">
-                    <input type="radio" name="category" value="land" />
-                    Land
+                    <input type="radio" name="category" value="sale" />
+                    Sale
                   </label>
                   <label className="flex items-center gap-1 text-sm">
-                    <input type="radio" name="category" value="duplex" />
-                    Duplex
+                    <input type="radio" name="category" value="shortlet" />
+                    Shortlet
                   </label>
                 </div>
               </div>

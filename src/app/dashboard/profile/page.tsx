@@ -6,6 +6,7 @@ import Button from "./Button";
 import Dropdown from "./Dropdown";
 import axios from "axios";
 import api from "@/lib/api";
+import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
@@ -120,6 +121,7 @@ function Profile() {
   }, [id, token]);
   const handleUpdateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     // Create FormData object to send both text data and image
     const formData = new FormData();
 
@@ -135,6 +137,7 @@ function Profile() {
     }
 
     try {
+      // Send the PUT request with form data
       const response = await api.put(`/users/${id}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -142,10 +145,21 @@ function Profile() {
         },
       });
 
-      console.log("Response:", response.data); // Check if the response is valid
+      // Log the response and check if it contains the image URL
+      console.log("Response:", response.data);
+
+      // Assuming the response contains an image URL like { avatarUrl: 'https://example.com/path/to/image.jpg' }
+      if (response.data && response.data.avatarUrl) {
+        const imageUrl = response.data.avatarUrl; // Extract the URL
+        console.log("Image URL:", imageUrl);
+
+        // Update the UI with the new image URL (e.g., display it on the profile page)
+      }
+
       toast.success("Updated profile successfully!");
     } catch (error) {
       console.error("Error updating:", error);
+      toast.error("Failed to update profile");
     }
   };
 
@@ -291,7 +305,7 @@ function Profile() {
                   your social media details and your user details.
                 </p>
               </div>
-              <div className="flex flex-col px-12 pt-8 gap-16">
+              <div className="flex flex-col px-12 pt-8 gap-16 w-full">
                 <div className="flex flex-col gap-8">
                   <div>
                     <p className="text-primary font-semibold">Account Type</p>
@@ -310,9 +324,9 @@ function Profile() {
                     )}
                   </div>
                 </div>
-                <button type="submit" className="w-fit">
+                <Button type="submit" className="w-fit" onClick={null}>
                   Upload Profile
-                </button>
+                </Button>
               </div>
             </div>
             <hr className="text-gray-300 pb-8" />
@@ -358,7 +372,7 @@ function Profile() {
             </div>
             <div className="px-12 py-8 flex flex-col gap-8 w-full">
               <div className="flex flex-col gap-4">
-                <div className="flex gap-6 w-full">
+                <div className="flex gap-6 w-full items-center">
                   <PasswordFields
                     updatePassword={updatePassword}
                     setUpdatedPassword={setUpdatedPassword}
