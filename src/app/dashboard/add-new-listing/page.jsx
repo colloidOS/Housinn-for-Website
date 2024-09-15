@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { useRouter } from 'next/router';
 import { ChevronDown, Landmark } from "lucide-react";
 import Image from "next/image";
 import { toast, ToastContainer } from "react-toastify";
@@ -120,6 +121,10 @@ function AddNewListing() {
         "An error occurred while creating the post. Please try again."
       );
     }
+  };
+  const handleNavigate = () => {
+    const router = useRouter();
+    router.push("/dashboard");
   };
 
   return (
@@ -405,7 +410,10 @@ function AddNewListing() {
           </div>
         </section>
         <section className="w-full flex gap-[329px] justify-center">
-          <button className="border border-secondary py-[11px] px-6 rounded-md text-secondary bg-secondary/10">
+          <button
+            onClick={handleNavigate}
+            className="border border-secondary py-[11px] px-6 rounded-md text-secondary bg-secondary/10"
+          >
             Save and Continue
           </button>
           <Button type="submit">List Property</Button>
