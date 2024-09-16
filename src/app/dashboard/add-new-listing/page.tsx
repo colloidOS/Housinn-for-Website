@@ -47,9 +47,7 @@ function AddNewListing() {
     landmark: "",
   });
 
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
-  ) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
       ...prevState,
@@ -104,8 +102,7 @@ function AddNewListing() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    const formatString = (str: string) =>
-      str.toLowerCase().replace(/\s+/g, "_");
+    const formatString = (str: string) => str.toLowerCase().replace(/\s+/g, "_");
 
     const formattedCity = formatString(formData.city);
     const formattedState = formatString(formData.state);
@@ -311,13 +308,12 @@ function AddNewListing() {
                         >
                           <option value="">Select a City</option>
                           {formData.state &&
-                            cities[formData.state as keyof typeof cities]?.map(
-                              (city) => (
-                                <option key={city} value={city}>
-                                  {city}
-                                </option>
-                              )
-                            )}
+  cities[formData.state as keyof typeof cities]?.map((city) => (
+    <option key={city} value={city}>
+      {city}
+    </option>
+  ))}
+
                         </select>
                       </div>
                     </div>
@@ -434,9 +430,7 @@ function AddNewListing() {
           >
             Save and Resume
           </button>
-          <Button type="submit" onClick={null}>
-            List Property
-          </Button>
+          <Button type="submit" onClick={null}>List Property</Button>
         </section>
       </form>
     </div>
