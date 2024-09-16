@@ -158,7 +158,6 @@ function Profile() {
 
       // Set the new firstName in the cookie after a successful update
       document.cookie = `firstName=${updatedProfile.firstName}; path=/; max-age=31536000;`;
-
       toast.success("Updated profile successfully!");
     } catch (error) {
       console.error("Error updating:", error);

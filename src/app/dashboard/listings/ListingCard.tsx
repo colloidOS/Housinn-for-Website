@@ -18,7 +18,7 @@ interface Listing {
   tag: string; // Restrict tags to specific strings
   price: number;
   listed: string;
-  status: string; // Restrict statuses to specific strings
+
   imageUrl: string;
   beds: number;
   baths: number;
@@ -28,7 +28,7 @@ interface Listing {
 const ListingCard: React.FC<{ listing: Listing }> = ({ listing }) => {
   // Formatting the price as a currency string
   const formattedPrice = `₦${Number(listing.price).toLocaleString()}`;
-
+  console.log("listing tag", listing.tag);
   return (
     <div className="relative rounded-[7px] shadow-custom-property-shadow">
       <img
@@ -40,17 +40,24 @@ const ListingCard: React.FC<{ listing: Listing }> = ({ listing }) => {
         {/* Conditional tag rendering */}
         <span
           className={`text-xs px-2 pr-4 py-1 absolute top-0 rounded-ss-[7px] left-0 clip-triangle-right ${
-            listing.tag === "For Sale"
+            listing.tag === "sale"
               ? "bg-green-200 text-green-700"
-              : listing.tag === "For Rent"
+              : listing.tag === "rent"
               ? "bg-blue-200 text-blue-700"
-              : listing.tag === "Short-let"
+              : listing.tag === "shortlet"
               ? "bg-yellow-200 text-yellow-700"
               : "bg-gray-200 text-gray-700"
           }`}
         >
-          {listing.tag}
+          {listing.tag === "sale"
+            ? "For Sale"
+            : listing.tag === "rent"
+            ? "For Rent"
+            : listing.tag === "shortlet"
+            ? "For Shortlet"
+            : ""}
         </span>
+
         {/* Camera Icon */}
         <Image
           src={Camera}
@@ -61,7 +68,9 @@ const ListingCard: React.FC<{ listing: Listing }> = ({ listing }) => {
         />
         <div className="flex justify-between">
           {/* Formatted price */}
-          <h3 className="text-xl text-primary font-semibold">{formattedPrice}</h3>
+          <h3 className="text-xl text-primary font-semibold">
+            {formattedPrice}
+          </h3>
           {/* Menu Icon */}
           <Image
             src={Menu}
@@ -74,14 +83,9 @@ const ListingCard: React.FC<{ listing: Listing }> = ({ listing }) => {
         <p className="text-gray-700 text-[12px] font-semibold">
           {listing.title}
         </p>
-        {/* Listing date and status */}
-        <div className="flex justify-between text-gray-500 text-[10px]">
-          <div className="flex clip items-start gap-1">
-            <p>Listed: {listing.listed}</p>
-          </div>
-          <div className="flex items-start gap-1">
-            <p>Status: {listing.status}</p>
-          </div>
+   
+        <div className="flex justify-start text-gray-500 text-[10px]">
+          <p>Listed: {listing.listed}</p>
         </div>
         <hr className="text-gray-300" />
         {/* Property details */}

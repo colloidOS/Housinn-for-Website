@@ -1,4 +1,4 @@
-"use client"
+"use client";
 // ListingsPage.tsx
 import React, { useState, useEffect } from "react";
 import ListingCard from "./ListingCard";
@@ -50,9 +50,10 @@ const ListingsPage: React.FC = () => {
           baths: post.bathroom,
           area: `${post.latitude} x ${post.longitude}`,
           imageUrl: post.images[0] || "/images/default-image.png",
-          tag: post.category === "apartment" ? "For Rent" : "For Sale",
+          tag: post.type,
           listed: new Date(post.createdAt).toLocaleDateString(),
-          status: "Published",
+          category: post.category,
+        
         }));
         setListings(data);
         console.log("Fetched data:", data);
@@ -84,11 +85,10 @@ const ListingsPage: React.FC = () => {
       const lowerCaseSearchTerm = searchTerm.toLowerCase();
 
       const matchesSearch = [
-        listing.title,
         listing.location,
         listing.price.toString(),
-        listing.beds.toString(),
-        listing.baths.toString(),
+     
+
         listing.area.toString(),
         listing.tag,
       ].some((field) => field.toLowerCase().includes(lowerCaseSearchTerm));
@@ -148,7 +148,7 @@ const ListingsPage: React.FC = () => {
       </div>
 
       {isListView ? (
-        <Sort listings={filteredListings} /> 
+        <Sort listings={filteredListings} />
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
           {filteredListings.map((listing) => (
