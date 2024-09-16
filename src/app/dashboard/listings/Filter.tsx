@@ -8,18 +8,11 @@ interface FilterProps {
   activeTag: string;
   onChange: (tag: string) => void;
 }
-const tagMapping: Record<"All Properties" | "For Sale" | "For Rent" | "Short-let" , string> = {
-  "All Properties": "All Properties",
-  "For Sale": "sale",
-  "For Rent": "rent",
-  "Short-let": "shortlet",
-
-};
-const tags = ["All Properties", "For Sale", "For Rent", "Short-let"] as const;
 
 const Filter: React.FC<FilterProps> = ({ activeTag, onChange }) => {
   const [isModalOpen, setIsModalOpen] = useState(false); // State to handle modal visibility
 
+  const tags = ["all-properties", "sale", "rent", "shortlet"];
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -28,21 +21,36 @@ const Filter: React.FC<FilterProps> = ({ activeTag, onChange }) => {
   return (
     <div className="flex items-center gap-4">
       <div className="flex border-[1px] gap-6 border-gray-300 p-[2px] rounded-[7px] bg-background-2 ">
-      {tags.map((tag) => (
+        {tags.map((tag) => (
           <button
             key={tag}
-            onClick={() => onChange(tagMapping[tag])} // Send the API-understood value
+            onClick={() => onChange(tag)}
             className={`text-[1rem] rounded-[7px] p-2 ${
-              activeTag === tagMapping[tag] // Compare with the API value
+              activeTag === tag
                 ? "bg-primary-100 text-primary"
                 : "text-gray-700"
             }`}
           >
-            {tag} {/* Display user-friendly name */}
+            {tag == "all-properties"
+              ? "All Properties"
+              : tag === "sale"
+              ? "For Sale"
+              : tag == "all-properties"
+              ? "All Properties"
+              : tag === "rent"
+              ? "For Rent"
+              : tag == "all-properties"
+              ? "All Properties"
+              : tag === "shortlet"
+              ? "Shortlet"
+              : ""}
           </button>
         ))}
       </div>
-      <button onClick={toggleModal} className=" p-2 flex items-center gap-2 border border-gray-300 rounded-[7px]">
+      <button
+        onClick={toggleModal}
+        className=" p-2 flex items-center gap-2 border border-gray-300 rounded-[7px]"
+      >
         <span className="flex gap-1">
           {" "}
           <Image
@@ -52,10 +60,7 @@ const Filter: React.FC<FilterProps> = ({ activeTag, onChange }) => {
             height={14}
             className=" cursor-pointer"
           />{" "}
-          <p className="text-[10px] text-gray-700 ">
-            {" "}
-            More Filters
-          </p>
+          <p className="text-[10px] text-gray-700 "> More Filters</p>
         </span>
         <Image
           src={Filter_arrow_2}

@@ -27,7 +27,7 @@ type Listing = {
 };
 
 const ListingsPage: React.FC = () => {
-  const [activeTag, setActiveTag] = useState<string | null>("All Properties");
+  const [activeTag, setActiveTag] = useState<string | null>("all-properties");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isListView, setIsListView] = useState<boolean>(false);
   const [listings, setListings] = useState<Listing[]>([]);
@@ -81,7 +81,7 @@ const ListingsPage: React.FC = () => {
   const handleSearch = () => {
     return listings.filter((listing) => {
       const matchesTag =
-        activeTag === "All Properties" || listing.tag === activeTag;
+        activeTag === "all-properties" || listing.tag === activeTag;
   
       const lowerCaseSearchTerm = searchTerm.toLowerCase();
   

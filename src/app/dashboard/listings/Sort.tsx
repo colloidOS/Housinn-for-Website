@@ -13,7 +13,7 @@ interface Listing {
   imageUrl: string;
   tag: string;
   listed: string;
-  status: string;
+  // status: string;
 }
 
 interface SortProps {
@@ -94,12 +94,12 @@ const Sort: React.FC<SortProps> = ({ listings }) => {
           >
             Date <span className={getClassNamesFor("listed")}></span>
           </th>
-          <th
+          {/* <th
             className="py-2 px-4 cursor-pointer"
             onClick={() => requestSort("status")}
           >
             Status <span className={getClassNamesFor("status")}></span>
-          </th>
+          </th> */}
         </tr>
       </thead>
       <tbody>
