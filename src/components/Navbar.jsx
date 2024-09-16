@@ -13,6 +13,7 @@ import {
   User,
   Search,
 } from "lucide-react";
+import Cookies from "js-cookie";
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -39,7 +40,7 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
-    const token = localStorage.getItem("token"); // or use 'userid' depending on how you're storing it
+    const token = Cookies.get("token");
     if (token) {
       setIsLoggedIn(true);
     }
@@ -113,7 +114,7 @@ const Navbar = () => {
         <div className="relative " ref={dropdownRef}>
           <div
             onClick={toggleDropdown}
-            className="w-fit border-[1.5px] border-white px-4 text-white py-2.5 rounded-3xl flex gap-6 justify-center items-center "
+            className="w-fit border-[1.5px] cursor-pointer border-white px-4 text-white py-2.5 rounded-3xl flex gap-6 justify-center items-center "
           >
             <User />
             <ChevronDown />
