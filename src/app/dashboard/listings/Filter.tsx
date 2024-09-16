@@ -8,11 +8,18 @@ interface FilterProps {
   activeTag: string;
   onChange: (tag: string) => void;
 }
+const tagMapping: Record<"All Properties" | "For Sale" | "For Rent" | "Short-let" , string> = {
+  "All Properties": "All Properties",
+  "For Sale": "sale",
+  "For Rent": "rent",
+  "Short-let": "shortlet",
+
+};
+const tags = ["All Properties", "For Sale", "For Rent", "Short-let"] as const;
 
 const Filter: React.FC<FilterProps> = ({ activeTag, onChange }) => {
   const [isModalOpen, setIsModalOpen] = useState(false); // State to handle modal visibility
 
-  const tags = ["All Properties", "For Sale", "For Rent", "Short-let", "Lands"];
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -21,17 +28,17 @@ const Filter: React.FC<FilterProps> = ({ activeTag, onChange }) => {
   return (
     <div className="flex items-center gap-4">
       <div className="flex border-[1px] gap-6 border-gray-300 p-[2px] rounded-[7px] bg-background-2 ">
-        {tags.map((tag) => (
+      {tags.map((tag) => (
           <button
             key={tag}
-            onClick={() => onChange(tag)}
+            onClick={() => onChange(tagMapping[tag])} // Send the API-understood value
             className={`text-[1rem] rounded-[7px] p-2 ${
-              activeTag === tag
+              activeTag === tagMapping[tag] // Compare with the API value
                 ? "bg-primary-100 text-primary"
                 : "text-gray-700"
             }`}
           >
-            {tag}
+            {tag} {/* Display user-friendly name */}
           </button>
         ))}
       </div>

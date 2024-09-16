@@ -23,6 +23,7 @@ type Listing = {
   tag: string;
   listed: string;
   status: string;
+  category:string;
 };
 
 const ListingsPage: React.FC = () => {
@@ -81,21 +82,24 @@ const ListingsPage: React.FC = () => {
     return listings.filter((listing) => {
       const matchesTag =
         activeTag === "All Properties" || listing.tag === activeTag;
-
+  
       const lowerCaseSearchTerm = searchTerm.toLowerCase();
-
+  
       const matchesSearch = [
-        listing.location,
-        listing.price.toString(),
-     
-
-        listing.area.toString(),
-        listing.tag,
+        listing.location || "", // Ensure location is not null
+        listing.price?.toString() || "", // Convert price to string
+        listing.beds?.toString() || "", // Convert beds to string, handle null values
+        listing.baths?.toString() || "", // Convert baths to string, handle null values
+        listing.area || "", // Handle area, even if it's "null x null"
+        listing.title || "", // Handle title, even if it's null
+        listing.tag || "", // Handle tag if null
+        listing.category || "", // Handle category if null
       ].some((field) => field.toLowerCase().includes(lowerCaseSearchTerm));
-
+  
       return matchesTag && matchesSearch;
     });
   };
+  
 
   const filteredListings = handleSearch();
 
