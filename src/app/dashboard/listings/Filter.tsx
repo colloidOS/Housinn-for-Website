@@ -56,17 +56,17 @@ const Filter: React.FC<FilterProps> = ({ activeTag, onChange }) => {
           <Image
             src={Filter_arrow}
             alt="image"
-            width={14}
-            height={14}
+            width={20}
+            height={20}
             className=" cursor-pointer"
           />{" "}
-          <p className="text-[10px] text-gray-700 "> More Filters</p>
+          <p className="text-sm text-gray-700 "> More Filters</p>
         </span>
         <Image
           src={Filter_arrow_2}
           alt="image"
-          width={10}
-          height={10}
+          width={20}
+          height={20}
           className=" cursor-pointer"
         />{" "}
       </button>

@@ -115,21 +115,21 @@ const ListingsPage: React.FC = () => {
 
       <div className="flex items-center gap-4 mb-5 justify-between w-full">
         <Filter activeTag={activeTag || ""} onChange={handleFilterChange} />
-        <div className="flex relative items-center w-[150px] h-full">
+        <div className="flex relative items-center  h-full">
           <input
             type="text"
             placeholder="Search listings..."
             value={searchTerm}
             onChange={handleSearchInputChange}
-            className="pl-6 p-2 h-11 border border-gray-300  rounded w-full placeholder:text-[12px] placeholder:flex placeholder:items-center justify-center"
+            className="pl-7 flex justify-end pr-1 p-2 h-11 border border-gray-300  rounded w-full placeholder:text-sm text-sm  placeholder:text-center"
           />
           <button className="rounded-[5px] absolute left-2">
             <Image
               src={Search}
               alt="image"
-              width={12}
-              height={12}
-              className="cursor-pointer"
+              width={20}
+              height={20}
+              className="cursor-pointer opacity-60"
             />
           </button>
         </div>
