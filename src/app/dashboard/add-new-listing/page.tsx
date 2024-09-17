@@ -1,6 +1,6 @@
 "use client";
-import React, { useState } from "react";
-import { useRouter } from 'next/router';
+import React, { useState, ChangeEvent, FormEvent } from "react";
+import { useRouter } from "next/router";
 import { ChevronDown, Landmark } from "lucide-react";
 import Image from "next/image";
 import { toast, ToastContainer } from "react-toastify";
@@ -16,23 +16,38 @@ import {
   propertyTypes,
 } from "../../../data/new-listing"; // Adjust the path as needed
 
+interface FormData {
+  images: File | null;
+  state: string;
+  city: string;
+  type: string;
+  amenities: string[];
+  propertySize: string;
+  bedroom: string;
+  price: string;
+  description: string;
+  category: string;
+  address: string;
+  landmark: string;
+}
+
 function AddNewListing() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     images: null,
     state: "",
     city: "",
     type: "",
-    amenities: [], // Ensure amenities is an array
+    amenities: [],
     propertySize: "",
-    bedroom: "", // Initialize as an empty string
-    price: "", // Initialize as an empty string
+    bedroom: "",
+    price: "",
     description: "",
     category: "",
     address: "",
     landmark: "",
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
       ...prevState,
@@ -40,7 +55,7 @@ function AddNewListing() {
     }));
   };
 
-  const handleStateChange = (e) => {
+  const handleStateChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const state = e.target.value;
     setFormData((prevState) => ({
       ...prevState,
@@ -49,14 +64,14 @@ function AddNewListing() {
     }));
   };
 
-  const handleCityChange = (e) => {
+  const handleCityChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setFormData((prevState) => ({
       ...prevState,
       city: e.target.value,
     }));
   };
 
-  const handleDrop = (e) => {
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
     if (file && (file.type === "image/jpeg" || file.type === "video/mp4")) {
@@ -67,8 +82,8 @@ function AddNewListing() {
     }
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (file && (file.type === "image/jpeg" || file.type === "video/mp4")) {
       setFormData((prevState) => ({
         ...prevState,
@@ -84,24 +99,22 @@ function AddNewListing() {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    // Helper function to format strings
-    const formatString = (str) => str.toLowerCase().replace(/\s+/g, "_");
+    const formatString = (str: string) => str.toLowerCase().replace(/\s+/g, "_");
 
-    // Transform city and state
     const formattedCity = formatString(formData.city);
     const formattedState = formatString(formData.state);
     const bedroom = Number(formData.bedroom);
     const price = Number(formData.price);
-    // Prepare payload with formatted city and state
+
     const payload = {
       postData: {
         price: price,
         address: formData.address,
-        city: formattedCity, // Use formatted city
-        state: formattedState, // Use formatted state
+        city: formattedCity,
+        state: formattedState,
         type: formData.type,
         category: formData.category,
         bedroom: bedroom,
@@ -122,11 +135,11 @@ function AddNewListing() {
       );
     }
   };
+
   const handleNavigate = () => {
     const router = useRouter();
     router.push("/dashboard");
   };
-
   return (
     <div className="w-full flex flex-col gap-5 bg-background-2">
       <ToastContainer />
@@ -295,11 +308,12 @@ function AddNewListing() {
                         >
                           <option value="">Select a City</option>
                           {formData.state &&
-                            cities[formData.state]?.map((city) => (
-                              <option key={city} value={city}>
-                                {city}
-                              </option>
-                            ))}
+  cities[formData.state as keyof typeof cities]?.map((city) => (
+    <option key={city} value={city}>
+      {city}
+    </option>
+  ))}
+
                         </select>
                       </div>
                     </div>
@@ -414,9 +428,9 @@ function AddNewListing() {
             onClick={handleNavigate}
             className="border border-secondary py-[11px] px-6 rounded-md text-secondary bg-secondary/10"
           >
-            Save and Continue
+            Save and Resume
           </button>
-          <Button type="submit">List Property</Button>
+          <Button type="submit" onClick={null}>List Property</Button>
         </section>
       </form>
     </div>

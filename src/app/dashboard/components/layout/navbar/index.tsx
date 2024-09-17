@@ -4,15 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Notification from "../../../../../../public/icons/notifications.svg";
-
-// Function to parse cookies into an object
-const parseCookies = (): Record<string, string> => {
-  return document.cookie.split("; ").reduce((acc, cookie) => {
-    const [name, value] = cookie.split("=");
-    acc[name] = decodeURIComponent(value);
-    return acc;
-  }, {} as Record<string, string>);
-};
+import { useAuth } from "@/context/AuthContext"; // Import the useAuth hook
 
 const navlinks = [
   {
@@ -36,47 +28,13 @@ interface UserNavbarProps {
   className?: string; // Explicitly typing the className prop as string
 }
 
-// useEffect(() => {
-//   const fetchData = async () => {
-//     if (token) {
-//       const base64Url = token.split(".")[1];
-//       const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-//       const jsonPayload = decodeURIComponent(
-//         atob(base64)
-//           .split("")
-//           .map(function (c) {
-//             return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-//           })
-//           .join("")
-//       );
-//       console.log(JSON.parse(jsonPayload)); // This will show the contents of the token
-//     }
-//     try {
-//       const response = await axios.get(
-//         `https://housinn.onrender.com/api/users/search/${id}`,
-//         {
-//           headers: { Authorization: `Bearer ${token}` },
-//         }
-//       );
-//       const userData = response.data;
-//       setUserData(userData);
-
-//       setLoading(false);
-//       console.log(userData);
-//     } catch (error) {
-//       console.error("Error:", error);
-//     }
-//   };
-//   fetchData();
-// }, [id, token]);
-
 const UserNavbar: React.FC<UserNavbarProps> = ({ className }) => {
   const pathname = usePathname();
   const currentPath = pathname?.split("/")[2];
 
-  // Parse cookies to get the user data
-  const cookies = parseCookies();
-  const firstName = cookies.firstName || "User"; // Get the firstName from cookies or fallback to 'User'
+  // Get user data from the AuthContext
+  const { user } = useAuth();
+  const firstName = user?.firstName || "User"; // Get the firstName from context or fallback to 'User'
 
   return (
     <nav
@@ -112,7 +70,7 @@ const UserNavbar: React.FC<UserNavbarProps> = ({ className }) => {
               <img
                 src="/icons/profile.svg"
                 className="w-[18px] h-[18px]"
-                alt=""
+                alt="profile"
               />
 
               <span className="text-sm text-gray-600">{firstName}</span>

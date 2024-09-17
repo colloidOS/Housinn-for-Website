@@ -137,12 +137,12 @@ const AuthPage = () => {
     <div className="relative flex w-full">
       <ToastContainer />
       <div
-        className="sticky top-0 hidden w-1/2 h-screen bg-center bg-no-repeat bg-cover md:flex"
+        className="sticky top-0 hidden w-1/2 h-screen bg-center bg-no-repeat bg-cover xl:flex"
         style={{ backgroundImage: `url('/images/sign-in.png')` }}
       ></div>
 
-      <div className="flex flex-col items-center justify-center w-full md:w-1/2">
-        <div className="flex flex-col gap-7 px-[65px] pt-[62px] pb-[8.75rem] text-center md:px-[7.125rem] md:pt-9">
+      <div className="flex flex-col items-center h-screen xl:h-full justify-center w-full xl:w-1/2">
+        <div className="flex flex-col gap-7 px-[65px] pt-[62px] pb-[8.75rem] text-center xl:px-[7.125rem] xl:pt-9">
           <h1 className="text-2xl font-bold">Welcome To Housinn</h1>
           <div className="flex justify-center w-full px-[13px]">
             <button

@@ -7,7 +7,7 @@ interface Listing {
   tag: string;
   price: number;
   listed: string;
-  status: string;
+  // status: string;
 }
 
 interface ListingListItemProps {
@@ -15,8 +15,7 @@ interface ListingListItemProps {
 }
 
 const ListingListItem: React.FC<ListingListItemProps> = ({ listing }) => {
-  // Add a console log to check if listing data is passed correctly
-  console.log("Listing data:", listing);
+
   
 
   return (
@@ -25,7 +24,7 @@ const ListingListItem: React.FC<ListingListItemProps> = ({ listing }) => {
       <td className="py-2 px-4">{listing.tag}</td>
       <td className="py-2 px-4">₦ {listing.price}</td>
       <td className="py-2 px-4">{listing.listed}</td>
-      <td className="py-2 px-4">
+      {/* <td className="py-2 px-4">
         <span
           className={`py-1 px-3 rounded-full text-xs ${
             listing.status === "Published"
@@ -39,7 +38,7 @@ const ListingListItem: React.FC<ListingListItemProps> = ({ listing }) => {
         >
           {listing.status}
         </span>
-      </td>
+      </td> */}
     </tr>
   );
 };

@@ -12,15 +12,15 @@ interface FilterProps {
 const Filter: React.FC<FilterProps> = ({ activeTag, onChange }) => {
   const [isModalOpen, setIsModalOpen] = useState(false); // State to handle modal visibility
 
-  const tags = ["All Properties", "For Sale", "For Rent", "Short-let", "Lands"];
+  const tags = ["all-properties", "sale", "rent", "shortlet"];
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
 
   return (
-    <div className="flex items-center gap-4">
-      <div className="flex border-[1px] gap-6 border-gray-300 p-[2px] rounded-[7px] bg-background-2 ">
+    <div className="flex items-center gap-4 ">
+      <div className="xl:flex hidden border-[1px] gap-6 border-gray-300 p-[2px] rounded-[7px] bg-background-2 ">
         {tags.map((tag) => (
           <button
             key={tag}
@@ -31,30 +31,42 @@ const Filter: React.FC<FilterProps> = ({ activeTag, onChange }) => {
                 : "text-gray-700"
             }`}
           >
-            {tag}
+            {tag == "all-properties"
+              ? "All Properties"
+              : tag === "sale"
+              ? "For Sale"
+              : tag == "all-properties"
+              ? "All Properties"
+              : tag === "rent"
+              ? "For Rent"
+              : tag == "all-properties"
+              ? "All Properties"
+              : tag === "shortlet"
+              ? "Shortlet"
+              : ""}
           </button>
         ))}
       </div>
-      <button onClick={toggleModal} className=" p-2 flex items-center gap-2 border border-gray-300 rounded-[7px]">
+      <button
+        onClick={toggleModal}
+        className=" p-3 h-11 flex items-center gap-2 border border-gray-300 rounded-[7px]"
+      >
         <span className="flex gap-1">
           {" "}
           <Image
             src={Filter_arrow}
             alt="image"
-            width={14}
-            height={14}
+            width={20}
+            height={20}
             className=" cursor-pointer"
           />{" "}
-          <p className="text-[10px] text-gray-700 ">
-            {" "}
-            More Filters
-          </p>
+          <p className="text-sm text-gray-700 "> <span className="hidden xl:flex">More</span>  Filters</p>
         </span>
         <Image
           src={Filter_arrow_2}
           alt="image"
-          width={10}
-          height={10}
+          width={20}
+          height={20}
           className=" cursor-pointer"
         />{" "}
       </button>
