@@ -61,7 +61,7 @@ const PasswordFields = ({ updatePassword, setUpdatedPassword }) => {
       </div>
 
       {/* Last two fields (column layout) */}
-      <div className="flex gap-6 w-full">
+      <div className="flex lg:flex-row flex-col gap-6 w-full">
         {passwordFields.slice(1).map((field) => (
           <div key={field.id} className="w-full gap-1">
             <label

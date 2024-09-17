@@ -15,8 +15,9 @@ import PasswordFields from "./PasswordFields";
 import AddressFields from "./AddressFields";
 
 function Profile() {
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [selectedImageFile, setSelectedImageFile] = useState(null); // For uploading the image file
+  const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null); // Correct typing
+  const [selectedImage, setSelectedImage] = useState<string | null>(null); // For preview as a string
+
   const [selectedState, setSelectedState] = useState<string>("");
   const [selectedCity, setSelectedCity] = useState<string>("");
   const [updatedProfile, setUpdatedProfile] = useState({
@@ -42,9 +43,10 @@ function Profile() {
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file && file.type.startsWith("image/")) {
+      setSelectedImageFile(file); // Store the actual file for submission
       const reader = new FileReader();
       reader.onloadend = () => {
-        setSelectedImage(reader.result as string);
+        setSelectedImage(reader.result as string); // Store the image URL for preview
       };
       reader.readAsDataURL(file);
     }
@@ -73,25 +75,30 @@ function Profile() {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (token) {
-        const base64Url = token.split(".")[1];
-        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-        const jsonPayload = decodeURIComponent(
-          atob(base64)
-            .split("")
-            .map(function (c) {
-              return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-            })
-            .join("")
-        );
-        console.log(JSON.parse(jsonPayload)); // This will show the contents of the token
-      }
+      // if (token) {
+      //   const base64Url = token.split(".")[1];
+      //   const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      //   const jsonPayload = decodeURIComponent(
+      //     atob(base64)
+      //       .split("")
+      //       .map(function (c) {
+      //         return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+      //       })
+      //       .join("")
+      //   );
+      //   console.log(JSON.parse(jsonPayload)); // This will show the contents of the token
+      // }
       try {
         const response = await api.get(`/users/search/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const userData = response.data;
         setUserData(userData);
+
+        // If avatar exists, set it for preview
+        if (userData.data.avatar) {
+          setSelectedImage(userData.data.avatar); // Set the avatar URL
+        }
 
         // Populate form fields
         setUpdatedProfile({
@@ -121,47 +128,33 @@ function Profile() {
   }, [id, token]);
   const handleUpdateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Create FormData object to send both text data and image
     const formData = new FormData();
 
-    // Append profile data
+    // Append other profile fields to FormData
     formData.append("firstName", updatedProfile.firstName);
     formData.append("lastName", updatedProfile.lastName);
     formData.append("number", updatedProfile.number);
     formData.append("company", updatedProfile.company);
 
-    // Append image if one was selected
+    // Append the image file to FormData if one is selected
     if (selectedImageFile) {
-      formData.append("avatar", selectedImageFile); // Add image to the form data
+      formData.append("avatar", selectedImageFile);
     }
 
+    console.log(selectedImageFile);
+
     try {
-      // Send the PUT request with form data
       const response = await api.put(`/users/${id}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "multipart/form-data", // Required for file uploads
         },
       });
 
-      // Log the response and check if it contains the image URL
       console.log("Response:", response.data);
-
-      // Assuming the response contains an image URL like { avatarUrl: 'https://example.com/path/to/image.jpg' }
-      if (response.data && response.data.avatarUrl) {
-        const imageUrl = response.data.avatarUrl; // Extract the URL
-        console.log("Image URL:", imageUrl);
-
-        // Update the UI with the new image URL (e.g., display it on the profile page)
-      }
-
-      // Set the new firstName in the cookie after a successful update
-      document.cookie = `firstName=${updatedProfile.firstName}; path=/; max-age=31536000;`;
-
-      toast.success("Updated profile successfully!");
+      toast.success("Profile updated successfully!");
     } catch (error) {
-      console.error("Error updating:", error);
+      console.error("Error updating profile:", error);
       toast.error("Failed to update profile");
     }
   };
@@ -249,21 +242,21 @@ function Profile() {
         </div>
         <form onSubmit={handleUpdateSubmit}>
           <div className="flex flex-col gap-3">
-            <div className="flex gap-[164px]">
+            <div className="flex gap-10 lg:gap-[164px]">
               <div className="flex flex-col gap-0">
                 <p className="text-lg font-semibold">Profile Photo</p>
                 <p className="text-sm font-normal text-gray-600">
                   upload your profile photo
                 </p>
               </div>
-              <div className="flex flex-col justify-center items-center gap-[33px] px-[28px] pt-[62px] pb-[14px]">
+              <div className="flex flex-col justify-center items-center gap-[33px] px-[28px] lg:pt-[62px] pb-[14px]">
                 <div className="relative">
                   {selectedImage ? (
                     <div>
                       <img
                         src={selectedImage}
                         alt="Profile Photo"
-                        className="border max-w-[137px] max-h-[137px] border-gray-300 relative rounded-full object-cover"
+                        className="border w-[137px] h-[137px] border-gray-300 relative rounded-full object-cover"
                       />
                     </div>
                   ) : (
@@ -280,7 +273,7 @@ function Profile() {
                   <Button
                     type="button"
                     onClick={triggerImageUpload}
-                    className="focus:outline-none"
+                    className="focus:outline-none text-nowrap"
                   >
                     Select your Image/Photo
                   </Button>
@@ -297,18 +290,18 @@ function Profile() {
                 </div>
               </div>
             </div>
-            <hr className="text-gray-300" />
+            <hr className="text-gray-300 pb-5" />
           </div>
           <div className="flex flex-col gap-6">
             <div className="flex">
               <div className="flex flex-col gap-2">
                 <p className="text-lg font-semibold">Edit Your Profile</p>
-                <p className="text-sm font-normal w-[308px] text-gray-600">
+                <p className="text-sm font-normal w-[150px] lg:w-[308px] text-gray-600">
                   Change your account type, edit your contact information, add
                   your social media details and your user details.
                 </p>
               </div>
-              <div className="flex flex-col px-12 pt-8 gap-16 w-full">
+              <div className="flex flex-col px-12 lg:pt-8 gap-16 w-full">
                 <div className="flex flex-col gap-8">
                   <div>
                     <p className="text-primary font-semibold">Account Type</p>
@@ -337,16 +330,16 @@ function Profile() {
         </form>
         <div className="flex flex-col gap-4 w-full">
           <form
-            className="flex gap-[140px]"
+            className="flex lg:gap-[140px]"
             onSubmit={handleVerificationSubmit}
           >
             <div className="flex flex-col gap-2 text-nowrap">
               <p className="text-lg font-semibold">Verification</p>
-              <p className="text-sm font-normal text-gray-600">
+              <p className="text-sm font-normal text-gray-600 w-[150px]">
                 Get your account verified!
               </p>
             </div>
-            <div className="px-12 py-8 flex flex-col gap-8 w-full">
+            <div className="px-12 lg:py-8 flex flex-col gap-8 w-full">
               <div className="flex flex-col gap-4">
                 {loading ? (
                   <p>Loading...</p>
@@ -369,7 +362,7 @@ function Profile() {
           <form className="flex gap-3 w-full" onSubmit={handlePasswordChange}>
             <div className="flex flex-col gap-0 ">
               <p className="text-lg font-semibold">Change Password</p>
-              <p className="text-sm font-normal text-gray-600 w-[300px]">
+              <p className="text-sm font-normal text-gray-600 w-[150px] lg:w-[300px]">
                 *After you change the password you will have to login again.
               </p>
             </div>
@@ -391,7 +384,7 @@ function Profile() {
         </div>
         <div>
           <hr className="text-gray-300" />
-          <div className="flex gap-[202px]">
+          <div className="flex gap-10 lg:gap-[202px]">
             <div className="flex flex-col gap-2 w-">
               <p className="text-lg font-semibold">Logout</p>
               <p className="text-sm font-normal text-gray-600">
