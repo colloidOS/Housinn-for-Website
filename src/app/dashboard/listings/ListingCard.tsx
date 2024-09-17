@@ -28,7 +28,7 @@ interface Listing {
 const ListingCard: React.FC<{ listing: Listing }> = ({ listing }) => {
   // Formatting the price as a currency string
   const formattedPrice = `₦${Number(listing.price).toLocaleString()}`;
-  console.log("listing tag", listing.tag);
+  
   return (
     <div className="relative rounded-[7px] shadow-custom-property-shadow">
       <img

@@ -108,12 +108,12 @@ const ListingsPage: React.FC = () => {
   const filteredListings = handleSearch();
 
   return (
-    <div className="px-12 text-gray-600 pt-10 pb-12 w-full">
+    <div className="xl:px-12 text-gray-600 pt-10 px-5 pb-12 w-full">
       <div>
         <h1 className="font-bold text-2xl mb-4">My Listings</h1>
       </div>
 
-      <div className="flex items-center gap-4 mb-5 justify-between w-full">
+      <div className="flex  items-center gap-4 mb-5 justify-between w-full">
         <Filter activeTag={activeTag || ""} onChange={handleFilterChange} />
         <div className="flex relative items-center  h-full">
           <input
@@ -121,7 +121,7 @@ const ListingsPage: React.FC = () => {
             placeholder="Search listings..."
             value={searchTerm}
             onChange={handleSearchInputChange}
-            className="pl-7 flex justify-end pr-1 p-2 h-11 border border-gray-300  rounded w-full placeholder:text-sm text-sm  placeholder:text-center"
+            className="pl-7 flex flex-1  justify-end pr-1 p-2 h-11 border border-gray-300  rounded w-full placeholder:text-sm text-sm  placeholder:text-center"
           />
           <button className="rounded-[5px] absolute left-2">
             <Image
@@ -180,7 +180,7 @@ const ListingsPage: React.FC = () => {
           {isListView ? (
             <Sort listings={filteredListings} />
           ) : (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
               {filteredListings.map((listing) => (
                 <ListingCard key={listing.id} listing={listing} />
               ))}

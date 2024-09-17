@@ -19,8 +19,8 @@ const Filter: React.FC<FilterProps> = ({ activeTag, onChange }) => {
   };
 
   return (
-    <div className="flex items-center gap-4">
-      <div className="flex border-[1px] gap-6 border-gray-300 p-[2px] rounded-[7px] bg-background-2 ">
+    <div className="flex items-center gap-4 ">
+      <div className="xl:flex hidden border-[1px] gap-6 border-gray-300 p-[2px] rounded-[7px] bg-background-2 ">
         {tags.map((tag) => (
           <button
             key={tag}
@@ -60,7 +60,7 @@ const Filter: React.FC<FilterProps> = ({ activeTag, onChange }) => {
             height={20}
             className=" cursor-pointer"
           />{" "}
-          <p className="text-sm text-gray-700 "> More Filters</p>
+          <p className="text-sm text-gray-700 "> <span className="hidden xl:flex">More</span>  Filters</p>
         </span>
         <Image
           src={Filter_arrow_2}
