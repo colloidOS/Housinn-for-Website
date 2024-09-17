@@ -25,6 +25,7 @@
     "react-switch": "^7.0.0",
     "react-toastify": "^10.0.5",
     "slick-carousel": "^1.8.1",
+    "socket.io-client": "^4.7.5",
     "zod": "^3.23.8"
   },
   "devDependencies": {

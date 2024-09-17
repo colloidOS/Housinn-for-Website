@@ -70,10 +70,10 @@ const AddressFields = ({
 
   return (
     <div className="w-full">
-      <div className="flex flex-wrp gap-6 mb-4">
+      <div className="flex lg:flex-row flex-col flex-wrp gap-6 mb-4">
         {/* Display the dropdown fields (State and City) in a row */}
         {addressFields.slice(0, 2).map((field) => (
-          <div key={field.id} className="w-full md:w-1/2 gap-1">
+          <div key={field.id} className="w-full lg:w-1/2 gap-1">
             <label
               className="block text-gray-700 text-sm font-bold"
               htmlFor={field.id}
