@@ -49,7 +49,7 @@ const Filter: React.FC<FilterProps> = ({ activeTag, onChange }) => {
       </div>
       <button
         onClick={toggleModal}
-        className=" p-2 flex items-center gap-2 border border-gray-300 rounded-[7px]"
+        className=" p-3 h-11 flex items-center gap-2 border border-gray-300 rounded-[7px]"
       >
         <span className="flex gap-1">
           {" "}
