@@ -4,15 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Notification from "../../../../../../public/icons/notifications.svg";
-
-// Function to parse cookies into an object
-const parseCookies = (): Record<string, string> => {
-  return document.cookie.split("; ").reduce((acc, cookie) => {
-    const [name, value] = cookie.split("=");
-    acc[name] = decodeURIComponent(value);
-    return acc;
-  }, {} as Record<string, string>);
-};
+import { useAuth } from "@/context/AuthContext"; // Import the useAuth hook
 
 const navlinks = [
   {
@@ -36,14 +28,13 @@ interface UserNavbarProps {
   className?: string; // Explicitly typing the className prop as string
 }
 
-
 const UserNavbar: React.FC<UserNavbarProps> = ({ className }) => {
   const pathname = usePathname();
   const currentPath = pathname?.split("/")[2];
 
-  // Parse cookies to get the user data
-  const cookies = parseCookies();
-  const firstName = cookies.firstName || "User"; // Get the firstName from cookies or fallback to 'User'
+  // Get user data from the AuthContext
+  const { user } = useAuth();
+  const firstName = user?.firstName || "User"; // Get the firstName from context or fallback to 'User'
 
   return (
     <nav
@@ -79,7 +70,7 @@ const UserNavbar: React.FC<UserNavbarProps> = ({ className }) => {
               <img
                 src="/icons/profile.svg"
                 className="w-[18px] h-[18px]"
-                alt=""
+                alt="profile"
               />
 
               <span className="text-sm text-gray-600">{firstName}</span>
