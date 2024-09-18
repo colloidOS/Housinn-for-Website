@@ -329,8 +329,8 @@ function Profile() {
                   disabled={isProfileLoading}
                 >
                   {isProfileLoading ? (
-                    <span>
-                      Uploading... <ClipLoader color="#fff" size={20} />
+                    <span className="flex items-center gap-2">
+                      Uploading <ClipLoader color="#fff" size={20} />
                     </span>
                   ) : (
                     "Upload Profile"
@@ -373,7 +373,13 @@ function Profile() {
                 onClick={null}
                 disabled={isVerificationLoading}
               >
-                {isVerificationLoading ? "Verifying..." : "Verify Account"}
+                {isVerificationLoading ? (
+                  <span className="flex items-center gap-2">
+                    Verifying <ClipLoader color="#fff" size={20} />
+                  </span>
+                ) : (
+                  "Verify Account"
+                )}
               </Button>
             </div>
           </form>
@@ -399,7 +405,14 @@ function Profile() {
                 type="submit"
                 disabled={isPasswordLoading}
               >
-                {isPasswordLoading ? "Resetting..." : "Reset Password"}
+                {isPasswordLoading ? (
+                  <span className="flex items-center gap-2">
+                    Resetting
+                    <ClipLoader color="#fff" size={20} />
+                  </span>
+                ) : (
+                  "Reset Password"
+                )}
               </Button>
             </div>
           </form>
@@ -421,7 +434,7 @@ function Profile() {
                   className={`px-6 py-[11px] flex gap-2 items-center focus:outline-primary bg-primary text-white rounded-md text-base font-semibold`}
                 >
                   {" "}
-                  Logging out...
+                  Logging out <ClipLoader color="#fff" size={20} />
                 </button>
               ) : (
                 <button
