@@ -4,7 +4,7 @@ import Filter_arrow from "../../../../public/icons/filter-arrow.svg";
 import Filter_arrow_2 from "../../../../public/icons/filter-arrow-2.svg";
 import Image from "next/image";
 
-interface FilterProps {
+interface ListingFilterProps {
   activeTag: string;
   onChange: (tag: string) => void;
 }
@@ -29,7 +29,7 @@ const FilterList: React.FC<{ label: string; options: string[] }> = ({
   </div>
 );
 
-const Filter: React.FC<FilterProps> = ({ activeTag, onChange }) => {
+const ListingFilter: React.FC<ListingFilterProps> = ({ activeTag, onChange }) => {
   const [isModalOpen, setIsModalOpen] = useState(false); // State to handle modal visibility
 
   const tags = ["all-properties", "sale", "rent", "shortlet"];
@@ -225,4 +225,4 @@ const Filter: React.FC<FilterProps> = ({ activeTag, onChange }) => {
   );
 };
 
-export default Filter;
+export default ListingFilter;

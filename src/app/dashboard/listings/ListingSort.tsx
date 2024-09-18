@@ -16,11 +16,11 @@ interface Listing {
   // status: string;
 }
 
-interface SortProps {
+interface ListingSortProps {
   listings: Listing[]; // Receive listings as prop
 }
 
-const Sort: React.FC<SortProps> = ({ listings }) => {
+const ListingSort: React.FC<ListingSortProps> = ({ listings }) => {
   const [sortConfig, setSortConfig] = useState<{
     key: keyof Listing;
     direction: "asc" | "desc";
@@ -111,4 +111,4 @@ const Sort: React.FC<SortProps> = ({ listings }) => {
   );
 };
 
-export default Sort;
+export default ListingSort;
