@@ -3,11 +3,11 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import profile from "../../../../public/icons/profile.svg";
 import Button from "./Button";
-import Dropdown from "./Dropdown";
 import axios from "axios";
 import api from "@/lib/api";
 import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
+import { ClipLoader } from "react-spinners";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import ProfileFields from "./ProfileFields";
@@ -17,7 +17,10 @@ import AddressFields from "./AddressFields";
 function Profile() {
   const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null); // Correct typing
   const [selectedImage, setSelectedImage] = useState<string | null>(null); // For preview as a string
-
+  const [isProfileLoading, setProfileLoading] = useState(false);
+  const [isVerificationLoading, setVerificationLoading] = useState(false);
+  const [isPasswordLoading, setPasswordLoading] = useState(false);
+  const [isLogoutLoading, setLogoutLoading] = useState(false);
   const [selectedState, setSelectedState] = useState<string>("");
   const [selectedCity, setSelectedCity] = useState<string>("");
   const [updatedProfile, setUpdatedProfile] = useState({
@@ -75,19 +78,6 @@ function Profile() {
 
   useEffect(() => {
     const fetchData = async () => {
-      // if (token) {
-      //   const base64Url = token.split(".")[1];
-      //   const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-      //   const jsonPayload = decodeURIComponent(
-      //     atob(base64)
-      //       .split("")
-      //       .map(function (c) {
-      //         return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-      //       })
-      //       .join("")
-      //   );
-      //   console.log(JSON.parse(jsonPayload)); // This will show the contents of the token
-      // }
       try {
         const response = await api.get(`/users/search/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -126,8 +116,10 @@ function Profile() {
     };
     fetchData();
   }, [id, token]);
+
   const handleUpdateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setProfileLoading(true);
     const formData = new FormData();
 
     // Append other profile fields to FormData
@@ -136,11 +128,9 @@ function Profile() {
     formData.append("number", updatedProfile.number);
     formData.append("company", updatedProfile.company);
 
-    // Append the image file to FormData if one is selected
     if (selectedImageFile) {
       formData.append("avatar", selectedImageFile);
     }
-
     console.log(selectedImageFile);
 
     try {
@@ -156,11 +146,14 @@ function Profile() {
     } catch (error) {
       console.error("Error updating profile:", error);
       toast.error("Failed to update profile");
+    } finally {
+      setProfileLoading(false);
     }
   };
 
   const handleVerificationSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setVerificationLoading(true);
     const verificationData = {
       ...updateVerification,
       state: selectedState,
@@ -178,11 +171,14 @@ function Profile() {
       toast.success("Updated location successfully!");
     } catch (error) {
       console.error("Error updating:", error);
+    } finally {
+      setVerificationLoading(false);
     }
   };
 
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
+    setPasswordLoading(true);
     const passwordChange = {
       ...updatePassword,
     };
@@ -209,9 +205,12 @@ function Profile() {
       } else {
         toast.error("An unexpected error occurred. Please try again.");
       }
+    } finally {
+      setPasswordLoading(false);
     }
   };
   const handleLogout = async () => {
+    setLogoutLoading(true);
     try {
       await api.post("/auth/logout", {
         headers: {
@@ -229,6 +228,8 @@ function Profile() {
       }, 2000);
     } catch (error) {
       toast.error("Failed to log out. Please try again.");
+    } finally {
+      setLogoutLoading(false);
     }
   };
 
@@ -274,6 +275,7 @@ function Profile() {
                     type="button"
                     onClick={triggerImageUpload}
                     className="focus:outline-none text-nowrap"
+                    disabled={isProfileLoading}
                   >
                     Select your Image/Photo
                   </Button>
@@ -320,8 +322,19 @@ function Profile() {
                     )}
                   </div>
                 </div>
-                <Button type="submit" className="w-fit" onClick={null}>
-                  Upload Profile
+                <Button
+                  type="submit"
+                  className="w-fit"
+                  onClick={null}
+                  disabled={isProfileLoading}
+                >
+                  {isProfileLoading ? (
+                    <span>
+                      Uploading... <ClipLoader color="#fff" size={20} />
+                    </span>
+                  ) : (
+                    "Upload Profile"
+                  )}
                 </Button>
               </div>
             </div>
@@ -354,8 +367,13 @@ function Profile() {
                   />
                 )}
               </div>
-              <Button type="submit" className="w-fit" onClick={null}>
-                Verify Account
+              <Button
+                type="submit"
+                className="w-fit"
+                onClick={null}
+                disabled={isVerificationLoading}
+              >
+                {isVerificationLoading ? "Verifying..." : "Verify Account"}
               </Button>
             </div>
           </form>
@@ -375,8 +393,13 @@ function Profile() {
                   />
                 </div>
               </div>
-              <Button onClick={null} className="w-fit" type="submit">
-                Reset Password
+              <Button
+                onClick={null}
+                className="w-fit"
+                type="submit"
+                disabled={isPasswordLoading}
+              >
+                {isPasswordLoading ? "Resetting..." : "Reset Password"}
               </Button>
             </div>
           </form>
@@ -392,14 +415,24 @@ function Profile() {
               </p>
             </div>
             <div>
-              <button
-                onClick={handleLogout}
-                className={`px-6 py-[11px] flex gap-2 items-center focus:outline-primary bg-primary text-white rounded-md text-base font-semibold`}
-              >
-                {" "}
-                <img src="/icons/sign_out.svg" />
-                Logout
-              </button>
+              {isLogoutLoading ? (
+                <button
+                  onClick={handleLogout}
+                  className={`px-6 py-[11px] flex gap-2 items-center focus:outline-primary bg-primary text-white rounded-md text-base font-semibold`}
+                >
+                  {" "}
+                  Logging out...
+                </button>
+              ) : (
+                <button
+                  onClick={handleLogout}
+                  className={`px-6 py-[11px] flex gap-2 items-center focus:outline-primary bg-primary text-white rounded-md text-base font-semibold`}
+                >
+                  {" "}
+                  <img src="/icons/sign_out.svg" />
+                  Logout
+                </button>
+              )}
             </div>
           </div>
         </div>

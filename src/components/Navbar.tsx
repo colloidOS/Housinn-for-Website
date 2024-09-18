@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Logo from "../../public/icons/Logo.svg";
 import Like from "../../public/icons/heart.svg";
 import Link from "next/link";
-import { useState, useEffect, useRef } from "react";
 import {
   ChevronDown,
   LayoutDashboard,
@@ -15,18 +14,29 @@ import {
 } from "lucide-react";
 import Cookies from "js-cookie";
 
-const Navbar = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef(null);
+// Define the type for sideItems
+interface SideItem {
+  route: string;
+  link: string;
+  icon: React.ComponentType<{ className?: string }>; // icon is a React component with an optional className prop
+  id: string;
+}
+
+const Navbar: React.FC = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   };
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setDropdownOpen(false);
       }
     };
@@ -34,7 +44,6 @@ const Navbar = () => {
     document.addEventListener("click", handleClickOutside);
 
     return () => {
-      // Cleanup event listener
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
@@ -46,7 +55,7 @@ const Navbar = () => {
     }
   }, []);
 
-  const sideItems = [
+  const sideItems: SideItem[] = [
     {
       route: "Dashboard",
       link: "/dashboard",
@@ -86,7 +95,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className=" w-full flex justify-between items-center px-9 md:px-[104px] py-[14px]">
+    <nav className="w-full flex justify-between items-center px-9 lg:px-[104px] py-[14px]">
       <ul className="sm:flex gap-2 text-white hidden">
         <li>
           <Link href="#" className="hover:text-primary p-[10px]">
@@ -111,10 +120,10 @@ const Navbar = () => {
       </ul>
       <Image src={Logo} alt="Housinn logo" width={80} height={48} />
       {isLoggedIn ? (
-        <div className="relative " ref={dropdownRef}>
+        <div className="relative" ref={dropdownRef}>
           <div
             onClick={toggleDropdown}
-            className="w-fit border-[1.5px] cursor-pointer border-white px-4 text-white py-2.5 rounded-3xl flex gap-6 justify-center items-center "
+            className="w-fit border-[1.5px] cursor-pointer border-white px-4 text-white py-2.5 rounded-3xl flex gap-6 justify-center items-center"
           >
             <User />
             <ChevronDown />
@@ -137,7 +146,7 @@ const Navbar = () => {
       ) : (
         <div className="flex gap-4">
           <Image src={Like} alt="heart" width={18} height={16} />
-          <button className="bg-primary text-white px-6 py-[11px] rounded ">
+          <button className="bg-primary text-white px-6 py-[11px] rounded">
             <Link href={`/auth/`}>Sign in</Link>
           </button>
         </div>
