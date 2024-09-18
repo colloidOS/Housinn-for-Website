@@ -82,7 +82,7 @@ const AddressFields = ({
             </label>
             <select
               id={field.id}
-              className="w-full px-4 py-2 border border-gray-300 rounded"
+              className="w-full px-4 py-2 border border-gray-300 rounded select-wrapper"
               value={field.value}
               onChange={(e) => field.onChange(e.target.value)}
             >
