@@ -31,10 +31,11 @@ const ListingCard: React.FC<{ listing: Listing }> = ({ listing }) => {
   
   return (
     <div className="relative rounded-[7px] shadow-custom-property-shadow">
-      <img
+      
+       <img
         src={listing.imageUrl}
         alt={listing.title}
-        className="rounded-t-[7px] w-full"
+        className="rounded-t-[7px] w-full h-60 object-cover"
       />
       <div className="mt-4 mb-2 flex flex-col gap-2 mx-5">
         {/* Conditional tag rendering */}

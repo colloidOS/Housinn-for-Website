@@ -28,7 +28,8 @@
     ".next/types/**/*.ts",
     "src/app/dashboard/page.tsx",
     "src/app/dashboard/favorites/page.jsx",
-    "src/app/dashboard/components/layout/pricing/index.tsx"
-, "src/app/test/page.tsx"  ],
+    "src/app/dashboard/components/layout/pricing/index.tsx",
+    "src/app/test/page.tsx"
+  ],
   "exclude": ["node_modules"]
 }

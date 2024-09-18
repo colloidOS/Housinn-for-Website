@@ -2,11 +2,11 @@
 import React, { useState, useEffect } from "react";
 import ListingCard from "./ListingCard";
 import Search from "../../../../public/icons/search-listing.svg";
-import Grid_view from "../../../../public/icons/grid-view.svg";
-import List_view from "../../../../public/icons/list-view.svg";
-import Filter from "./Filter";
+import grid_view from "../../../../public/icons/grid-view.svg";
+import list_view from "../../../../public/icons/list-view.svg";
+import ListingFilter from "./ListingFilter";
 import Image from "next/image";
-import Sort from "./Sort";
+import ListingSort from "./ListingSort";
 import api from "../../../lib/api";
 import { useAuth } from "../../../context/AuthContext";
 import { TailSpin } from "react-loader-spinner"; // Import TailSpin loader
@@ -114,7 +114,10 @@ const ListingsPage: React.FC = () => {
       </div>
 
       <div className="flex  items-center gap-4 mb-5 justify-between w-full">
-        <Filter activeTag={activeTag || ""} onChange={handleFilterChange} />
+        <ListingFilter
+          activeTag={activeTag || ""}
+          onChange={handleFilterChange}
+        />
         <div className="flex relative items-center  h-full">
           <input
             type="text"
@@ -136,7 +139,7 @@ const ListingsPage: React.FC = () => {
         <button onClick={toggleView}>
           {isListView ? (
             <Image
-              src={Grid_view}
+              src={grid_view}
               alt="Grid view"
               width={86}
               height={44}
@@ -144,7 +147,7 @@ const ListingsPage: React.FC = () => {
             />
           ) : (
             <Image
-              src={List_view}
+              src={list_view}
               alt="List view"
               width={86}
               height={44}
@@ -178,7 +181,7 @@ const ListingsPage: React.FC = () => {
       ) : (
         <>
           {isListView ? (
-            <Sort listings={filteredListings} />
+            <ListingSort listings={filteredListings} />
           ) : (
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
               {filteredListings.map((listing) => (

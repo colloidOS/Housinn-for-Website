@@ -89,7 +89,10 @@ const ProfilePage: React.FC = () => {
 
     try {
       const userId = user.id;
-      const response = await api.put<UpdateUserResponse>(`/users/${userId}`, formData);
+      const response = await api.put<UpdateUserResponse>(
+        `/users/${userId}`,
+        formData
+      );
       console.log("Response from server:", response.data);
 
       if (response.data.status === "success") {
@@ -191,7 +194,9 @@ const ProfilePage: React.FC = () => {
           </button>
         </form>
 
-        {responseMessage && <p className="text-green-500 mt-4">{responseMessage}</p>}
+        {responseMessage && (
+          <p className="text-green-500 mt-4">{responseMessage}</p>
+        )}
         {error && <p className="text-red-500 mt-4">{error}</p>}
       </section>
 

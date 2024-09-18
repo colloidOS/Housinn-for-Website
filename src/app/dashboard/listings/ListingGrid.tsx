@@ -10,11 +10,11 @@ interface Listing {
   // status: string;
 }
 
-interface ListingListItemProps {
+interface ListingGridProps {
   listing: Listing;
 }
 
-const ListingListItem: React.FC<ListingListItemProps> = ({ listing }) => {
+const ListingGrid: React.FC<ListingGridProps> = ({ listing }) => {
 
   
 
@@ -43,4 +43,4 @@ const ListingListItem: React.FC<ListingListItemProps> = ({ listing }) => {
   );
 };
 
-export default ListingListItem;
+export default ListingGrid;
