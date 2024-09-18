@@ -9,6 +9,7 @@ import Icon from "../../../public/icons/ph-icon.svg";
 import Bed from "../../../public/icons/ph-bed.svg";
 import Bath from "../../../public/icons/ph-bath.svg";
 import Feet from "../../../public/icons/ph-feet.svg";
+import { useRouter } from "next/navigation";
 
 type Listing = {
   id: string;
@@ -34,8 +35,17 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, onSave }) => {
     onSave(listing.id); // Call the save function with the listing id
   };
 
+  const router = useRouter();
+
+  const handleCardClick = () => {
+    router.push(`/listings/${listing.id}`); // Navigate to the new page with the listing ID
+  };
+
   return (
-    <div className="relative rounded-[7px] shadow-custom-property-shadow">
+    <div
+      className="relative rounded-[7px] shadow-custom-property-shadow cursor-pointer"
+      onClick={handleCardClick}
+    >
       {/* Listing Image */}
       <img
         src={listing.imageUrl}

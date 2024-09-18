@@ -1,16 +1,19 @@
-import React from 'react';
+import React from "react";
 
 interface ListingFilterProps {
   activeTag: string;
   onChange: (tag: string) => void;
 }
 
-const ListingFilter: React.FC<ListingFilterProps> = ({ activeTag, onChange }) => {
+const ListingFilter: React.FC<ListingFilterProps> = ({
+  activeTag,
+  onChange,
+}) => {
   // Map between display labels and actual tag values
   const tags = [
-    { label: 'For Sale', value: 'sale' },
-    { label: 'For Rent', value: 'rent' },
-    { label: 'Short-let', value: 'shortlet' }
+    { label: "For Sale", value: "sale" },
+    { label: "For Rent", value: "rent" },
+    { label: "Short-let", value: "shortlet" },
   ];
 
   return (
@@ -20,7 +23,9 @@ const ListingFilter: React.FC<ListingFilterProps> = ({ activeTag, onChange }) =>
           key={tag.value}
           onClick={() => onChange(tag.value)}
           className={` text-[14px] rounded-[7px] p-2 ${
-            activeTag === tag.value ? 'bg-primary-100 text-primary' : ' text-gray-700'
+            activeTag === tag.value
+              ? "bg-primary-100 text-primary"
+              : " text-gray-700"
           }`}
         >
           {tag.label}

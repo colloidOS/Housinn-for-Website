@@ -1,9 +1,9 @@
+"use client";
 import React, { useState, useEffect } from "react";
-import ListingCard from "./ListingCard";
-import ListingFilter from "./ListingFilter";
+import ListingCard from "../../components/listings/ListingCard";
+import ListingFilter from "../../components/listings/ListingFilter";
 import api from "../../lib/api"; // Assuming you have an API utility like Axios for requests
 import { TailSpin } from "react-loader-spinner";
-import { useRouter } from "next/navigation";
 
 type Listing = {
   id: string;
@@ -23,11 +23,7 @@ const Listings: React.FC = () => {
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const router = useRouter(); // Initialize useRouter
 
-  const handleViewAllListings = () => {
-    router.push("/listings"); // Navigate to /listings on button click
-  };
   useEffect(() => {
     const fetchListings = async () => {
       setLoading(true);
@@ -88,7 +84,7 @@ const Listings: React.FC = () => {
       </div>
 
       {loading ? (
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center w-full">
           <TailSpin
             visible={true}
             height="80"
@@ -101,29 +97,18 @@ const Listings: React.FC = () => {
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-6 mt-4">
           {filteredListings.length > 0 ? (
-            filteredListings
-              .slice(0, 6)
-              .map((listing) => (
-                <ListingCard
-                  key={listing.id}
-                  listing={listing}
-                  onSave={handleSave}
-                />
-              ))
+            filteredListings.map((listing) => (
+              <ListingCard
+                key={listing.id}
+                listing={listing}
+                onSave={handleSave}
+              />
+            ))
           ) : (
             <p>No listings found</p>
           )}
         </div>
       )}
-
-      <div className="w-full flex justify-center">
-        <button
-          className="mt-8 px-4 py-2 bg-primary text-white rounded"
-          onClick={handleViewAllListings}
-        >
-          View all Listings
-        </button>
-      </div>
     </div>
   );
 };
