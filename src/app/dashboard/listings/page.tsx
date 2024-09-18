@@ -27,6 +27,7 @@ type Listing = {
   category: string;
 };
 
+
 const ListingsPage: React.FC = () => {
   const [activeTag, setActiveTag] = useState<string | null>("all-properties");
   const [searchTerm, setSearchTerm] = useState<string>("");
