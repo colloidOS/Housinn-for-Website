@@ -1,14 +1,14 @@
 import React from "react";
 import Image from "next/image";
-import Camera from "../../public/icons/ph-camera.svg";
-import Heart from "../../public/icons/ph-heart.svg";
-import Address from "../../public/icons/ph-address.svg";
-import Share from "../../public/icons/ph-share.svg";
-import Add from "../../public/icons/ph-add.svg";
-import Icon from "../../public/icons/ph-icon.svg";
-import Bed from "../../public/icons/ph-bed.svg";
-import Bath from "../../public/icons/ph-bath.svg";
-import Feet from "../../public/icons/ph-feet.svg";
+import Camera from "../../../public/icons/ph-camera.svg";
+import Heart from "../../../public/icons/ph-heart.svg";
+import Address from "../../../public/icons/ph-address.svg";
+import Share from "../../../public/icons/ph-share.svg";
+import Add from "../../../public/icons/ph-add.svg";
+import Icon from "../../../public/icons/ph-icon.svg";
+import Bed from "../../../public/icons/ph-bed.svg";
+import Bath from "../../../public/icons/ph-bath.svg";
+import Feet from "../../../public/icons/ph-feet.svg";
 
 type Listing = {
   id: string;

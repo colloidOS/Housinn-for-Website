@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import ListingCard from "../components/ListingCard";
-import Filter from "../components/Filter";
-import api from "../lib/api"; // Assuming you have an API utility like Axios for requests
+import ListingCard from "./ListingCard";
+import ListingFilter from "./ListingFilter";
+import api from "../../lib/api"; // Assuming you have an API utility like Axios for requests
+import { TailSpin } from "react-loader-spinner";
 
 type Listing = {
   id: string;
@@ -17,7 +18,7 @@ type Listing = {
   category: string;
 };
 
-const ListingsPage: React.FC = () => {
+const Listings: React.FC = () => {
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -75,12 +76,19 @@ const ListingsPage: React.FC = () => {
     <div className="lg:px-[104px] sm:px-14 px-6 pt-9 pb-12 w-full">
       <div className="flex flex-col md:flex-row gap-2 justify-between mb-5">
         <h2 className="text-2xl font-bold">New Listings</h2>
-        <Filter activeTag={activeTag || ""} onChange={handleFilterChange} />
+        <ListingFilter activeTag={activeTag || ""} onChange={handleFilterChange} />
       </div>
 
       {loading ? (
-        <div className="text-center">
-          <p>Loading listings...</p>
+        <div className="flex justify-center items-center">
+          <TailSpin
+            visible={true}
+            height="80"
+            width="80"
+            color="#002A50"
+            ariaLabel="tail-spin-loading"
+            radius="1"
+          />
         </div>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-6 mt-4">
@@ -109,4 +117,4 @@ const ListingsPage: React.FC = () => {
   );
 };
 
-export default ListingsPage;
+export default Listings;

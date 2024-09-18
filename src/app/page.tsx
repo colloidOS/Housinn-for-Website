@@ -6,14 +6,14 @@ import Services from "@/components/services/page";
 import HeroContainer from "@/components/HeroSectionContainer";
 import GetOurApp from "@/components/GetOurApp";
 import ChooseUsReviewContainer from "@/components/ChooseUsReviewContainer";
-import ListingsPage from "@/components/ListingsPage";
-import { listings } from "../data/listings";
+import Listings from "@/components/listings/Listings";
+
 
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col min-w-full ">
       <HeroContainer />
-      <ListingsPage listings={listings} />
+      <Listings />
       <AboutUs />
       <Services />
       <ChooseUsReviewContainer />

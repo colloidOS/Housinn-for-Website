@@ -1,11 +1,11 @@
 import React from 'react';
 
-interface FilterProps {
+interface ListingFilterProps {
   activeTag: string;
   onChange: (tag: string) => void;
 }
 
-const Filter: React.FC<FilterProps> = ({ activeTag, onChange }) => {
+const ListingFilter: React.FC<ListingFilterProps> = ({ activeTag, onChange }) => {
   // Map between display labels and actual tag values
   const tags = [
     { label: 'For Sale', value: 'sale' },
@@ -30,4 +30,4 @@ const Filter: React.FC<FilterProps> = ({ activeTag, onChange }) => {
   );
 };
 
-export default Filter;
+export default ListingFilter;

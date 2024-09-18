@@ -1,6 +1,6 @@
 // Sort.tsx
 import React, { useState } from "react";
-import ListingListItem from "./ListingListItem";
+import ListingGrid from "./ListingGrid";
 
 interface Listing {
   id: string;
@@ -104,7 +104,7 @@ const Sort: React.FC<SortProps> = ({ listings }) => {
       </thead>
       <tbody>
         {sortedListings.map((listing) => (
-          <ListingListItem key={listing.id} listing={listing} />
+          <ListingGrid key={listing.id} listing={listing} />
         ))}
       </tbody>
     </table>
