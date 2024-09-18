@@ -6,19 +6,24 @@ interface FilterProps {
 }
 
 const Filter: React.FC<FilterProps> = ({ activeTag, onChange }) => {
-  const tags = ['For Sale', 'For Rent', 'Short-let', 'Lands'];
+  // Map between display labels and actual tag values
+  const tags = [
+    { label: 'For Sale', value: 'sale' },
+    { label: 'For Rent', value: 'rent' },
+    { label: 'Short-let', value: 'shortlet' }
+  ];
 
   return (
-    <div className="flex border-[1px] border-gray-300 p-[2px] rounded-[7px] bg-background-2 gap-6">
+    <div className="flex   p-[2px] rounded-[7px] bg-background-2 gap-6">
       {tags.map((tag) => (
         <button
-          key={tag}
-          onClick={() => onChange(tag)}
+          key={tag.value}
+          onClick={() => onChange(tag.value)}
           className={` text-[14px] rounded-[7px] p-2 ${
-            activeTag === tag ? 'bg-primary-100 text-primary' : ' text-gray-700'
+            activeTag === tag.value ? 'bg-primary-100 text-primary' : ' text-gray-700'
           }`}
         >
-          {tag}
+          {tag.label}
         </button>
       ))}
     </div>

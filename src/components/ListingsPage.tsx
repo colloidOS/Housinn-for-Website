@@ -1,13 +1,70 @@
-import React, { useState } from "react";
-import { listings, Listing } from "../data/listings";
+import React, { useState, useEffect } from "react";
 import ListingCard from "../components/ListingCard";
 import Filter from "../components/Filter";
+import api from "../lib/api"; // Assuming you have an API utility like Axios for requests
+
+type Listing = {
+  id: string;
+  price: number;
+  title: string;
+  location: string;
+  beds: number;
+  baths: number;
+  area: string;
+  imageUrl: string;
+  tag: string;
+  listed: string;
+  category: string;
+};
 
 const ListingsPage: React.FC = () => {
   const [activeTag, setActiveTag] = useState<string | null>(null);
+  const [listings, setListings] = useState<Listing[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const fetchListings = async () => {
+      setLoading(true);
+      try {
+        const response = await api.get("/posts");
+        console.log("response: ", response.data.data.posts);
+        const data = response.data.data.posts.map((post: any) => ({
+          id: post.id,
+          price: post.price,
+          title: post.title,
+          location: `${post.city}, ${post.state}, ${post.address}`,
+          beds: post.bedroom,
+          baths: post.bathroom,
+          area: `${post.latitude} x ${post.longitude}`,
+          imageUrl: post.images[0] || "/images/default-image.png",
+          tag: post.type, // Ensure the `tag` corresponds to 'sale', 'rent', 'shortlet'
+          listed: new Date(post.createdAt).toLocaleDateString(),
+          category: post.category,
+        }));
+        setListings(data);
+      } catch (error) {
+        console.error("Error fetching listings:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchListings();
+  }, []);
+
+  const handleSave = async (id: string) => {
+    try {
+      const payload = { postId: id }; // Format the data as required
+      await api.post("/users/save", payload); // Send the POST request with formatted data
+      alert("Listing saved successfully!");
+    } catch (error) {
+      console.error("Error saving listing:", error);
+      alert("Failed to save listing.");
+    }
+  };
 
   const handleFilterChange = (tag: string) => {
-    setActiveTag(tag === activeTag ? null : tag); 
+    setActiveTag(tag === activeTag ? null : tag);
   };
 
   const filteredListings = activeTag
@@ -15,22 +72,39 @@ const ListingsPage: React.FC = () => {
     : listings;
 
   return (
-    <div className="lg:px-[104px] sm:px-14 px-6  pt-9 pb-12 w-full">
+    <div className="lg:px-[104px] sm:px-14 px-6 pt-9 pb-12 w-full">
       <div className="flex flex-col md:flex-row gap-2 justify-between mb-5">
         <h2 className="text-2xl font-bold">New Listings</h2>
-        <Filter activeTag={activeTag || ""} onChange={handleFilterChange}  />
+        <Filter activeTag={activeTag || ""} onChange={handleFilterChange} />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
-        {filteredListings.map((listing) => (
-          <ListingCard key={listing.id} listing={listing} />
-        ))}
+      {loading ? (
+        <div className="text-center">
+          <p>Loading listings...</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-6 mt-4">
+          {filteredListings.length > 0 ? (
+            filteredListings
+              .slice(0, 6)
+              .map((listing) => (
+                <ListingCard
+                  key={listing.id}
+                  listing={listing}
+                  onSave={handleSave}
+                />
+              ))
+          ) : (
+            <p>No listings found</p>
+          )}
+        </div>
+      )}
+
+      <div className="w-full flex justify-center">
+        <button className="mt-8 px-4 py-2 bg-primary text-white rounded">
+          View all Listings
+        </button>
       </div>
-    <div className="w-full flex justify-center">
-    <button className="mt-8 px-4 py-2 bg-primary text-white rounded">
-        View all Listings
-      </button>
-    </div>
     </div>
   );
 };
