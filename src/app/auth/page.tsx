@@ -7,9 +7,12 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 import { ClipLoader } from "react-spinners";
+import { signInFields, newAccountFields, accountTypes } from "@/data/auth";
 import Apple from "../../../public/icons/apple.svg";
 import Google from "../../../public/icons/google.svg";
 import api from "../../lib/api"; // Ensure you have your API module correctly configured
+import { TailSpin } from "react-loader-spinner";
+import Logo from "../../../public/icons/Logo.svg";
 
 const AuthPage = () => {
   const [isSignIn, setIsSignIn] = useState(true);
@@ -71,107 +74,66 @@ const AuthPage = () => {
     }
   };
 
-  const signInFields = [
-    {
-      id: "signin-email",
-      name: "email",
-      type: "email",
-      placeholder: "Enter your email",
-      label: "Email",
-    },
-    {
-      id: "signin-password",
-      name: "password",
-      type: "password",
-      placeholder: "Enter your password",
-      label: "Password",
-    },
-  ];
-
-  const newAccountFields = [
-    {
-      id: "first-name",
-      name: "firstName",
-      type: "text",
-      placeholder: "Enter your first name",
-      label: "First name",
-    },
-    {
-      id: "last-name",
-      name: "lastName",
-      type: "text",
-      placeholder: "Enter your last name",
-      label: "Last name",
-    },
-    {
-      id: "signup-email",
-      name: "email",
-      type: "email",
-      placeholder: "Enter your email",
-      label: "Email",
-    },
-    {
-      id: "signup-password",
-      name: "password",
-      type: "password",
-      placeholder: "Create password",
-      label: "Password",
-    },
-  ];
-
-  const accountTypes = [
-    { id: "account-type-individual", value: "Individual", label: "Individual" },
-    {
-      id: "account-type-property-owner",
-      value: "Property Owner",
-      label: "Property Owner",
-    },
-    { id: "account-type-agent", value: "Agent", label: "Agent" },
-    {
-      id: "account-type-property-developer",
-      value: "Property Developer",
-      label: "Property Developer",
-    },
-  ];
   return (
     <div className="relative flex w-full">
       <ToastContainer />
       <div
-        className="sticky top-0 hidden w-1/2 h-screen bg-center bg-no-repeat bg-cover xl:flex"
+        className="sticky top-0 hidden w-1/2 h-screen bg-center bg-no-repeat bg-cover xl:flex justify-center items-start pt-9"
         style={{ backgroundImage: `url('/images/sign-in.png')` }}
-      ></div>
+      >
+        <Image src={Logo} alt="Housinn logo" width={80} height={48} />
+      </div>
 
-      <div className="flex flex-col items-center h-screen xl:h-full justify-center w-full xl:w-1/2">
-        <div className="flex flex-col gap-7 px-[65px] pt-[62px] pb-[8.75rem] text-center xl:px-[7.125rem] xl:pt-9">
-          <h1 className="text-2xl font-bold">Welcome To Housinn</h1>
-          <div className="flex justify-center w-full px-[13px]">
-            <button
-              className={`px-8 py-2 text-[14px] border-b-2 focus:outline-none ${
-                isSignIn ? "border-primary" : "border-white-300"
-              }`}
-              onClick={toggleView}
-            >
-              Sign in
-            </button>
-            <button
-              className={`px-6 py-2 text-[14px] border-b-2 focus:outline-none ${
-                !isSignIn ? "border-primary" : "border-white-300"
-              }`}
-              onClick={toggleView}
-            >
-              New Account
-            </button>
-          </div>
-          <form
-            className="px-[13px] flex flex-col w-full"
-            onSubmit={handleSubmit}
+      <div className="flex flex-col gap-7 xl:pb-36  text-center px-6 md:px-48 lg:px-56 xl:px-28 xl:pt-9 xl:items-center h-screen xl:h-full justify-center w-full xl:w-1/2">
+        <div className="flex justify-center items-center xl:hidden">
+          <Image src={Logo} alt="Housinn logo" width={80} height={48} />
+        </div>{" "}
+        <h1 className="text-2xl font-bold">Welcome To Housinn</h1>
+        <div className="flex justify-center w-full px-3">
+          <button
+            className={`px-8 py-2 text-[0.875rem] border-b-2 focus:outline-none ${
+              isSignIn ? "border-primary" : "border-white-300"
+            }`}
+            onClick={toggleView}
           >
-            {isSignIn ? (
-              signInFields.map((field) => (
+            Sign in
+          </button>
+          <button
+            className={`px-6 py-2 text-[0.875rem] border-b-2 focus:outline-none ${
+              !isSignIn ? "border-primary" : "border-white-300"
+            }`}
+            onClick={toggleView}
+          >
+            New Account
+          </button>
+        </div>
+        <form className="px-3 flex flex-col w-full" onSubmit={handleSubmit}>
+          {isSignIn ? (
+            signInFields.map((field) => (
+              <div key={field.id} className="mb-3 text-left">
+                <label
+                  htmlFor={field.id}
+                  className="text-[0.875rem] font-semibold"
+                >
+                  {field.label}
+                </label>
+                <input
+                  id={field.id}
+                  name={field.name}
+                  type={field.type}
+                  placeholder={field.placeholder}
+                  required
+                  className="w-full px-2 py-2 placeholder:text-[0.875rem] border border-white-300 rounded focus:outline-none"
+                />
+              </div>
+            ))
+          ) : (
+            <>
+              {newAccountFields.map((field) => (
                 <div key={field.id} className="mb-3 text-left">
                   <label
                     htmlFor={field.id}
-                    className="text-[14px] font-semibold"
+                    className="text-[0.875rem] font-semibold"
                   >
                     {field.label}
                   </label>
@@ -180,96 +142,94 @@ const AuthPage = () => {
                     name={field.name}
                     type={field.type}
                     placeholder={field.placeholder}
-                    className="w-full px-2 py-2 placeholder:text-[14px] border border-white-300 rounded focus:outline-none"
+                    required
+                    className="w-full px-2 py-2 placeholder:text-[0.875rem] border border-white-300 rounded focus:outline-none"
                   />
                 </div>
-              ))
-            ) : (
-              <>
-                {newAccountFields.map((field) => (
-                  <div key={field.id} className="mb-3 text-left">
+              ))}
+              <div className="pt-3">
+                <p className="text-[0.875rem] font-semibold">Account Type</p>
+                <div className="grid grid-cols-2 grid-rows-2 mt-2">
+                  {accountTypes.map((type) => (
                     <label
-                      htmlFor={field.id}
-                      className="text-[14px] font-semibold"
+                      key={type.id}
+                      className="flex items-center gap-1 text-[0.875rem]"
                     >
-                      {field.label}
+                      <input
+                        type="radio"
+                        id={type.id}
+                        name="userType"
+                        value={type.value}
+                        required
+                      />
+                      {type.label}
                     </label>
-                    <input
-                      id={field.id}
-                      name={field.name}
-                      type={field.type}
-                      placeholder={field.placeholder}
-                      className="w-full px-2 py-2 placeholder:text-[14px] border border-white-300 rounded focus:outline-none"
-                    />
-                  </div>
-                ))}
-                <div className="pt-3">
-                  <p className="text-[14px] font-semibold">Account Type</p>
-                  <div className="grid grid-cols-2 grid-rows-2 mt-2">
-                    {accountTypes.map((type) => (
-                      <label
-                        key={type.id}
-                        className="flex items-center gap-1 text-[14px]"
-                      >
-                        <input
-                          type="radio"
-                          id={type.id}
-                          name="userType"
-                          value={type.value}
-                        />
-                        {type.label}
-                      </label>
-                    ))}
-                  </div>
+                  ))}
                 </div>
-              </>
+              </div>
+            </>
+          )}
+          <button
+            className="w-full py-2 mt-8 mb-4 text-base text-white bg-primary rounded"
+            disabled={loading}
+          >
+            {loading ? (
+             <div className="flex justify-center items-center">
+               <TailSpin
+                visible={true}
+                height="20"
+                width="20"
+                color="#fff"
+                ariaLabel="tail-spin-loading"
+                radius="1"
+              />
+             </div>
+            ) : isSignIn ? (
+              "Sign in"
+            ) : (
+              "Create Account"
             )}
-            <button
-              className="w-full py-2 mt-8 mb-4 text-base text-white bg-primary rounded"
-              disabled={loading}
-            >
-              {loading ? (
-                <ClipLoader color="#fff" size={20} />
-              ) : isSignIn ? (
-                "Sign in"
-              ) : (
-                "Create Account"
-              )}
-            </button>
-            {isSignIn && (
-              <div className="mb-2 text-center">
-                <a href="#" className="text-[14px] text-primary">
-                  Forgot your password?
-                </a>
-              </div>
-            )}
-            <div className="flex items-center justify-center gap-2 text-white-300">
-              <div className="flex-1 border-[1px] border-white-300"></div>
-              or
-              <div className="flex-1 border-[1px] border-white-300"></div>
+          </button>
+          {isSignIn && (
+            <div className="mb-2 text-center">
+              <a
+                href="#"
+                className="text-[0.875rem] font-semibold text-primary"
+              >
+                Forgot your password?
+              </a>
             </div>
-            <div className="flex flex-col w-full gap-[14px] pt-3">
-              <div className="flex items-center justify-between px-[7.6px] py-[6px] pr-[30px] border-[1px] rounded-[5px]">
-                <Image
-                  src={Google}
-                  width={30}
-                  height={30}
-                  alt="Sign in with Google"
-                />
-                <p className="text-[14px] font-semibold">Sign in with Google</p>
-              </div>
-              <div className="flex items-center justify-between px-[7.6px] py-[6px] pr-[34px] border-[1px] rounded-[5px]">
-                <Image
-                  src={Apple}
-                  width={30}
-                  height={30}
-                  alt="Sign in with Apple"
-                />
-                <p className="text-[14px] font-semibold">Sign in with Apple</p>
-              </div>
+          )}
+          <div className="flex items-center justify-center gap-2 text-white-300">
+            <div className="flex-1 border border-white-300"></div>
+            or
+            <div className="flex-1 border border-white-300"></div>
+          </div>
+          <div className="flex flex-col w-full gap-[0.875rem] pt-3">
+            <div className="flex items-center  justify-center space-x-4 px-2 py-[0.375rem] pr-8 border rounded-md">
+              <Image
+                src={Google}
+                width={30}
+                height={30}
+                alt="Sign in with Google"
+              />
+              <p className="text-[0.875rem] font-semibold">
+                Sign in with Google
+              </p>
             </div>
-          </form>
-        </div>
+            <div className="flex items-center justify-center space-x-4 px-2 py-[0.375rem] pr-9 border rounded-md">
+              <Image
+                src={Apple}
+                width={30}
+                height={30}
+                alt="Sign in with Apple"
+              />
+              <p className="text-[0.875rem] font-semibold">
+                Sign in with Apple
+              </p>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   );
