@@ -4,7 +4,7 @@ import ListingCard from "../../components/listings/ListingCard";
 import ListingFilter from "../../components/listings/ListingFilter";
 import api from "../../lib/api"; // Assuming you have an API utility like Axios for requests
 import { TailSpin } from "react-loader-spinner";
-import { Listing } from "@/types/listing";
+import { Listing } from "@/types";
 
 const Listings: React.FC = () => {
   const [activeTag, setActiveTag] = useState<string | null>(null);

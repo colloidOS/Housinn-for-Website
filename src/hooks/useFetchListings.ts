@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import api from "@/lib/api"; // Adjust this import path based on your project structure
-import { Listing } from "@/types/listing";
+import { Listing } from "@/types";
 
 const useFetchListings = (endpoint: string) => {
   const [listings, setListings] = useState<Listing[]>([]);

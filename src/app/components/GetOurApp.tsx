@@ -11,7 +11,7 @@ import { LeftPhone, RightPhone } from "../../../public/images";
 
 const GetOurApp: React.FC = () => {
   return (
-    <section className="grid md:grid-cols-2 grid-cols-1 justify-between md:h-[385px] h-[80vh] get-our-app lg:mx-[104px] mx-6 sm:mx-8 rounded-[36px] text-white mb-[286px] mt-16">
+    <section className="grid md:grid-cols-2 grid-cols-1 justify-between md:h-96 h-[80vh] shadow-get-our-app bg-get-our-app lg:mx-[6.5rem] mx-6 sm:mx-8 rounded-[2.25rem] text-white mb-[17.875rem] mt-[5.1875rem]">
       <div className="text-center md:text-left flex flex-col gap-5 md:pl-12 pt-14 pb-16">
         <h1 className="font-bold text-4xl">Get Our App</h1>
         <p className="font-normal text-[18px] leading-6">
