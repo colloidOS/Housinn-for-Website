@@ -11,7 +11,7 @@ import api from "../../../lib/api";
 import { useAuth } from "../../../context/AuthContext";
 import { TailSpin } from "react-loader-spinner"; // Import TailSpin loader
 import { useRouter } from "next/navigation";
-import { Listing } from "@/types/listing";
+import { Listing } from "@/types";
 
 const ListingsPage: React.FC = () => {
   const [activeTag, setActiveTag] = useState<string | null>("all-properties");
