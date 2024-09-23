@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import ListingCard from "./components/ListingCard";
-import { Search, ListView, GridView } from "../../../../public/icons";
 import ListingFilter from "./components/ListingFilter";
 import Image from "next/image";
 import ListingSort from "./components/ListingSort";
@@ -10,6 +9,7 @@ import { useAuth } from "../../../context/AuthContext";
 import { TailSpin } from "react-loader-spinner"; // Import TailSpin loader
 import { useRouter } from "next/navigation";
 import { Listing } from "@/types";
+import { GridView, ListView, Search } from "../../../../public/icons";
 
 const ListingsPage: React.FC = () => {
   const [activeTag, setActiveTag] = useState<string | null>("all-properties");

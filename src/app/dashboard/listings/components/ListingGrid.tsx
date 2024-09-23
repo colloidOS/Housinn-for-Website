@@ -1,23 +1,7 @@
 import React from "react";
-
-// Reuse the same Listing interface as defined in your Sort component
-interface Listing {
-  id: string;
-  title: string;
-  tag: string;
-  price: number;
-  listed: string;
-  // status: string;
-}
-
-interface ListingGridProps {
-  listing: Listing;
-}
+import { ListingGridProps, Listing } from "@/types";
 
 const ListingGrid: React.FC<ListingGridProps> = ({ listing }) => {
-
-  
-
   return (
     <tr className="border-b text-[14px]">
       <td className="py-2 px-4">{listing.title}</td>

@@ -20,6 +20,7 @@ export interface Review {
   message: string;
 }
 
+
 export interface ListingCardProps {
   listing: Listing;
   onSave: (id: string) => void; 
@@ -28,4 +29,10 @@ export interface ListingCardProps {
 export interface ListingFilterProps {
   activeTag: string;
   onChange: (tag: string) => void;
+}
+export interface ListingGridProps {
+  listing: Listing;
+}
+export interface ListingSortProps {
+  listings: Listing[]; // Receive listings as prop
 }

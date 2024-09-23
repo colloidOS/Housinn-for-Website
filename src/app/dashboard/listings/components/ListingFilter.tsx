@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Modal from "../../../../components/Modal"; // Assuming you have a Modal component
-import Filter_arrow from "../../../../public/icons/filter-arrow.svg";
-import Filter_arrow_2 from "../../../../public/icons/filter-arrow-2.svg";
+import { FilterArrow, FilterArrow2 } from "../../../../../public/icons";
 import Image from "next/image";
 
 interface ListingFilterProps {
@@ -88,7 +87,7 @@ const ListingFilter: React.FC<ListingFilterProps> = ({
       >
         <span className="flex gap-1">
           <Image
-            src={Filter_arrow}
+            src={FilterArrow}
             alt="filter arrow"
             width={20}
             height={20}
@@ -99,7 +98,7 @@ const ListingFilter: React.FC<ListingFilterProps> = ({
           </p>
         </span>
         <Image
-          src={Filter_arrow_2}
+          src={FilterArrow2}
           alt="filter arrow 2"
           width={20}
           height={20}

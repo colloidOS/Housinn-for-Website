@@ -18,8 +18,31 @@ import PersonCircle from "./person-circle.svg";
 import Search from "./search-listing.svg";
 import GridView from "./grid-view.svg";
 import ListView from "./list-view.svg";
-
+import Camera from "./ph-camera.svg";
+import Heart from "./ph-heart.svg";
+import PhAddress from "./ph-address.svg";
+import Share from "./ph-share.svg";
+import Add from "./ph-add.svg";
+import Icon from "./ph-icon.svg";
+import Bed from "./ph-bed.svg";
+import Bath from "./ph-bath.svg";
+import Feet from "./ph-feet.svg";
+import Menu from "./menu.svg";
+import FilterArrow from "./filter-arrow.svg";
+import FilterArrow2 from "./filter-arrow-2.svg";
 export {
+  FilterArrow,
+  FilterArrow2,
+  Camera,
+  Heart,
+  PhAddress,
+  Share,
+  Add,
+  Icon,
+  Bed,
+  Bath,
+  Feet,
+  Menu,
   GoogleDownloadButton,
   AppleDownloadButton,
   Twitter,
