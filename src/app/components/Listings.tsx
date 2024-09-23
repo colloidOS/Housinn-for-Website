@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 import useFetchListings from "../../hooks/useFetchListings"; // Custom hook for fetching listings
 import useSaveListing from "../../hooks/useSaveListing";
 import PrimaryButton from "../../components/ui/PrimaryButton";
-import Wrapper from "@/app/components/ui/Wrapper";
+import Wrapper from "@/components/ui/Wrapper";
+
 
 const Listings: React.FC = () => {
   const [activeTag, setActiveTag] = useState<string | null>(null);
