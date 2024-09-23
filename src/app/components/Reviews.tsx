@@ -10,8 +10,16 @@ import PersonCircle from "../../../public/icons/person-circle.svg";
 
 import CurvedArrowTop from "../../../public/icons/curved-arrow-top.svg";
 import CurvedArrowBottom from "../../../public/icons/curved-arrow-bottom.svg";
-
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import Image from "next/image";
+import Wrapper from "@/components/ui/Wrapper";
 
 interface Testimonial {
   image: string;
@@ -42,99 +50,83 @@ const testimonials: Testimonial[] = [
     message:
       "Buying a house from Housinn was one of the best decisions I've ever made, their services were amazing and every transaction made were seamless and transparent.",
   },
+  {
+    image: PersonCircle,
+    name: "Adeola Adebayo",
+    location: "Abeokuta, Ogun",
+    message:
+      "Housinn helped me secure my dream home with ease. The process was smooth and the customer service was top-notch!",
+  },
+  {
+    image: PersonCircle,
+    name: "Bala Ibrahim",
+    location: "Kaduna, Kaduna",
+    message:
+      "The professionalism and support from Housinn were beyond my expectations. Highly recommend them for anyone looking for a hassle-free real estate experience.",
+  },
+  {
+    image: PersonCircle,
+    name: "Nkechi Chukwuma",
+    location: "Enugu, Enugu",
+    message:
+      "From start to finish, Housinn made the home-buying process stress-free. I couldn't be happier with their service and expertise.",
+  },
 ];
 
-const CustomPrevArrow = (props: any) => {
-  const { onClick } = props;
-  return (
-    <div className="absolute top-1/2 left-0 transform -translate-y-1/2 z-10">
-      <Image
-        src={PreviousArrow}
-        width={52}
-        height={52}
-        alt="previous-arrow"
-        onClick={onClick}
-        className="cursor-pointer"
-      />
-    </div>
-  );
-};
-
-const CustomNextArrow = (props: any) => {
-  const { onClick } = props;
-  return (
-    <div className="absolute top-1/2 right-0 transform -translate-y-1/2 z-10">
-      <Image
-        src={NextArrow}
-        width={52}
-        height={52}
-        alt="next-arrow"
-        onClick={onClick}
-        className="cursor-pointer"
-      />
-    </div>
-  );
-};
-
 const Reviews: React.FC = () => {
-  const settings = {
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    arrows: true,
-    autoplay: false,
-    prevArrow: <CustomPrevArrow />,
-    nextArrow: <CustomNextArrow />,
-  };
-
   return (
-    <section className="relative flex flex-col gap-8 mx-[104px] pt-[71px] pb-[131px]">
-      <Image
-        src={CurvedArrowTop}
-        alt="image"
-        width={80}
-        height={86}
-        className="absolute top-[110px] -left-[60px] "
-      />{" "}
-      <Image
-        src={CurvedArrowBottom}
-        alt="image"
-        width={80}
-        height={86}
-        className="absolute bottom-[40px] -right-[60px] "
-      />
+    <Wrapper className="flex flex-col gap-12 md:gap-8">
       <div className="flex flex-col gap-3 w-full text-center ">
         <h1 className="font-semibold text-4xl text-primary">Reviews</h1>
         <p className="font-semibold text-2xl text-gray-600">
           Here are what some of our customers are saying
         </p>
       </div>
-      <div className="">
-        <Slider {...settings}>
+      <Carousel
+        opts={{
+          align: "start",
+        }}
+        className="w-full "
+      >
+        <CarouselContent>
           {testimonials.map((testimonial, index) => (
-            <div key={index} className="h-[400px] w-[400px]  m-2  rounded-lg ">
-              <div className="flex flex-col items-center  justify-start  px-[56px] pb-[42px] pt-[32px] w-full h-full text-center">
-                <Image
-                  src={testimonial.image}
-                  alt="image"
-                  width={100}
-                  height={100}
-                  className="mb-3"
-                />
-                <h3 className="text-lg font-semibold mb-1">
-                  {testimonial.name}
-                </h3>
-                <p className="text-sm text-gray-500 mb-4">
-                  {testimonial.location}
-                </p>
-                <p className=" text-gray-700 ">"{testimonial.message}"</p>
+            <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+              <div className="p-3 h-full">
+                <Card className="h-full">
+                  <CardContent className="shadow-custom-shadow-review flex flex-col gap-8 md:gap-4 h-full  items-center  text-center p-6">
+                    <div className="flex flex-col gap-3 justify-center items-center">
+                      <Image
+                        src={testimonial.image}
+                        alt={testimonial.name}
+                        className="rounded-full "
+                        width={100}
+                        height={100}
+                      />
+
+                      <div>
+                        <h3 className="font-bold text-[1.125rem]">
+                          {testimonial.name}
+                        </h3>
+                        <p className="text-sm text-gray-500">
+                          {testimonial.location}.
+                        </p>
+                      </div>
+                    </div>
+                    <p className="text-[1.125rem] text-primary-main">
+                      "{testimonial.message}"
+                    </p>
+                  </CardContent>
+                </Card>
               </div>
-            </div>
+            </CarouselItem>
           ))}
-        </Slider>
-      </div>
-    </section>
+        </CarouselContent>
+        <div className="w-full flex gap-12 mt-6 justify-center">
+          <CarouselPrevious />
+          <CarouselNext />
+        </div>
+      </Carousel>
+    </Wrapper>
   );
 };
 
