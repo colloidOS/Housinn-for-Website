@@ -1,9 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import ListingCard from "./components/ListingCard";
-import Search from "../../../../public/icons/search-listing.svg";
-import grid_view from "../../../../public/icons/grid-view.svg";
-import list_view from "../../../../public/icons/list-view.svg";
+import { Search, ListView, GridView } from "../../../../public/icons";
 import ListingFilter from "./components/ListingFilter";
 import Image from "next/image";
 import ListingSort from "./components/ListingSort";
@@ -125,7 +123,7 @@ const ListingsPage: React.FC = () => {
         <button onClick={toggleView}>
           {isListView ? (
             <Image
-              src={grid_view}
+              src={GridView}
               alt="Grid view"
               width={86}
               height={44}
@@ -133,7 +131,7 @@ const ListingsPage: React.FC = () => {
             />
           ) : (
             <Image
-              src={list_view}
+              src={ListView}
               alt="List view"
               width={86}
               height={44}

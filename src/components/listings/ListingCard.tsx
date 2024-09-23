@@ -10,25 +10,7 @@ import Bed from "../../../public/icons/ph-bed.svg";
 import Bath from "../../../public/icons/ph-bath.svg";
 import Feet from "../../../public/icons/ph-feet.svg";
 import { useRouter } from "next/navigation";
-
-type Listing = {
-  id: string;
-  price: number;
-  title: string;
-  location: string;
-  beds: number;
-  baths: number;
-  area: string;
-  imageUrl: string;
-  tag: string;
-  listed: string;
-  category: string;
-};
-
-interface ListingCardProps {
-  listing: Listing;
-  onSave: (id: string) => void; // Function to handle save action
-}
+import { Listing , ListingCardProps } from "@/types";
 
 const ListingCard: React.FC<ListingCardProps> = ({ listing, onSave }) => {
   const handleSaveClick = () => {

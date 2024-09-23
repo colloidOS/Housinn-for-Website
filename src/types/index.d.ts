@@ -19,3 +19,13 @@ export interface Review {
   location: string;
   message: string;
 }
+
+export interface ListingCardProps {
+  listing: Listing;
+  onSave: (id: string) => void; 
+}
+
+export interface ListingFilterProps {
+  activeTag: string;
+  onChange: (tag: string) => void;
+}
