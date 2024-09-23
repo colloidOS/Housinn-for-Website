@@ -1,12 +1,12 @@
 import Image from "next/image";
 import React from "react";
-import GoogleDownloadButton from "../../public/icons/google-bownload-button.svg";
-import AppleDownloadButton from "../../public/icons/apple-download-button.svg";
-import LeftPhone from "../../public/images/left-phone.png";
-import RightPhone from "../../public/images/right-phone.png";
-import Ellipse1 from "../../public/icons/ellipse-1.svg";
-import Ellipse2 from "../../public/icons/ellipse-2.svg";
-import Ellipse3 from "../../public/icons/ellipse-3.svg";
+import GoogleDownloadButton from "../../../public/icons/google-bownload-button.svg";
+import AppleDownloadButton from "../../../public/icons/apple-download-button.svg";
+import LeftPhone from "../../../public/images/left-phone.png";
+import RightPhone from "../../../public/images/right-phone.png";
+import Ellipse1 from "../../../public/icons/ellipse-1.svg";
+import Ellipse2 from "../../../public/icons/ellipse-2.svg";
+import Ellipse3 from "../../../public/icons/ellipse-3.svg";
 
 const GetOurApp: React.FC = () => {
   return (

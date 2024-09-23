@@ -1,6 +1,6 @@
 import React from "react";
-import WhyChooseUs from "./WhyChooseUs";
-import Reviews from "./Reviews";
+import WhyChooseUs from "../app/components/WhyChooseUs";
+import Reviews from "../app/components/Reviews";
 
 const ChooseUsReviewContainer = () => {
   return (

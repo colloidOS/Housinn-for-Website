@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Modal from "../../../components/Modal"; // Assuming you have a Modal component
+import Modal from "../../../../components/Modal"; // Assuming you have a Modal component
 import Filter_arrow from "../../../../public/icons/filter-arrow.svg";
 import Filter_arrow_2 from "../../../../public/icons/filter-arrow-2.svg";
 import Image from "next/image";
