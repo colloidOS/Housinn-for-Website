@@ -22,6 +22,8 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, onSave }) => {
   const handleCardClick = () => {
     router.push(`/listings/${listing.id}`); // Navigate to the new page with the listing ID
   };
+  
+  const formattedPrice = `₦${Number(listing.price).toLocaleString()}`;
 
   return (
     <div
@@ -74,7 +76,7 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, onSave }) => {
         />
 
         {/* Price */}
-        <h3 className="text-xl text-primary font-semibold">${listing.price}</h3>
+        <h3 className="text-xl text-primary font-semibold">{formattedPrice}</h3>
 
         {/* Title */}
         <p className="text-gray-700 text-[12px] font-semibold">
