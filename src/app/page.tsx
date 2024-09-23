@@ -4,10 +4,9 @@ import Image from "next/image";
 import AboutUs from "@/components/aboutus/page";
 import Services from "@/components/services/page";
 import HeroContainer from "@/components/HeroSectionContainer";
-import GetOurApp from "@/components/GetOurApp";
+import GetOurApp from "@/app/components/GetOurApp";
 import ChooseUsReviewContainer from "@/components/ChooseUsReviewContainer";
-import Listings from "@/components/listings/Listings";
-
+import Listings from "@/app/components/Listings";
 
 export default function Home() {
   return (

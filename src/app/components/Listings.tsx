@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import ListingCard from "./ListingCard";
-import ListingFilter from "./ListingFilter";
+import ListingCard from "../../components/listings/ListingCard";
+import ListingFilter from "../../components/listings/ListingFilter";
 import { TailSpin } from "react-loader-spinner";
 import { useRouter } from "next/navigation";
 import useFetchListings from "../../hooks/useFetchListings"; // Custom hook for fetching listings
 import useSaveListing from "../../hooks/useSaveListing";
-import PrimaryButton from "../ui/PrimaryButton";
+import PrimaryButton from "../../components/ui/PrimaryButton";
+import Wrapper from "@/components/ui/Wrapper";
+
 
 const Listings: React.FC = () => {
   const [activeTag, setActiveTag] = useState<string | null>(null);
@@ -37,7 +39,7 @@ const Listings: React.FC = () => {
     return <p>Error fetching listings.</p>;
   }
   return (
-    <div className="lg:px-[104px] sm:px-14 px-6 pt-9 pb-12 w-full">
+    <Wrapper>
       <div className="flex flex-col md:flex-row gap-2 justify-between mb-5">
         <h2 className="text-2xl font-bold">New Listings</h2>
         <ListingFilter
@@ -76,7 +78,7 @@ const Listings: React.FC = () => {
           View all Listings
         </PrimaryButton>
       </div>
-    </div>
+    </Wrapper>
   );
 };
 

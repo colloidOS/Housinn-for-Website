@@ -4,12 +4,12 @@ import React from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import NextArrow from "../../public/icons/next-arrow.svg";
-import PreviousArrow from "../../public/icons/previous-arrow.svg";
-import PersonCircle from "../../public/icons/person-circle.svg";
+import NextArrow from "../../../public/icons/next-arrow.svg";
+import PreviousArrow from "../../../public/icons/previous-arrow.svg";
+import PersonCircle from "../../../public/icons/person-circle.svg";
 
-import CurvedArrowTop from "../../public/icons/curved-arrow-top.svg";
-import CurvedArrowBottom from "../../public/icons/curved-arrow-bottom.svg";
+import CurvedArrowTop from "../../../public/icons/curved-arrow-top.svg";
+import CurvedArrowBottom from "../../../public/icons/curved-arrow-bottom.svg";
 
 import Image from "next/image";
 
