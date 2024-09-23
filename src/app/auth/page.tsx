@@ -13,6 +13,7 @@ import Google from "../../../public/icons/google.svg";
 import api from "../../lib/api"; // Ensure you have your API module correctly configured
 import { TailSpin } from "react-loader-spinner";
 import Logo from "../../../public/icons/Logo.svg";
+import PrimaryButton from "@/components/ui/PrimaryButton";
 
 const AuthPage = () => {
   const [isSignIn, setIsSignIn] = useState(true);
@@ -169,27 +170,14 @@ const AuthPage = () => {
               </div>
             </>
           )}
-          <button
-            className="w-full py-2 mt-8 mb-4 text-base text-white bg-primary rounded"
-            disabled={loading}
+          <PrimaryButton
+            loading={loading}
+            isSignIn={isSignIn}
+            className="w-full mt-8 mb-4 py-2"
           >
-            {loading ? (
-             <div className="flex justify-center items-center">
-               <TailSpin
-                visible={true}
-                height="20"
-                width="20"
-                color="#fff"
-                ariaLabel="tail-spin-loading"
-                radius="1"
-              />
-             </div>
-            ) : isSignIn ? (
-              "Sign in"
-            ) : (
-              "Create Account"
-            )}
-          </button>
+            {isSignIn ? "Sign in" : "Create Account"}
+          </PrimaryButton>
+
           {isSignIn && (
             <div className="mb-2 text-center">
               <a

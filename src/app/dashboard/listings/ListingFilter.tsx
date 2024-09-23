@@ -29,7 +29,10 @@ const FilterList: React.FC<{ label: string; options: string[] }> = ({
   </div>
 );
 
-const ListingFilter: React.FC<ListingFilterProps> = ({ activeTag, onChange }) => {
+const ListingFilter: React.FC<ListingFilterProps> = ({
+  activeTag,
+  onChange,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false); // State to handle modal visibility
 
   const tags = ["all-properties", "sale", "rent", "shortlet"];
@@ -43,11 +46,16 @@ const ListingFilter: React.FC<ListingFilterProps> = ({ activeTag, onChange }) =>
   };
 
   // Define your select options
-  const states = ['All States', 'State 1', 'State 2', 'State 3'];
-  const localities = ['All Localities', 'Locality 1', 'Locality 2', 'Locality 3'];
-  const featuredOptions = ['All Listings', 'Featured', 'Not Featured'];
-  const statusOptions = ['Any Status', 'Available', 'Sold'];
-  const squareFeetOptions = ['No Min', 'No Max', '500', '1000', '1500'];
+  const states = ["All States", "State 1", "State 2", "State 3"];
+  const localities = [
+    "All Localities",
+    "Locality 1",
+    "Locality 2",
+    "Locality 3",
+  ];
+  const featuredOptions = ["All Listings", "Featured", "Not Featured"];
+  const statusOptions = ["Any Status", "Available", "Sold"];
+  const squareFeetOptions = ["No Min", "No Max", "500", "1000", "1500"];
 
   return (
     <div className="flex items-center gap-4">
@@ -86,8 +94,8 @@ const ListingFilter: React.FC<ListingFilterProps> = ({ activeTag, onChange }) =>
             height={20}
             className="cursor-pointer"
           />
-          <p className="text-sm text-gray-700">
-            <span className="hidden xl:flex">More</span> Filters
+          <p className="text-sm text-gray-700 flex  w-full">
+            <span className="hidden xl:flex">More</span>&nbsp;Filters
           </p>
         </span>
         <Image
@@ -133,7 +141,10 @@ const ListingFilter: React.FC<ListingFilterProps> = ({ activeTag, onChange }) =>
                   {/* State */}
                   <div className="flex flex-col">
                     <label>State</label>
-                    <select name="state" className="p-2 border border-gray-500 rounded">
+                    <select
+                      name="state"
+                      className="p-2 border border-gray-500 rounded"
+                    >
                       {states.map((state, index) => (
                         <option key={index} value={state}>
                           {state}
@@ -145,7 +156,10 @@ const ListingFilter: React.FC<ListingFilterProps> = ({ activeTag, onChange }) =>
                   {/* Locality */}
                   <div className="flex flex-col">
                     <label>Locality</label>
-                    <select name="locality" className="p-2 border border-gray-500 rounded">
+                    <select
+                      name="locality"
+                      className="p-2 border border-gray-500 rounded"
+                    >
                       {localities.map((locality, index) => (
                         <option key={index} value={locality}>
                           {locality}
@@ -157,7 +171,10 @@ const ListingFilter: React.FC<ListingFilterProps> = ({ activeTag, onChange }) =>
                   {/* Featured */}
                   <div className="flex flex-col">
                     <label>Featured</label>
-                    <select name="featured" className="p-2 border border-gray-500 rounded">
+                    <select
+                      name="featured"
+                      className="p-2 border border-gray-500 rounded"
+                    >
                       {featuredOptions.map((option, index) => (
                         <option key={index} value={option}>
                           {option}
@@ -169,7 +186,10 @@ const ListingFilter: React.FC<ListingFilterProps> = ({ activeTag, onChange }) =>
                   {/* Status */}
                   <div className="flex flex-col">
                     <label>Status</label>
-                    <select name="status" className="p-2 border border-gray-500 rounded">
+                    <select
+                      name="status"
+                      className="p-2 border border-gray-500 rounded"
+                    >
                       {statusOptions.map((status, index) => (
                         <option key={index} value={status}>
                           {status}
@@ -182,14 +202,20 @@ const ListingFilter: React.FC<ListingFilterProps> = ({ activeTag, onChange }) =>
                   <div className="flex flex-col col-span-2 w-full">
                     <label>Square Feet</label>
                     <div className="square-feet w-full">
-                      <select name="minSquareFeet" className="p-2 border border-gray-500 rounded">
+                      <select
+                        name="minSquareFeet"
+                        className="p-2 border border-gray-500 rounded"
+                      >
                         {squareFeetOptions.map((option, index) => (
                           <option key={index} value={option}>
                             {option}
                           </option>
                         ))}
                       </select>
-                      <select name="maxSquareFeet" className="p-2 border border-gray-500 rounded">
+                      <select
+                        name="maxSquareFeet"
+                        className="p-2 border border-gray-500 rounded"
+                      >
                         {squareFeetOptions.map((option, index) => (
                           <option key={index} value={option}>
                             {option}
@@ -203,8 +229,16 @@ const ListingFilter: React.FC<ListingFilterProps> = ({ activeTag, onChange }) =>
                   <div className="flex flex-col">
                     <label>Date Listed</label>
                     <div className="date-listed w-full">
-                      <input type="date" name="dateListedFrom" className="p-2 border border-gray-500 rounded"/>
-                      <input type="date" name="dateListedTo" className="p-2 border border-gray-500 rounded"/>
+                      <input
+                        type="date"
+                        name="dateListedFrom"
+                        className="p-2 border border-gray-500 rounded"
+                      />
+                      <input
+                        type="date"
+                        name="dateListedTo"
+                        className="p-2 border border-gray-500 rounded"
+                      />
                     </div>
                   </div>
                 </div>

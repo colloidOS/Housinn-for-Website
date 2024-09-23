@@ -11,21 +11,7 @@ import api from "../../../lib/api";
 import { useAuth } from "../../../context/AuthContext";
 import { TailSpin } from "react-loader-spinner"; // Import TailSpin loader
 import { useRouter } from "next/navigation";
-
-type Listing = {
-  id: string;
-  price: number;
-  title: string;
-  location: string;
-  beds: number;
-  baths: number;
-  area: string;
-  imageUrl: string;
-  tag: string;
-  listed: string;
-  status: string;
-  category: string;
-};
+import { Listing } from "@/types/listing";
 
 const ListingsPage: React.FC = () => {
   const [activeTag, setActiveTag] = useState<string | null>("all-properties");
