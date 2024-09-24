@@ -16,7 +16,7 @@ const useFetchListings = (endpoint: string) => {
           id: post.id,
           price: post.price,
           title: post.title,
-          location: `${post.city}, ${post.state}, ${post.address}`,
+          location: ` ${post.address}, ${post.city}, ${post.state}`,
           beds: post.bedroom,
           baths: post.bathroom,
           area: `${post.latitude} x ${post.longitude}`,

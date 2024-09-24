@@ -30,24 +30,25 @@ const ListingDetailPage: React.FC = () => {
     fetchListing();
   }, [id]);
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center w-full">
-        <TailSpin
-          visible={true}
-          height="80"
-          width="80"
-          color="#002A50"
-          ariaLabel="tail-spin-loading"
-          radius="1"
-        />
-      </div>
-    );
-  }
 
   return (
-    <div className="px-6 lg:px-[104px] pt-9 pb-12 w-full">
-      {listing ? <ListingDetail listing={listing} /> : <p>Listing not found</p>}
+    <div className=" w-full">
+      {loading ? (
+        <div className="flex justify-center h-screen items-center w-full">
+          <TailSpin
+            visible={true}
+            height="80"
+            width="80"
+            color="#002A50"
+            ariaLabel="tail-spin-loading"
+            radius="1"
+          />
+        </div>
+      ) : listing ? (
+        <ListingDetail listing={listing} />
+      ) : (
+        <p>Listing not found</p>
+      )}
     </div>
   );
 };

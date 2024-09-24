@@ -1,9 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import ListingCard from "./components/ListingCard";
-import Search from "../../../../public/icons/search-listing.svg";
-import grid_view from "../../../../public/icons/grid-view.svg";
-import list_view from "../../../../public/icons/list-view.svg";
 import ListingFilter from "./components/ListingFilter";
 import Image from "next/image";
 import ListingSort from "./components/ListingSort";
@@ -12,6 +9,7 @@ import { useAuth } from "../../../context/AuthContext";
 import { TailSpin } from "react-loader-spinner"; // Import TailSpin loader
 import { useRouter } from "next/navigation";
 import { Listing } from "@/types";
+import { GridView, ListView, Search } from "../../../../public/icons";
 
 const ListingsPage: React.FC = () => {
   const [activeTag, setActiveTag] = useState<string | null>("all-properties");
@@ -125,7 +123,7 @@ const ListingsPage: React.FC = () => {
         <button onClick={toggleView}>
           {isListView ? (
             <Image
-              src={grid_view}
+              src={GridView}
               alt="Grid view"
               width={86}
               height={44}
@@ -133,7 +131,7 @@ const ListingsPage: React.FC = () => {
             />
           ) : (
             <Image
-              src={list_view}
+              src={ListView}
               alt="List view"
               width={86}
               height={44}

@@ -1,24 +1,7 @@
 // Sort.tsx
 import React, { useState } from "react";
 import ListingGrid from "./ListingGrid";
-
-interface Listing {
-  id: string;
-  price: number;
-  title: string;
-  location: string;
-  beds: number;
-  baths: number;
-  area: string;
-  imageUrl: string;
-  tag: string;
-  listed: string;
-  // status: string;
-}
-
-interface ListingSortProps {
-  listings: Listing[]; // Receive listings as prop
-}
+import { Listing, ListingSortProps } from "@/types";
 
 const ListingSort: React.FC<ListingSortProps> = ({ listings }) => {
   const [sortConfig, setSortConfig] = useState<{
@@ -49,7 +32,11 @@ const ListingSort: React.FC<ListingSortProps> = ({ listings }) => {
 
   const requestSort = (key: keyof Listing) => {
     let direction: "asc" | "desc" = "asc";
-    if (sortConfig && sortConfig.key === key && sortConfig.direction === "asc") {
+    if (
+      sortConfig &&
+      sortConfig.key === key &&
+      sortConfig.direction === "asc"
+    ) {
       direction = "desc";
     }
     setSortConfig({ key, direction });

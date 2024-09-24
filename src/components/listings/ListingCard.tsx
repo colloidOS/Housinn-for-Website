@@ -10,25 +10,7 @@ import Bed from "../../../public/icons/ph-bed.svg";
 import Bath from "../../../public/icons/ph-bath.svg";
 import Feet from "../../../public/icons/ph-feet.svg";
 import { useRouter } from "next/navigation";
-
-type Listing = {
-  id: string;
-  price: number;
-  title: string;
-  location: string;
-  beds: number;
-  baths: number;
-  area: string;
-  imageUrl: string;
-  tag: string;
-  listed: string;
-  category: string;
-};
-
-interface ListingCardProps {
-  listing: Listing;
-  onSave: (id: string) => void; // Function to handle save action
-}
+import { Listing , ListingCardProps } from "@/types";
 
 const ListingCard: React.FC<ListingCardProps> = ({ listing, onSave }) => {
   const handleSaveClick = () => {
@@ -40,6 +22,8 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, onSave }) => {
   const handleCardClick = () => {
     router.push(`/listings/${listing.id}`); // Navigate to the new page with the listing ID
   };
+  
+  const formattedPrice = `₦${Number(listing.price).toLocaleString()}`;
 
   return (
     <div
@@ -92,7 +76,7 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, onSave }) => {
         />
 
         {/* Price */}
-        <h3 className="text-xl text-primary font-semibold">${listing.price}</h3>
+        <h3 className="text-xl text-primary font-semibold">{formattedPrice}</h3>
 
         {/* Title */}
         <p className="text-gray-700 text-[12px] font-semibold">
