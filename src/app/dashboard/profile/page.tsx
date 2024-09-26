@@ -67,8 +67,8 @@ function Profile() {
 
   const router = useRouter();
 
-  const token = Cookies.get("token");
-  const id = Cookies.get("id");
+  const token = user?.token;
+  const id = user?.id;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -136,29 +136,23 @@ function Profile() {
 
       console.log("Response:", response.data);
       toast.success("Profile updated successfully!");
+      console.log(response.data.data.avatar);
+      const updatedAvatarURL = response.data.data.avatar; // Extract the correct Cloudinary URL from the response
 
-      // Update user in AuthContext after successful response
-      const updatedUser = {
-        ...user,
-        firstName: updatedProfile.firstName,
-        lastName: updatedProfile.lastName,
-        number: updatedProfile.number,
-        company: updatedProfile.company,
-        avatar: selectedImageFile
-          ? URL.createObjectURL(selectedImageFile)
-          : user?.avatar,
-      };
+      // Set the Cloudinary avatar URL in cookies
+      Cookies.set("avatar", updatedAvatarURL);
 
-      setUser(updatedUser); // Update context
+      // Update the user in AuthContext with the new avatar URL
+      setUser((prevUser) => ({
+        ...prevUser,
+        avatar: updatedAvatarURL, // Update the avatar in the user context
+      }));
 
       // Also save user info in cookies or localStorage based on your current strategy
       Cookies.set("firstName", updatedProfile.firstName);
       Cookies.set("lastName", updatedProfile.lastName);
       Cookies.set("number", updatedProfile.number);
       Cookies.set("company", updatedProfile.company);
-      if (selectedImageFile) {
-        Cookies.set("avatar", updatedUser.avatar!); // Store the avatar URL if needed
-      }
     } catch (error) {
       console.error("Error updating profile:", error);
       toast.error("Failed to update profile");

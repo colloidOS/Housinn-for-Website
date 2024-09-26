@@ -64,7 +64,11 @@ const UserNavbar: React.FC<UserNavbarProps> = ({ className }) => {
           <div className="flex gap-5 ">
             <Image src={Notification} alt="info" width={20} height={21} />
             <div className="w-[150px] border-[1.5px] border-gray-600 py-2.5 rounded-3xl flex gap-2.5 justify-center items-center ">
-              <img src={image} className="w-[18px] h-[18px]" alt="profile" />
+              <img
+                src={image}
+                className="w-[18px] h-[18px] rounded-full"
+                alt="profile"
+              />
 
               <span className="text-sm text-gray-600 ">{firstName}</span>
             </div>
