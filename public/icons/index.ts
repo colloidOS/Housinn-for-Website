@@ -28,6 +28,7 @@ import Bed from "./ph-bed.svg";
 import Bath from "./ph-bath.svg";
 import Feet from "./ph-feet.svg";
 import Menu from "./menu.svg";
+import Logo from "./Logo-main.svg";
 import FilterArrow from "./filter-arrow.svg";
 import FilterArrow2 from "./filter-arrow-2.svg";
 export {
@@ -63,4 +64,5 @@ export {
   Search,
   GridView,
   ListView,
+  Logo,
 };

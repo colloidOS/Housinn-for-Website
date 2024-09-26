@@ -6,7 +6,7 @@ const HeroContainer = () => {
   return (
     <div
       className="relative h-full bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: "url('/images/hero.png')" }}
+      style={{ backgroundImage: "url('/images/hero-bg.png')" }}
     >
       <Navbar />
       <HeroSection />
