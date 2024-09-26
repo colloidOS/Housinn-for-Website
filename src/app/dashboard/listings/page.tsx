@@ -1,17 +1,15 @@
-// "use client";
-// import React, { useState, useEffect } from "react";
-// import ListingCard from "./components/ListingCard";
-// import Search from "../../../../public/icons/search-listing.svg";
-// import grid_view from "../../../../public/icons/grid-view.svg";
-// import list_view from "../../../../public/icons/list-view.svg";
-// import ListingFilter from "./components/ListingFilter";
-// import Image from "next/image";
-// import ListingSort from "./components/ListingSort";
-// import api from "../../../lib/api";
-// import { useAuth } from "../../../context/AuthContext";
-// import { TailSpin } from "react-loader-spinner"; // Import TailSpin loader
-// import { useRouter } from "next/navigation";
-// import { Listing } from "@/types";
+"use client";
+import React, { useState, useEffect } from "react";
+import ListingCard from "./components/ListingCard";
+import ListingFilter from "./components/ListingFilter";
+import Image from "next/image";
+import ListingSort from "./components/ListingSort";
+import api from "../../../lib/api";
+import { useAuth } from "../../../context/AuthContext";
+import { TailSpin } from "react-loader-spinner"; // Import TailSpin loader
+import { useRouter } from "next/navigation";
+import { Listing } from "@/types";
+import { GridView, ListView, Search } from "../../../../public/icons";
 
 // const ListingsPage: React.FC = () => {
 //   const [activeTag, setActiveTag] = useState<string | null>("all-properties");
@@ -99,49 +97,46 @@
 //         <h1 className="font-bold text-2xl mb-4">My Listings</h1>
 //       </div>
 
-//       <div className="flex  items-center gap-4 mb-5 justify-between w-full">
-//         <ListingFilter
-//           activeTag={activeTag || ""}
-//           onChange={handleFilterChange}
-//         />
-//         <div className="flex relative items-center  h-full">
-//           <input
-//             type="text"
-//             placeholder="Search listings..."
-//             value={searchTerm}
-//             onChange={handleSearchInputChange}
-//             className="pl-7 flex flex-1  justify-end pr-1 p-2 h-11 border border-gray-300  rounded w-full placeholder:text-sm text-sm  placeholder:text-center"
-//           />
-//           <button className="rounded-[5px] absolute left-2">
-//             <Image
-//               src={Search}
-//               alt="image"
-//               width={20}
-//               height={20}
-//               className="cursor-pointer opacity-60"
-//             />
-//           </button>
-//         </div>
-//         <button onClick={toggleView}>
-//           {isListView ? (
-//             <Image
-//               src={grid_view}
-//               alt="Grid view"
-//               width={86}
-//               height={44}
-//               className="cursor-pointer"
-//             />
-//           ) : (
-//             <Image
-//               src={list_view}
-//               alt="List view"
-//               width={86}
-//               height={44}
-//               className="cursor-pointer"
-//             />
-//           )}
-//         </button>
-//       </div>
+<div className="flex  items-center gap-4 mb-5 justify-between w-full">
+  <ListingFilter activeTag={activeTag || ""} onChange={handleFilterChange} />
+  <div className="flex relative items-center  h-full">
+    <input
+      type="text"
+      placeholder="Search listings..."
+      value={searchTerm}
+      onChange={handleSearchInputChange}
+      className="pl-7 flex flex-1  justify-end pr-1 p-2 h-11 border border-gray-300  rounded w-full placeholder:text-sm text-sm  placeholder:text-center"
+    />
+    <button className="rounded-[5px] absolute left-2">
+      <Image
+        src={Search}
+        alt="image"
+        width={20}
+        height={20}
+        className="cursor-pointer opacity-60"
+      />
+    </button>
+  </div>
+  <button onClick={toggleView}>
+    {isListView ? (
+      <Image
+        src={GridView}
+        alt="Grid view"
+        width={86}
+        height={44}
+        className="cursor-pointer"
+      />
+    ) : (
+      <Image
+        src={ListView}
+        alt="List view"
+        width={86}
+        height={44}
+        className="cursor-pointer"
+      />
+    )}
+  </button>
+</div>;
 
 //       {loading ? (
 //         <div className="flex justify-center items-center min-h-[200px]">

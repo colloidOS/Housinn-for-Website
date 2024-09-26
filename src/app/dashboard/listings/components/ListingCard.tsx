@@ -1,29 +1,14 @@
 import React from "react";
 import Image from "next/image"; // Import for Next.js optimized image handling
-import Camera from "../../../../public/icons/ph-camera.svg";
-import Heart from "../../../../public/icons/ph-heart.svg";
-import Address from "../../../../public/icons/ph-address.svg";
-import Share from "../../../../public/icons/ph-share.svg";
-import Add from "../../../../public/icons/ph-add.svg";
-import Icon from "../../../../public/icons/ph-icon.svg";
-import Bed from "../../../../public/icons/ph-bed.svg";
-import Bath from "../../../../public/icons/ph-bath.svg";
-import Feet from "../../../../public/icons/ph-feet.svg";
-import Menu from "../../../../public/icons/menu.svg";
+import {
+  Camera,
+  Menu,
+  Bed,
+  Bath,
+  Feet,
+} from "../../../../../public/icons";
+import { Listing } from "@/types";
 
-// Define the Listing interface
-interface Listing {
-  id: string;
-  title: string;
-  tag: string; // Restrict tags to specific strings
-  price: number;
-  listed: string;
-
-  imageUrl: string;
-  beds: number;
-  baths: number;
-  area: string;
-}
 
 const ListingCard: React.FC<{ listing: Listing }> = ({ listing }) => {
   // Formatting the price as a currency string
