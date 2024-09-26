@@ -15,6 +15,7 @@ import Ellipse3 from "./ellipse-3.svg";
 import CurvedArrowTop from "./curved-arrow-top.svg";
 import CurvedArrowBottom from "./curved-arrow-bottom.svg";
 import PersonCircle from "./person-circle.svg";
+import Logo from "./Logo-main.svg";
 
 export {
   GoogleDownloadButton,
@@ -33,5 +34,6 @@ export {
   Ellipse3,
   CurvedArrowTop,
   CurvedArrowBottom,
-  PersonCircle
+  PersonCircle,
+  Logo,
 };

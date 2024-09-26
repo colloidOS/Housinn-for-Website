@@ -13,6 +13,7 @@ import Cookies from "js-cookie";
 import ProfileFields from "./ProfileFields";
 import PasswordFields from "./PasswordFields";
 import AddressFields from "./AddressFields";
+import { useAuth } from "@/context/AuthContext";
 
 function Profile() {
   const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null); // Correct typing
@@ -54,6 +55,7 @@ function Profile() {
       reader.readAsDataURL(file);
     }
   };
+  const { user, setUser } = useAuth();
 
   const clearCookie = (name: string) => {
     document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
@@ -62,14 +64,6 @@ function Profile() {
   const triggerImageUpload = () => {
     document.getElementById("profileImageInput")?.click();
   };
-
-  // const handleImageUpload = (e) => {
-  //   const file = e.target.files[0]; // Get the selected file
-  //   if (file) {
-  //     setSelectedImageFile(file); // Store the actual file for submission
-  //     setSelectedImage(URL.createObjectURL(file)); // Store the image URL for preview
-  //   }
-  // };
 
   const router = useRouter();
 
@@ -131,18 +125,40 @@ function Profile() {
     if (selectedImageFile) {
       formData.append("avatar", selectedImageFile);
     }
-    console.log(selectedImageFile);
 
     try {
-      const response = await api.put(`/users/${id}`, formData, {
+      const response = await api.put(`/users/${user?.id}`, formData, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${user?.token}`,
           "Content-Type": "multipart/form-data", // Required for file uploads
         },
       });
 
       console.log("Response:", response.data);
       toast.success("Profile updated successfully!");
+
+      // Update user in AuthContext after successful response
+      const updatedUser = {
+        ...user,
+        firstName: updatedProfile.firstName,
+        lastName: updatedProfile.lastName,
+        number: updatedProfile.number,
+        company: updatedProfile.company,
+        avatar: selectedImageFile
+          ? URL.createObjectURL(selectedImageFile)
+          : user?.avatar,
+      };
+
+      setUser(updatedUser); // Update context
+
+      // Also save user info in cookies or localStorage based on your current strategy
+      Cookies.set("firstName", updatedProfile.firstName);
+      Cookies.set("lastName", updatedProfile.lastName);
+      Cookies.set("number", updatedProfile.number);
+      Cookies.set("company", updatedProfile.company);
+      if (selectedImageFile) {
+        Cookies.set("avatar", updatedUser.avatar!); // Store the avatar URL if needed
+      }
     } catch (error) {
       console.error("Error updating profile:", error);
       toast.error("Failed to update profile");
