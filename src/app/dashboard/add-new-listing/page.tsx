@@ -15,9 +15,11 @@ import {
   amenities,
   propertyTypes,
 } from "../../../data/new-listing"; // Adjust the path as needed
+import { title } from "process";
 
 interface FormData {
-  images: File | null;
+  title: string;
+  images: FileList | null; // Allow multiple files
   state: string;
   city: string;
   type: string;
@@ -33,6 +35,7 @@ interface FormData {
 
 function AddNewListing() {
   const [formData, setFormData] = useState<FormData>({
+    title: "",
     images: null,
     state: "",
     city: "",
@@ -75,25 +78,26 @@ function AddNewListing() {
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    if (file && (file.type === "image/jpeg" || file.type === "video/mp4")) {
+    const files = e.dataTransfer.files; // FileList
+    if (files.length > 0 && (files[0].type === "image/jpeg" || files[0].type === "video/mp4")) {
       setFormData((prevState) => ({
         ...prevState,
-        images: file,
+        images: files, // Set the FileList here
       }));
     }
   };
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file && (file.type === "image/jpeg" || file.type === "video/mp4")) {
+    const files = e.target.files; // This is a FileList
+    if (files) {
       setFormData((prevState) => ({
         ...prevState,
-        images: file,
+        images: files, // Save the FileList to the state
       }));
     }
   };
 
+  
   const handleRemoveFile = () => {
     setFormData((prevState) => ({
       ...prevState,
@@ -103,36 +107,72 @@ function AddNewListing() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-
+  
+    // Creating a new FormData object to handle both text and file inputs
+    const formDataToSend = new FormData();
     const formatString = (str: string) =>
       str.toLowerCase().replace(/\s+/g, "_");
-
-    const payload = {
-      postData: {
-        price: Number(formData.price),
-        address: formData.address,
-        city: formatString(formData.city),
-        state: formatString(formData.state),
-        type: formData.type,
-        category: formData.category,
-        bedroom: Number(formData.bedroom),
-      },
-      postDetail: {
-        propertySize: formData.propertySize,
-        desc: formData.description,
-        landmark: formData.landmark,
-      },
-    };
-
+    
+    // Append text fields
+    formDataToSend.append('title', formData.title);
+    formDataToSend.append('price', formData.price);
+    formDataToSend.append('address', formData.address);
+    formDataToSend.append('city', formatString(formData.city));
+    formDataToSend.append('state', formatString(formData.state));
+    formDataToSend.append('bedroom', formData.bedroom);
+    formDataToSend.append('type', formData.type);
+    formDataToSend.append('desc', formData.description);
+    formDataToSend.append('category', formData.category);
+    // Append images (assuming formData.images is an array of File objects)
+    if (formData.images && formData.images.length > 0) {
+      Array.from(formData.images).forEach((file, idx) => {
+        formDataToSend.append(`postData[images][${idx}]`, file);
+      });
+    }
+  
     try {
-      const response = await api.post("/posts", payload);
-      toast.success("Post created successfully!");
+      // Send POST request with formData
+      const response = await api.post('/posts', formDataToSend, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+  
+      toast.success('Post created successfully!');
+    
     } catch (error) {
-      toast.error(
-        "An error occurred while creating the post. Please try again."
-      );
+      console.error('Error creating post:', error);
+      toast.error('An error occurred while creating the post. Please try again.');
     }
   };
+  
+  // const handleSubmit = async (e: FormEvent) => {
+  //   e.preventDefault();
+
+  //   const formatString = (str: string) =>
+  //     str.toLowerCase().replace(/\s+/g, "_");
+
+  //   const payload = {
+  //     title: formData.title,
+  //     price: Number(formData.price),
+  //     address: formData.address,
+  //     city: formatString(formData.city),
+  //     state: formatString(formData.state),
+  //     type: formData.type,
+  //     category: formData.category,
+  //     bedroom: Number(formData.bedroom),
+  //     desc: formData.description,
+  //   };
+  //   console.log("payload", payload);
+  //   try {
+  //     const response = await api.post("/posts", payload);
+  //     toast.success("Post created successfully!");
+  //   } catch (error) {
+  //     toast.error(
+  //       "An error occurred while creating the post. Please try again."
+  //     );
+  //   }
+  // };
 
   const handleNavigate = () => {
     const router = useRouter();
@@ -168,7 +208,7 @@ function AddNewListing() {
                         type="radio"
                         name="category"
                         value={category.value}
-                        required
+                        // required
                         className="border border-gray-400 rounded-full checked:bg-gray-500 checked:border-transparent focus:outline-none focus:ring-0 focus:ring-offset-2"
                         onChange={(e) =>
                           setFormData((prevState) => ({
@@ -195,7 +235,7 @@ function AddNewListing() {
                         name="type"
                         value={formData.type} // Corrected to use formData.type
                         onChange={handleChange}
-                        required
+                        // required
                       >
                         <option value="">Select a Property Type</option>
                         {propertyTypes.map(
@@ -278,7 +318,7 @@ function AddNewListing() {
                         <select
                           className="w-[300px] bg-white p-[10px] border border-gray-300 rounded-md"
                           name="state"
-                          required
+                          // required
                           value={formData.state}
                           onChange={handleStateChange}
                         >
@@ -299,7 +339,7 @@ function AddNewListing() {
                         <select
                           className="w-[300px] bg-white p-[10px] border border-gray-300 rounded-md"
                           name="city"
-                          required
+                          // required
                           value={formData.city}
                           onChange={handleCityChange}
                           disabled={!formData.state}
@@ -322,7 +362,7 @@ function AddNewListing() {
                       <input
                         type="text"
                         name="address"
-                        required
+                        // required
                         placeholder="Street Address"
                         className="p-[10px] w-[300px] border border-gray-300 rounded-md"
                         value={formData.address}
@@ -342,18 +382,34 @@ function AddNewListing() {
                 </div>
               </div>
               <div className="flex flex-col gap-6">
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-semibold">
-                    Price of Property <span className="text-red-600">*</span>
-                  </label>
-                  <input
-                    type="number"
-                    name="price"
-                    required
-                    className="p-[10px] w-[300px] border border-gray-300 rounded-md"
-                    value={formData.price}
-                    onChange={handleChange}
-                  />
+                <div className="flex gap-12">
+                  {" "}
+                  <div className="flex flex-col gap-1">
+                    <label className="text-sm font-semibold">
+                      Title <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="title"
+                      // required
+                      className="p-[10px] w-[300px] border border-gray-300 rounded-md"
+                      value={formData.title}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-sm font-semibold">
+                      Price of Property <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      type="number"
+                      name="price"
+                      // required
+                      className="p-[10px] w-[300px] border border-gray-300 rounded-md"
+                      value={formData.price}
+                      onChange={handleChange}
+                    />
+                  </div>
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="text-sm font-semibold">Description</label>
@@ -361,7 +417,7 @@ function AddNewListing() {
                     name="description"
                     className="p-[10px] w-[520px] h-[110px] resize-none border border-gray-300 rounded-md"
                     value={formData.description}
-                    required
+                    // required
                     onChange={handleChange}
                   ></textarea>
                 </div>
@@ -382,17 +438,18 @@ function AddNewListing() {
               <Image src={Upload} width={42} height={42} alt="Upload Icon" />
               <span>
                 {formData.images ? (
-                  <div className="flex items-center justify-center gap-7 w-[540px]">
-                    <span className="text-base">
-                      Filename: {formData.images.name}
-                    </span>
-                    <button
-                      onClick={handleRemoveFile}
-                      className="text-red-500 text-sm"
-                    >
-                      X
-                    </button>
-                  </div>
+                 <div className="flex items-center justify-center gap-7 w-[540px]">
+                 <span className="text-base">
+                   Filename: {formData.images && formData.images.length > 0 ? formData.images[0].name : 'No file selected'}
+                 </span>
+                 <button
+                   onClick={handleRemoveFile}
+                   className="text-red-500 text-sm"
+                 >
+                   X
+                 </button>
+               </div>
+               
                 ) : (
                   <p className="text-center max-w-[330px]">
                     Drag your documents, photos, or videos here to start
@@ -407,6 +464,7 @@ function AddNewListing() {
                 id="fileUpload"
                 accept=".jpg,.jpeg,.mp4"
                 className="hidden"
+                multiple  // Allow multiple file uploads
                 onChange={handleFileChange}
               />
               <label
@@ -425,11 +483,11 @@ function AddNewListing() {
         <section className="w-full flex gap-[329px] justify-center">
           <button
             onClick={handleNavigate}
-            className="border border-secondary py-[11px] px-6 rounded-md text-secondary bg-secondary/10"
+            className="border border-secondary py-[11px] px-6 rounded-md text-white bg-blue-900"
           >
             Save and Resume
           </button>
-          <Button type="submit" onClick={null}>
+          <Button disabled={null} type="submit" onClick={null}>
             List Property
           </Button>
         </section>

@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <div className="flex min-h-screen flex-col min-w-full ">
       <HeroContainer />
-      <Listings />
+      <Listings  shouldSlice={true}/>
       <AboutUs />
       <Services />
       <ChooseUsReviewContainer />

@@ -1,4 +1,6 @@
+import { AddNewListingFormData } from "@/types";
 export type Listing = {
+  isSaved: boolean;
   id: string;
   price: number;
   title: string;
@@ -32,10 +34,10 @@ export interface Review {
   message: string;
 }
 
-
 export interface ListingCardProps {
   listing: Listing;
-  onSave: (id: string) => void; 
+  onSave: (id: string) => void;
+  isSaved: boolean;
 }
 
 export interface ListingFilterProps {
@@ -47,4 +49,23 @@ export interface ListingGridProps {
 }
 export interface ListingSortProps {
   listings: Listing[]; // Receive listings as prop
+}
+interface ListingsProps {
+  shouldSlice?: boolean; 
+}
+
+export interface AddNewListingFormData {
+  title: string;
+  images: FileList | null;
+  state: string;
+  city: string;
+  type: string;
+  amenities: string[];
+  propertySize: string;
+  bedroom: string;
+  price: string;
+  description: string;
+  category: string;
+  address: string;
+  landmark: string;
 }
