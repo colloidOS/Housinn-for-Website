@@ -56,7 +56,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
             e.stopPropagation();
             onSave(listing.id); // Pass the listing ID for saving/unsaving
           }}
-          className="absolute top-[16rem] right-4 text-primary"
+          className="absolute top-[16rem] right-4 text-secondary"
         >
           {isSaved ? <FaHeart  /> : <FaRegHeart />}
         </div>
