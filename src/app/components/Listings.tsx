@@ -4,12 +4,12 @@ import ListingCard from "../../components/listings/ListingCard";
 import ListingFilter from "../../components/listings/ListingFilter";
 import { TailSpin } from "react-loader-spinner";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext"; // Import authentication context
+import { toast } from "react-toastify"; // Import toast notifications
 import useFetchListings from "../../hooks/useFetchListings";
 import useSaveListing from "../../hooks/useSaveListing";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import Wrapper from "@/components/ui/Wrapper";
-import { useAuth } from "@/context/AuthContext"; // Import authentication context
-import { toast } from "react-toastify"; // Import toast notifications
 
 interface ListingsProps {
   shouldSlice?: boolean; // This prop controls whether listings are sliced or not

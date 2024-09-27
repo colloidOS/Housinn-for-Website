@@ -1,10 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import Heart from "../../../public/icons/ph-heart.svg";
-import Address from "../../../public/icons/ph-address.svg";
-import Bed from "../../../public/icons/ph-bed.svg";
-import Bath from "../../../public/icons/ph-bath.svg";
-import Feet from "../../../public/icons/ph-feet.svg";
+import { PhAddress,Bed,Bath,Feet } from "../../../public/icons";
 import { useRouter } from "next/navigation";
 import { ListingCardProps } from "@/types";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
@@ -69,7 +65,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
           {listing.title}
         </p>
         <div className="flex items-start gap-1">
-          <Image src={Address} width={15} height={15} alt="Address icon" />
+          <Image src={PhAddress} width={15} height={15} alt="Address icon" />
           <p className="text-gray-500 text-[12px]">{listing.location}</p>
         </div>
         <div className="flex gap-2 text-gray-500 text-[12px]">
