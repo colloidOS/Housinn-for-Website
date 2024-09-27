@@ -1,29 +1,57 @@
+"use client"
 import React, { useState } from "react";
 import ListingCard from "../../components/listings/ListingCard";
 import ListingFilter from "../../components/listings/ListingFilter";
 import { TailSpin } from "react-loader-spinner";
 import { useRouter } from "next/navigation";
-import useFetchListings from "../../hooks/useFetchListings"; // Custom hook for fetching listings
+import { useAuth } from "@/context/AuthContext"; // Import authentication context
+import { toast } from "react-toastify"; // Import toast notifications
+import useFetchListings from "../../hooks/useFetchListings";
 import useSaveListing from "../../hooks/useSaveListing";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import Wrapper from "@/components/ui/Wrapper";
 
+interface ListingsProps {
+  shouldSlice?: boolean; // This prop controls whether listings are sliced or not
+}
 
-const Listings: React.FC = () => {
+const Listings: React.FC<ListingsProps> = ({ shouldSlice = true }) => {
   const [activeTag, setActiveTag] = useState<string | null>(null);
-  const { listings, loading, error } = useFetchListings("/posts");
+  const { listings, loading, error, setListings } = useFetchListings("/posts");
   const saveListing = useSaveListing();
   const router = useRouter();
+  const { user } = useAuth();
 
   const handleViewAllListings = () => {
-    router.push("/listings"); // Navigate to /listings on button click
+    router.push("/listings");
   };
 
-  const handleSave = async (id: string) => {
+  const handleSave = async (id: string, isSaved: boolean) => {
+    if (!user) {
+      toast.error("You need to sign in to save listings.");
+      return;
+    }
+
+    const updatedListings = listings.map((listing) =>
+      listing.id === id ? { ...listing, isSaved: !isSaved } : listing
+    );
+    setListings(updatedListings);
+
     try {
       await saveListing(id);
+      if (isSaved) {
+        toast.info("Listing unsaved.");
+      } else {
+        toast.success("Listing saved.");
+      }
     } catch (error) {
-      console.error("Error saving listing:", error);
+      console.error("Error saving/un-saving listing:", error);
+      toast.error("There was an error saving the listing.");
+
+      const rollbackListings = listings.map((listing) =>
+        listing.id === id ? { ...listing, isSaved: isSaved } : listing
+      );
+      setListings(rollbackListings);
     }
   };
 
@@ -35,9 +63,15 @@ const Listings: React.FC = () => {
     ? listings.filter((listing) => listing.tag === activeTag)
     : listings;
 
+  // Conditionally slice the listings if shouldSlice is true
+  const displayedListings = shouldSlice
+    ? filteredListings.slice(0, 6)
+    : filteredListings;
+
   if (error) {
     return <p>Error fetching listings.</p>;
   }
+
   return (
     <Wrapper>
       <div className="flex flex-col md:flex-row gap-2 justify-between mb-5">
@@ -47,39 +81,41 @@ const Listings: React.FC = () => {
           onChange={handleFilterChange}
         />
       </div>
+
       {loading ? (
         <div className="flex justify-center items-center h-96">
           <TailSpin visible={true} height="80" width="80" color="#002A50" />
         </div>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-6 mt-4">
-          {filteredListings.length > 0 ? (
-            filteredListings
-              .slice(0, 6)
-              .map((listing) => (
-                <ListingCard
-                  key={listing.id}
-                  listing={listing}
-                  onSave={handleSave}
-                />
-              ))
+          {displayedListings.length > 0 ? (
+            displayedListings.map((listing) => (
+              <ListingCard
+                key={listing.id}
+                listing={listing}
+                onSave={() => handleSave(listing.id, listing.isSaved)}
+                isSaved={listing.isSaved}
+              />
+            ))
           ) : (
             <p>No listings found</p>
           )}
         </div>
       )}
 
-      <div className="w-full flex justify-center">
-        <PrimaryButton
-          disabled={loading}
-          onClick={handleViewAllListings}
-          className="mt-8 px-4 py-2"
-        >
-          View all Listings
-        </PrimaryButton>
-      </div>
+      {shouldSlice && (
+        <div className="w-full flex justify-center">
+          <PrimaryButton
+            onClick={handleViewAllListings}
+            className="mt-8 px-4 py-2"
+          >
+            View all Listings
+          </PrimaryButton>
+        </div>
+      )}
     </Wrapper>
   );
 };
 
 export default Listings;
+

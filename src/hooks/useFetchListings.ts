@@ -24,7 +24,9 @@ const useFetchListings = (endpoint: string) => {
           tag: post.type,
           listed: new Date(post.createdAt).toLocaleDateString(),
           category: post.category,
+          isSaved: post.isSaved,
         }));
+        
         setListings(data);
       } catch (err) {
         setError("Failed to fetch listings");
@@ -37,7 +39,7 @@ const useFetchListings = (endpoint: string) => {
     fetchListings();
   }, [endpoint]);
 
-  return { listings, loading, error };
+  return { listings, setListings, loading, error };
 };
 
 export default useFetchListings;

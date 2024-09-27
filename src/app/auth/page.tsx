@@ -172,6 +172,7 @@ const AuthPage = () => {
           )}
           <PrimaryButton
             loading={loading}
+            disabled={loading}
             isSignIn={isSignIn}
             className="w-full mt-8 mb-4 py-2"
           >

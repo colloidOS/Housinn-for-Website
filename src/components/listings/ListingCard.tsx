@@ -1,28 +1,21 @@
 import React from "react";
 import Image from "next/image";
-import Camera from "../../../public/icons/ph-camera.svg";
-import Heart from "../../../public/icons/ph-heart.svg";
-import Address from "../../../public/icons/ph-address.svg";
-import Share from "../../../public/icons/ph-share.svg";
-import Add from "../../../public/icons/ph-add.svg";
-import Icon from "../../../public/icons/ph-icon.svg";
-import Bed from "../../../public/icons/ph-bed.svg";
-import Bath from "../../../public/icons/ph-bath.svg";
-import Feet from "../../../public/icons/ph-feet.svg";
+import { PhAddress,Bed,Bath,Feet } from "../../../public/icons";
 import { useRouter } from "next/navigation";
-import { Listing , ListingCardProps } from "@/types";
+import { ListingCardProps } from "@/types";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 
-const ListingCard: React.FC<ListingCardProps> = ({ listing, onSave }) => {
-  const handleSaveClick = () => {
-    onSave(listing.id); // Call the save function with the listing id
-  };
-
+const ListingCard: React.FC<ListingCardProps> = ({
+  listing,
+  onSave,
+  isSaved,
+}) => {
   const router = useRouter();
 
   const handleCardClick = () => {
-    router.push(`/listings/${listing.id}`); // Navigate to the new page with the listing ID
+    router.push(`/listings/${listing.id}`);
   };
-  
+
   const formattedPrice = `₦${Number(listing.price).toLocaleString()}`;
 
   return (
@@ -30,14 +23,12 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, onSave }) => {
       className="relative rounded-[7px] shadow-custom-property-shadow cursor-pointer"
       onClick={handleCardClick}
     >
-      {/* Listing Image */}
       <img
         src={listing.imageUrl}
         alt={listing.title}
         className="rounded-t-[7px] w-full h-60 object-cover"
       />
 
-      {/* Listing Details */}
       <div className="mt-4 mb-2 flex flex-col gap-2 mx-5">
         {/* Tag */}
         <span
@@ -58,38 +49,25 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, onSave }) => {
             : "Short-Let"}
         </span>
 
-        {/* Icon Overlays */}
-        <Image
-          src={Camera}
-          alt="Camera icon"
-          width={15}
-          height={15}
-          className="absolute top-[14.5rem] left-1 cursor-pointer"
-        />
-        <Image
-          src={Heart}
-          alt="Heart icon"
-          width={18}
-          height={18}
-          className="absolute top-[14.5rem] right-1 cursor-pointer"
-          onClick={handleSaveClick} // Add onClick handler for save action
-        />
+        {/* Heart Icon for Saving */}
 
-        {/* Price */}
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            onSave(listing.id); // Pass the listing ID for saving/unsaving
+          }}
+          className="absolute top-[16rem] right-4 text-secondary"
+        >
+          {isSaved ? <FaHeart  /> : <FaRegHeart />}
+        </div>
         <h3 className="text-xl text-primary font-semibold">{formattedPrice}</h3>
-
-        {/* Title */}
         <p className="text-gray-700 text-[12px] font-semibold">
           {listing.title}
         </p>
-
-        {/* Location */}
         <div className="flex items-start gap-1">
-          <Image src={Address} width={15} height={15} alt="Address icon" />
+          <Image src={PhAddress} width={15} height={15} alt="Address icon" />
           <p className="text-gray-500 text-[12px]">{listing.location}</p>
         </div>
-
-        {/* Beds, Baths, Area */}
         <div className="flex gap-2 text-gray-500 text-[12px]">
           <span className="flex gap-1">
             <Image src={Bed} alt="Bed icon" width={15} height={15} />
@@ -103,15 +81,6 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, onSave }) => {
             <Image src={Feet} alt="Area icon" width={15} height={15} />
             {listing.area} sq.ft
           </span>
-        </div>
-
-        {/* Footer Icons */}
-        <div className="flex pt-3 justify-between w-full">
-          <Image src={Icon} alt="Category icon" width={85} height={32} />
-          <div className="flex gap-2">
-            <Image src={Share} alt="Share icon" width={18} height={18} />
-            <Image src={Add} alt="Add icon" width={18} height={18} />
-          </div>
         </div>
       </div>
     </div>
