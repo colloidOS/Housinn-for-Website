@@ -10,6 +10,7 @@ import { TailSpin } from "react-loader-spinner"; // Import TailSpin loader
 import { useRouter } from "next/navigation";
 import { Listings } from "@/types";
 import { GridView, ListView, Search } from "../../../../../public/icons";
+import { ListingsPageProps } from "@/types";
 
 const ListingsPage: React.FC<ListingsPageProps> = ({
   getRoute,
