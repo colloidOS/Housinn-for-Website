@@ -79,7 +79,10 @@ function AddNewListing() {
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const files = e.dataTransfer.files; // FileList
-    if (files.length > 0 && (files[0].type === "image/jpeg" || files[0].type === "video/mp4")) {
+    if (
+      files.length > 0 &&
+      (files[0].type === "image/jpeg" || files[0].type === "video/mp4")
+    ) {
       setFormData((prevState) => ({
         ...prevState,
         images: files, // Set the FileList here
@@ -97,7 +100,6 @@ function AddNewListing() {
     }
   };
 
-  
   const handleRemoveFile = () => {
     setFormData((prevState) => ({
       ...prevState,
@@ -107,45 +109,48 @@ function AddNewListing() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-  
+
     // Creating a new FormData object to handle both text and file inputs
     const formDataToSend = new FormData();
     const formatString = (str: string) =>
       str.toLowerCase().replace(/\s+/g, "_");
-    
+
     // Append text fields
-    formDataToSend.append('title', formData.title);
-    formDataToSend.append('price', formData.price);
-    formDataToSend.append('address', formData.address);
-    formDataToSend.append('city', formatString(formData.city));
-    formDataToSend.append('state', formatString(formData.state));
-    formDataToSend.append('bedroom', formData.bedroom);
-    formDataToSend.append('type', formData.type);
-    formDataToSend.append('desc', formData.description);
-    formDataToSend.append('category', formData.category);
-    // Append images (assuming formData.images is an array of File objects)
+    formDataToSend.append("title", formData.title);
+    formDataToSend.append("price", formData.price);
+    formDataToSend.append("address", formData.address);
+    formDataToSend.append("city", formatString(formData.city));
+    formDataToSend.append("state", formatString(formData.state));
+    formDataToSend.append("bedroom", formData.bedroom);
+    formDataToSend.append("type", formData.type);
+    formDataToSend.append("desc", formData.description);
+    formDataToSend.append("category", formData.category);
+
+    // Log and append images (assuming formData.images is an array of File objects)
     if (formData.images && formData.images.length > 0) {
       Array.from(formData.images).forEach((file, idx) => {
-        formDataToSend.append(`postData[images][${idx}]`, file);
+        console.log(`Image ${idx}:`, file); // Log each file here
+        formDataToSend.append(`images`, file);
       });
     }
-  
+
     try {
       // Send POST request with formData
-      const response = await api.post('/posts', formDataToSend, {
+      const response = await api.post("/posts", formDataToSend, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
         },
       });
-  
-      toast.success('Post created successfully!');
-    
+
+      toast.success("Post created successfully!");
     } catch (error) {
-      console.error('Error creating post:', error);
-      toast.error('An error occurred while creating the post. Please try again.');
+      console.error("Error creating post:", error);
+      toast.error(
+        "An error occurred while creating the post. Please try again."
+      );
     }
   };
-  
+
   // const handleSubmit = async (e: FormEvent) => {
   //   e.preventDefault();
 
@@ -438,18 +443,20 @@ function AddNewListing() {
               <Image src={Upload} width={42} height={42} alt="Upload Icon" />
               <span>
                 {formData.images ? (
-                 <div className="flex items-center justify-center gap-7 w-[540px]">
-                 <span className="text-base">
-                   Filename: {formData.images && formData.images.length > 0 ? formData.images[0].name : 'No file selected'}
-                 </span>
-                 <button
-                   onClick={handleRemoveFile}
-                   className="text-red-500 text-sm"
-                 >
-                   X
-                 </button>
-               </div>
-               
+                  <div className="flex items-center justify-center gap-7 w-[540px]">
+                    <span className="text-base">
+                      Filename:{" "}
+                      {formData.images && formData.images.length > 0
+                        ? formData.images[0].name
+                        : "No file selected"}
+                    </span>
+                    <button
+                      onClick={handleRemoveFile}
+                      className="text-red-500 text-sm"
+                    >
+                      X
+                    </button>
+                  </div>
                 ) : (
                   <p className="text-center max-w-[330px]">
                     Drag your documents, photos, or videos here to start
@@ -464,7 +471,7 @@ function AddNewListing() {
                 id="fileUpload"
                 accept=".jpg,.jpeg,.mp4"
                 className="hidden"
-                multiple  // Allow multiple file uploads
+                multiple // Allow multiple file uploads
                 onChange={handleFileChange}
               />
               <label
