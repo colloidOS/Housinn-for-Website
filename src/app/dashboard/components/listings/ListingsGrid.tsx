@@ -1,7 +1,7 @@
 import React from "react";
-import { ListingGridProps, Listing } from "@/types";
+import { ListingsGridProps, Listings } from "@/types";
 
-const ListingGrid: React.FC<ListingGridProps> = ({ listing }) => {
+const ListingGrid: React.FC<ListingsGridProps> = ({ listing }) => {
   return (
     <tr className="border-b text-[14px]">
       <td className="py-2 px-4">{listing.title}</td>

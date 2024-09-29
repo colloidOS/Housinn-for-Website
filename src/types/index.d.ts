@@ -1,5 +1,5 @@
 import { AddNewListingFormData } from "@/types";
-export type Listing = {
+export type Listings = {
   isSaved: boolean;
   id: string;
   price: number;
@@ -34,20 +34,20 @@ export interface Review {
   message: string;
 }
 
-export interface ListingCardProps {
+export interface ListingsCardProps {
   listing: Listing;
   onSave: (id: string) => void;
   isSaved: boolean;
 }
 
-export interface ListingFilterProps {
+export interface ListingsFilterProps {
   activeTag: string;
   onChange: (tag: string) => void;
 }
-export interface ListingGridProps {
+export interface ListingsGridProps {
   listing: Listing;
 }
-export interface ListingSortProps {
+export interface ListingsSortProps {
   listings: Listing[]; // Receive listings as prop
 }
 interface ListingsProps {

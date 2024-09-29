@@ -7,10 +7,10 @@ import {
   Bath,
   Feet,
 } from "../../../../../public/icons";
-import { Listing } from "@/types";
+import { Listings } from "@/types";
 
 
-const ListingCard: React.FC<{ listing: Listing }> = ({ listing }) => {
+const ListingsCard: React.FC<{ listing: Listings }> = ({ listing }) => {
   // Formatting the price as a currency string
   const formattedPrice = `₦${Number(listing.price).toLocaleString()}`;
 
@@ -111,4 +111,4 @@ const ListingCard: React.FC<{ listing: Listing }> = ({ listing }) => {
   );
 };
 
-export default ListingCard;
+export default ListingsCard;

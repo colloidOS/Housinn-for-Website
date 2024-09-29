@@ -1,7 +1,14 @@
 import React from "react";
+import ListingsPage from "../components/listings/ListingsPage";
 
 function Favorites() {
-  return <div className="w-full bg-background-2 px-12 py-10 ">Favorites</div>;
+  return (
+    <ListingsPage
+      getRoute="/posts/savedPosts/post"
+      dataRoute="posts"
+      pageTitle="Favorites"
+    />
+  );
 }
 
 export default Favorites;

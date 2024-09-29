@@ -3,7 +3,7 @@ import Modal from "../../../../components/Modal"; // Assuming you have a Modal c
 import { FilterArrow, FilterArrow2 } from "../../../../../public/icons";
 import Image from "next/image";
 
-interface ListingFilterProps {
+interface ListingsFilterProps {
   activeTag: string;
   onChange: (tag: string) => void;
 }
@@ -28,7 +28,7 @@ const FilterList: React.FC<{ label: string; options: string[] }> = ({
   </div>
 );
 
-const ListingFilter: React.FC<ListingFilterProps> = ({
+const ListingsFilter: React.FC<ListingsFilterProps> = ({
   activeTag,
   onChange,
 }) => {
@@ -258,4 +258,4 @@ const ListingFilter: React.FC<ListingFilterProps> = ({
   );
 };
 
-export default ListingFilter;
+export default ListingsFilter;
