@@ -50,8 +50,14 @@ export interface ListingsGridProps {
 export interface ListingsSortProps {
   listings: Listing[]; // Receive listings as prop
 }
-interface ListingsProps {
+export interface ListingsProps {
   shouldSlice?: boolean; 
+}
+
+export interface ListingsPageProps {
+  getRoute: string; // Accept the API route as a prop
+  dataRoute: string;
+  pageTitle: string; // Title of the page
 }
 
 export interface AddNewListingFormData {

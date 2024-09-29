@@ -11,12 +11,6 @@ import { useRouter } from "next/navigation";
 import { Listings } from "@/types";
 import { GridView, ListView, Search } from "../../../../../public/icons";
 
-interface ListingsPageProps {
-  getRoute: string; // Accept the API route as a prop
-  dataRoute: string;
-  pageTitle: string; // Title of the page
-}
-
 const ListingsPage: React.FC<ListingsPageProps> = ({
   getRoute,
   dataRoute,

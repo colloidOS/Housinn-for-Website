@@ -2,10 +2,10 @@ import React from "react";
 import Image from "next/image";
 import { PhAddress,Bed,Bath,Feet } from "../../../public/icons";
 import { useRouter } from "next/navigation";
-import { ListingCardProps } from "@/types";
+import { ListingsCardProps } from "@/types";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 
-const ListingCard: React.FC<ListingCardProps> = ({
+const ListingCard: React.FC<ListingsCardProps> = ({
   listing,
   onSave,
   isSaved,
