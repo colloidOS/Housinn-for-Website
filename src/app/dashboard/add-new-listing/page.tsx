@@ -152,10 +152,10 @@ function AddNewListing() {
         Add New Listing
       </h1>
       <form
-        className="flex flex-col gap-16 items-center justify-center px-6 w-full"
+        className="flex flex-col gap-16 items-center justify-center px-52 w-full"
         onSubmit={handleSubmit}
       >
-        <section className="flex flex-col gap-10">
+        <section className="flex flex-col gap-y-10">
           <h2 className="font-bold text-lg text-primary text-center">
             Property Information
           </h2>
@@ -198,7 +198,7 @@ function AddNewListing() {
                     </label>
                     <div className="relative">
                       <select
-                        className="w-[300px] bg-white p-[10px] border border-gray-300 rounded-md"
+                        className="w-full bg-white p-2 border border-gray-300 rounded-md"
                         name="type"
                         value={formData.type} // Corrected to use formData.type
                         onChange={handleChange}
@@ -228,7 +228,7 @@ function AddNewListing() {
                       type="text"
                       name="propertySize"
                       placeholder="Eg.50ft x 100ft, 156ft x 100ft"
-                      className="p-[10px] w-[300px] border border-gray-300 rounded-md"
+                      className="p-2 w-full border border-gray-300 rounded-md"
                       value={formData.propertySize}
                       onChange={handleChange}
                     />
@@ -244,7 +244,7 @@ function AddNewListing() {
                         type="number"
                         name="bedroom"
                         placeholder=" Eg. 1, 2, 4"
-                        className="p-[10px] w-[300px] border border-gray-300 rounded-md"
+                        className="p-2 w-full border border-gray-300 rounded-md"
                         value={formData.bedroom}
                         onChange={handleChange}
                       />
@@ -254,7 +254,7 @@ function AddNewListing() {
                     <label className="text-sm font-semibold">Amenities</label>
                     <div className="relative">
                       <select
-                        className="p-[10px] w-[300px] border border-gray-300 rounded-md"
+                        className="p-2 w-full border border-gray-300 rounded-md"
                         name="amenities"
                         value={formData.amenities}
                         onChange={handleChange}
@@ -283,7 +283,7 @@ function AddNewListing() {
                       <label className="text-sm font-semibold">State</label>
                       <div className="relative">
                         <select
-                          className="w-[300px] bg-white p-[10px] border border-gray-300 rounded-md"
+                          className="w-full bg-white p-2 border border-gray-300 rounded-md"
                           name="state"
                           required
                           value={formData.state}
@@ -304,7 +304,7 @@ function AddNewListing() {
                       <label className="text-sm font-semibold">City</label>
                       <div className="relative">
                         <select
-                          className="w-[300px] bg-white p-[10px] border border-gray-300 rounded-md"
+                          className="w-full bg-white p-2 border border-gray-300 rounded-md"
                           name="city"
                           required
                           value={formData.city}
@@ -331,7 +331,7 @@ function AddNewListing() {
                         name="address"
                         required
                         placeholder="Street Address"
-                        className="p-[10px] w-[300px] border border-gray-300 rounded-md"
+                        className="p-2 w-full border border-gray-300 rounded-md"
                         value={formData.address}
                         onChange={handleChange}
                       />
@@ -341,7 +341,7 @@ function AddNewListing() {
                         type="text"
                         name="landmark"
                         placeholder="Popular Landmarks"
-                        className="p-[10px] w-[300px] border border-gray-300 rounded-md"
+                        className="p-2 w-full border border-gray-300 rounded-md"
                         onChange={handleChange}
                       />
                     </div>
@@ -359,7 +359,7 @@ function AddNewListing() {
                       type="text"
                       name="title"
                       required
-                      className="p-[10px] w-[300px] border border-gray-300 rounded-md"
+                      className="p-2 w-full border border-gray-300 rounded-md"
                       value={formData.title}
                       onChange={handleChange}
                     />
@@ -372,7 +372,7 @@ function AddNewListing() {
                       type="number"
                       name="price"
                       required
-                      className="p-[10px] w-[300px] border border-gray-300 rounded-md"
+                      className="p-2 w-full border border-gray-300 rounded-md"
                       value={formData.price}
                       onChange={handleChange}
                     />
@@ -382,7 +382,7 @@ function AddNewListing() {
                   <label className="text-sm font-semibold">Description</label>
                   <textarea
                     name="description"
-                    className="p-[10px] w-[520px] h-[110px] resize-none border border-gray-300 rounded-md"
+                    className="p-2 w-full h-28 resize-none border border-gray-300 rounded-md"
                     value={formData.description}
                     required
                     onChange={handleChange}
@@ -398,14 +398,14 @@ function AddNewListing() {
               Photos and Videos of Property
             </h2>
             <div
-              className="flex flex-col py-4 w-[540px] gap-4 justify-center items-center border-secondary border-2 border-dashed rounded-md"
+              className="flex flex-col py-4 w-full gap-4 justify-center items-center border-secondary border-2 border-dashed rounded-md"
               onDrop={handleDrop}
               onDragOver={(e) => e.preventDefault()}
             >
               <Image src={Upload} width={42} height={42} alt="Upload Icon" />
               <span>
                 {formData.images ? (
-                  <div className="flex items-center justify-center gap-7 w-[540px]">
+                  <div className="flex items-center justify-center gap-7 w-full">
                     <span className="text-base">
                       Filename:{" "}
                       {formData.images && formData.images.length > 0
@@ -420,7 +420,7 @@ function AddNewListing() {
                     </button>
                   </div>
                 ) : (
-                  <p className="text-center max-w-[330px]">
+                  <p className="text-center max-w-80">
                     Drag your documents, photos, or videos here to start
                     uploading
                   </p>
@@ -449,10 +449,10 @@ function AddNewListing() {
             </div>
           </div>
         </section>
-        <section className="w-full flex gap-[329px] justify-center">
+        <section className="w-full flex justify-between">
           <button
             onClick={handleNavigate}
-            className="border border-secondary py-[11px] px-6 rounded-md text-secondary bg-[#0D66B71A]"
+            className="border border-secondary py-3 px-6 rounded-md text-secondary bg-[#0D66B71A]"
           >
             Save and Resume
           </button>
