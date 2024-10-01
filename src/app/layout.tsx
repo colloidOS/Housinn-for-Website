@@ -6,8 +6,7 @@ import { Open_Sans } from 'next/font/google';
 import "./globals.css";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from 'react-toastify';
-import { Toaster } from '@/components/ui/toaster';
-
+import { Toaster, toast } from 'sonner'
 const sans = Open_Sans({ subsets: ["latin"] });
 
 export const metadata = {
@@ -25,7 +24,7 @@ export default function RootLayout({
         <AuthProvider>
           {children}
         </AuthProvider>
-        <Toaster/>
+        <Toaster position="top-right" expand={false} richColors/>
 
       </body>
     </html>
