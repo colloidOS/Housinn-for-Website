@@ -7,10 +7,12 @@ import HeroContainer from "@/components/HeroSectionContainer";
 import GetOurApp from "@/app/components/GetOurApp";
 import ChooseUsReviewContainer from "@/components/ChooseUsReviewContainer";
 import Listings from "@/app/components/Listings";
+import { ToastContainer } from "react-toastify";
 
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col min-w-full ">
+      <ToastContainer/>
       <HeroContainer />
       <Listings  shouldSlice={true}/>
       <AboutUs />

@@ -75,3 +75,9 @@ export interface AddNewListingFormData {
   address: string;
   landmark: string;
 }
+export interface ListingsProps {
+  shouldSlice?: boolean; 
+}
+export interface UserNavbarProps {
+  className?: string; 
+}
