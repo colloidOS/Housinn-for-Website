@@ -4,18 +4,17 @@ import ListingCard from "../../components/listings/ListingCard";
 import ListingFilter from "../../components/listings/ListingFilter";
 import { TailSpin } from "react-loader-spinner";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/context/AuthContext"; // Import authentication context
-import { toast } from "react-toastify"; // Import toast notifications
+import { useAuth } from "@/context/AuthContext"; 
 import useFetchListings from "../../hooks/useFetchListings";
 import useSaveListing from "../../hooks/useSaveListing";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import Wrapper from "@/components/ui/Wrapper";
+import { useToast } from "@/hooks/use-toast";
+import { ListingsProps } from "@/types";
 
-interface ListingsProps {
-  shouldSlice?: boolean; // This prop controls whether listings are sliced or not
-}
 
 const Listings: React.FC<ListingsProps> = ({ shouldSlice = true }) => {
+  const { toast } = useToast()
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const { listings, loading, error, setListings } = useFetchListings("/posts");
   const saveListing = useSaveListing();
@@ -28,7 +27,12 @@ const Listings: React.FC<ListingsProps> = ({ shouldSlice = true }) => {
 
   const handleSave = async (id: string, isSaved: boolean) => {
     if (!user) {
-      toast.error("You need to sign in to save listings.");
+      toast({
+        variant: "destructive",
+        title: "Error!",
+        description: "You need to sign in to save listings.",
+      })
+    
       return;
     }
 
@@ -40,14 +44,23 @@ const Listings: React.FC<ListingsProps> = ({ shouldSlice = true }) => {
     try {
       await saveListing(id);
       if (isSaved) {
-        toast.info("Listing unsaved.");
+        toast({
+          // title: "Success!",
+          description: "Listing unsaved.",
+        })
       } else {
-        toast.success("Listing saved.");
+        toast({
+          // title: "Success!",
+          description: "Listing saved.",
+        })
       }
     } catch (error) {
       console.error("Error saving/un-saving listing:", error);
-      toast.error("There was an error saving the listing.");
-
+      toast({
+        variant: "destructive",
+        title: "Error!",
+        description: "There was an error saving the listing.",
+      })
       const rollbackListings = listings.map((listing) =>
         listing.id === id ? { ...listing, isSaved: isSaved } : listing
       );
@@ -74,6 +87,7 @@ const Listings: React.FC<ListingsProps> = ({ shouldSlice = true }) => {
 
   return (
     <Wrapper>
+     
       <div className="flex flex-col md:flex-row gap-2 justify-between mb-5">
         <h2 className="text-2xl font-bold">New Listings</h2>
         <ListingFilter
@@ -119,3 +133,4 @@ const Listings: React.FC<ListingsProps> = ({ shouldSlice = true }) => {
 
 export default Listings;
 
+ 

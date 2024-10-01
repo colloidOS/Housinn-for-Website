@@ -3,22 +3,20 @@
 import Image from "next/image";
 import axios, { AxiosError } from "axios";
 import React, { useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
-import { ClipLoader } from "react-spinners";
 import { signInFields, newAccountFields, accountTypes } from "@/data/auth";
 import Apple from "../../../public/icons/apple.svg";
 import Google from "../../../public/icons/google.svg";
-import api from "../../lib/api"; // Ensure you have your API module correctly configured
-import { TailSpin } from "react-loader-spinner";
+import api from "../../lib/api";
 import Logo from "../../../public/icons/Logo.svg";
 import PrimaryButton from "@/components/ui/PrimaryButton";
+import { useToast } from "@/hooks/use-toast";
 
 const AuthPage = () => {
   const [isSignIn, setIsSignIn] = useState(true);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { toast } = useToast()
 
   const toggleView = () => {
     setIsSignIn(!isSignIn);
@@ -40,8 +38,9 @@ const AuthPage = () => {
       let response;
       if (isSignIn) {
         response = await api.post("/auth/login", data);
-        toast.success("Signed in successfully!");
-
+        toast({
+           description: "Signed in successfully!",
+        })
         const userData = response.data.data;
 
         // Set all user data in cookies
@@ -56,7 +55,9 @@ const AuthPage = () => {
         router.push("/dashboard");
       } else {
         response = await api.post("/auth/register", data);
-        toast.success("Account created successfully!");
+        toast({
+          description: "Account created successfully!",
+        })
         setIsSignIn(true);
       }
     } catch (error) {
@@ -66,9 +67,15 @@ const AuthPage = () => {
           "Submission Error:",
           error.response?.data || error.message
         );
-        toast.error(`Error: ${errorMessage}`);
+        toast({
+          variant: "destructive",
+          description: `Error: ${errorMessage}`,
+        })
       } else {
-        toast.error("An unexpected error occurred. Please try again.");
+        toast({
+          variant: "destructive",
+          description: "An unexpected error occurred. Please try again.",
+        })
       }
     } finally {
       setLoading(false);
@@ -77,7 +84,6 @@ const AuthPage = () => {
 
   return (
     <div className="relative flex w-full">
-      <ToastContainer />
       <div
         className="sticky top-0 hidden w-1/2 h-screen bg-center bg-no-repeat bg-cover xl:flex justify-center items-start pt-9"
         style={{ backgroundImage: `url('/images/sign-in.png')` }}
@@ -174,7 +180,7 @@ const AuthPage = () => {
             loading={loading}
             disabled={loading}
             isSignIn={isSignIn}
-            className="w-full mt-8 mb-4 py-2"
+            className="w-full mt-8 mb-4 py-2 text-base"
           >
             {isSignIn ? "Sign in" : "Create Account"}
           </PrimaryButton>

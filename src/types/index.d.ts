@@ -75,3 +75,6 @@ export interface AddNewListingFormData {
   address: string;
   landmark: string;
 }
+interface ListingsProps {
+  shouldSlice?: boolean; 
+}
