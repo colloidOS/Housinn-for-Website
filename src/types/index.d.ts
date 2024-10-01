@@ -60,7 +60,7 @@ export interface ListingsPageProps {
   pageTitle: string; // Title of the page
 }
 
-export interface AddNewListingFormData {
+export interface AddNewListings {
   title: string;
   images: FileList | null;
   state: string;

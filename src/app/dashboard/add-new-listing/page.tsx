@@ -1,10 +1,7 @@
 "use client";
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import { useRouter } from "next/router";
-import { ChevronDown, Landmark } from "lucide-react";
 import Image from "next/image";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import Upload from "../../../../public/icons/upload.svg";
 import Button from "../profile/Button";
 import api from "../../../lib/api"; // Adjust the import path accordingly
@@ -15,26 +12,12 @@ import {
   amenities,
   propertyTypes,
 } from "../../../data/new-listing"; // Adjust the path as needed
-import { title } from "process";
-
-interface FormData {
-  title: string;
-  images: FileList | null; // Allow multiple files
-  state: string;
-  city: string;
-  type: string;
-  amenities: string[];
-  propertySize: string;
-  bedroom: string;
-  price: string;
-  description: string;
-  category: string;
-  address: string;
-  landmark: string;
-}
+import { AddNewListings } from "@/types";
+import { toast } from "sonner";
+import axios from "axios";
 
 function AddNewListing() {
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<AddNewListings>({
     title: "",
     images: null,
     state: "",
@@ -144,40 +127,16 @@ function AddNewListing() {
 
       toast.success("Post created successfully!");
     } catch (error) {
-      console.error("Error creating post:", error);
-      toast.error(
-        "An error occurred while creating the post. Please try again."
-      );
+      if (axios.isAxiosError(error)) {
+        const errorMessage = error.response?.data?.message || error.message;
+        console.error(
+          "Submission Error:",
+          error.response?.data || error.message
+        );
+        toast.error(`Error: ${errorMessage}`);
+      }
     }
   };
-
-  // const handleSubmit = async (e: FormEvent) => {
-  //   e.preventDefault();
-
-  //   const formatString = (str: string) =>
-  //     str.toLowerCase().replace(/\s+/g, "_");
-
-  //   const payload = {
-  //     title: formData.title,
-  //     price: Number(formData.price),
-  //     address: formData.address,
-  //     city: formatString(formData.city),
-  //     state: formatString(formData.state),
-  //     type: formData.type,
-  //     category: formData.category,
-  //     bedroom: Number(formData.bedroom),
-  //     desc: formData.description,
-  //   };
-  //   console.log("payload", payload);
-  //   try {
-  //     const response = await api.post("/posts", payload);
-  //     toast.success("Post created successfully!");
-  //   } catch (error) {
-  //     toast.error(
-  //       "An error occurred while creating the post. Please try again."
-  //     );
-  //   }
-  // };
 
   const handleNavigate = () => {
     const router = useRouter();
@@ -185,12 +144,11 @@ function AddNewListing() {
   };
   return (
     <div className="w-full flex flex-col gap-5 bg-background-2">
-      <ToastContainer />
       <h1 className="py-4 px-12 text-2xl font-bold border-b border-gray-500">
         Add New Listing
       </h1>
       <form
-        className="flex flex-col gap-[70px] items-center justify-center px-6 w-full"
+        className="flex flex-col gap-16 items-center justify-center px-6 w-full"
         onSubmit={handleSubmit}
       >
         <section className="flex flex-col gap-10">

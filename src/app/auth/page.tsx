@@ -10,13 +10,12 @@ import Google from "../../../public/icons/google.svg";
 import api from "../../lib/api";
 import Logo from "../../../public/icons/Logo.svg";
 import PrimaryButton from "@/components/ui/PrimaryButton";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
 const AuthPage = () => {
   const [isSignIn, setIsSignIn] = useState(true);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { toast } = useToast()
 
   const toggleView = () => {
     setIsSignIn(!isSignIn);
@@ -38,9 +37,7 @@ const AuthPage = () => {
       let response;
       if (isSignIn) {
         response = await api.post("/auth/login", data);
-        toast({
-           description: "Signed in successfully!",
-        })
+        toast.success("Signed in successfully!");
         const userData = response.data.data;
 
         // Set all user data in cookies
@@ -55,9 +52,7 @@ const AuthPage = () => {
         router.push("/dashboard");
       } else {
         response = await api.post("/auth/register", data);
-        toast({
-          description: "Account created successfully!",
-        })
+        toast.success("Account created successfully!");
         setIsSignIn(true);
       }
     } catch (error) {
@@ -67,15 +62,9 @@ const AuthPage = () => {
           "Submission Error:",
           error.response?.data || error.message
         );
-        toast({
-          variant: "destructive",
-          description: `Error: ${errorMessage}`,
-        })
+        toast.error(`Error: ${errorMessage}`);
       } else {
-        toast({
-          variant: "destructive",
-          description: "An unexpected error occurred. Please try again.",
-        })
+        toast.error("An unexpected error occurred. Please try again.");
       }
     } finally {
       setLoading(false);
