@@ -155,12 +155,12 @@ function AddNewListing() {
         className="flex flex-col gap-16 items-center justify-center px-6 md:px-20 xl:px-52 w-full"
         onSubmit={handleSubmit}
       >
-        <section className="flex flex-col gap-y-10 w-full">
-          <h2 className="font-bold text-lg text-primary text-center">
+        <section className="grid md:grid-cols-2 gap-x-12 gap-y-8 w-full">
+          <h2 className="font-bold text-lg text-primary text-center col-span-2">
             Property Information
           </h2>
 
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3 col-span-2">
             <h1 className="font-semibold text-base text-primary">Category</h1>
             <div className="flex gap-9 text-gray-600 w-full">
               {categories.map((category) => (
@@ -256,74 +256,73 @@ function AddNewListing() {
             </div>
           </div>
 
-          <h2 className="text-base text-primary font-semibold">Location</h2>
-          
-            {/* State Dropdown */}
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-semibold">State</label>
-              <div className="relative">
-                <select
-                  className="w-full bg-white p-2 border border-gray-300 rounded-md"
-                  name="state"
-                  required
-                  value={formData.state}
-                  onChange={handleStateChange}
-                >
-                  <option value="">Select a State</option>
-                  {states.map((state) => (
-                    <option key={state} value={state}>
-                      {state}
+          <h2 className="text-base text-primary font-semibold col-span-2 ">
+            Location
+          </h2>
+
+          {/* State Dropdown */}
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-semibold">State</label>
+            <div className="relative">
+              <select
+                className="w-full bg-white p-2 border border-gray-300 rounded-md"
+                name="state"
+                required
+                value={formData.state}
+                onChange={handleStateChange}
+              >
+                <option value="">Select a State</option>
+                {states.map((state) => (
+                  <option key={state} value={state}>
+                    {state}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-semibold">City</label>
+            <div className="relative">
+              <select
+                className="w-full bg-white p-2 border border-gray-300 rounded-md"
+                name="city"
+                required
+                value={formData.city}
+                onChange={handleCityChange}
+                disabled={!formData.state}
+              >
+                <option value="">Select a City</option>
+                {formData.state &&
+                  cities[formData.state as keyof typeof cities]?.map((city) => (
+                    <option key={city} value={city}>
+                      {city}
                     </option>
                   ))}
-                </select>
-              </div>
+              </select>
             </div>
+          </div>
 
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-semibold">City</label>
-              <div className="relative">
-                <select
-                  className="w-full bg-white p-2 border border-gray-300 rounded-md"
-                  name="city"
-                  required
-                  value={formData.city}
-                  onChange={handleCityChange}
-                  disabled={!formData.state}
-                >
-                  <option value="">Select a City</option>
-                  {formData.state &&
-                    cities[formData.state as keyof typeof cities]?.map(
-                      (city) => (
-                        <option key={city} value={city}>
-                          {city}
-                        </option>
-                      )
-                    )}
-                </select>
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-1">
-              <input
-                type="text"
-                name="address"
-                required
-                placeholder="Street Address"
-                className="p-2 w-full border border-gray-300 rounded-md"
-                value={formData.address}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="flex flex-col gap-1">
-              <input
-                type="text"
-                name="landmark"
-                placeholder="Popular Landmarks"
-                className="p-2 w-full border border-gray-300 rounded-md"
-                onChange={handleChange}
-              />
-            </div>
-          
+          <div className="flex flex-col gap-1">
+            <input
+              type="text"
+              name="address"
+              required
+              placeholder="Street Address"
+              className="p-2 w-full border border-gray-300 rounded-md"
+              value={formData.address}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <input
+              type="text"
+              name="landmark"
+              placeholder="Popular Landmarks"
+              className="p-2 w-full border border-gray-300 rounded-md"
+              onChange={handleChange}
+            />
+          </div>
 
           <div className="flex flex-col gap-1">
             <label className="text-sm font-semibold">
@@ -352,7 +351,7 @@ function AddNewListing() {
             />
           </div>
 
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1 col-span-2">
             <label className="text-sm font-semibold">Description</label>
             <textarea
               name="description"
