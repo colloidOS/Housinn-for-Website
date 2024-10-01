@@ -15,8 +15,10 @@ import {
 import { AddNewListings } from "@/types";
 import { toast } from "sonner";
 import axios from "axios";
+import { TailSpin } from "react-loader-spinner";
 
 function AddNewListing() {
+  const [loading, setLoading] = useState<boolean>(false); // State for loading
   const [formData, setFormData] = useState<AddNewListings>({
     title: "",
     images: null,
@@ -92,6 +94,7 @@ function AddNewListing() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setLoading(true);
 
     // Creating a new FormData object to handle both text and file inputs
     const formDataToSend = new FormData();
@@ -124,7 +127,6 @@ function AddNewListing() {
           "Content-Type": "multipart/form-data",
         },
       });
-
       toast.success("Post created successfully!");
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -135,6 +137,8 @@ function AddNewListing() {
         );
         toast.error(`Error: ${errorMessage}`);
       }
+    } finally {
+      setLoading(false); // Hide loader after fetching
     }
   };
 
@@ -171,7 +175,7 @@ function AddNewListing() {
                         type="radio"
                         name="category"
                         value={category.value}
-                        // required
+                        required
                         className="border border-gray-400 rounded-full checked:bg-gray-500 checked:border-transparent focus:outline-none focus:ring-0 focus:ring-offset-2"
                         onChange={(e) =>
                           setFormData((prevState) => ({
@@ -198,7 +202,7 @@ function AddNewListing() {
                         name="type"
                         value={formData.type} // Corrected to use formData.type
                         onChange={handleChange}
-                        // required
+                        required
                       >
                         <option value="">Select a Property Type</option>
                         {propertyTypes.map(
@@ -281,7 +285,7 @@ function AddNewListing() {
                         <select
                           className="w-[300px] bg-white p-[10px] border border-gray-300 rounded-md"
                           name="state"
-                          // required
+                          required
                           value={formData.state}
                           onChange={handleStateChange}
                         >
@@ -302,7 +306,7 @@ function AddNewListing() {
                         <select
                           className="w-[300px] bg-white p-[10px] border border-gray-300 rounded-md"
                           name="city"
-                          // required
+                          required
                           value={formData.city}
                           onChange={handleCityChange}
                           disabled={!formData.state}
@@ -325,7 +329,7 @@ function AddNewListing() {
                       <input
                         type="text"
                         name="address"
-                        // required
+                        required
                         placeholder="Street Address"
                         className="p-[10px] w-[300px] border border-gray-300 rounded-md"
                         value={formData.address}
@@ -354,7 +358,7 @@ function AddNewListing() {
                     <input
                       type="text"
                       name="title"
-                      // required
+                      required
                       className="p-[10px] w-[300px] border border-gray-300 rounded-md"
                       value={formData.title}
                       onChange={handleChange}
@@ -367,7 +371,7 @@ function AddNewListing() {
                     <input
                       type="number"
                       name="price"
-                      // required
+                      required
                       className="p-[10px] w-[300px] border border-gray-300 rounded-md"
                       value={formData.price}
                       onChange={handleChange}
@@ -380,7 +384,7 @@ function AddNewListing() {
                     name="description"
                     className="p-[10px] w-[520px] h-[110px] resize-none border border-gray-300 rounded-md"
                     value={formData.description}
-                    // required
+                    required
                     onChange={handleChange}
                   ></textarea>
                 </div>
@@ -448,12 +452,23 @@ function AddNewListing() {
         <section className="w-full flex gap-[329px] justify-center">
           <button
             onClick={handleNavigate}
-            className="border border-secondary py-[11px] px-6 rounded-md text-white bg-blue-900"
+            className="border border-secondary py-[11px] px-6 rounded-md text-secondary bg-[#0D66B71A]"
           >
             Save and Resume
           </button>
-          <Button disabled={null} type="submit" onClick={null}>
-            List Property
+          <Button disabled={loading} type="submit" onClick={null}>
+            {loading ? (
+             <div className="px-8"> <TailSpin
+             visible={true}
+             height="30"
+             width="30"
+             color="#fff"
+             ariaLabel="tail-spin-loading"
+             radius="2"
+           /></div>
+            ) : (
+              "List Property"
+            )}
           </Button>
         </section>
       </form>
