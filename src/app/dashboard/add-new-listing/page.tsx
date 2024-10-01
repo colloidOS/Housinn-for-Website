@@ -152,10 +152,10 @@ function AddNewListing() {
         Add New Listing
       </h1>
       <form
-        className="flex flex-col gap-16 items-center justify-center px-6 md:px-20 xl:px-52 w-full"
+        className="flex flex-col gap-16 items-center justify-center px-6 pt-2 pb-10 md:px-20 xl:px-52 w-full"
         onSubmit={handleSubmit}
       >
-        <section className="grid md:grid-cols-2 gap-x-12 gap-y-8 w-full">
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 w-full">
           <h2 className="font-bold text-lg text-primary text-center col-span-2">
             Property Information
           </h2>
