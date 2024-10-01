@@ -11,6 +11,8 @@ import { useRouter } from "next/navigation";
 import { Listings } from "@/types";
 import { GridView, ListView, Search } from "../../../../../public/icons";
 import { ListingsPageProps } from "@/types";
+import { toast } from "sonner";
+import axios from "axios";
 
 const ListingsPage: React.FC<ListingsPageProps> = ({
   getRoute,
@@ -52,7 +54,14 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
         setListings(data);
         console.log("Fetched data:", data);
       } catch (error) {
-        console.error("Error fetching listings:", error);
+        if (axios.isAxiosError(error)) {
+          const errorMessage = error.response?.data?.message || error.message;
+          console.error(
+            "Submission Error:",
+            error.response?.data || error.message
+          );
+          toast.error(`Error: ${errorMessage}`);
+        }
       } finally {
         setLoading(false); // Hide loader after fetching
       }
@@ -160,7 +169,7 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
           />
         </div>
       ) : filteredListings.length === 0 ? (
-        <div className="text-center">
+        <div className="flex justify-center items-center flex-col mt-24 w-full">
           <h2 className="text-xl font-bold mb-4">No listings available</h2>
           <button
             className="bg-secondary text-white px-6 py-2 rounded transition"

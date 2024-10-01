@@ -25,7 +25,7 @@ const Listings: React.FC<ListingsProps> = ({ shouldSlice = true }) => {
 
   const handleSave = async (id: string, isSaved: boolean) => {
     if (!user) {
-      toast("You need to sign in to save Listings.");
+      toast.error("You need to sign in to save Listings.");
       return;
     }
 
