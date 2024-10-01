@@ -1,9 +1,8 @@
-"use client";
-
+"use client"
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import Image from "next/image";
-import { useAuth } from "@/context/AuthContext"; // Import the useAuth hook
+import { usePathname } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 import { Logo,Notification } from "../../../../../../public/icons";
 import { UserNavbarProps } from "@/types";
 
