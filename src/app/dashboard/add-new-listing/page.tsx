@@ -152,244 +152,215 @@ function AddNewListing() {
         Add New Listing
       </h1>
       <form
-        className="flex flex-col gap-16 items-center justify-center px-52 w-full"
+        className="flex flex-col gap-16 items-center justify-center px-6 md:px-20 xl:px-52 w-full"
         onSubmit={handleSubmit}
       >
-        <section className="flex flex-col gap-y-10">
+        <section className="flex flex-col gap-y-10 w-full">
           <h2 className="font-bold text-lg text-primary text-center">
             Property Information
           </h2>
-          <div className="flex flex-col gap-5">
-            <div className="flex flex-col gap-6">
-              <div className="flex flex-col gap-3">
-                <h1 className="font-semibold text-base text-primary">
-                  Category
-                </h1>
-                <div className="flex gap-9 text-gray-600 w-full">
-                  {categories.map((category) => (
-                    <label
-                      key={category.value}
-                      className="flex items-center gap-1 text-sm"
-                    >
-                      <input
-                        type="radio"
-                        name="category"
-                        value={category.value}
-                        required
-                        className="border border-gray-400 rounded-full checked:bg-gray-500 checked:border-transparent focus:outline-none focus:ring-0 focus:ring-offset-2"
-                        onChange={(e) =>
-                          setFormData((prevState) => ({
-                            ...prevState,
-                            category: e.target.value, // Update the formData with selected category
-                          }))
-                        }
-                      />
-                      {category.label}
-                    </label>
-                  ))}
-                </div>
-              </div>
 
-              <div className="flex flex-col gap-8">
-                <div className="flex gap-12">
-                  <div className="flex flex-col gap-1 w-full">
-                    <label className="text-sm font-semibold">
-                      Property Type <span className="text-red-600">*</span>
-                    </label>
-                    <div className="relative">
-                      <select
-                        className="w-full bg-white p-2 border border-gray-300 rounded-md"
-                        name="type"
-                        value={formData.type} // Corrected to use formData.type
-                        onChange={handleChange}
-                        required
-                      >
-                        <option value="">Select a Property Type</option>
-                        {propertyTypes.map(
-                          (
-                            propertyType // Rename to propertyType to avoid confusion
-                          ) => (
-                            <option
-                              key={propertyType.value}
-                              value={propertyType.value}
-                            >
-                              {propertyType.label}
-                            </option>
-                          )
-                        )}
-                      </select>
-                    </div>
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <label className="text-sm font-semibold">
-                      Property Size
-                    </label>
-                    <input
-                      type="text"
-                      name="propertySize"
-                      placeholder="Eg.50ft x 100ft, 156ft x 100ft"
-                      className="p-2 w-full border border-gray-300 rounded-md"
-                      value={formData.propertySize}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-                <div className="flex gap-12">
-                  <div className="flex flex-col gap-1">
-                    <label className="text-sm font-semibold">
-                      Number of bedroom
-                    </label>
-                    <div className="relative">
-                      <input
-                        type="number"
-                        name="bedroom"
-                        placeholder=" Eg. 1, 2, 4"
-                        className="p-2 w-full border border-gray-300 rounded-md"
-                        value={formData.bedroom}
-                        onChange={handleChange}
-                      />
-                    </div>
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <label className="text-sm font-semibold">Amenities</label>
-                    <div className="relative">
-                      <select
-                        className="p-2 w-full border border-gray-300 rounded-md"
-                        name="amenities"
-                        value={formData.amenities}
-                        onChange={handleChange}
-                      >
-                        <option value="">Select Amenities</option>
-                        {amenities.map((amenity) => (
-                          <option key={amenity} value={amenity}>
-                            {amenity}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col gap-10">
-              <div className="flex flex-col gap-3">
-                <h2 className="text-base text-primary font-semibold">
-                  Location
-                </h2>
-                <div className="flex flex-col gap-7">
-                  <div className="flex gap-12">
-                    {/* State Dropdown */}
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold">State</label>
-                      <div className="relative">
-                        <select
-                          className="w-full bg-white p-2 border border-gray-300 rounded-md"
-                          name="state"
-                          required
-                          value={formData.state}
-                          onChange={handleStateChange}
-                        >
-                          <option value="">Select a State</option>
-                          {states.map((state) => (
-                            <option key={state} value={state}>
-                              {state}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-
-                    {/* City Dropdown */}
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold">City</label>
-                      <div className="relative">
-                        <select
-                          className="w-full bg-white p-2 border border-gray-300 rounded-md"
-                          name="city"
-                          required
-                          value={formData.city}
-                          onChange={handleCityChange}
-                          disabled={!formData.state}
-                        >
-                          <option value="">Select a City</option>
-                          {formData.state &&
-                            cities[formData.state as keyof typeof cities]?.map(
-                              (city) => (
-                                <option key={city} value={city}>
-                                  {city}
-                                </option>
-                              )
-                            )}
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex gap-12">
-                    <div className="flex flex-col gap-1">
-                      <input
-                        type="text"
-                        name="address"
-                        required
-                        placeholder="Street Address"
-                        className="p-2 w-full border border-gray-300 rounded-md"
-                        value={formData.address}
-                        onChange={handleChange}
-                      />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <input
-                        type="text"
-                        name="landmark"
-                        placeholder="Popular Landmarks"
-                        className="p-2 w-full border border-gray-300 rounded-md"
-                        onChange={handleChange}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-col gap-6">
-                <div className="flex gap-12">
-                  {" "}
-                  <div className="flex flex-col gap-1">
-                    <label className="text-sm font-semibold">
-                      Title <span className="text-red-600">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      name="title"
-                      required
-                      className="p-2 w-full border border-gray-300 rounded-md"
-                      value={formData.title}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <label className="text-sm font-semibold">
-                      Price of Property <span className="text-red-600">*</span>
-                    </label>
-                    <input
-                      type="number"
-                      name="price"
-                      required
-                      className="p-2 w-full border border-gray-300 rounded-md"
-                      value={formData.price}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-semibold">Description</label>
-                  <textarea
-                    name="description"
-                    className="p-2 w-full h-28 resize-none border border-gray-300 rounded-md"
-                    value={formData.description}
+          <div className="flex flex-col gap-3">
+            <h1 className="font-semibold text-base text-primary">Category</h1>
+            <div className="flex gap-9 text-gray-600 w-full">
+              {categories.map((category) => (
+                <label
+                  key={category.value}
+                  className="flex items-center gap-1 text-sm"
+                >
+                  <input
+                    type="radio"
+                    name="category"
+                    value={category.value}
                     required
-                    onChange={handleChange}
-                  ></textarea>
-                </div>
+                    className="border border-gray-400 rounded-full checked:bg-gray-500 checked:border-transparent focus:outline-none focus:ring-0 focus:ring-offset-2"
+                    onChange={(e) =>
+                      setFormData((prevState) => ({
+                        ...prevState,
+                        category: e.target.value, // Update the formData with selected category
+                      }))
+                    }
+                  />
+                  {category.label}
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-semibold">
+              Property Type <span className="text-red-600">*</span>
+            </label>
+            <div className="relative">
+              <select
+                className="w-full bg-white p-2 border border-gray-300 rounded-md"
+                name="type"
+                value={formData.type} // Corrected to use formData.type
+                onChange={handleChange}
+                required
+              >
+                <option value="">Select a Property Type</option>
+                {propertyTypes.map(
+                  (
+                    propertyType // Rename to propertyType to avoid confusion
+                  ) => (
+                    <option key={propertyType.value} value={propertyType.value}>
+                      {propertyType.label}
+                    </option>
+                  )
+                )}
+              </select>
+            </div>
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-semibold">Property Size</label>
+            <input
+              type="text"
+              name="propertySize"
+              placeholder="Eg.50ft x 100ft, 156ft x 100ft"
+              className="p-2 w-full border border-gray-300 rounded-md"
+              value={formData.propertySize}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-semibold">Number of bedroom</label>
+            <div className="relative">
+              <input
+                type="number"
+                name="bedroom"
+                placeholder=" Eg. 1, 2, 4"
+                className="p-2 w-full border border-gray-300 rounded-md"
+                value={formData.bedroom}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-semibold">Amenities</label>
+            <div className="relative">
+              <select
+                className="p-2 w-full border border-gray-300 rounded-md"
+                name="amenities"
+                value={formData.amenities}
+                onChange={handleChange}
+              >
+                <option value="">Select Amenities</option>
+                {amenities.map((amenity) => (
+                  <option key={amenity} value={amenity}>
+                    {amenity}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <h2 className="text-base text-primary font-semibold">Location</h2>
+          
+            {/* State Dropdown */}
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-semibold">State</label>
+              <div className="relative">
+                <select
+                  className="w-full bg-white p-2 border border-gray-300 rounded-md"
+                  name="state"
+                  required
+                  value={formData.state}
+                  onChange={handleStateChange}
+                >
+                  <option value="">Select a State</option>
+                  {states.map((state) => (
+                    <option key={state} value={state}>
+                      {state}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
+
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-semibold">City</label>
+              <div className="relative">
+                <select
+                  className="w-full bg-white p-2 border border-gray-300 rounded-md"
+                  name="city"
+                  required
+                  value={formData.city}
+                  onChange={handleCityChange}
+                  disabled={!formData.state}
+                >
+                  <option value="">Select a City</option>
+                  {formData.state &&
+                    cities[formData.state as keyof typeof cities]?.map(
+                      (city) => (
+                        <option key={city} value={city}>
+                          {city}
+                        </option>
+                      )
+                    )}
+                </select>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <input
+                type="text"
+                name="address"
+                required
+                placeholder="Street Address"
+                className="p-2 w-full border border-gray-300 rounded-md"
+                value={formData.address}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="flex flex-col gap-1">
+              <input
+                type="text"
+                name="landmark"
+                placeholder="Popular Landmarks"
+                className="p-2 w-full border border-gray-300 rounded-md"
+                onChange={handleChange}
+              />
+            </div>
+          
+
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-semibold">
+              Title <span className="text-red-600">*</span>
+            </label>
+            <input
+              type="text"
+              name="title"
+              required
+              className="p-2 w-full border border-gray-300 rounded-md"
+              value={formData.title}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-semibold">
+              Price of Property <span className="text-red-600">*</span>
+            </label>
+            <input
+              type="number"
+              name="price"
+              required
+              className="p-2 w-full border border-gray-300 rounded-md"
+              value={formData.price}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-semibold">Description</label>
+            <textarea
+              name="description"
+              className="p-2 w-full h-28 resize-none border border-gray-300 rounded-md"
+              value={formData.description}
+              required
+              onChange={handleChange}
+            ></textarea>
           </div>
         </section>
         <section className="flex flex-col items-center">
@@ -458,14 +429,17 @@ function AddNewListing() {
           </button>
           <Button disabled={loading} type="submit" onClick={null}>
             {loading ? (
-             <div className="px-8"> <TailSpin
-             visible={true}
-             height="30"
-             width="30"
-             color="#fff"
-             ariaLabel="tail-spin-loading"
-             radius="2"
-           /></div>
+              <div className="px-8">
+                {" "}
+                <TailSpin
+                  visible={true}
+                  height="30"
+                  width="30"
+                  color="#fff"
+                  ariaLabel="tail-spin-loading"
+                  radius="2"
+                />
+              </div>
             ) : (
               "List Property"
             )}
