@@ -75,16 +75,16 @@ const ListingCard: React.FC<ListingsCardProps> = ({
         </div>
 
         {/* Listing Price */}
-        <div className="flex justify-between">
+        <div className="flex justify-start">
           <h3 className="text-xl text-primary font-semibold">{formattedPrice}</h3>
           {/* Menu Icon */}
-          <Image
+          {/* <Image
             src={Menu}
             alt="Menu"
             width={15}
             height={15}
             className="cursor-pointer"
-          />
+          /> */}
         </div>
 
         {/* Listing Title */}
