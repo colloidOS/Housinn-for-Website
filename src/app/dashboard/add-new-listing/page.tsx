@@ -5,6 +5,7 @@ import Image from "next/image";
 import Upload from "../../../../public/icons/upload.svg";
 import Button from "../profile/Button";
 import api from "../../../lib/api"; // Adjust the import path accordingly
+import Select, { MultiValue } from "react-select";
 import {
   categories,
   states,
@@ -50,6 +51,24 @@ function AddNewListing() {
       [name]: value,
     }));
   };
+  type OptionType = {
+    value: string;
+    label: string;
+  };
+
+  const handleAmenitiesChange = (selectedOptions: MultiValue<OptionType>) => {
+    const selectedValues = selectedOptions.map((option) => option.value);
+    setFormData((prevState) => ({
+      ...prevState,
+      amenities: selectedValues, // Update the form data with selected values
+    }));
+  };
+
+  // Map amenities to amenity options
+  const amenitiesOptions: OptionType[] = amenities.map((amenity) => ({
+    value: amenity,
+    label: amenity,
+  }));
 
   const handleStateChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const state = e.target.value;
@@ -155,12 +174,11 @@ function AddNewListing() {
   return (
     <Wrapper title="Add New Listing">
       <FormWrapper onSubmit={handleSubmit}>
-
-    
-
         <SectionWrapper title="Property Information">
           <div className="flex flex-col gap-3 col-span-2">
-            <h1 className="font-semibold text-base text-primary">Category</h1>
+            <h1 className="font-semibold text-base text-primary">
+              Category <span className="text-red-600">*</span>
+            </h1>
             <div className="flex gap-9 text-gray-600 w-full">
               {categories.map((category) => (
                 <label
@@ -226,19 +244,18 @@ function AddNewListing() {
             />
           </FormFieldWrapper>
           <FormFieldWrapper label="Amenities">
-            <select
-              className="p-2 w-full border border-gray-300 rounded-md"
+            <Select
+              isMulti
               name="amenities"
-              value={formData.amenities}
-              onChange={handleChange}
-            >
-              <option value="">Select Amenities</option>
-              {amenities.map((amenity) => (
-                <option key={amenity} value={amenity}>
-                  {amenity}
-                </option>
-              ))}
-            </select>
+              options={amenitiesOptions}
+              // Bind the value prop to match the structure of MultiValue<OptionType>
+              value={amenitiesOptions.filter((option) =>
+                formData.amenities.includes(option.value)
+              )}
+              onChange={handleAmenitiesChange} // Update form data when selection changes
+              className="basic-multi-select"
+              classNamePrefix="select"
+            />
           </FormFieldWrapper>
 
           <h2 className="text-base text-primary font-semibold col-span-2 ">
@@ -292,17 +309,7 @@ function AddNewListing() {
               onChange={handleChange}
             />
           </FormFieldWrapper>
-          <FormFieldWrapper label="">
-            <input
-              type="text"
-              name="address"
-              required
-              placeholder="Street Address"
-              className="p-2 w-full border border-gray-300 rounded-md"
-              value={formData.address}
-              onChange={handleChange}
-            />
-          </FormFieldWrapper>
+
           <FormFieldWrapper label="">
             <input
               type="text"
@@ -332,7 +339,8 @@ function AddNewListing() {
               onChange={handleChange}
             />
           </FormFieldWrapper>
-          <FormFieldWrapper label="Description">
+          <div className="flex flex-col gap-1 col-span-2  w-full">
+            <label className="text-sm font-semibold">Description</label>
             <textarea
               name="description"
               className="p-2 w-full h-28 resize-none border border-gray-300 rounded-md"
@@ -340,64 +348,61 @@ function AddNewListing() {
               required
               onChange={handleChange}
             ></textarea>
-          </FormFieldWrapper>
+          </div>
         </SectionWrapper>
 
-        <section className="flex flex-col items-center">
-          <div className="flex flex-col gap-8">
-            <h2 className="text-lg font-bold text-center text-primary">
-              Photos and Videos of Property
-            </h2>
-            <div
-              className="flex flex-col py-4 w-full gap-4 justify-center items-center border-secondary border-2 border-dashed rounded-md"
-              onDrop={handleDrop}
-              onDragOver={(e) => e.preventDefault()}
-            >
-              <Image src={Upload} width={42} height={42} alt="Upload Icon" />
-              <span>
-                {formData.images ? (
-                  <div className="flex items-center justify-center gap-7 w-full">
-                    <span className="text-base">
-                      Filename:{" "}
-                      {formData.images && formData.images.length > 0
-                        ? formData.images[0].name
-                        : "No file selected"}
-                    </span>
-                    <button
-                      onClick={handleRemoveFile}
-                      className="text-red-500 text-sm"
-                    >
-                      X
-                    </button>
-                  </div>
-                ) : (
-                  <p className="text-center max-w-80">
-                    Drag your documents, photos, or videos here to start
-                    uploading
-                  </p>
-                )}
-              </span>
+        <section className="flex flex-col gap-8 items-center w-full">
+          <h2 className="text-lg font-bold text-center text-primary">
+            Photos and Videos of Property
+          </h2>
+          <div
+            className="flex flex-col py-4 w-full gap-4 justify-center items-center border-secondary border-2 border-dashed rounded-md"
+            onDrop={handleDrop}
+            onDragOver={(e) => e.preventDefault()}
+          >
+            <Image src={Upload} width={42} height={42} alt="Upload Icon" />
+            <span>
+              {formData.images ? (
+                <div className="flex items-center justify-center gap-7 w-full">
+                  <span className="text-base">
+                    Filename:{" "}
+                    {formData.images && formData.images.length > 0
+                      ? formData.images[0].name
+                      : "No file selected"}
+                  </span>
+                  <button
+                    onClick={handleRemoveFile}
+                    className="text-red-500 text-sm"
+                  >
+                    X
+                  </button>
+                </div>
+              ) : (
+                <p className="text-center max-w-80">
+                  Drag your documents, photos, or videos here to start uploading
+                </p>
+              )}
+            </span>
 
-              <p>OR</p>
-              <input
-                type="file"
-                id="fileUpload"
-                accept=".jpg,.jpeg,.mp4"
-                className="hidden"
-                multiple // Allow multiple file uploads
-                onChange={handleFileChange}
-              />
-              <label
-                htmlFor="fileUpload"
-                className="px-6 py-2 border-2 border-secondary rounded-lg text-secondary cursor-pointer"
-              >
-                Browse files
-              </label>
-              <span className="text-center">
-                Files Supported: JPG, MP4 <br />
-                File Size: 30MB max
-              </span>
-            </div>
+            <p>OR</p>
+            <input
+              type="file"
+              id="fileUpload"
+              accept=".jpg,.jpeg,.mp4"
+              className="hidden"
+              multiple // Allow multiple file uploads
+              onChange={handleFileChange}
+            />
+            <label
+              htmlFor="fileUpload"
+              className="px-6 py-2 border-2 border-secondary rounded-lg text-secondary cursor-pointer"
+            >
+              Browse files
+            </label>
+            <span className="text-center">
+              Files Supported: JPG, MP4 <br />
+              File Size: 30MB max
+            </span>
           </div>
         </section>
         <section className="w-full flex justify-between">
@@ -425,7 +430,6 @@ function AddNewListing() {
             )}
           </Button>
         </section>
-    ß
       </FormWrapper>
     </Wrapper>
   );

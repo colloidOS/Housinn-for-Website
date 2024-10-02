@@ -52,6 +52,8 @@ export interface ListingsSortProps {
 }
 export interface ListingsProps {
   shouldSlice?: boolean; 
+   getRoute: string; // Add this
+  dataRoute: string; // Add this
 }
 
 export interface ListingsPageProps {

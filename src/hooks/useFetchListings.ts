@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import api from "@/lib/api"; // Adjust this import path based on your project structure
 import { Listings } from "@/types";
 
-const useFetchListings = (endpoint: string) => {
+const useFetchListings = (endpoint: string, dataRoute: string) => {
   const [listings, setListings] = useState<Listings[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -12,7 +12,7 @@ const useFetchListings = (endpoint: string) => {
       setLoading(true);
       try {
         const response = await api.get(endpoint);
-        const data = response.data.data.posts.map((post: any) => ({
+        const data = response.data.data[dataRoute].map((post: any) => ({
           id: post.id,
           price: post.price,
           title: post.title,

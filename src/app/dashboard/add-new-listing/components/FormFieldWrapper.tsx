@@ -8,7 +8,7 @@ interface FormFieldWrapperProps {
 
 export const FormFieldWrapper: React.FC<FormFieldWrapperProps> = ({ label, required = false, children }) => {
   return (
-    <div className="flex flex-col gap-1 col-span-2 md:col-span-1 w-full">
+    <div className="flex flex-col gap-1 col-span-2 md:col-span-1 w-full ">
       <label className="text-sm font-semibold">
         {label} {required && <span className="text-red-600">*</span>}
       </label>

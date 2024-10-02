@@ -13,6 +13,7 @@ import { GridView, ListView, Search } from "../../../../../public/icons";
 import { ListingsPageProps } from "@/types";
 import { toast } from "sonner";
 import axios from "axios";
+import useFetchListings from "@/hooks/useFetchListings";
 
 const ListingsPage: React.FC<ListingsPageProps> = ({
   getRoute,
@@ -22,54 +23,9 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
   const [activeTag, setActiveTag] = useState<string | null>("all-properties");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isListView, setIsListView] = useState<boolean>(false);
-  const [listings, setListings] = useState<Listings[]>([]);
-  const [loading, setLoading] = useState<boolean>(true); // State for loading
-  const { user } = useAuth();
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchListings = async () => {
-      if (!user) {
-        console.error("User not authenticated.");
-        return;
-      }
-
-      setLoading(true); // Show loader before fetching
-      try {
-        const response = await api.get(getRoute); // Use the passed API route
-
-        const data = response.data.data[dataRoute].map((post: any) => ({
-          id: post.id,
-          price: post.price,
-          title: post.title,
-          location: `${post.city}, ${post.state}, ${post.address}`,
-          beds: post.bedroom,
-          baths: post.bathroom,
-          area: `${post.latitude} x ${post.longitude}`,
-          imageUrl: post.images[0] || "/images/default-image.png",
-          tag: post.type,
-          listed: new Date(post.createdAt).toLocaleDateString(),
-          category: post.category,
-        }));
-        setListings(data);
-        console.log("Fetched data:", data);
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          const errorMessage = error.response?.data?.message || error.message;
-          console.error(
-            "Submission Error:",
-            error.response?.data || error.message
-          );
-          toast.error(`Error: ${errorMessage}`);
-        }
-      } finally {
-        setLoading(false); // Hide loader after fetching
-      }
-    };
-
-    fetchListings();
-  }, [user, getRoute]); // Include getRoute as a dependency
-
+  const { listings, loading, error } = useFetchListings(getRoute, dataRoute); // Use the custom hook
   const handleFilterChange = (tag: string) => {
     setActiveTag(tag === activeTag ? null : tag);
   };

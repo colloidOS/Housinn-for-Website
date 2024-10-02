@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import ListingCard from "../../components/listings/ListingCard";
+import ListingCard from "../../components/listings/ListingsCard";
 import ListingFilter from "../../components/listings/ListingFilter";
 import { TailSpin } from "react-loader-spinner";
 import { useRouter } from "next/navigation";
@@ -12,9 +12,16 @@ import Wrapper from "@/components/ui/Wrapper";
 import { ListingsProps } from "@/types";
 import { toast } from "sonner";
 
-const Listings: React.FC<ListingsProps> = ({ shouldSlice = true }) => {
+const Listings: React.FC<ListingsProps> = ({
+  shouldSlice = true,
+  getRoute,
+  dataRoute,
+})  => {
   const [activeTag, setActiveTag] = useState<string | null>(null);
-  const { listings, loading, error, setListings } = useFetchListings("/posts");
+  const { listings, loading, error, setListings } = useFetchListings(
+    getRoute,
+    dataRoute
+  );
   const saveListing = useSaveListing();
   const router = useRouter();
   const { user } = useAuth();
@@ -63,10 +70,6 @@ const Listings: React.FC<ListingsProps> = ({ shouldSlice = true }) => {
     ? filteredListings.slice(0, 6)
     : filteredListings;
 
-  if (error) {
-    return <p>Error fetching listings.</p>;
-  }
-
   return (
     <Wrapper>
       <div className="flex flex-col md:flex-row gap-2 justify-between mb-5">
@@ -77,7 +80,9 @@ const Listings: React.FC<ListingsProps> = ({ shouldSlice = true }) => {
         />
       </div>
 
-      {loading ? (
+      {error ? (
+       <div className="w-full text-center py-12"> <p>Error fetching listings.</p></div>
+      ) : loading ? (
         <div className="flex justify-center items-center h-96">
           <TailSpin visible={true} height="80" width="80" color="#002A50" />
         </div>
@@ -98,16 +103,18 @@ const Listings: React.FC<ListingsProps> = ({ shouldSlice = true }) => {
         </div>
       )}
 
-      {shouldSlice && (
-        <div className="w-full flex justify-center">
-          <PrimaryButton
-            onClick={handleViewAllListings}
-            className="mt-8 px-4 py-2"
-          >
-            View all Listings
-          </PrimaryButton>
-        </div>
-      )}
+      {error
+        ? ""
+        : shouldSlice && (
+            <div className="w-full flex justify-center">
+              <PrimaryButton
+                onClick={handleViewAllListings}
+                className="mt-8 px-4 py-2"
+              >
+                View all Listings
+              </PrimaryButton>
+            </div>
+          )}
     </Wrapper>
   );
 };
