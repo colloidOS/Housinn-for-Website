@@ -16,45 +16,20 @@ const Listings: React.FC<ListingsProps> = ({
   shouldSlice = true,
   getRoute,
   dataRoute,
-})  => {
+}) => {
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const { listings, loading, error, setListings } = useFetchListings(
     getRoute,
     dataRoute
   );
-  const saveListing = useSaveListing();
+  const saveListing = useSaveListing(listings, setListings);
   const router = useRouter();
-  const { user } = useAuth();
+  const handleSave = (id: string, isSaved: boolean) => {
+    saveListing(id, isSaved);
+  };
 
   const handleViewAllListings = () => {
     router.push("/listings");
-  };
-
-  const handleSave = async (id: string, isSaved: boolean) => {
-    if (!user) {
-      toast.error("You need to sign in to save Listings.");
-      return;
-    }
-
-    const updatedListings = listings.map((listing) =>
-      listing.id === id ? { ...listing, isSaved: !isSaved } : listing
-    );
-    setListings(updatedListings);
-
-    try {
-      await saveListing(id);
-      if (isSaved) {
-        toast.success("Listing unsaved.");
-      } else {
-        toast.success("Listing saved.");
-      }
-    } catch (error) {
-      toast.error("There was an error saving the listing.");
-      const rollbackListings = listings.map((listing) =>
-        listing.id === id ? { ...listing, isSaved: isSaved } : listing
-      );
-      setListings(rollbackListings);
-    }
   };
 
   const handleFilterChange = (tag: string) => {
@@ -81,7 +56,10 @@ const Listings: React.FC<ListingsProps> = ({
       </div>
 
       {error ? (
-       <div className="w-full text-center py-12"> <p>Error fetching listings.</p></div>
+        <div className="w-full text-center py-12">
+          {" "}
+          <p>Error fetching listings.</p>
+        </div>
       ) : loading ? (
         <div className="flex justify-center items-center h-96">
           <TailSpin visible={true} height="80" width="80" color="#002A50" />

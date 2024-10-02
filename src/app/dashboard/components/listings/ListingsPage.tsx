@@ -9,6 +9,7 @@ import { GridView, ListView, Search } from "../../../../../public/icons";
 import { ListingsPageProps } from "@/types";
 import useFetchListings from "@/hooks/useFetchListings";
 import ListingCard from "@/components/listings/ListingsCard";
+import useSaveListing from "@/hooks/useSaveListing";
 
 const ListingsPage: React.FC<ListingsPageProps> = ({
   getRoute,
@@ -19,8 +20,13 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isListView, setIsListView] = useState<boolean>(false);
   const router = useRouter();
+ 
 
-  const { listings, loading} = useFetchListings(getRoute, dataRoute); // Use the custom hook
+  const { listings, loading, setListings} = useFetchListings(getRoute, dataRoute); // Use the custom hook
+  const saveListing = useSaveListing(listings, setListings);
+  const handleSave = (id: string, isSaved: boolean) => {
+    saveListing(id, isSaved);
+  };
   const handleFilterChange = (tag: string) => {
     setActiveTag(tag === activeTag ? null : tag);
   };
@@ -139,8 +145,8 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
                 <ListingCard
                   key={listing.id}
                   listing={listing}
-                  onSave={null}
-                  isSaved={listing.isSaved}
+                  onSave={() => handleSave(listing.id, listing.isSaved)}
+                isSaved={listing.isSaved}
                 />
               ))}
             </div>
