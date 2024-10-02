@@ -16,6 +16,12 @@ import { AddNewListings } from "@/types";
 import { toast } from "sonner";
 import axios from "axios";
 import { TailSpin } from "react-loader-spinner";
+import {
+  FormFieldWrapper,
+  FormWrapper,
+  SectionWrapper,
+  Wrapper,
+} from "./components/FormFieldWrapper";
 
 function AddNewListing() {
   const [loading, setLoading] = useState<boolean>(false); // State for loading
@@ -147,19 +153,12 @@ function AddNewListing() {
     router.push("/dashboard");
   };
   return (
-    <div className="w-full flex flex-col gap-5 bg-background-2">
-      <h1 className="py-4 px-12 text-2xl font-bold border-b border-gray-500">
-        Add New Listing
-      </h1>
-      <form
-        className="flex flex-col gap-16 items-center justify-center px-6 pt-2 pb-10 md:px-20 xl:px-52 w-full"
-        onSubmit={handleSubmit}
-      >
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 w-full">
-          <h2 className="font-bold text-lg text-primary text-center col-span-2">
-            Property Information
-          </h2>
+    <Wrapper title="Add New Listing">
+      <FormWrapper onSubmit={handleSubmit}>
 
+    
+
+        <SectionWrapper title="Property Information">
           <div className="flex flex-col gap-3 col-span-2">
             <h1 className="font-semibold text-base text-primary">Category</h1>
             <div className="flex gap-9 text-gray-600 w-full">
@@ -186,34 +185,27 @@ function AddNewListing() {
               ))}
             </div>
           </div>
-
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-semibold">
-              Property Type <span className="text-red-600">*</span>
-            </label>
-            <div className="relative">
-              <select
-                className="w-full bg-white p-2 border border-gray-300 rounded-md"
-                name="type"
-                value={formData.type} // Corrected to use formData.type
-                onChange={handleChange}
-                required
-              >
-                <option value="">Select a Property Type</option>
-                {propertyTypes.map(
-                  (
-                    propertyType // Rename to propertyType to avoid confusion
-                  ) => (
-                    <option key={propertyType.value} value={propertyType.value}>
-                      {propertyType.label}
-                    </option>
-                  )
-                )}
-              </select>
-            </div>
-          </div>
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-semibold">Property Size</label>
+          <FormFieldWrapper label="Property Type">
+            <select
+              className="w-full bg-white p-2 border border-gray-300 rounded-md"
+              name="type"
+              value={formData.type} // Corrected to use formData.type
+              onChange={handleChange}
+              required
+            >
+              <option value="">Select a Property Type</option>
+              {propertyTypes.map(
+                (
+                  propertyType // Rename to propertyType to avoid confusion
+                ) => (
+                  <option key={propertyType.value} value={propertyType.value}>
+                    {propertyType.label}
+                  </option>
+                )
+              )}
+            </select>
+          </FormFieldWrapper>
+          <FormFieldWrapper label="Property Size">
             <input
               type="text"
               name="propertySize"
@@ -222,88 +214,74 @@ function AddNewListing() {
               value={formData.propertySize}
               onChange={handleChange}
             />
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-semibold">Number of bedroom</label>
-            <div className="relative">
-              <input
-                type="number"
-                name="bedroom"
-                placeholder=" Eg. 1, 2, 4"
-                className="p-2 w-full border border-gray-300 rounded-md"
-                value={formData.bedroom}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-semibold">Amenities</label>
-            <div className="relative">
-              <select
-                className="p-2 w-full border border-gray-300 rounded-md"
-                name="amenities"
-                value={formData.amenities}
-                onChange={handleChange}
-              >
-                <option value="">Select Amenities</option>
-                {amenities.map((amenity) => (
-                  <option key={amenity} value={amenity}>
-                    {amenity}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
+          </FormFieldWrapper>
+          <FormFieldWrapper label="Number of bedroom">
+            <input
+              type="number"
+              name="bedroom"
+              placeholder=" Eg. 1, 2, 4"
+              className="p-2 w-full border border-gray-300 rounded-md"
+              value={formData.bedroom}
+              onChange={handleChange}
+            />
+          </FormFieldWrapper>
+          <FormFieldWrapper label="Amenities">
+            <select
+              className="p-2 w-full border border-gray-300 rounded-md"
+              name="amenities"
+              value={formData.amenities}
+              onChange={handleChange}
+            >
+              <option value="">Select Amenities</option>
+              {amenities.map((amenity) => (
+                <option key={amenity} value={amenity}>
+                  {amenity}
+                </option>
+              ))}
+            </select>
+          </FormFieldWrapper>
 
           <h2 className="text-base text-primary font-semibold col-span-2 ">
             Location
           </h2>
 
           {/* State Dropdown */}
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-semibold">State</label>
-            <div className="relative">
-              <select
-                className="w-full bg-white p-2 border border-gray-300 rounded-md"
-                name="state"
-                required
-                value={formData.state}
-                onChange={handleStateChange}
-              >
-                <option value="">Select a State</option>
-                {states.map((state) => (
-                  <option key={state} value={state}>
-                    {state}
+          <FormFieldWrapper label="State" required>
+            <select
+              className="w-full bg-white p-2 border border-gray-300 rounded-md"
+              name="state"
+              required
+              value={formData.state}
+              onChange={handleStateChange}
+            >
+              <option value="">Select a State</option>
+              {states.map((state) => (
+                <option key={state} value={state}>
+                  {state}
+                </option>
+              ))}
+            </select>
+          </FormFieldWrapper>
+          <FormFieldWrapper label="City" required>
+            <select
+              className="w-full bg-white p-2 border border-gray-300 rounded-md"
+              name="city"
+              required
+              value={formData.city}
+              onChange={handleCityChange}
+              disabled={!formData.state}
+            >
+              <option value="">Select a City</option>
+              {formData.state &&
+                cities[formData.state as keyof typeof cities]?.map((city) => (
+                  <option key={city} value={city}>
+                    {city}
                   </option>
                 ))}
-              </select>
-            </div>
-          </div>
+            </select>
+          </FormFieldWrapper>
 
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-semibold">City</label>
-            <div className="relative">
-              <select
-                className="w-full bg-white p-2 border border-gray-300 rounded-md"
-                name="city"
-                required
-                value={formData.city}
-                onChange={handleCityChange}
-                disabled={!formData.state}
-              >
-                <option value="">Select a City</option>
-                {formData.state &&
-                  cities[formData.state as keyof typeof cities]?.map((city) => (
-                    <option key={city} value={city}>
-                      {city}
-                    </option>
-                  ))}
-              </select>
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-1">
+          <FormFieldWrapper label="">
             <input
               type="text"
               name="address"
@@ -313,8 +291,19 @@ function AddNewListing() {
               value={formData.address}
               onChange={handleChange}
             />
-          </div>
-          <div className="flex flex-col gap-1">
+          </FormFieldWrapper>
+          <FormFieldWrapper label="">
+            <input
+              type="text"
+              name="address"
+              required
+              placeholder="Street Address"
+              className="p-2 w-full border border-gray-300 rounded-md"
+              value={formData.address}
+              onChange={handleChange}
+            />
+          </FormFieldWrapper>
+          <FormFieldWrapper label="">
             <input
               type="text"
               name="landmark"
@@ -322,12 +311,8 @@ function AddNewListing() {
               className="p-2 w-full border border-gray-300 rounded-md"
               onChange={handleChange}
             />
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-semibold">
-              Title <span className="text-red-600">*</span>
-            </label>
+          </FormFieldWrapper>
+          <FormFieldWrapper label="Title" required>
             <input
               type="text"
               name="title"
@@ -336,11 +321,8 @@ function AddNewListing() {
               value={formData.title}
               onChange={handleChange}
             />
-          </div>
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-semibold">
-              Price of Property <span className="text-red-600">*</span>
-            </label>
+          </FormFieldWrapper>
+          <FormFieldWrapper label="Price of Property" required>
             <input
               type="number"
               name="price"
@@ -349,10 +331,8 @@ function AddNewListing() {
               value={formData.price}
               onChange={handleChange}
             />
-          </div>
-
-          <div className="flex flex-col gap-1 col-span-2">
-            <label className="text-sm font-semibold">Description</label>
+          </FormFieldWrapper>
+          <FormFieldWrapper label="Description">
             <textarea
               name="description"
               className="p-2 w-full h-28 resize-none border border-gray-300 rounded-md"
@@ -360,8 +340,9 @@ function AddNewListing() {
               required
               onChange={handleChange}
             ></textarea>
-          </div>
-        </section>
+          </FormFieldWrapper>
+        </SectionWrapper>
+
         <section className="flex flex-col items-center">
           <div className="flex flex-col gap-8">
             <h2 className="text-lg font-bold text-center text-primary">
@@ -444,8 +425,9 @@ function AddNewListing() {
             )}
           </Button>
         </section>
-      </form>
-    </div>
+    ß
+      </FormWrapper>
+    </Wrapper>
   );
 }
 
