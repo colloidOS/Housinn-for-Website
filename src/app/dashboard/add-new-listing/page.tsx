@@ -136,7 +136,10 @@ function AddNewListing() {
     formDataToSend.append("type", formData.type);
     formDataToSend.append("desc", formData.description);
     formDataToSend.append("category", formData.category);
-
+    formData.amenities.forEach((amenity, idx) => {
+      formDataToSend.append(`amenities`, amenity);
+    });
+  
     // Log and append images (assuming formData.images is an array of File objects)
     if (formData.images && formData.images.length > 0) {
       Array.from(formData.images).forEach((file, idx) => {

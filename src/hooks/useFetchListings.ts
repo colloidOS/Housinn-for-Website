@@ -12,6 +12,7 @@ const useFetchListings = (endpoint: string, dataRoute: string) => {
       setLoading(true);
       try {
         const response = await api.get(endpoint);
+        console.log("response", response.data)
         const data = response.data.data[dataRoute].map((post: any) => ({
           id: post.id,
           price: post.price,

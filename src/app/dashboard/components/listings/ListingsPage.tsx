@@ -1,19 +1,14 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import ListingsCard from "./ListingsCard";
+import React, { useState } from "react";
 import ListingsFilter from "./ListingsFilter";
 import Image from "next/image";
 import ListingSort from "./ListingSort";
-import api from "../../../../lib/api";
-import { useAuth } from "../../../../context/AuthContext";
 import { TailSpin } from "react-loader-spinner"; // Import TailSpin loader
 import { useRouter } from "next/navigation";
-import { Listings } from "@/types";
 import { GridView, ListView, Search } from "../../../../../public/icons";
 import { ListingsPageProps } from "@/types";
-import { toast } from "sonner";
-import axios from "axios";
 import useFetchListings from "@/hooks/useFetchListings";
+import ListingCard from "@/components/listings/ListingsCard";
 
 const ListingsPage: React.FC<ListingsPageProps> = ({
   getRoute,
@@ -25,7 +20,7 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
   const [isListView, setIsListView] = useState<boolean>(false);
   const router = useRouter();
 
-  const { listings, loading, error } = useFetchListings(getRoute, dataRoute); // Use the custom hook
+  const { listings, loading} = useFetchListings(getRoute, dataRoute); // Use the custom hook
   const handleFilterChange = (tag: string) => {
     setActiveTag(tag === activeTag ? null : tag);
   };
@@ -141,7 +136,12 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
           ) : (
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
               {filteredListings.map((listing) => (
-                <ListingsCard key={listing.id} listing={listing} />
+                <ListingCard
+                  key={listing.id}
+                  listing={listing}
+                  onSave={null}
+                  isSaved={listing.isSaved}
+                />
               ))}
             </div>
           )}
