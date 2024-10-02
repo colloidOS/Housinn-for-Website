@@ -14,7 +14,7 @@ export default function Home() {
     <div className="flex min-h-screen flex-col min-w-full ">
       <ToastContainer/>
       <HeroContainer />
-      <Listings  shouldSlice={true}/>
+      <Listings  shouldSlice={true} getRoute="/posts" dataRoute="posts"/>
       <AboutUs />
       <Services />
       <ChooseUsReviewContainer />
