@@ -156,7 +156,7 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
           <div>{renderAmenities()}</div>
         </div>
         <div className="w-1/3">
-        <h2></h2>
+        <h2>What you will love about this home</h2>
 
         </div>
         <div className="w-1/3">
