@@ -159,17 +159,15 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
         <h2>What you will love about this home</h2>
 
         </div>
-        <div className="w-1/3">
-          <div className="flex flex-col h-full">
+        <div className="w-1/3 h-full">
+       
             <img
               src="/images/map.png"
               alt="Map"
               className="object-cover h-full w-full"
             />
-          </div>
-          <div className="h-auto">
-            <p className="text-[0.875rem]">{listing.postDetail.desc}</p>
-          </div>
+     
+       
         </div>
       </div>
 
