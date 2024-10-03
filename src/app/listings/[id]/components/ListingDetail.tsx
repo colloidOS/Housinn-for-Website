@@ -155,8 +155,11 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
           <Image src={Sanrealtor} alt="logo" width={250} height={65} />
           <div>{renderAmenities()}</div>
         </div>
-        <div className="w-1/3">
+        <div className="w-1/3 italic flex flex-col gap-1">
           <h2>What you will love about this home</h2>
+         
+            <p className="text-[0.875rem]">{listing.postDetail.desc}</p>
+   
         </div>
         <div className="w-1/3 h-full">
           <img
