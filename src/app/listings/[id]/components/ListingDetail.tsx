@@ -24,7 +24,7 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
     }
     setShowGallery(true);
   };
- 
+
   const closeGallery = () => {
     setShowGallery(false);
     setCurrentImage(null);
@@ -156,18 +156,14 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
           <div>{renderAmenities()}</div>
         </div>
         <div className="w-1/3">
-        <h2>What you will love about this home</h2>
-
+          <h2>What you will love about this home</h2>
         </div>
         <div className="w-1/3 h-full">
-       
-            <img
-              src="/images/map.png"
-              alt="Map"
-              className="object-cover h-full w-full"
-            />
-     
-       
+          <img
+            src="/images/map.png"
+            alt="Map"
+            className="object-cover h-full w-full"
+          />
         </div>
       </div>
 
