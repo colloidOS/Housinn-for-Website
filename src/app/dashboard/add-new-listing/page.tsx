@@ -112,12 +112,19 @@ function AddNewListing() {
     }
   };
 
-  const handleRemoveFile = () => {
-    setFormData((prevState) => ({
-      ...prevState,
-      images: [], // Reset to empty array
-    }));
+  const handleRemoveFile = (index: number) => {
+    setFormData((prevState) => {
+      // Convert FileList to an array
+      const newImages = Array.from(prevState.images); // No need for null check now
+      // Remove the image at the specified index
+      newImages.splice(index, 1);
+      return {
+        ...prevState,
+        images: newImages.length > 0 ? newImages : [], // Return an empty array if no images left
+      };
+    });
   };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -368,20 +375,24 @@ function AddNewListing() {
             <span>
               {formData.images ? (
                 <div className="flex flex-col items-center justify-center gap-7 w-full">
-                  <span className="text-base">Filenames:</span>
-                  <ul>
+                  <span className="text-base">Images:</span>
+                  <div className="flex gap-4">
                     {Array.from(formData.images).map((file, idx) => (
-                      <li key={idx} className="text-base">
-                        {file.name}
-                      </li>
+                      <div className="relative" key={idx}>
+                        <img
+                          src={URL.createObjectURL(file)} // Create a URL for the image
+                          alt={`uploaded-image-${idx}`} // Provide a unique alt text
+                          className="w-24 h-24 object-cover rounded-md" // Adjust styles as needed
+                        />
+                        <button
+                          onClick={() => handleRemoveFile(idx)} // Pass the index to the remove function
+                          className="absolute -top-3 -right-1  text-black rounded-full "
+                        >
+                          &times; {/* "X" character */}
+                        </button>
+                      </div>
                     ))}
-                  </ul>
-                  <button
-                    onClick={handleRemoveFile}
-                    className="text-red-500 text-sm"
-                  >
-                    Remove all files
-                  </button>
+                  </div>
                 </div>
               ) : (
                 <p className="text-center max-w-80">
