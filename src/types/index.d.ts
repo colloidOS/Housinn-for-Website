@@ -64,7 +64,7 @@ export interface ListingsPageProps {
 
 export interface AddNewListings {
   title: string;
-  images: FileList | null;
+  images: File[]; // Changed from FileList | null to File[]
   state: string;
   city: string;
   type: string;
@@ -77,6 +77,7 @@ export interface AddNewListings {
   address: string;
   landmark: string;
 }
+
 export interface ListingsProps {
   shouldSlice?: boolean; 
 }

@@ -28,7 +28,7 @@ function AddNewListing() {
   const [loading, setLoading] = useState<boolean>(false); // State for loading
   const [formData, setFormData] = useState<AddNewListings>({
     title: "",
-    images: null,
+    images: [],
     state: "",
     city: "",
     type: "",
@@ -93,9 +93,10 @@ function AddNewListing() {
       files.length > 0 &&
       (files[0].type === "image/jpeg" || files[0].type === "video/mp4")
     ) {
+      const fileArray = Array.from(files); // Convert FileList to Array
       setFormData((prevState) => ({
         ...prevState,
-        images: files, // Set the FileList here
+        images: fileArray, // Set the File[] here
       }));
     }
   };
@@ -103,9 +104,10 @@ function AddNewListing() {
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files; // This is a FileList
     if (files) {
+      const fileArray = Array.from(files); // Convert FileList to Array
       setFormData((prevState) => ({
         ...prevState,
-        images: files, // Save the FileList to the state
+        images: fileArray, // Save the File[] to the state
       }));
     }
   };
@@ -113,10 +115,9 @@ function AddNewListing() {
   const handleRemoveFile = () => {
     setFormData((prevState) => ({
       ...prevState,
-      images: null,
+      images: [], // Reset to empty array
     }));
   };
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -139,7 +140,7 @@ function AddNewListing() {
     formData.amenities.forEach((amenity, idx) => {
       formDataToSend.append(`amenities`, amenity);
     });
-  
+
     // Log and append images (assuming formData.images is an array of File objects)
     if (formData.images && formData.images.length > 0) {
       Array.from(formData.images).forEach((file, idx) => {
@@ -366,18 +367,20 @@ function AddNewListing() {
             <Image src={Upload} width={42} height={42} alt="Upload Icon" />
             <span>
               {formData.images ? (
-                <div className="flex items-center justify-center gap-7 w-full">
-                  <span className="text-base">
-                    Filename:{" "}
-                    {formData.images && formData.images.length > 0
-                      ? formData.images[0].name
-                      : "No file selected"}
-                  </span>
+                <div className="flex flex-col items-center justify-center gap-7 w-full">
+                  <span className="text-base">Filenames:</span>
+                  <ul>
+                    {Array.from(formData.images).map((file, idx) => (
+                      <li key={idx} className="text-base">
+                        {file.name}
+                      </li>
+                    ))}
+                  </ul>
                   <button
                     onClick={handleRemoveFile}
                     className="text-red-500 text-sm"
                   >
-                    X
+                    Remove all files
                   </button>
                 </div>
               ) : (
