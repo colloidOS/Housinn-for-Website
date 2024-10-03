@@ -24,7 +24,7 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
     }
     setShowGallery(true);
   };
-const desc=listin
+ 
   const closeGallery = () => {
     setShowGallery(false);
     setCurrentImage(null);
@@ -33,7 +33,7 @@ const desc=listin
     if (!listing.postDetail || listing.postDetail.amenities.length === 0) {
       return <p>No amenities available</p>;
     }
-  
+
     return (
       <div className="flex flex-wrap gap-4 mt-4">
         {listing.postDetail.amenities.map((amenity, index) => (
@@ -47,7 +47,6 @@ const desc=listin
       </div>
     );
   };
-  
 
   const renderImages = () => {
     const images = listing.images;
@@ -126,7 +125,7 @@ const desc=listin
 
       {/* Listing Info Section */}
       <div className="flex gap-1 md:h-1/2">
-        <div className="w-3/4 flex flex-col gap-4">
+        <div className="w-1/3 flex flex-col gap-4">
           <div className="flex flex-col gap-2">
             <h1 className="text-4xl text-primary font-bold">
               {formattedPrice}
@@ -156,7 +155,11 @@ const desc=listin
           <Image src={Sanrealtor} alt="logo" width={250} height={65} />
           <div>{renderAmenities()}</div>
         </div>
-        <div className="w-1/4">
+        <div className="w-1/3">
+        <h2></h2>
+
+        </div>
+        <div className="w-1/3">
           <div className="flex flex-col h-full">
             <img
               src="/images/map.png"
@@ -165,7 +168,7 @@ const desc=listin
             />
           </div>
           <div className="h-auto">
-            <p className="text-[0.875rem]">{listing.desc}</p>
+            <p className="text-[0.875rem]">{listing.postDetail.desc}</p>
           </div>
         </div>
       </div>
