@@ -32,6 +32,8 @@ import Logo from "./Logo-main.svg";
 import FilterArrow from "./filter-arrow.svg";
 import FilterArrow2 from "./filter-arrow-2.svg";
 import Notification from "./notifications.svg";
+import Sanrealtor from "./sanrealtor.svg"
+
 export {
   FilterArrow,
   FilterArrow2,
@@ -66,5 +68,6 @@ export {
   GridView,
   ListView,
   Logo,
-  Notification
+  Notification,
+  Sanrealtor
 };

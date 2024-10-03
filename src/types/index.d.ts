@@ -1,6 +1,7 @@
 import { AddNewListingFormData } from "@/types";
 export type Listings = {
   isSaved: boolean;
+  amenities: string;
   id: string;
   price: number;
   title: string;
@@ -25,6 +26,17 @@ export type Listings = {
   createdAt: string;
   category: string;
   desc: string;
+  postDetail: {
+    amenities: string[];
+    // Other fields inside postDetail can be added as per your API response
+    propertySize: string | null;
+    income: string | null;
+    pet: string | null;
+    restaurant: string | null;
+    school: string | null;
+    desc: string | null;
+    // etc.
+  };
 };
 
 export interface Review {
@@ -51,8 +63,8 @@ export interface ListingsSortProps {
   listings: Listing[]; // Receive listings as prop
 }
 export interface ListingsProps {
-  shouldSlice?: boolean; 
-   getRoute: string; // Add this
+  shouldSlice?: boolean;
+  getRoute: string; // Add this
   dataRoute: string; // Add this
 }
 
@@ -79,8 +91,8 @@ export interface AddNewListings {
 }
 
 export interface ListingsProps {
-  shouldSlice?: boolean; 
+  shouldSlice?: boolean;
 }
 export interface UserNavbarProps {
-  className?: string; 
+  className?: string;
 }

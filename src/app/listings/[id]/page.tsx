@@ -18,7 +18,7 @@ const ListingDetailPage: React.FC = () => {
     const fetchListing = async () => {
       try {
         const response = await api.get(`/posts/${id}`);
-        console.log("response", response.data.data.postDetail);
+        console.log("responsesdf", response.data.data.postDetail);
         setListing(response.data.data);
       } catch (error) {
         console.error("Error fetching listing:", error);
