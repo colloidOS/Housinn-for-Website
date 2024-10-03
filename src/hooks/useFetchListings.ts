@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import api from "@/lib/api"; // Adjust this import path based on your project structure
 import { Listings } from "@/types";
 
+
+
 const useFetchListings = (endpoint: string, dataRoute: string) => {
   const [listings, setListings] = useState<Listings[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -12,7 +14,7 @@ const useFetchListings = (endpoint: string, dataRoute: string) => {
       setLoading(true);
       try {
         const response = await api.get(endpoint);
-        console.log("response", response.data)
+        console.log("response.data.data", response.data.data)
         const data = response.data.data[dataRoute].map((post: any) => ({
           id: post.id,
           price: post.price,
@@ -23,6 +25,7 @@ const useFetchListings = (endpoint: string, dataRoute: string) => {
           area: `${post.latitude} x ${post.longitude}`,
           imageUrl: post.images[0] || "/images/default-image.png",
           tag: post.type,
+          desc:post.desc,
           listed: new Date(post.createdAt).toLocaleDateString(),
           category: post.category,
           isSaved: post.isSaved,

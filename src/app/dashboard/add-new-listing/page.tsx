@@ -28,7 +28,7 @@ function AddNewListing() {
   const [loading, setLoading] = useState<boolean>(false); // State for loading
   const [formData, setFormData] = useState<AddNewListings>({
     title: "",
-    images: null,
+    images: [],
     state: "",
     city: "",
     type: "",
@@ -93,9 +93,10 @@ function AddNewListing() {
       files.length > 0 &&
       (files[0].type === "image/jpeg" || files[0].type === "video/mp4")
     ) {
+      const fileArray = Array.from(files); // Convert FileList to Array
       setFormData((prevState) => ({
         ...prevState,
-        images: files, // Set the FileList here
+        images: fileArray, // Set the File[] here
       }));
     }
   };
@@ -103,18 +104,25 @@ function AddNewListing() {
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files; // This is a FileList
     if (files) {
+      const fileArray = Array.from(files); // Convert FileList to Array
       setFormData((prevState) => ({
         ...prevState,
-        images: files, // Save the FileList to the state
+        images: fileArray, // Save the File[] to the state
       }));
     }
   };
 
-  const handleRemoveFile = () => {
-    setFormData((prevState) => ({
-      ...prevState,
-      images: null,
-    }));
+  const handleRemoveFile = (index: number) => {
+    setFormData((prevState) => {
+      // Convert FileList to an array
+      const newImages = Array.from(prevState.images); // No need for null check now
+      // Remove the image at the specified index
+      newImages.splice(index, 1);
+      return {
+        ...prevState,
+        images: newImages.length > 0 ? newImages : [], // Return an empty array if no images left
+      };
+    });
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -139,7 +147,7 @@ function AddNewListing() {
     formData.amenities.forEach((amenity, idx) => {
       formDataToSend.append(`amenities`, amenity);
     });
-  
+
     // Log and append images (assuming formData.images is an array of File objects)
     if (formData.images && formData.images.length > 0) {
       Array.from(formData.images).forEach((file, idx) => {
@@ -366,19 +374,25 @@ function AddNewListing() {
             <Image src={Upload} width={42} height={42} alt="Upload Icon" />
             <span>
               {formData.images ? (
-                <div className="flex items-center justify-center gap-7 w-full">
-                  <span className="text-base">
-                    Filename:{" "}
-                    {formData.images && formData.images.length > 0
-                      ? formData.images[0].name
-                      : "No file selected"}
-                  </span>
-                  <button
-                    onClick={handleRemoveFile}
-                    className="text-red-500 text-sm"
-                  >
-                    X
-                  </button>
+                <div className="flex flex-col items-center justify-center gap-7 w-full">
+                  <span className="text-base">Images:</span>
+                  <div className="flex gap-4">
+                    {Array.from(formData.images).map((file, idx) => (
+                      <div className="relative" key={idx}>
+                        <img
+                          src={URL.createObjectURL(file)} // Create a URL for the image
+                          alt={`uploaded-image-${idx}`} // Provide a unique alt text
+                          className="w-24 h-24 object-cover rounded-md" // Adjust styles as needed
+                        />
+                        <button
+                          onClick={() => handleRemoveFile(idx)} // Pass the index to the remove function
+                          className="absolute -top-3 -right-1  text-black rounded-full "
+                        >
+                          &times; {/* "X" character */}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               ) : (
                 <p className="text-center max-w-80">
