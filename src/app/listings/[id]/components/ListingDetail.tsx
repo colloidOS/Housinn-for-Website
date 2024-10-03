@@ -124,7 +124,7 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
       <div className="h-1/2">{renderImages()}</div>
 
       {/* Listing Info Section */}
-      <div className="flex gap-1 md:h-1/2">
+      <div className="flex gap-4 md:h-1/2">
         <div className="w-1/3 flex flex-col gap-4">
           <div className="flex flex-col gap-2">
             <h1 className="text-4xl text-primary font-bold">
@@ -155,16 +155,19 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
           <Image src={Sanrealtor} alt="logo" width={250} height={65} />
           <div>{renderAmenities()}</div>
         </div>
-        <div className="w-1/3 italic flex flex-col gap-1">
-          <h2>What you will love about this home</h2>
-         
-            <p className="text-[0.875rem]">{listing.postDetail.desc}</p>
-   
+        <div className="w-1/3 h-full italic flex flex-col gap-4 font-light">
+        <div className="flex flex-col gap-2">
+        <h2 className="text-base text-[#333333]">What you will love about this home</h2>
+        <p className="text-sm text-[#7D7D7D]">{listing.postDetail.desc}</p>
+        </div>
+          <button className="bg-primary rounded-[0.5rem] text-white font-semibold text-lg w-full py-3">
+          Schedule Visit
+          </button>
         </div>
         <div className="w-1/3 h-full">
           <img
             src="/images/map.png"
-            alt="Map"
+            alt="Map" 
             className="object-cover h-full w-full"
           />
         </div>
