@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import api from "@/lib/api"; // Adjust this import path based on your project structure
 import { Listings } from "@/types";
-
-
+import axios from "axios";
+import { toast } from "sonner";
 
 const useFetchListings = (endpoint: string, dataRoute: string) => {
   const [listings, setListings] = useState<Listings[]>([]);
@@ -33,6 +33,10 @@ const useFetchListings = (endpoint: string, dataRoute: string) => {
         
         setListings(data);
       } catch (err) {
+        if (axios.isAxiosError(error)) {
+          const errorMessage = error.response?.data?.message || error.message;
+          toast.error(`Error: ${errorMessage}`);
+        }
         setError("Failed to fetch listings");
         console.error("Error fetching listings:", err);
       } finally {
