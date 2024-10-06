@@ -96,3 +96,29 @@ export interface ListingsProps {
 export interface UserNavbarProps {
   className?: string;
 }
+
+export interface User {
+  id: string;
+  email: string;
+  userType: string;
+  avatar: string | null;
+  number: string | null;
+  firstName: string;
+  lastName: string;
+  state: string | null;
+  town: string | null;
+  address: string | null;
+  position: string | null;
+  company: string | null;
+  isVerified: boolean;
+  passwordResetToken: string | null;
+  passwordResetExpiry: string | null;
+  createdAt: string;
+  chatIDs: string[];
+  token: string;
+}
+
+export interface AuthContextType {
+  user: User | null;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+}

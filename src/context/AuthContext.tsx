@@ -1,32 +1,7 @@
 "use client";
 import React, { createContext, useContext, useState, useEffect } from "react";
 import Cookies from 'js-cookie'; // Import js-cookie
-
-interface User {
-  id: string;
-  email: string;
-  userType: string;
-  avatar: string | null;
-  number: string | null;
-  firstName: string;
-  lastName: string;
-  state: string | null;
-  town: string | null;
-  address: string | null;
-  position: string | null;
-  company: string | null;
-  isVerified: boolean;
-  passwordResetToken: string | null;
-  passwordResetExpiry: string | null;
-  createdAt: string;
-  chatIDs: string[];
-  token: string;
-}
-
-interface AuthContextType {
-  user: User | null;
-  setUser: React.Dispatch<React.SetStateAction<User | null>>;
-}
+import { AuthContextType, User } from "@/types";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 

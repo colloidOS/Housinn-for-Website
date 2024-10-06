@@ -4,9 +4,7 @@ import React from 'react';
 import { AuthProvider } from '@/context/AuthContext'; // Adjust the path as necessary
 import { Open_Sans } from 'next/font/google';
 import "./globals.css";
-import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer } from 'react-toastify';
-import { Toaster, toast } from 'sonner'
+import { Toaster} from 'sonner'
 const sans = Open_Sans({ subsets: ["latin"] });
 
 export const metadata = {
@@ -20,7 +18,6 @@ export default function RootLayout({
   return (
     <html lang="en" className='w-full'>
       <body className={`${sans.className} w-full`}>
-        <ToastContainer/>
         <AuthProvider>
           {children}
         </AuthProvider>

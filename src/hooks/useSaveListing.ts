@@ -1,6 +1,7 @@
 import api from "@/lib/api"; // Adjust this import path based on your project structure
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner"; // Ensure you have the sonner library installed
+import axios from "axios";
 
 const useSaveListing = (listings: any[], setListings: React.Dispatch<React.SetStateAction<any[]>>) => {
   const { user } = useAuth();
@@ -25,10 +26,11 @@ const useSaveListing = (listings: any[], setListings: React.Dispatch<React.SetSt
       } else {
         toast.success("Listing saved.");
       }
-    } catch (err) {
-      console.error("Error saving listing:", err);
-      toast.error("There was an error saving the listing.");
-      // Rollback logic
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const errorMessage = error.response?.data?.message || error.message;
+        toast.error(`Error: ${errorMessage}`);
+      }
       const rollbackListings = listings.map((listing) =>
         listing.id === id ? { ...listing, isSaved: isSaved } : listing
       );

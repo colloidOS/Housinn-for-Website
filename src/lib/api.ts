@@ -1,8 +1,8 @@
-import axios from "axios";
+import axios, { AxiosInstance } from "axios";
 import Cookies from "js-cookie";
 
 // Create an Axios instance with the base URL
-const api = axios.create({
+const api: AxiosInstance = axios.create({
   baseURL: "https://housinn.onrender.com/api",
   headers: {
     "Content-Type": "application/json",
@@ -11,7 +11,7 @@ const api = axios.create({
 
 // Ensure this runs only on the client side
 if (typeof window !== "undefined") {
-  const token = Cookies.get("token");
+  const token: string | undefined = Cookies.get("token");
 
   if (token) {
     api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
