@@ -3,24 +3,10 @@ import Image from "next/image";
 import { Logo } from "../../public/icons";
 import Like from "../../public/icons/heart.svg";
 import Link from "next/link";
-import {
-  ChevronDown,
-  LayoutDashboard,
-  Heart,
-  Home,
-  Mail,
-  User,
-  Search,
-} from "lucide-react";
 import Cookies from "js-cookie";
+import { sideItems } from "@/data/navbar";
+import { ChevronDown, User } from "lucide-react";
 
-// Define the type for sideItems
-interface SideItem {
-  route: string;
-  link: string;
-  icon: React.ComponentType<{ className?: string }>; // icon is a React component with an optional className prop
-  id: string;
-}
 
 const Navbar: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -55,44 +41,6 @@ const Navbar: React.FC = () => {
     }
   }, []);
 
-  const sideItems: SideItem[] = [
-    {
-      route: "Dashboard",
-      link: "/dashboard",
-      icon: LayoutDashboard,
-      id: "dashboard",
-    },
-    {
-      route: "Profile",
-      link: "/dashboard/profile",
-      icon: User,
-      id: "profile",
-    },
-    {
-      route: "My Listings",
-      link: "/dashboard/listings",
-      icon: Home,
-      id: "listings",
-    },
-    {
-      route: "Messages",
-      link: "/dashboard/messages",
-      icon: Mail,
-      id: "messages",
-    },
-    {
-      route: "Favorites",
-      link: "/dashboard/favorites",
-      icon: Heart,
-      id: "favorites",
-    },
-    {
-      route: "Saved Searches",
-      link: "/dashboard/saved-searches",
-      icon: Search,
-      id: "save-searches",
-    },
-  ];
 
   return (
     <nav className="w-full flex justify-between items-center px-9 lg:px-[104px] py-[14px]">

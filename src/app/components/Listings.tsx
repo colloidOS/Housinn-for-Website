@@ -45,6 +45,7 @@ const Listings: React.FC<ListingsProps> = ({
     ? filteredListings.slice(0, 6)
     : filteredListings;
 
+  console.log("lsdfgredcdfcdxcvgfrd", listings);
   return (
     <Wrapper>
       <div className="flex flex-col md:flex-row gap-2 justify-between mb-5">
