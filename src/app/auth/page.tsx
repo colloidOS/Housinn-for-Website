@@ -44,11 +44,6 @@ const AuthPage = () => {
         Object.entries(userData).forEach(([key, value]) => {
           document.cookie = `${key}=${value}; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT`;
         });
-
-        // Log all cookies for verification
-        console.log("Cookies: ", document.cookie);
-
-        // Redirect based on userType
         router.push("/dashboard");
       } else {
         response = await api.post("/auth/register", data);
