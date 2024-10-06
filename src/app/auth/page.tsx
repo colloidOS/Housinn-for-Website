@@ -1,5 +1,4 @@
 "use client";
-
 import Image from "next/image";
 import axios from "axios";
 import React, { useState } from "react";
@@ -11,14 +10,34 @@ import api from "../../lib/api";
 import Logo from "../../../public/icons/Logo.svg";
 import PrimaryButton from "@/components/ui/PrimaryButton";
 import { toast } from "sonner";
+import { z } from "zod";
+import { ZodError } from "zod";
+
+// Validation schemas for sign-in and sign-up
+const signInSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(4, "Password must be at least 6 characters"),
+});
+
+const signUpSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(4, "Password must be at least 6 characters"),
+  confirmPassword: z.string().min(6, "Password must be at least 6 characters"),
+  userType: z.string().nonempty("Please select an account type"),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
 
 const AuthPage = () => {
   const [isSignIn, setIsSignIn] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<{ [key: string]: string }>({}); // Store field errors
   const router = useRouter();
 
   const toggleView = () => {
     setIsSignIn(!isSignIn);
+    setErrors({}); // Reset errors when toggling
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -33,7 +52,12 @@ const AuthPage = () => {
       data.userType = (data.userType as string).toLowerCase();
     }
 
+    // Zod validation
     try {
+      const validationSchema = isSignIn ? signInSchema : signUpSchema;
+      validationSchema.parse(data); // Throws error if validation fails
+      setErrors({}); // Clear any previous errors if validation is successful
+
       let response;
       if (isSignIn) {
         response = await api.post("/auth/login", data);
@@ -51,12 +75,15 @@ const AuthPage = () => {
         setIsSignIn(true);
       }
     } catch (error) {
-      if (axios.isAxiosError(error)) {
+      if (error instanceof ZodError) {
+        // Map Zod errors to field errors
+        const zodErrors = error.errors.reduce((acc: any, curr) => {
+          acc[curr.path[0]] = curr.message;
+          return acc;
+        }, {});
+        setErrors(zodErrors); // Set field-specific errors
+      } else if (axios.isAxiosError(error)) {
         const errorMessage = error.response?.data?.message || error.message;
-        console.error(
-          "Submission Error:",
-          error.response?.data || error.message
-        );
         toast.error(`Error: ${errorMessage}`);
       } else {
         toast.error("An unexpected error occurred. Please try again.");
@@ -78,7 +105,7 @@ const AuthPage = () => {
       <div className="flex flex-col gap-7 xl:pb-36  text-center px-6 md:px-48 lg:px-56 xl:px-28 xl:pt-9 xl:items-center h-screen xl:h-full justify-center w-full xl:w-1/2">
         <div className="flex justify-center items-center xl:hidden">
           <Image src={Logo} alt="Housinn logo" width={80} height={48} />
-        </div>{" "}
+        </div>
         <h1 className="text-2xl font-bold">Welcome To Housinn</h1>
         <div className="flex justify-center w-full px-3">
           <button
@@ -107,13 +134,18 @@ const AuthPage = () => {
                   className="text-[0.875rem] font-semibold"
                 >
                   {field.label}
+                  {errors[field.name] && (
+                    <span className="text-red-600 ml-2 text-sm">
+                      {errors[field.name]}
+                    </span>
+                  )}
                 </label>
                 <input
                   id={field.id}
                   name={field.name}
                   type={field.type}
                   placeholder={field.placeholder}
-                  required
+                 
                   className="w-full px-2 py-2 placeholder:text-[0.875rem] border border-white-300 rounded focus:outline-none"
                 />
               </div>
@@ -127,13 +159,18 @@ const AuthPage = () => {
                     className="text-[0.875rem] font-semibold"
                   >
                     {field.label}
+                    {errors[field.name] && (
+                      <span className="text-red-600 ml-2 text-sm">
+                        {errors[field.name]}
+                      </span>
+                    )}
                   </label>
                   <input
                     id={field.id}
                     name={field.name}
                     type={field.type}
                     placeholder={field.placeholder}
-                    required
+                   
                     className="w-full px-2 py-2 placeholder:text-[0.875rem] border border-white-300 rounded focus:outline-none"
                   />
                 </div>
@@ -151,9 +188,14 @@ const AuthPage = () => {
                         id={type.id}
                         name="userType"
                         value={type.value}
-                        required
+                       
                       />
                       {type.label}
+                      {errors.userType && (
+                        <span className="text-red-600 ml-2 text-sm">
+                          {errors.userType}
+                        </span>
+                      )}
                     </label>
                   ))}
                 </div>
@@ -185,27 +227,13 @@ const AuthPage = () => {
             <div className="flex-1 border border-white-300"></div>
           </div>
           <div className="flex flex-col w-full gap-[0.875rem] pt-3">
-            <div className="flex items-center  justify-center space-x-4 px-2 py-[0.375rem] pr-8 border rounded-md">
-              <Image
-                src={Google}
-                width={30}
-                height={30}
-                alt="Sign in with Google"
-              />
-              <p className="text-[0.875rem] font-semibold">
-                Sign in with Google
-              </p>
+            <div className="flex items-center  w-full gap-2 border border-white-300 rounded py-[0.375rem] px-6 justify-center">
+              <Image src={Google} alt="google icon" />
+              <p className="text-[0.875rem] font-semibold">Sign in with Google</p>
             </div>
-            <div className="flex items-center justify-center space-x-4 px-2 py-[0.375rem] pr-9 border rounded-md">
-              <Image
-                src={Apple}
-                width={30}
-                height={30}
-                alt="Sign in with Apple"
-              />
-              <p className="text-[0.875rem] font-semibold">
-                Sign in with Apple
-              </p>
+            <div className="flex items-center  w-full gap-2 border border-white-300 rounded py-[0.375rem] px-6 justify-center">
+              <Image src={Apple} alt="apple icon" />
+              <p className="text-[0.875rem] font-semibold">Sign in with Apple</p>
             </div>
           </div>
         </form>
