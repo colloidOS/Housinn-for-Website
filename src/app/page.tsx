@@ -9,7 +9,7 @@ import Listings from "@/app/components/Listings";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen flex-col min-w-full ">
+    <main className="flex min-h-screen flex-col min-w-full ">
       <HeroContainer />
       <Listings  shouldSlice={true} getRoute="/posts" dataRoute="posts"/>
       <AboutUs />
@@ -17,6 +17,6 @@ export default function Home() {
       <ChooseUsReviewContainer />
       <GetOurApp />
       <Footer />
-    </div>
+    </main>
   );
 }
