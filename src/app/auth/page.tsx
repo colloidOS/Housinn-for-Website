@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signInFields, newAccountFields, accountTypes } from "@/data/auth";
