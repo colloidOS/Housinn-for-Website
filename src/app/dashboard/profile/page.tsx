@@ -233,8 +233,8 @@ function Profile() {
         },
       });
 
-      clearCookie("Htoken");
-      clearCookie("Hid");
+      clearCookie("token");
+      clearCookie("id");
 
       toast.success("You have been logged out. Rerouting..");
 
