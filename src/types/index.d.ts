@@ -32,10 +32,9 @@ export interface Review {
   message: string;
 }
 
-
 export interface ListingCardProps {
   listing: Listing;
-  onSave: (id: string) => void; 
+  onSave: (id: string) => void;
 }
 
 export interface ListingFilterProps {
