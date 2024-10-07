@@ -5,8 +5,6 @@ import profile from "../../../../public/icons/profile.svg";
 import Button from "./Button";
 import axios from "axios";
 import api from "@/lib/api";
-import "react-toastify/dist/ReactToastify.css";
-import { toast, ToastContainer } from "react-toastify";
 import { ClipLoader } from "react-spinners";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
@@ -14,6 +12,7 @@ import ProfileFields from "./ProfileFields";
 import PasswordFields from "./PasswordFields";
 import AddressFields from "./AddressFields";
 import { useAuth } from "@/context/AuthContext";
+import { toast } from "sonner";
 
 function Profile() {
   const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null); // Correct typing
@@ -154,8 +153,14 @@ function Profile() {
       Cookies.set("number", updatedProfile.number);
       Cookies.set("company", updatedProfile.company);
     } catch (error) {
-      console.error("Error updating profile:", error);
-      toast.error("Failed to update profile");
+      if (axios.isAxiosError(error)) {
+        const errorMessage = error.response?.data?.message || error.message;
+        console.error(
+          "Submission Error:",
+          error.response?.data || error.message
+        );
+        toast.error(`Error: ${errorMessage}`);
+      }
     } finally {
       setProfileLoading(false);
     }
@@ -237,7 +242,14 @@ function Profile() {
         router.push("/auth");
       }, 2000);
     } catch (error) {
-      toast.error("Failed to log out. Please try again.");
+      if (axios.isAxiosError(error)) {
+        const errorMessage = error.response?.data?.message || error.message;
+        console.error(
+          "Submission Error:",
+          error.response?.data || error.message
+        );
+        toast.error(`Error: ${errorMessage}`);
+      }
     } finally {
       setLogoutLoading(false);
     }
@@ -245,7 +257,6 @@ function Profile() {
 
   return (
     <>
-      <ToastContainer />
       <div className="flex flex-col px-12 py-10 gap-8 bg-background-2 w-full">
         <div className="flex flex-col gap-4">
           <h3 className="text-2xl font-bold text-black">Profile</h3>

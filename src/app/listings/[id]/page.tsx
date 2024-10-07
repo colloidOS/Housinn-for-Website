@@ -4,6 +4,8 @@ import { useParams } from "next/navigation"; // Use useParams for dynamic routin
 import ListingDetail from "./components/ListingDetail";
 import api from "../../../lib/api";
 import { TailSpin } from "react-loader-spinner";
+import { toast } from "sonner";
+import axios from "axios";
 
 const ListingDetailPage: React.FC = () => {
   const params = useParams(); // Get the dynamic id from params
@@ -18,10 +20,13 @@ const ListingDetailPage: React.FC = () => {
     const fetchListing = async () => {
       try {
         const response = await api.get(`/posts/${id}`);
-        console.log("response", response.data.data.postDetail);
+        console.log("resssssss", response)
         setListing(response.data.data);
       } catch (error) {
-        console.error("Error fetching listing:", error);
+        if (axios.isAxiosError(error)) {
+          const errorMessage = error.response?.data?.message || error.message;
+          toast.error(`Error: ${errorMessage}`);
+        }
       } finally {
         setLoading(false);
       }
@@ -29,7 +34,6 @@ const ListingDetailPage: React.FC = () => {
 
     fetchListing();
   }, [id]);
-
 
   return (
     <div className=" w-full">
@@ -47,7 +51,7 @@ const ListingDetailPage: React.FC = () => {
       ) : listing ? (
         <ListingDetail listing={listing} />
       ) : (
-        <p>Listing not found</p>
+        <p className="flex justify-center items-center w-full h-screen">Listing not found</p>
       )}
     </div>
   );

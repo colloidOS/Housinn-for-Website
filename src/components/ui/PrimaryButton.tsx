@@ -27,11 +27,11 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({
       disabled={disabled || loading}
     >
       {loading ? (
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center ">
           <TailSpin
             visible={true}
-            height="16"
-            width="16"
+            height="24"
+            width="24"
             color="#fff"
             ariaLabel="tail-spin-loading"
             radius="2"

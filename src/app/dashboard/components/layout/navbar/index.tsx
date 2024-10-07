@@ -1,11 +1,10 @@
-"use client";
-
+"use client"
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import Image from "next/image";
-import Notification from "../../../../../../public/icons/notifications.svg";
-import { useAuth } from "@/context/AuthContext"; // Import the useAuth hook
-import { Logo } from "../../../../../../public/icons";
+import { usePathname } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import { Logo,Notification } from "../../../../../../public/icons";
+import { UserNavbarProps } from "@/types";
 
 const navlinks = [
   {
@@ -25,9 +24,7 @@ const navlinks = [
   },
 ];
 
-interface UserNavbarProps {
-  className?: string; // Explicitly typing the className prop as string
-}
+
 
 const UserNavbar: React.FC<UserNavbarProps> = ({ className }) => {
   const pathname = usePathname();

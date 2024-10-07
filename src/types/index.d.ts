@@ -1,4 +1,7 @@
-export type Listing = {
+import { AddNewListingFormData } from "@/types";
+export type Listings = {
+  isSaved: boolean;
+  amenities: string;
   id: string;
   price: number;
   title: string;
@@ -23,6 +26,17 @@ export type Listing = {
   createdAt: string;
   category: string;
   desc: string;
+  postDetail: {
+    amenities: string[];
+    // Other fields inside postDetail can be added as per your API response
+    propertySize: string | null;
+    income: string | null;
+    pet: string | null;
+    restaurant: string | null;
+    school: string | null;
+    desc: string | null;
+    // etc.
+  };
 };
 
 export interface Review {
@@ -32,18 +46,79 @@ export interface Review {
   message: string;
 }
 
-export interface ListingCardProps {
+export interface ListingsCardProps {
   listing: Listing;
   onSave: (id: string) => void;
+  isSaved: boolean;
 }
 
-export interface ListingFilterProps {
+export interface ListingsFilterProps {
   activeTag: string;
   onChange: (tag: string) => void;
 }
-export interface ListingGridProps {
+export interface ListingsGridProps {
   listing: Listing;
 }
-export interface ListingSortProps {
+export interface ListingsSortProps {
   listings: Listing[]; // Receive listings as prop
+}
+export interface ListingsProps {
+  shouldSlice?: boolean;
+  getRoute: string; // Add this
+  dataRoute: string; // Add this
+}
+
+export interface ListingsPageProps {
+  getRoute: string; // Accept the API route as a prop
+  dataRoute: string;
+  pageTitle: string; // Title of the page
+}
+
+export interface AddNewListings {
+  title: string;
+  images: File[]; // Changed from FileList | null to File[]
+  state: string;
+  city: string;
+  type: string;
+  amenities: string[];
+  propertySize: string;
+  bedroom: string;
+  price: string;
+  description: string;
+  category: string;
+  address: string;
+  landmark: string;
+}
+
+export interface ListingsProps {
+  shouldSlice?: boolean;
+}
+export interface UserNavbarProps {
+  className?: string;
+}
+
+export interface User {
+  id: string;
+  email: string;
+  userType: string;
+  avatar: string | null;
+  number: string | null;
+  firstName: string;
+  lastName: string;
+  state: string | null;
+  town: string | null;
+  address: string | null;
+  position: string | null;
+  company: string | null;
+  isVerified: boolean;
+  passwordResetToken: string | null;
+  passwordResetExpiry: string | null;
+  createdAt: string;
+  chatIDs: string[];
+  token: string;
+}
+
+export interface AuthContextType {
+  user: User | null;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }

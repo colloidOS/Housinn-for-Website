@@ -1,6 +1,5 @@
 "use client";
 import Footer from "@/components/Footer";
-import Image from "next/image";
 import AboutUs from "@/components/aboutus/page";
 import Services from "@/components/services/page";
 import HeroContainer from "@/components/HeroSectionContainer";
@@ -10,14 +9,14 @@ import Listings from "@/app/components/Listings";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen flex-col min-w-full ">
+    <main className="flex min-h-screen flex-col min-w-full ">
       <HeroContainer />
-      <Listings />
+      <Listings  shouldSlice={true} getRoute="/posts" dataRoute="posts"/>
       <AboutUs />
       <Services />
       <ChooseUsReviewContainer />
       <GetOurApp />
       <Footer />
-    </div>
+    </main>
   );
 }

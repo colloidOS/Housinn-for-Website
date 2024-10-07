@@ -1,11 +1,11 @@
 // Sort.tsx
 import React, { useState } from "react";
-import ListingGrid from "./ListingGrid";
-import { Listing, ListingSortProps } from "@/types";
+import ListingGrid from "./ListingsGrid";
+import { Listings, ListingsSortProps } from "@/types";
 
-const ListingSort: React.FC<ListingSortProps> = ({ listings }) => {
+const ListingSort: React.FC<ListingsSortProps> = ({ listings }) => {
   const [sortConfig, setSortConfig] = useState<{
-    key: keyof Listing;
+    key: keyof Listings;
     direction: "asc" | "desc";
   } | null>(null);
 
@@ -30,7 +30,7 @@ const ListingSort: React.FC<ListingSortProps> = ({ listings }) => {
     return sortableListings;
   }, [listings, sortConfig]);
 
-  const requestSort = (key: keyof Listing) => {
+  const requestSort = (key: keyof Listings) => {
     let direction: "asc" | "desc" = "asc";
     if (
       sortConfig &&
@@ -42,7 +42,7 @@ const ListingSort: React.FC<ListingSortProps> = ({ listings }) => {
     setSortConfig({ key, direction });
   };
 
-  const getClassNamesFor = (key: keyof Listing) => {
+  const getClassNamesFor = (key: keyof Listings) => {
     if (!sortConfig) {
       return "";
     }

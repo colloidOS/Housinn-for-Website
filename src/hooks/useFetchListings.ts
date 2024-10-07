@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import api from "@/lib/api"; // Adjust this import path based on your project structure
-import { Listing } from "@/types";
+import { Listings } from "@/types";
+import axios from "axios";
+import { toast } from "sonner";
 
-const useFetchListings = (endpoint: string) => {
-  const [listings, setListings] = useState<Listing[]>([]);
+const useFetchListings = (endpoint: string, dataRoute: string) => {
+  const [listings, setListings] = useState<Listings[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -12,7 +14,8 @@ const useFetchListings = (endpoint: string) => {
       setLoading(true);
       try {
         const response = await api.get(endpoint);
-        const data = response.data.data.posts.map((post: any) => ({
+        console.log("response.data.data", response.data.data)
+        const data = response.data.data[dataRoute].map((post: any) => ({
           id: post.id,
           price: post.price,
           title: post.title,
@@ -22,11 +25,18 @@ const useFetchListings = (endpoint: string) => {
           area: `${post.latitude} x ${post.longitude}`,
           imageUrl: post.images[0] || "/images/default-image.png",
           tag: post.type,
+          desc:post.desc,
           listed: new Date(post.createdAt).toLocaleDateString(),
           category: post.category,
+          isSaved: post.isSaved,
         }));
+        
         setListings(data);
       } catch (err) {
+        if (axios.isAxiosError(error)) {
+          const errorMessage = error.response?.data?.message || error.message;
+          toast.error(`Error: ${errorMessage}`);
+        }
         setError("Failed to fetch listings");
         console.error("Error fetching listings:", err);
       } finally {
@@ -37,7 +47,7 @@ const useFetchListings = (endpoint: string) => {
     fetchListings();
   }, [endpoint]);
 
-  return { listings, loading, error };
+  return { listings, setListings, loading, error };
 };
 
 export default useFetchListings;
