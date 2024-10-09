@@ -39,6 +39,9 @@ export type Listings = {
   };
   user: {
     avatar: string;
+    company:string;
+    firstName: string;
+    lastName: string;
   };
 };
 
