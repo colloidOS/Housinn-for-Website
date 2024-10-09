@@ -17,7 +17,7 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
   const [currentImage, setCurrentImage] = useState<string | null>(null);
   const location = ` ${listing.address}, ${listing.city}, ${listing.state}.`;
   const formattedPrice = `₦${Number(listing.price).toLocaleString()}`;
-
+console.log("listing",listing)
   const openGallery = (image?: string) => {
     if (image) {
       setCurrentImage(image);
@@ -152,7 +152,7 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
               </div>
             </div>
           </div>
-          <Image src={Sanrealtor} alt="logo" width={250} height={65} />
+          <img src={listing.user.avatar} alt="logo" className="w-12 h-12 rounded-full"  />
           <div>{renderAmenities()}</div>
         </div>
 

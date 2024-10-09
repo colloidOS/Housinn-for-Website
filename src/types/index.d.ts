@@ -37,6 +37,9 @@ export type Listings = {
     desc: string | null;
     // etc.
   };
+  user: {
+    avatar: string;
+  };
 };
 
 export interface Review {
@@ -121,4 +124,11 @@ export interface User {
 export interface AuthContextType {
   user: User | null;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
+}
+// Define the type for sideItems
+export interface SideItem {
+  route: string;
+  link: string;
+  icon: React.ComponentType<{ className?: string }>; // icon is a React component with an optional className prop
+  id: string;
 }

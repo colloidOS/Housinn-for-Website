@@ -1,6 +1,13 @@
 import React from "react";
 import Image from "next/image"; // Import for Next.js optimized image handling
-import { PhAddress, Bed, Bath, Feet, Camera, Menu } from "../../../public/icons";
+import {
+  PhAddress,
+  Bed,
+  Bath,
+  Feet,
+  Camera,
+  Menu,
+} from "../../../public/icons";
 import { useRouter } from "next/navigation";
 import { ListingsCardProps } from "@/types";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
@@ -12,7 +19,7 @@ const ListingCard: React.FC<ListingsCardProps> = ({
   isSaved,
 }) => {
   const router = useRouter();
-
+  console.log("lidhdhsting", listing);
   // Handle card click to navigate to the listing details page
   const handleCardClick = () => {
     router.push(`/listings/${listing.id}`);
@@ -55,14 +62,17 @@ const ListingCard: React.FC<ListingsCardProps> = ({
         </span>
 
         {/* Camera Icon */}
+       <div className="flex gap-1 absolute top-[13.8rem] left-1 cursor-pointer ">
+
         <Image
           src={Camera}
           alt="Camera"
           width={15}
           height={15}
-          className="absolute top-[14.5rem] left-1 cursor-pointer"
+          className=""
         />
-
+        <p className="text-white text-xs">{listing.imageLength}</p>
+        </div> 
         {/* Heart Icon for Saving */}
         <div
           onClick={(e) => {
@@ -76,7 +86,9 @@ const ListingCard: React.FC<ListingsCardProps> = ({
 
         {/* Listing Price */}
         <div className="flex justify-start">
-          <h3 className="text-xl text-primary font-semibold">{formattedPrice}</h3>
+          <h3 className="text-xl text-primary font-semibold">
+            {formattedPrice}
+          </h3>
           {/* Menu Icon */}
           {/* <Image
             src={Menu}

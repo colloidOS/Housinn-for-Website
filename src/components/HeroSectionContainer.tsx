@@ -8,7 +8,7 @@ const HeroContainer = () => {
       className="relative h-full bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: "url('/images/hero-bg.png')" }}
     >
-      <Navbar />
+      <Navbar colorScheme="default"/>
       <HeroSection />
     </div>
   );

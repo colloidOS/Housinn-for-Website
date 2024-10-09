@@ -14,7 +14,7 @@ const useFetchListings = (endpoint: string, dataRoute: string) => {
       setLoading(true);
       try {
         const response = await api.get(endpoint);
-        console.log("response.data.data", response.data.data)
+        console.log("response.data.data", response.data.data);
         const data = response.data.data[dataRoute].map((post: any) => ({
           id: post.id,
           price: post.price,
@@ -25,12 +25,13 @@ const useFetchListings = (endpoint: string, dataRoute: string) => {
           area: `${post.latitude} x ${post.longitude}`,
           imageUrl: post.images[0] || "/images/default-image.png",
           tag: post.type,
-          desc:post.desc,
+          desc: post.desc,
           listed: new Date(post.createdAt).toLocaleDateString(),
           category: post.category,
           isSaved: post.isSaved,
+          imageLength: post.images.length,
         }));
-        
+
         setListings(data);
       } catch (err) {
         if (axios.isAxiosError(error)) {

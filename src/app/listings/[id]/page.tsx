@@ -20,8 +20,8 @@ const ListingDetailPage: React.FC = () => {
     const fetchListing = async () => {
       try {
         const response = await api.get(`/posts/${id}`);
-        console.log("resssssss", response)
         setListing(response.data.data);
+        console.log("dfghtrd", response)
       } catch (error) {
         if (axios.isAxiosError(error)) {
           const errorMessage = error.response?.data?.message || error.message;
