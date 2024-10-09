@@ -75,7 +75,7 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
           activeTag={activeTag || ""}
           onChange={handleFilterChange}
         />
-        <div className="flex relative items-center h-full">
+        <div className="flex relative items-center  h-full">
           <input
             type="text"
             placeholder="Search listings..."
