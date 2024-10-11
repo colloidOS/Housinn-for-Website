@@ -20,9 +20,11 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isListView, setIsListView] = useState<boolean>(false);
   const router = useRouter();
- 
 
-  const { listings, loading, setListings} = useFetchListings(getRoute, dataRoute); // Use the custom hook
+  const { listings, loading, setListings } = useFetchListings(
+    getRoute,
+    dataRoute
+  ); // Use the custom hook
   const saveListing = useSaveListing(listings, setListings);
   const handleSave = (id: string, isSaved: boolean) => {
     saveListing(id, isSaved);
@@ -146,7 +148,7 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
                   key={listing.id}
                   listing={listing}
                   onSave={() => handleSave(listing.id, listing.isSaved)}
-                isSaved={listing.isSaved}
+                  isSaved={listing.isSaved}
                 />
               ))}
             </div>

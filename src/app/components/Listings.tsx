@@ -9,6 +9,8 @@ import useSaveListing from "../../hooks/useSaveListing";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import Wrapper from "@/components/ui/Wrapper";
 import { ListingsProps } from "@/types";
+import { Skeleton } from "@/components/ui/skeleton";
+import { toast } from "sonner";
 
 const Listings: React.FC<ListingsProps> = ({
   shouldSlice = true,
@@ -66,7 +68,21 @@ const Listings: React.FC<ListingsProps> = ({
       window.removeEventListener("resize", updateMaxListings);
     };
   }, []);
+  // Toast notification for error
+  useEffect(() => {
+    if (error) {
+      toast.error("Error fetching listings");
+    }
+  }, [error]);
   console.log("lsdfgredcdfcdxcvgfrd", listings);
+  const renderSkeletons = () => {
+    return Array.from({ length: maxListings }).map((_, index) => (
+      <Skeleton
+        key={index}
+        className="w-full h-96 rounded-[7px]  cursor-pointer bg-gray-300"
+      />
+    ));
+  };
   return (
     <Wrapper>
       <div className="flex flex-col md:flex-row gap-2 justify-between mb-5">
@@ -77,14 +93,9 @@ const Listings: React.FC<ListingsProps> = ({
         />
       </div>
 
-      {error ? (
-        <div className="w-full text-center py-12">
-          {" "}
-          <p>Error fetching listings.</p>
-        </div>
-      ) : loading ? (
-        <div className="flex justify-center items-center h-96">
-          <TailSpin visible={true} height="80" width="80" color="#002A50" />
+      {error || loading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 gap-6 mt-4">
+          {renderSkeletons()}
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  2xl:grid-cols-3 gap-6 mt-4">

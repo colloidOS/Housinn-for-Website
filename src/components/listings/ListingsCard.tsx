@@ -11,6 +11,7 @@ import {
 import { useRouter } from "next/navigation";
 import { ListingsCardProps } from "@/types";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
+import useFetchListings from "@/hooks/useFetchListings";
 
 // Combined Listing Card Component
 const ListingCard: React.FC<ListingsCardProps> = ({
@@ -19,6 +20,7 @@ const ListingCard: React.FC<ListingsCardProps> = ({
   isSaved,
 }) => {
   const router = useRouter();
+
   console.log("lidhdhsting", listing);
   // Handle card click to navigate to the listing details page
   const handleCardClick = () => {
@@ -44,8 +46,8 @@ const ListingCard: React.FC<ListingsCardProps> = ({
           <Image src={Camera} alt="Camera" width={15} height={15} />
           <p className="text-white text-xs">{listing.imageLength}</p>
         </div>
-         {/* Listing Tag */}
-         <span
+        {/* Listing Tag */}
+        <span
           className={`text-xs px-2 py-1 pr-4 clip-triangle-right absolute top-0 rounded-ss-[7px] left-0 ${
             listing.tag === "sale"
               ? "bg-green-200 text-green-700"
@@ -66,7 +68,6 @@ const ListingCard: React.FC<ListingsCardProps> = ({
 
       {/* Listing Content */}
       <div className="py-4 mb-2 flex flex-col gap-3 mx-5">
-      
         {/* Listing Price */}
         <div className="flex justify-between">
           <h3 className="text-xl text-primary font-semibold">
@@ -94,9 +95,7 @@ const ListingCard: React.FC<ListingsCardProps> = ({
         </div>
 
         {/* Listing Title */}
-        <p className="text-gray-700 text-xs font-semibold">
-          {listing.title}
-        </p>
+        <p className="text-gray-700 text-xs font-semibold">{listing.title}</p>
 
         {/* Listing Location */}
         <div className="flex items-start gap-1">
