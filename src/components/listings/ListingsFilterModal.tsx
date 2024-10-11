@@ -88,7 +88,7 @@ const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
               value={selectedState}
               onChange={handleStateChange} // Call state change handler
             >
-              <option value="" disabled>
+              <option value="" disabled >
                 Select State
               </option>
               {states.map((state, index) => (
