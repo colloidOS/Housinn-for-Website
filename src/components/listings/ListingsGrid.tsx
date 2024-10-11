@@ -1,5 +1,5 @@
 import React from "react";
-import { ListingsGridProps, Listings } from "@/types";
+import { ListingsGridProps} from "@/types";
 
 const ListingGrid: React.FC<ListingsGridProps> = ({ listing }) => {
   const listingDetails = [
@@ -13,11 +13,11 @@ const ListingGrid: React.FC<ListingsGridProps> = ({ listing }) => {
   ];
 
   return (
-    <tr className="border-b text-[14px]">
+    <tr className="border-b text-sm">
       {listingDetails.map((detail, index) => (
         <td
           key={index}
-          className={`py-2 px-4 ${index === 6 ? "hidden md:flex" : ""}`}
+          className={`py-2 px-4  ${index === 6 ? "hidden md:flex" : ""}`}
         >
           {detail}
         </td>
