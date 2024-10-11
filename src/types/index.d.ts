@@ -79,6 +79,7 @@ export interface ListingsPageProps {
   dataRoute: string;
   pageTitle: string; // Title of the page
   className: string;
+  
 }
 
 export interface AddNewListings {
@@ -104,7 +105,9 @@ export interface UserNavbarProps {
   className?: string;
 }
 interface ListingsFilterModalProps {
-  toggleModal: () => void; }
+  toggleModal: () => void; 
+  applyFilters: (filters: Record<string, any>) => void; // Add this line
+}
 
 export interface User {
   id: string;
@@ -137,4 +140,9 @@ export interface SideItem {
   link: string;
   icon: React.ComponentType<{ className?: string }>; // icon is a React component with an optional className prop
   id: string;
+}
+interface ListingsFilterProps {
+  activeTag: string;
+  onChange: (tag: string) => void;
+  applyFilters: (filters: Record<string, any>) => void; // Add this line
 }

@@ -2,18 +2,13 @@ import React, { useState } from "react";
 import { FilterArrow, FilterArrow2 } from "../../../public/icons";
 import Image from "next/image";
 import ListingsFilterModal from "./ListingsFilterModal";
-
-interface ListingsFilterProps {
-  activeTag: string;
-  onChange: (tag: string) => void;
-}
-
-// Reusable component to render list of options for filters
+import { ListingsFilterProps } from "@/types";
 
 
 const ListingsFilter: React.FC<ListingsFilterProps> = ({
   activeTag,
   onChange,
+  applyFilters,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false); // State to handle modal visibility
 
@@ -22,6 +17,7 @@ const ListingsFilter: React.FC<ListingsFilterProps> = ({
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
+
 
 
   return (
@@ -75,7 +71,7 @@ const ListingsFilter: React.FC<ListingsFilterProps> = ({
       </button>
 
       {isModalOpen && (
-     <ListingsFilterModal toggleModal={toggleModal}/>
+     <ListingsFilterModal toggleModal={toggleModal} applyFilters={applyFilters}/>
       )}
     </div>
   );

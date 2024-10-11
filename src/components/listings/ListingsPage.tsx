@@ -10,6 +10,21 @@ import ListingCard from "@/components/listings/ListingsCard";
 import useSaveListing from "@/hooks/useSaveListing";
 import ListingsFilter from "./ListingsFilter";
 import ListingSort from "./ListingSort";
+interface FilterValues {
+  minPrice?: string;
+  maxPrice?: string;
+  bedrooms?: string;
+  bathrooms?: string;
+  state?: string;
+  city?: string;
+  featured?: string;
+  status?: string;
+  minSquareFeet?: string;
+  maxSquareFeet?: string;
+  dateListedFrom?: string;
+  dateListedTo?: string;
+}
+
 
 const ListingsPage: React.FC<ListingsPageProps> = ({
   getRoute,
@@ -20,6 +35,7 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
   const [activeTag, setActiveTag] = useState<string | null>("all-properties");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isListView, setIsListView] = useState<boolean>(false);
+  const [filters, setFilters] = useState({}); // Store selected filters
   const router = useRouter();
 
   const { listings, loading, setListings } = useFetchListings(
@@ -40,6 +56,11 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
 
   const toggleView = () => {
     setIsListView(!isListView);
+  };
+
+  const applyFilters = (selectedFilters: FilterValues) => {
+    console.log("Filters received in ListingsPage: ", selectedFilters);
+    setFilters(selectedFilters);
   };
 
   const handleSearch = () => {
@@ -77,6 +98,7 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
         <ListingsFilter
           activeTag={activeTag || ""}
           onChange={handleFilterChange}
+          applyFilters={applyFilters}
         />
         <div className="flex relative items-center flex-1  h-full">
           <input
