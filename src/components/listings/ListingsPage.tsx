@@ -84,7 +84,7 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
             placeholder="Search listings..."
             value={searchTerm}
             onChange={handleSearchInputChange}
-            className="pr-2 text-right flex flex-1   p-2 h-11 border border-gray-300  rounded w-full placeholder:text-sm text-sm  placeholder:text-center outline-primary outline-1"
+            className="pr-2 text-right flex flex-1   p-2 h-11 border border-gray-300  rounded w-full placeholder:text-sm text-sm  placeholder:text-right "
           />
           <button className="rounded-[5px] absolute left-2">
             <Image

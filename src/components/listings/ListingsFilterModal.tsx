@@ -1,25 +1,34 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import Modal from "../ui/Modal"; // Assuming you have a Modal component
 import { ListingsFilterModalProps } from "@/types";
+import { cities, states } from "@/data/new-listing";
 const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
   toggleModal,
 }) => {
-
   // Arrays for Bedroom and Bathroom options
   const bedroomOptions = ["Any", "1+", "2+", "3+", "4+", "5+"];
   const bathroomOptions = ["Any", "1+", "2+", "3+", "4+", "5+"];
-
-  // Define your select options
-  const states = ["All States", "State 1", "State 2", "State 3"];
-  const localities = [
-    "All Localities",
-    "Locality 1",
-    "Locality 2",
-    "Locality 3",
-  ];
   const featuredOptions = ["All Listings", "Featured", "Not Featured"];
   const statusOptions = ["Any Status", "Available", "Sold"];
   const squareFeetOptions = ["No Min", "No Max", "500", "1000", "1500"];
+  // State to keep track of selected state and city
+  const [selectedState, setSelectedState] = useState<string>(""); // To track the selected state
+  const [availableCities, setAvailableCities] = useState<string[]>([]); // To store cities of the selected state
+  const [selectedCity, setSelectedCity] = useState<string>(""); // To track the selected city
+  // Handle state selection change
+  const handleStateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selected = event.target.value;
+    setSelectedState(selected);
+    setAvailableCities(cities[selected as keyof typeof cities] || []);
+    setSelectedCity(""); // Reset city selection when state changes
+  };
+
+  // Handle city selection change
+  const handleCityChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCity(event.target.value);
+  };
+
   return (
     <div>
       {" "}
@@ -27,15 +36,15 @@ const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
         <form className="p-6 w-full grid  md:grid-cols-2 gap-3  ">
           {/* Filter options inside modal */}
 
-          <div >
+          <div>
             <label>Min Price</label>
             <input
               type="number"
               placeholder="No Min"
-              className="w-full border rounded p-2 flex-1"
+              className="w-full border rounded p-2 flex-1 "
             />
           </div>
-          <div >
+          <div>
             <label>Max Price</label>
             <input
               type="number"
@@ -73,7 +82,15 @@ const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
           {/* State */}
           <div className="flex flex-col">
             <label>State</label>
-            <select name="state" className="p-2 border border-gray-500 rounded">
+            <select
+              name="state"
+              className="p-2 border border-gray-500 rounded"
+              value={selectedState}
+              onChange={handleStateChange} // Call state change handler
+            >
+              <option value="" disabled>
+                Select State
+              </option>
               {states.map((state, index) => (
                 <option key={index} value={state}>
                   {state}
@@ -82,16 +99,22 @@ const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
             </select>
           </div>
 
-          {/* Locality */}
+          {/* City/Locality */}
           <div className="flex flex-col">
-            <label>Locality</label>
+            <label>City</label>
             <select
-              name="locality"
+              name="city"
               className="p-2 border border-gray-500 rounded"
+              value={selectedCity}
+              onChange={handleCityChange} // Update selected city
+              disabled={!selectedState} // Disable if no state is selected
             >
-              {localities.map((locality, index) => (
-                <option key={index} value={locality}>
-                  {locality}
+              <option value="" disabled>
+                Select City
+              </option>
+              {availableCities.map((city, index) => (
+                <option key={index} value={city}>
+                  {city}
                 </option>
               ))}
             </select>
