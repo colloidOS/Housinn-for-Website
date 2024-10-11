@@ -8,6 +8,10 @@ const useFetchListings = (endpoint: string, dataRoute: string) => {
   const [listings, setListings] = useState<Listings[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const capitalizeFirstLetter = (str: string) => {
+    if (!str) return str; // Return if the string is empty
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  };
 
   useEffect(() => {
     const fetchListings = async () => {
@@ -17,9 +21,11 @@ const useFetchListings = (endpoint: string, dataRoute: string) => {
         console.log("response.data.data", response.data.data);
         const data = response.data.data[dataRoute].map((post: any) => ({
           id: post.id,
-          price: post.price,
+          price: `₦${Number(post.price).toLocaleString()}`,
           title: post.title,
-          location: ` ${post.address}, ${post.city}, ${post.state}`,
+          location: ` ${post.address}, ${capitalizeFirstLetter(
+            post.city
+          )}, ${capitalizeFirstLetter(post.state)}`,
           beds: post.bedroom,
           baths: post.bathroom,
           area: `${post.latitude} x ${post.longitude}`,

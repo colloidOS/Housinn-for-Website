@@ -11,7 +11,7 @@ import {
 import { useRouter } from "next/navigation";
 import { ListingsCardProps } from "@/types";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
-import useFetchListings from "@/hooks/useFetchListings";
+
 
 // Combined Listing Card Component
 const ListingCard: React.FC<ListingsCardProps> = ({
@@ -26,9 +26,6 @@ const ListingCard: React.FC<ListingsCardProps> = ({
   const handleCardClick = () => {
     router.push(`/listings/${listing.id}`);
   };
-
-  // Format the price as currency
-  const formattedPrice = `₦${Number(listing.price).toLocaleString()}`;
 
   return (
     <div
@@ -71,7 +68,7 @@ const ListingCard: React.FC<ListingsCardProps> = ({
         {/* Listing Price */}
         <div className="flex justify-between">
           <h3 className="text-xl text-primary font-semibold">
-            {formattedPrice}
+            {listing.price}
           </h3>
 
           {/* Heart Icon for Saving */}
