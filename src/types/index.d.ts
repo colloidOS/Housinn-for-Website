@@ -39,6 +39,9 @@ export type Listings = {
   };
   user: {
     avatar: string;
+    company: string;
+    firstName: string;
+    lastName: string;
   };
 };
 
@@ -75,6 +78,8 @@ export interface ListingsPageProps {
   getRoute: string; // Accept the API route as a prop
   dataRoute: string;
   pageTitle: string; // Title of the page
+  className: string;
+  
 }
 
 export interface AddNewListings {
@@ -98,6 +103,10 @@ export interface ListingsProps {
 }
 export interface UserNavbarProps {
   className?: string;
+}
+interface ListingsFilterModalProps {
+  toggleModal: () => void; 
+  applyFilters: (filters: Record<string, any>) => void; // Add this line
 }
 
 export interface User {
@@ -131,4 +140,9 @@ export interface SideItem {
   link: string;
   icon: React.ComponentType<{ className?: string }>; // icon is a React component with an optional className prop
   id: string;
+}
+interface ListingsFilterProps {
+  activeTag: string;
+  onChange: (tag: string) => void;
+  applyFilters: (filters: Record<string, any>) => void; // Add this line
 }
