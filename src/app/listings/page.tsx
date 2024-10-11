@@ -1,12 +1,18 @@
-import React from "react";
-import Listings from "../components/Listings";
+import ListingsPage from "@/components/listings/ListingsPage";
+import Wrapper from "@/components/ui/Wrapper";
 
-const ListingsPage = () => {
+
+const MyListings: React.FC = () => {
   return (
-    <div>
-      <Listings shouldSlice={false} getRoute="/posts" dataRoute="posts"/>
-    </div>
+    <Wrapper>
+      <ListingsPage
+        getRoute="/posts"
+        dataRoute="posts"
+        pageTitle="Listings"
+        className=""
+      />
+    </Wrapper>
   );
 };
 
-export default ListingsPage;
+export default MyListings;

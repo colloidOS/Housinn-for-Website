@@ -78,6 +78,7 @@ export interface ListingsPageProps {
   getRoute: string; // Accept the API route as a prop
   dataRoute: string;
   pageTitle: string; // Title of the page
+  className: string;
 }
 
 export interface AddNewListings {
@@ -102,6 +103,8 @@ export interface ListingsProps {
 export interface UserNavbarProps {
   className?: string;
 }
+interface ListingsFilterModalProps {
+  toggleModal: () => void; }
 
 export interface User {
   id: string;

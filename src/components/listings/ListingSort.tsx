@@ -77,10 +77,29 @@ const ListingSort: React.FC<ListingsSortProps> = ({ listings }) => {
           </th>
           <th
             className="py-2 px-4 cursor-pointer"
+            onClick={() => requestSort("beds")}
+          >
+            Bed <span className={getClassNamesFor("beds")}></span>
+          </th>
+          <th
+            className="py-2 px-4 cursor-pointer"
+            onClick={() => requestSort("baths")}
+          >
+            Bath <span className={getClassNamesFor("baths")}></span>
+          </th>
+          <th
+            className="py-2 px-4 cursor-pointer"
+            onClick={() => requestSort("area")}
+          >
+            Area <span className={getClassNamesFor("area")}></span>
+          </th>
+          <th
+            className="py-2 px-4 cursor-pointer hidden md:flex"
             onClick={() => requestSort("listed")}
           >
             Date <span className={getClassNamesFor("listed")}></span>
           </th>
+
           {/* <th
             className="py-2 px-4 cursor-pointer"
             onClick={() => requestSort("status")}

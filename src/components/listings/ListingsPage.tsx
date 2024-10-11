@@ -1,20 +1,21 @@
 "use client";
 import React, { useState } from "react";
-import ListingsFilter from "./ListingsFilter";
 import Image from "next/image";
-import ListingSort from "./ListingSort";
 import { TailSpin } from "react-loader-spinner"; // Import TailSpin loader
 import { useRouter } from "next/navigation";
-import { GridView, ListView, Search } from "../../../../../public/icons";
+import { GridView, ListView, Search } from "../../../public/icons";
 import { ListingsPageProps } from "@/types";
 import useFetchListings from "@/hooks/useFetchListings";
 import ListingCard from "@/components/listings/ListingsCard";
 import useSaveListing from "@/hooks/useSaveListing";
+import ListingsFilter from "./ListingsFilter";
+import ListingSort from "./ListingSort";
 
 const ListingsPage: React.FC<ListingsPageProps> = ({
   getRoute,
   dataRoute,
   pageTitle,
+  className,
 }) => {
   const [activeTag, setActiveTag] = useState<string | null>("all-properties");
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -66,24 +67,24 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
   const filteredListings = handleSearch();
 
   return (
-    <div className="xl:px-12 text-gray-600 pt-10 px-5 pb-12 w-full">
+    <div className={` ${className || ""}`}>
       <div>
         <h1 className="font-bold text-2xl mb-4">{pageTitle}</h1>{" "}
         {/* Dynamic title */}
       </div>
 
-      <div className="flex items-center gap-4 mb-5 justify-between w-full">
+      <div className="flex items-center gap-8 mb-5 justify-between w-full">
         <ListingsFilter
           activeTag={activeTag || ""}
           onChange={handleFilterChange}
         />
-        <div className="flex relative items-center  h-full">
+        <div className="flex relative items-center flex-1  h-full">
           <input
             type="text"
             placeholder="Search listings..."
             value={searchTerm}
             onChange={handleSearchInputChange}
-            className="pl-7 flex flex-1  justify-end pr-1 p-2 h-11 border border-gray-300  rounded w-full placeholder:text-sm text-sm  placeholder:text-center"
+            className="pr-2 text-right flex flex-1   p-2 h-11 border border-gray-300  rounded w-full placeholder:text-sm text-sm  placeholder:text-center outline-primary outline-1"
           />
           <button className="rounded-[5px] absolute left-2">
             <Image
