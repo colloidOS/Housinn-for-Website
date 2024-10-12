@@ -10,6 +10,7 @@ import ListingCard from "@/components/listings/ListingsCard";
 import useSaveListing from "@/hooks/useSaveListing";
 import ListingsFilter from "./ListingsFilter";
 import ListingSort from "./ListingSort";
+import { Skeleton } from "@/components/ui/skeleton";
 interface FilterValues {
   minPrice?: string;
   maxPrice?: string;
@@ -24,7 +25,6 @@ interface FilterValues {
   dateListedFrom?: string;
   dateListedTo?: string;
 }
-
 
 const ListingsPage: React.FC<ListingsPageProps> = ({
   getRoute,
@@ -86,7 +86,7 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
   };
 
   const filteredListings = handleSearch();
-
+ 
   return (
     <div className={` ${className || ""}`}>
       <div>
@@ -140,16 +140,11 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
       </div>
 
       {loading ? (
-        <div className="flex justify-center items-center min-h-[200px]">
-          <TailSpin
-            visible={true}
-            height="80"
-            width="80"
-            color="#0D66B7"
-            ariaLabel="tail-spin-loading"
-            radius="1"
-          />
-        </div>
+         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 gap-6 mt-4">
+         {Array(6).fill(null).map((_, index) => (
+           <Skeleton key={index} className="w-full h-96 rounded-[7px] cursor-pointer bg-gray-300" />
+         ))}
+       </div>
       ) : filteredListings.length === 0 ? (
         <div className="flex justify-center items-center flex-col mt-24 w-full">
           <h2 className="text-xl font-bold mb-4">No listings available</h2>
