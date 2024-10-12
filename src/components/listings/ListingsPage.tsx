@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { TailSpin } from "react-loader-spinner"; // Import TailSpin loader
 import { useRouter } from "next/navigation";
@@ -140,11 +141,21 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
       </div>
 
       {loading ? (
-         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 gap-6 mt-4">
-         {Array(6).fill(null).map((_, index) => (
-           <Skeleton key={index} className="w-full h-96 rounded-[7px] cursor-pointer bg-gray-300" />
+       <motion.div
+       className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 gap-6 mt-4"
+       initial={{ opacity: 1 }} // Starting with full opacity
+       animate={{ opacity: 0.3}} // Animate out
+       exit={{ opacity: 0.2 }}
+     >
+       {Array(6)
+         .fill(null)
+         .map((_, index) => (
+           <Skeleton
+             key={index}
+             className="w-full h-96 rounded-[7px] cursor-pointer bg-gray-300"
+           />
          ))}
-       </div>
+     </motion.div>
       ) : filteredListings.length === 0 ? (
         <div className="flex justify-center items-center flex-col mt-24 w-full">
           <h2 className="text-xl font-bold mb-4">No listings available</h2>
@@ -160,7 +171,14 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
           {isListView ? (
             <ListingSort listings={filteredListings} />
           ) : (
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+            <AnimatePresence>
+            <motion.div
+              className="grid grid-cols-2 lg:grid-cols-3 gap-4 mt-4"
+              initial={{ opacity: 0 }} // Start invisible
+              animate={{ opacity: 1 }}  // Animate in
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1 }} // Smooth transition timing
+            >
               {filteredListings.map((listing) => (
                 <ListingCard
                   key={listing.id}
@@ -169,7 +187,8 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
                   isSaved={listing.isSaved}
                 />
               ))}
-            </div>
+            </motion.div>
+          </AnimatePresence>
           )}
         </>
       )}
