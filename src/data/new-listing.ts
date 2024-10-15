@@ -34,6 +34,7 @@ export const amenities = [
 
 export const states = [
   "Abia",
+  "Abuja",
   "Adamawa",
   "Akwa Ibom",
   "Anambra",
@@ -73,6 +74,7 @@ export const states = [
 
 export const cities = {
   Abia: ["Umuahia", "Aba"],
+  Abuja: ["Abuja", "Garki", "Wuse", "Maitama"],
   Adamawa: ["Yola", "Mubi", "Jimeta"],
   "Akwa Ibom": ["Uyo", "Ikot Ekpene", "Eket"],
   Anambra: ["Awka", "Onitsha", "Nnewi"],
@@ -109,4 +111,3 @@ export const cities = {
   Yobe: ["Damaturu", "Nguru", "Potiskum"],
   Zamfara: ["Gusau", "Kaura Namoda", "Zurmi"],
 };
-

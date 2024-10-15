@@ -61,6 +61,7 @@ export interface ListingsCardProps {
 export interface ListingsFilterProps {
   activeTag: string;
   onChange: (tag: string) => void;
+  applyFilters: (filters: Record<string, any>) => void; // Add this line
 }
 export interface ListingsGridProps {
   listing: Listing;
@@ -79,7 +80,6 @@ export interface ListingsPageProps {
   dataRoute: string;
   pageTitle: string; // Title of the page
   className: string;
-  
 }
 
 export interface AddNewListings {
@@ -91,6 +91,7 @@ export interface AddNewListings {
   amenities: string[];
   propertySize: string;
   bedroom: string;
+  bathroom: string;
   price: string;
   description: string;
   category: string;
@@ -105,7 +106,7 @@ export interface UserNavbarProps {
   className?: string;
 }
 interface ListingsFilterModalProps {
-  toggleModal: () => void; 
+  toggleModal: () => void;
   applyFilters: (filters: Record<string, any>) => void; // Add this line
 }
 
