@@ -21,7 +21,7 @@ const ListingCard: React.FC<ListingsCardProps> = ({
 }) => {
   const router = useRouter();
 
-  console.log("lidhdhsting", listing);
+  // console.log("lidhdhsting", listing);
   // Handle card click to navigate to the listing details page
   const handleCardClick = () => {
     router.push(`/listings/${listing.id}`);

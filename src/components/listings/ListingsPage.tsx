@@ -45,7 +45,7 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
   };
 
   const applyFilters = (selectedFilters: FilterValues) => {
-    console.log("Filters received in ListingsPage: ", selectedFilters);
+    // console.log("Filters received in ListingsPage: ", selectedFilters);
     setFilters(selectedFilters);
   };
 

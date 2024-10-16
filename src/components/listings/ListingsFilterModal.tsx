@@ -32,7 +32,7 @@ const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
     dateListedFrom: "",
     dateListedTo: "",
   });
-  console.log("this are the filter values",filterValues)
+  // console.log("this are the filter values",filterValues)
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFilterValues((prev) => ({ ...prev, [name]: value }));
@@ -60,7 +60,7 @@ const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
   const handleApplyFilters = () => {
     applyFilters(filterValues); // Pass selected filter values to parent component
     
-    console.log("this is the applied filter", applyFilters)
+    // console.log("this is the applied filter", applyFilters)
     toggleModal(); // Close modal after applying filters
   };
 
