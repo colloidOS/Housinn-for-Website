@@ -1,30 +1,16 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { TailSpin } from "react-loader-spinner"; // Import TailSpin loader
 import { useRouter } from "next/navigation";
 import { GridView, ListView, Search } from "../../../public/icons";
-import { ListingsPageProps } from "@/types";
+import { FilterValues, ListingsPageProps } from "@/types";
 import useFetchListings from "@/hooks/useFetchListings";
 import ListingCard from "@/components/listings/ListingsCard";
 import useSaveListing from "@/hooks/useSaveListing";
 import ListingsFilter from "./ListingsFilter";
 import ListingSort from "./ListingSort";
-interface FilterValues {
-  minPrice?: string;
-  maxPrice?: string;
-  bedrooms?: string;
-  bathrooms?: string;
-  state?: string;
-  city?: string;
-  featured?: string;
-  status?: string;
-  minSquareFeet?: string;
-  maxSquareFeet?: string;
-  dateListedFrom?: string;
-  dateListedTo?: string;
-}
-
+import { Skeleton } from "@/components/ui/skeleton";
 
 const ListingsPage: React.FC<ListingsPageProps> = ({
   getRoute,
@@ -34,7 +20,12 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
 }) => {
   const [activeTag, setActiveTag] = useState<string | null>("all-properties");
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [isListView, setIsListView] = useState<boolean>(false);
+  const [isListView, setIsListView] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("viewMode") === "list";
+    }
+    return false; // Default to grid view if localStorage is not available
+  });
   const [filters, setFilters] = useState({}); // Store selected filters
   const router = useRouter();
 
@@ -55,13 +46,19 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
   };
 
   const toggleView = () => {
-    setIsListView(!isListView);
+    const newView = !isListView;
+    setIsListView(newView);
+    // Save the new view mode to localStorage
+    localStorage.setItem("viewMode", newView ? "list" : "grid");
   };
 
   const applyFilters = (selectedFilters: FilterValues) => {
-    console.log("Filters received in ListingsPage: ", selectedFilters);
+    // console.log("Filters received in ListingsPage: ", selectedFilters);
     setFilters(selectedFilters);
   };
+  useEffect(() => {
+    localStorage.removeItem("viewMode");
+  }, []);
 
   const handleSearch = () => {
     return listings.filter((listing) => {
@@ -140,16 +137,42 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
       </div>
 
       {loading ? (
-        <div className="flex justify-center items-center min-h-[200px]">
-          <TailSpin
-            visible={true}
-            height="80"
-            width="80"
-            color="#0D66B7"
-            ariaLabel="tail-spin-loading"
-            radius="1"
-          />
-        </div>
+        isListView ? ( // Check if in list view
+          <motion.div
+            className="grid grid-cols-1 gap-1"
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 0.3 }}
+            exit={{ opacity: 0.2 }}
+          >
+            {Array(15)
+              .fill(null)
+              .map((_, index) => (
+                <Skeleton
+                  key={index}
+                  className={`w-full rounded-none h-10 border-b border-b-gray-400 cursor-pointer bg-gray-200 ${
+                    index === 0 ? "bg-gray-300" : ""
+                  }`}
+                />
+              ))}
+          </motion.div>
+        ) : (
+          // Check if in grid view
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 gap-6 mt-4"
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 0.3 }}
+            exit={{ opacity: 0.2 }}
+          >
+            {Array(6)
+              .fill(null)
+              .map((_, index) => (
+                <Skeleton
+                  key={index}
+                  className="w-full h-96 rounded-[7px] cursor-pointer bg-gray-300"
+                />
+              ))}
+          </motion.div>
+        )
       ) : filteredListings.length === 0 ? (
         <div className="flex justify-center items-center flex-col mt-24 w-full">
           <h2 className="text-xl font-bold mb-4">No listings available</h2>
@@ -165,16 +188,24 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
           {isListView ? (
             <ListingSort listings={filteredListings} />
           ) : (
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-              {filteredListings.map((listing) => (
-                <ListingCard
-                  key={listing.id}
-                  listing={listing}
-                  onSave={() => handleSave(listing.id, listing.isSaved)}
-                  isSaved={listing.isSaved}
-                />
-              ))}
-            </div>
+            <AnimatePresence>
+              <motion.div
+                className="grid grid-cols-2 lg:grid-cols-3 gap-4 mt-4"
+                initial={{ opacity: 0 }} // Start invisible
+                animate={{ opacity: 1 }} // Animate in
+                exit={{ opacity: 0 }}
+                transition={{ duration: 1 }} // Smooth transition timing
+              >
+                {filteredListings.map((listing) => (
+                  <ListingCard
+                    key={listing.id}
+                    listing={listing}
+                    onSave={() => handleSave(listing.id, listing.isSaved)}
+                    isSaved={listing.isSaved}
+                  />
+                ))}
+              </motion.div>
+            </AnimatePresence>
           )}
         </>
       )}

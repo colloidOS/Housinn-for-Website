@@ -11,6 +11,7 @@ import Wrapper from "@/components/ui/Wrapper";
 import { ListingsProps } from "@/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Listings: React.FC<ListingsProps> = ({
   shouldSlice = true,
@@ -94,24 +95,34 @@ const Listings: React.FC<ListingsProps> = ({
       </div>
 
       {error || loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 gap-6 mt-4">
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 gap-6 mt-4"
+          initial={{ opacity: 1 }} // Starting with full opacity
+          animate={{ opacity: 0.3 }} // Animate out
+          exit={{ opacity: 0.2 }}
+        >
           {renderSkeletons()}
-        </div>
+        </motion.div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  2xl:grid-cols-3 gap-6 mt-4">
-          {displayedListings.length > 0 ? (
-            displayedListings.map((listing) => (
-              <ListingCard
-                key={listing.id}
-                listing={listing}
-                onSave={() => handleSave(listing.id, listing.isSaved)}
-                isSaved={listing.isSaved}
-              />
-            ))
-          ) : (
-            <p>No listings found</p>
-          )}
-        </div>
+        <AnimatePresence>
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  2xl:grid-cols-3 gap-6 mt-4"
+            transition={{ duration: 1 }} // Smooth transition timing
+          >
+            {displayedListings.length > 0 ? (
+              displayedListings.map((listing) => (
+                <ListingCard
+                  key={listing.id}
+                  listing={listing}
+                  onSave={() => handleSave(listing.id, listing.isSaved)}
+                  isSaved={listing.isSaved}
+                />
+              ))
+            ) : (
+              <p>No listings found</p>
+            )}
+          </motion.div>
+        </AnimatePresence>
       )}
 
       {error

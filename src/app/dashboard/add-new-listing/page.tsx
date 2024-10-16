@@ -35,6 +35,7 @@ function AddNewListing() {
     amenities: [],
     propertySize: "",
     bedroom: "",
+    bathroom: "",
     price: "",
     description: "",
     category: "",
@@ -141,7 +142,9 @@ function AddNewListing() {
     formDataToSend.append("city", formatString(formData.city));
     formDataToSend.append("state", formatString(formData.state));
     formDataToSend.append("bedroom", formData.bedroom);
+    formDataToSend.append("bathroom", formData.bathroom);
     formDataToSend.append("type", formData.type);
+    formDataToSend.append("propertySize", formData.propertySize);
     formDataToSend.append("desc", formData.description);
     formDataToSend.append("category", formData.category);
     formData.amenities.forEach((amenity, idx) => {
@@ -251,6 +254,16 @@ function AddNewListing() {
               placeholder=" Eg. 1, 2, 4"
               className="p-2 w-full border border-gray-300 rounded-md"
               value={formData.bedroom}
+              onChange={handleChange}
+            />
+          </FormFieldWrapper>
+          <FormFieldWrapper label="Number of bathroom">
+            <input
+              type="number"
+              name="bathroom"
+              placeholder=" Eg. 1, 2, 4"
+              className="p-2 w-full border border-gray-300 rounded-md"
+              value={formData.bathroom}
               onChange={handleChange}
             />
           </FormFieldWrapper>
