@@ -1,6 +1,6 @@
 // Sort.tsx
 import React, { useState } from "react";
-import ListingGrid from "./ListingsGrid";
+import ListingGrid from "./ListingsTable";
 import { Listings, ListingsSortProps } from "@/types";
 
 const ListingSort: React.FC<ListingsSortProps> = ({ listings }) => {

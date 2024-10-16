@@ -63,7 +63,7 @@ export interface ListingsFilterProps {
   onChange: (tag: string) => void;
   applyFilters: (filters: Record<string, any>) => void; // Add this line
 }
-export interface ListingsGridProps {
+export interface ListingsTableProps {
   listing: Listing;
 }
 export interface ListingsSortProps {

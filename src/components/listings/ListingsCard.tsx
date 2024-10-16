@@ -11,7 +11,7 @@ import {
 import { useRouter } from "next/navigation";
 import { ListingsCardProps } from "@/types";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
-
+import { FaHouse } from "react-icons/fa6";
 
 // Combined Listing Card Component
 const ListingCard: React.FC<ListingsCardProps> = ({
@@ -68,7 +68,7 @@ const ListingCard: React.FC<ListingsCardProps> = ({
         {/* Listing Price */}
         <div className="flex justify-between">
           <h3 className="text-xl text-primary font-semibold">
-            {listing.price}
+            {listing.price} 
           </h3>
 
           {/* Heart Icon for Saving */}
@@ -92,6 +92,11 @@ const ListingCard: React.FC<ListingsCardProps> = ({
         </div>
 
         {/* Listing Title */}
+
+        <p className="p-1 w-fit rounded-[7px] bg-gray-400 text-white text-xs">
+          {listing.category.charAt(0).toUpperCase() + listing.category.slice(1)}
+        </p>
+
         <p className="text-gray-700 text-xs font-semibold">{listing.title}</p>
 
         {/* Listing Location */}
@@ -113,10 +118,10 @@ const ListingCard: React.FC<ListingsCardProps> = ({
               {listing.baths} Baths
             </div>
           </div>
-          <div className="flex gap-1">
+          {/* <div className="flex gap-1">
             <Image src={Feet} alt="Area icon" width={15} height={15} />
             {listing.area} sq.ft
-          </div>
+          </div> */}
         </div>
 
         {/* Listing Date

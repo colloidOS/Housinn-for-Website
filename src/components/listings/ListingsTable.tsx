@@ -1,7 +1,7 @@
 import React from "react";
-import { ListingsGridProps} from "@/types";
+import { ListingsTableProps} from "@/types";
 
-const ListingGrid: React.FC<ListingsGridProps> = ({ listing }) => {
+const ListingTable: React.FC<ListingsTableProps> = ({ listing }) => {
   const listingDetails = [
     listing.title,
     listing.tag,
@@ -26,4 +26,4 @@ const ListingGrid: React.FC<ListingsGridProps> = ({ listing }) => {
   );
 };
 
-export default ListingGrid;
+export default ListingTable;
