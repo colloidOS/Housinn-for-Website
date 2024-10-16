@@ -68,6 +68,7 @@ function Profile() {
 
   const token = user?.token;
   const id = user?.id;
+  console.log("id", id);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -227,33 +228,37 @@ function Profile() {
   const handleLogout = async () => {
     setLogoutLoading(true);
     try {
-      await api.post("/auth/logout", {
+      await api.post("/auth/logout", {}, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      clearCookie("token");
-      clearCookie("id");
+      // Clear all cookies dynamically
+      const cookies = Cookies.get(); // Get all cookies
+      for (const cookie in cookies) {
+        Cookies.remove(cookie); // Remove each cookie
+      }
 
-      toast.success("You have been logged out. Rerouting..");
+      // Reset the user state in AuthContext
+      setUser(null); // This line clears the user state
+
+      toast.success("You have been logged out. Rerouting...");
 
       setTimeout(() => {
-        router.push("/auth");
+        router.push("/auth"); // Redirect to auth page
       }, 2000);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorMessage = error.response?.data?.message || error.message;
-        console.error(
-          "Submission Error:",
-          error.response?.data || error.message
-        );
+        console.error("Submission Error:", error.response?.data || error.message);
         toast.error(`Error: ${errorMessage}`);
       }
     } finally {
       setLogoutLoading(false);
     }
   };
+
 
   return (
     <>
@@ -449,24 +454,19 @@ function Profile() {
               </p>
             </div>
             <div>
-              {isLogoutLoading ? (
-                <button
-                  onClick={handleLogout}
-                  className={`px-6 py-[11px] flex gap-2 items-center focus:outline-primary bg-primary text-white rounded-md text-base font-semibold`}
-                >
-                  {" "}
-                  Logging out <ClipLoader color="#fff" size={20} />
-                </button>
-              ) : (
-                <button
-                  onClick={handleLogout}
-                  className={`px-6 py-[11px] flex gap-2 items-center focus:outline-primary bg-primary text-white rounded-md text-base font-semibold`}
-                >
-                  {" "}
-                  <img src="/icons/sign_out.svg" />
-                  Logout
-                </button>
-              )}
+              <Button
+                type="button"
+                onClick={handleLogout}
+                disabled={isLogoutLoading}
+              >
+                {isLogoutLoading ? (
+                  <span className="flex items-center gap-2">
+                    Logging out <ClipLoader color="#fff" size={20} />
+                  </span>
+                ) : (
+                  "Logout"
+                )}
+              </Button>
             </div>
           </div>
         </div>
