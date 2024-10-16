@@ -23,9 +23,13 @@ const useFetchListings = (endpoint: string, dataRoute: string) => {
           id: post.id,
           price: `₦${Number(post.price).toLocaleString()}`,
           title: post.title,
+          cityState: `${capitalizeFirstLetter(
+            post.city
+          )}, ${capitalizeFirstLetter(post.state)}.`,
           location: ` ${post.address}, ${capitalizeFirstLetter(
             post.city
-          )}, ${capitalizeFirstLetter(post.state)}`,
+          )}, ${capitalizeFirstLetter(post.state)}.`,
+         
           beds: post.bedroom,
           baths: post.bathroom,
           area: `${post.latitude} x ${post.longitude}`,

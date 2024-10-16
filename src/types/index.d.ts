@@ -6,6 +6,7 @@ export type Listings = {
   price: number;
   title: string;
   location: string;
+  cityState: string;
   beds: number;
   baths: number;
   area: string;
@@ -68,7 +69,6 @@ export interface ListingsTableProps {
 }
 export interface ListingsSortProps {
   listings: Listing[]; // Receive listings as prop
-  
 }
 export interface ListingsProps {
   shouldSlice?: boolean;

@@ -10,13 +10,21 @@ const ListingTable: React.FC<ListingsTableProps> = ({ listing }) => {
   const [isSaved, setIsSaved] = useState(listing.isSaved); // Track saved state locally
   const saveListing = useSaveListing([listing], () => {});
   console.log("listing in table", listing);
+  const capitalizeWords = (str: string) => {
+    return str
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
+  };
+
   const listingDetails = [
-    listing.title,
-    listing.tag,
+    capitalizeWords(listing.title),
+    capitalizeWords(listing.tag),
+    capitalizeWords(listing.category),
     listing.price,
+    listing.cityState,
     listing.beds,
     listing.baths,
-    listing.category,
     listing.listed,
   ];
   const handleCardClick = () => {
@@ -36,13 +44,13 @@ const ListingTable: React.FC<ListingsTableProps> = ({ listing }) => {
       {listingDetails.map((detail, index) => (
         <td
           key={index}
-          className={`text-gray-600 px-4 mb-4  ${index === 6 ? "hidden md:flex" : ""}`}
+          className={`text-gray-600 px-4 mb-4  pt-4`}
         >
           {detail}
         </td>
       ))}
-      <td className="text-secondary cursor-pointer px-6" onClick={handleSave}>
-        {listing.isSaved ? <FaHeart /> : <FaRegHeart />}{" "}
+      <td className="text-secondary cursor-pointer px-4 mb-4" onClick={handleSave}>
+      {isSaved ? <FaHeart /> : <FaRegHeart />}{" "}
       </td>
     </tr>
   );
