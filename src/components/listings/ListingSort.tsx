@@ -2,7 +2,11 @@
 import React, { useState } from "react";
 import { Listings, ListingsSortProps } from "@/types";
 import ListingTable from "./ListingsTable";
-
+type Column<T> = {
+  key: keyof T;
+  label: string;
+  hidden?: boolean; // Optional property for hidden columns
+};
 const ListingSort: React.FC<ListingsSortProps> = ({ listings }) => {
   const [sortConfig, setSortConfig] = useState<{
     key: keyof Listings;
@@ -52,73 +56,33 @@ const ListingSort: React.FC<ListingsSortProps> = ({ listings }) => {
         : "desc"
       : "";
   };
+  const columns: Column<Listings>[] = [
+    { key: "title", label: "Property Title" },
+    { key: "tag", label: "Type" },
+    { key: "category", label: "Category" },
+    { key: "price", label: "Price" },
+    { key: "cityState", label: "Location" },
+    { key: "beds", label: "Bed" },
+    { key: "baths", label: "Bath" },
+    { key: "listed", label: "Date", hidden: true }, // Add hidden flag for responsive design
+    { key: "isSaved", label: "Fav" },
+  ];
 
   return (
     <table className="min-w-full table-auto border-collapse">
       <thead>
         <tr className="bg-gray-200 text-left">
-          <th
-            className="py-2 px-4 cursor-pointer"
-            onClick={() => requestSort("title")}
-          >
-            Property Title <span className={getClassNamesFor("title")}></span>
-          </th>
-          <th
-            className="py-2 px-4 cursor-pointer"
-            onClick={() => requestSort("tag")}
-          >
-            Type <span className={getClassNamesFor("tag")}></span>
-          </th>
-          <th
-            className="py-2 px-4 cursor-pointer"
-            onClick={() => requestSort("category")}
-          >
-            Category <span className={getClassNamesFor("category")}></span>
-          </th>
-          <th
-            className="py-2 px-4 cursor-pointer"
-            onClick={() => requestSort("price")}
-          >
-            Price <span className={getClassNamesFor("price")}></span>
-          </th>
-          <th
-            className="py-2 px-4 cursor-pointer"
-            onClick={() => requestSort("cityState")}
-          >
-            Location <span className={getClassNamesFor("cityState")}></span>
-          </th>
-          <th
-            className="py-2 px-4 cursor-pointer"
-            onClick={() => requestSort("beds")}
-          >
-            Bed <span className={getClassNamesFor("beds")}></span>
-          </th>
-          <th
-            className="py-2 px-4 cursor-pointer"
-            onClick={() => requestSort("baths")}
-          >
-            Bath <span className={getClassNamesFor("baths")}></span>
-          </th>
-
-          <th
-            className="py-2 px-4 cursor-pointer hidden md:flex"
-            onClick={() => requestSort("listed")}
-          >
-            Date <span className={getClassNamesFor("listed")}></span>
-          </th>
-          <th
-            className="py-2 px-4 cursor-pointer"
-            onClick={() => requestSort("isSaved")}
-          >
-            Fav <span className={getClassNamesFor("isSaved")}></span>
-          </th>
-
-          {/* <th
-            className="py-2 px-4 cursor-pointer"
-            onClick={() => requestSort("status")}
-          >
-            Status <span className={getClassNamesFor("status")}></span>
-          </th> */}
+          {columns.map(({ key, label, hidden }) => (
+            <th
+              key={key}
+              className={`py-2 px-4 cursor-pointer ${
+                hidden ? "hidden md:flex" : ""
+              }`}
+              onClick={() => requestSort(key)}
+            >
+              {label} <span className={getClassNamesFor(key)}></span>
+            </th>
+          ))}
         </tr>
       </thead>
       <tbody>
