@@ -8,12 +8,11 @@ import api from "@/lib/api";
 import { ClipLoader } from "react-spinners";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
-import ProfileFields from "./ProfileFields";
-import PasswordFields from "./PasswordFields";
-import AddressFields from "./AddressFields";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
-
+import ProfileForm from './components/ProfileForm';
+import VerificationForm from './components/VerificationForm';
+import PasswordForm from './components/PasswordForm';
 function Profile() {
   const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null); // Correct typing
   const [selectedImage, setSelectedImage] = useState<string | null>(null); // For preview as a string
@@ -68,6 +67,7 @@ function Profile() {
 
   const token = user?.token;
   const id = user?.id;
+  console.log("id", id);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -141,7 +141,7 @@ function Profile() {
       // Set the Cloudinary avatar URL in cookies
       Cookies.set("avatar", updatedAvatarURL);
 
-      // Update the user in AuthContext with the new avatar URL
+
       setUser((prevUser) => ({
         ...prevUser,
         avatar: updatedAvatarURL, // Update the avatar in the user context
@@ -227,16 +227,23 @@ function Profile() {
   const handleLogout = async () => {
     setLogoutLoading(true);
     try {
-      await api.post("/auth/logout", {
+      await api.post("/auth/logout", {}, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      clearCookie("token");
-      clearCookie("id");
+      // Clear all relevant cookies
+      Cookies.remove('token');
+      Cookies.remove('id');
+      Cookies.remove('email');
+      Cookies.remove('userType');
+      // Remove any other cookies related to user state
 
-      toast.success("You have been logged out. Rerouting..");
+      // Reset the user state in AuthContext
+      setUser(null); // This line clears the user state
+
+      toast.success("You have been logged out. Rerouting...");
 
       setTimeout(() => {
         router.push("/auth");
@@ -244,16 +251,14 @@ function Profile() {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorMessage = error.response?.data?.message || error.message;
-        console.error(
-          "Submission Error:",
-          error.response?.data || error.message
-        );
+        console.error("Submission Error:", error.response?.data || error.message);
         toast.error(`Error: ${errorMessage}`);
       }
     } finally {
       setLogoutLoading(false);
     }
   };
+
 
   return (
     <>
@@ -262,181 +267,33 @@ function Profile() {
           <h3 className="text-2xl font-bold text-black">Profile</h3>
           <hr className="text-gray-300" />
         </div>
-        <form onSubmit={handleUpdateSubmit}>
-          <div className="flex flex-col gap-3">
-            <div className="flex gap-10 lg:gap-[164px]">
-              <div className="flex flex-col gap-0">
-                <p className="text-lg font-semibold">Profile Photo</p>
-                <p className="text-sm font-normal text-gray-600">
-                  upload your profile photo
-                </p>
-              </div>
-              <div className="flex flex-col justify-center items-center gap-[33px] px-[28px] lg:pt-[62px] pb-[14px]">
-                <div className="relative">
-                  {selectedImage ? (
-                    <div>
-                      <img
-                        src={selectedImage}
-                        alt="Profile Photo"
-                        className="border w-[137px] h-[137px] border-gray-300 relative rounded-full object-cover"
-                      />
-                    </div>
-                  ) : (
-                    <Image
-                      src={profile}
-                      alt="select-profile"
-                      height={137}
-                      width={137}
-                      className="border border-gray-300 rounded-full"
-                    />
-                  )}
-                </div>
-                <div className="flex flex-col gap-4 items-center">
-                  <Button
-                    type="button"
-                    onClick={triggerImageUpload}
-                    className="focus:outline-none text-nowrap"
-                    disabled={isProfileLoading}
-                  >
-                    Select your Image/Photo
-                  </Button>
-                  <span className="text-gray-500 text-sm font-normal">
-                    *minimum 500px x 500px
-                  </span>
-                  <input
-                    type="file"
-                    id="profileImageInput"
-                    accept="image/*"
-                    style={{ display: "none" }}
-                    onChange={handleImageUpload}
-                  />
-                </div>
-              </div>
-            </div>
-            <hr className="text-gray-300 pb-5" />
-          </div>
-          <div className="flex flex-col gap-6">
-            <div className="flex">
-              <div className="flex flex-col gap-2">
-                <p className="text-lg font-semibold">Edit Your Profile</p>
-                <p className="text-sm font-normal w-[150px] lg:w-[308px] text-gray-600">
-                  Change your account type, edit your contact information, add
-                  your social media details and your user details.
-                </p>
-              </div>
-              <div className="flex flex-col px-12 lg:pt-8 gap-16 w-full">
-                <div className="flex flex-col gap-8">
-                  <div>
-                    <p className="text-primary font-semibold">Account Type</p>
-                  </div>
-                  <div className="flex flex-col gap-3">
-                    <p className="text-primary font-semibold">
-                      Contact Information
-                    </p>
-                    {loading ? (
-                      <p>Loading...</p> // Show loading indicator
-                    ) : (
-                      <ProfileFields
-                        updatedProfile={updatedProfile}
-                        setUpdatedProfile={setUpdatedProfile}
-                      />
-                    )}
-                  </div>
-                </div>
-                <Button
-                  type="submit"
-                  className="w-fit"
-                  onClick={null}
-                  disabled={isProfileLoading}
-                >
-                  {isProfileLoading ? (
-                    <span className="flex items-center gap-2">
-                      Uploading <ClipLoader color="#fff" size={20} />
-                    </span>
-                  ) : (
-                    "Upload Profile"
-                  )}
-                </Button>
-              </div>
-            </div>
-            <hr className="text-gray-300 pb-8" />
-          </div>
-        </form>
+        <ProfileForm
+        updatedProfile={updatedProfile}
+        setUpdatedProfile={setUpdatedProfile}
+        handleUpdateSubmit={handleUpdateSubmit}
+        isProfileLoading={isProfileLoading}
+        selectedImage={selectedImage}
+        triggerImageUpload={triggerImageUpload}
+        handleImageUpload={handleImageUpload}
+      />
         <div className="flex flex-col gap-4 w-full">
-          <form
-            className="flex lg:gap-[140px]"
-            onSubmit={handleVerificationSubmit}
-          >
-            <div className="flex flex-col gap-2 text-nowrap">
-              <p className="text-lg font-semibold">Verification</p>
-              <p className="text-sm font-normal text-gray-600 w-[150px]">
-                Get your account verified!
-              </p>
-            </div>
-            <div className="px-12 lg:py-8 flex flex-col gap-8 w-full">
-              <div className="flex flex-col gap-4">
-                {loading ? (
-                  <p>Loading...</p>
-                ) : (
-                  <AddressFields
-                    updateVerification={updateVerification}
-                    setUpdateVerification={setUpdateVerification}
-                    selectedState={selectedState}
-                    setSelectedState={setSelectedState}
-                    selectedCity={selectedCity}
-                    setSelectedCity={setSelectedCity}
-                  />
-                )}
-              </div>
-              <Button
-                type="submit"
-                className="w-fit"
-                onClick={null}
-                disabled={isVerificationLoading}
-              >
-                {isVerificationLoading ? (
-                  <span className="flex items-center gap-2">
-                    Verifying <ClipLoader color="#fff" size={20} />
-                  </span>
-                ) : (
-                  "Verify Account"
-                )}
-              </Button>
-            </div>
-          </form>
-          <form className="flex gap-3 w-full" onSubmit={handlePasswordChange}>
-            <div className="flex flex-col gap-0 ">
-              <p className="text-lg font-semibold">Change Password</p>
-              <p className="text-sm font-normal text-gray-600 w-[150px] lg:w-[300px]">
-                *After you change the password you will have to login again.
-              </p>
-            </div>
-            <div className="px-12 py-8 flex flex-col gap-8 w-full">
-              <div className="flex flex-col gap-4">
-                <div className="flex gap-6 w-full items-center">
-                  <PasswordFields
-                    updatePassword={updatePassword}
-                    setUpdatedPassword={setUpdatedPassword}
-                  />
-                </div>
-              </div>
-              <Button
-                onClick={null}
-                className="w-fit"
-                type="submit"
-                disabled={isPasswordLoading}
-              >
-                {isPasswordLoading ? (
-                  <span className="flex items-center gap-2">
-                    Resetting
-                    <ClipLoader color="#fff" size={20} />
-                  </span>
-                ) : (
-                  "Reset Password"
-                )}
-              </Button>
-            </div>
-          </form>
+        <VerificationForm
+        updateVerification={updateVerification}
+        setUpdateVerification={setUpdateVerification}
+        selectedState={selectedState}
+        setSelectedState={setSelectedState}
+        selectedCity={selectedCity}
+        setSelectedCity={setSelectedCity}
+        handleVerificationSubmit={handleVerificationSubmit}
+        isVerificationLoading={isVerificationLoading}
+        loading={loading}
+      />
+            <PasswordForm
+        updatePassword={updatePassword}
+        setUpdatedPassword={setUpdatedPassword}
+        handlePasswordChange={handlePasswordChange}
+        isPasswordLoading={isPasswordLoading}
+      />
           <hr className="text-gray-300 py-2" />
         </div>
         <div>
@@ -449,24 +306,19 @@ function Profile() {
               </p>
             </div>
             <div>
-              {isLogoutLoading ? (
-                <button
-                  onClick={handleLogout}
-                  className={`px-6 py-[11px] flex gap-2 items-center focus:outline-primary bg-primary text-white rounded-md text-base font-semibold`}
-                >
-                  {" "}
-                  Logging out <ClipLoader color="#fff" size={20} />
-                </button>
-              ) : (
-                <button
-                  onClick={handleLogout}
-                  className={`px-6 py-[11px] flex gap-2 items-center focus:outline-primary bg-primary text-white rounded-md text-base font-semibold`}
-                >
-                  {" "}
-                  <img src="/icons/sign_out.svg" />
-                  Logout
-                </button>
-              )}
+              <Button
+                type="button"
+                onClick={handleLogout}
+                disabled={isLogoutLoading}
+              >
+                {isLogoutLoading ? (
+                  <span className="flex items-center gap-2">
+                    Logging out <ClipLoader color="#fff" size={20} />
+                  </span>
+                ) : (
+                  "Logout"
+                )}
+              </Button>
             </div>
           </div>
         </div>
