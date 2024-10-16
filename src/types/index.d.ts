@@ -68,6 +68,7 @@ export interface ListingsTableProps {
 }
 export interface ListingsSortProps {
   listings: Listing[]; // Receive listings as prop
+  
 }
 export interface ListingsProps {
   shouldSlice?: boolean;
@@ -142,8 +143,22 @@ export interface SideItem {
   icon: React.ComponentType<{ className?: string }>; // icon is a React component with an optional className prop
   id: string;
 }
-interface ListingsFilterProps {
+export interface ListingsFilterProps {
   activeTag: string;
   onChange: (tag: string) => void;
   applyFilters: (filters: Record<string, any>) => void; // Add this line
+}
+export interface FilterValues {
+  minPrice?: string;
+  maxPrice?: string;
+  bedrooms?: string;
+  bathrooms?: string;
+  state?: string;
+  city?: string;
+  featured?: string;
+  status?: string;
+  minSquareFeet?: string;
+  maxSquareFeet?: string;
+  dateListedFrom?: string;
+  dateListedTo?: string;
 }

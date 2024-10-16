@@ -1,7 +1,7 @@
 // Sort.tsx
 import React, { useState } from "react";
-import ListingGrid from "./ListingsTable";
 import { Listings, ListingsSortProps } from "@/types";
+import ListingTable from "./ListingsTable";
 
 const ListingSort: React.FC<ListingsSortProps> = ({ listings }) => {
   const [sortConfig, setSortConfig] = useState<{
@@ -67,7 +67,7 @@ const ListingSort: React.FC<ListingsSortProps> = ({ listings }) => {
             className="py-2 px-4 cursor-pointer"
             onClick={() => requestSort("tag")}
           >
-            Category <span className={getClassNamesFor("tag")}></span>
+            Type <span className={getClassNamesFor("tag")}></span>
           </th>
           <th
             className="py-2 px-4 cursor-pointer"
@@ -89,15 +89,21 @@ const ListingSort: React.FC<ListingsSortProps> = ({ listings }) => {
           </th>
           <th
             className="py-2 px-4 cursor-pointer"
-            onClick={() => requestSort("area")}
+            onClick={() => requestSort("category")}
           >
-            Area <span className={getClassNamesFor("area")}></span>
+            Category <span className={getClassNamesFor("category")}></span>
           </th>
           <th
             className="py-2 px-4 cursor-pointer hidden md:flex"
             onClick={() => requestSort("listed")}
           >
             Date <span className={getClassNamesFor("listed")}></span>
+          </th>
+          <th
+            className="py-2 px-4 cursor-pointer"
+            onClick={() => requestSort("isSaved")}
+          >
+            Favourite <span className={getClassNamesFor("isSaved")}></span>
           </th>
 
           {/* <th
@@ -110,7 +116,7 @@ const ListingSort: React.FC<ListingsSortProps> = ({ listings }) => {
       </thead>
       <tbody>
         {sortedListings.map((listing) => (
-          <ListingGrid key={listing.id} listing={listing} />
+          <ListingTable key={listing.id} listing={listing} />
         ))}
       </tbody>
     </table>

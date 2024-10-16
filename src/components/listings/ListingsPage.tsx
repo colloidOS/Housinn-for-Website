@@ -2,30 +2,15 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { TailSpin } from "react-loader-spinner"; // Import TailSpin loader
 import { useRouter } from "next/navigation";
 import { GridView, ListView, Search } from "../../../public/icons";
-import { ListingsPageProps } from "@/types";
+import { FilterValues, ListingsPageProps } from "@/types";
 import useFetchListings from "@/hooks/useFetchListings";
 import ListingCard from "@/components/listings/ListingsCard";
 import useSaveListing from "@/hooks/useSaveListing";
 import ListingsFilter from "./ListingsFilter";
 import ListingSort from "./ListingSort";
 import { Skeleton } from "@/components/ui/skeleton";
-interface FilterValues {
-  minPrice?: string;
-  maxPrice?: string;
-  bedrooms?: string;
-  bathrooms?: string;
-  state?: string;
-  city?: string;
-  featured?: string;
-  status?: string;
-  minSquareFeet?: string;
-  maxSquareFeet?: string;
-  dateListedFrom?: string;
-  dateListedTo?: string;
-}
 
 const ListingsPage: React.FC<ListingsPageProps> = ({
   getRoute,
@@ -87,7 +72,7 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
   };
 
   const filteredListings = handleSearch();
- 
+
   return (
     <div className={` ${className || ""}`}>
       <div>
@@ -141,21 +126,21 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
       </div>
 
       {loading ? (
-       <motion.div
-       className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 gap-6 mt-4"
-       initial={{ opacity: 1 }} // Starting with full opacity
-       animate={{ opacity: 0.3}} // Animate out
-       exit={{ opacity: 0.2 }}
-     >
-       {Array(6)
-         .fill(null)
-         .map((_, index) => (
-           <Skeleton
-             key={index}
-             className="w-full h-96 rounded-[7px] cursor-pointer bg-gray-300"
-           />
-         ))}
-     </motion.div>
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 gap-6 mt-4"
+          initial={{ opacity: 1 }} // Starting with full opacity
+          animate={{ opacity: 0.3 }} // Animate out
+          exit={{ opacity: 0.2 }}
+        >
+          {Array(6)
+            .fill(null)
+            .map((_, index) => (
+              <Skeleton
+                key={index}
+                className="w-full h-96 rounded-[7px] cursor-pointer bg-gray-300"
+              />
+            ))}
+        </motion.div>
       ) : filteredListings.length === 0 ? (
         <div className="flex justify-center items-center flex-col mt-24 w-full">
           <h2 className="text-xl font-bold mb-4">No listings available</h2>
@@ -172,23 +157,23 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
             <ListingSort listings={filteredListings} />
           ) : (
             <AnimatePresence>
-            <motion.div
-              className="grid grid-cols-2 lg:grid-cols-3 gap-4 mt-4"
-              initial={{ opacity: 0 }} // Start invisible
-              animate={{ opacity: 1 }}  // Animate in
-              exit={{ opacity: 0 }}
-              transition={{ duration: 1 }} // Smooth transition timing
-            >
-              {filteredListings.map((listing) => (
-                <ListingCard
-                  key={listing.id}
-                  listing={listing}
-                  onSave={() => handleSave(listing.id, listing.isSaved)}
-                  isSaved={listing.isSaved}
-                />
-              ))}
-            </motion.div>
-          </AnimatePresence>
+              <motion.div
+                className="grid grid-cols-2 lg:grid-cols-3 gap-4 mt-4"
+                initial={{ opacity: 0 }} // Start invisible
+                animate={{ opacity: 1 }} // Animate in
+                exit={{ opacity: 0 }}
+                transition={{ duration: 1 }} // Smooth transition timing
+              >
+                {filteredListings.map((listing) => (
+                  <ListingCard
+                    key={listing.id}
+                    listing={listing}
+                    onSave={() => handleSave(listing.id, listing.isSaved)}
+                    isSaved={listing.isSaved}
+                  />
+                ))}
+              </motion.div>
+            </AnimatePresence>
           )}
         </>
       )}
