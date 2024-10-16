@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { Listings, ListingsSortProps } from "@/types";
 import ListingTable from "./ListingsTable";
+import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 type Column<T> = {
   key: keyof T;
   label: string;
@@ -80,7 +81,18 @@ const ListingSort: React.FC<ListingsSortProps> = ({ listings }) => {
               }`}
               onClick={() => requestSort(key)}
             >
-              {label} <span className={getClassNamesFor(key)}></span>
+              <div className="flex items-center gap-2">
+                {label}{" "}
+                <span>
+                  {sortConfig?.key === key && sortConfig.direction === "asc" ? (
+                    <IoIosArrowUp />
+                  ) : sortConfig?.key === key &&
+                    sortConfig.direction === "desc" ? (
+                    <IoIosArrowDown />
+                  ) : null}
+                </span>
+              </div>
+              <span className={getClassNamesFor(key)}></span>
             </th>
           ))}
         </tr>
