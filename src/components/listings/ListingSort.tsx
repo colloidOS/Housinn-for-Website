@@ -71,9 +71,21 @@ const ListingSort: React.FC<ListingsSortProps> = ({ listings }) => {
           </th>
           <th
             className="py-2 px-4 cursor-pointer"
+            onClick={() => requestSort("category")}
+          >
+            Category <span className={getClassNamesFor("category")}></span>
+          </th>
+          <th
+            className="py-2 px-4 cursor-pointer"
             onClick={() => requestSort("price")}
           >
             Price <span className={getClassNamesFor("price")}></span>
+          </th>
+          <th
+            className="py-2 px-4 cursor-pointer"
+            onClick={() => requestSort("cityState")}
+          >
+            Location <span className={getClassNamesFor("cityState")}></span>
           </th>
           <th
             className="py-2 px-4 cursor-pointer"
@@ -87,12 +99,7 @@ const ListingSort: React.FC<ListingsSortProps> = ({ listings }) => {
           >
             Bath <span className={getClassNamesFor("baths")}></span>
           </th>
-          <th
-            className="py-2 px-4 cursor-pointer"
-            onClick={() => requestSort("category")}
-          >
-            Category <span className={getClassNamesFor("category")}></span>
-          </th>
+
           <th
             className="py-2 px-4 cursor-pointer hidden md:flex"
             onClick={() => requestSort("listed")}
@@ -103,7 +110,7 @@ const ListingSort: React.FC<ListingsSortProps> = ({ listings }) => {
             className="py-2 px-4 cursor-pointer"
             onClick={() => requestSort("isSaved")}
           >
-            Favourite <span className={getClassNamesFor("isSaved")}></span>
+            Fav <span className={getClassNamesFor("isSaved")}></span>
           </th>
 
           {/* <th

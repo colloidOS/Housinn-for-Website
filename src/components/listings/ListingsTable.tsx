@@ -42,15 +42,15 @@ const ListingTable: React.FC<ListingsTableProps> = ({ listing }) => {
   return (
     <tr className="border-b text-md cursor-pointer" onClick={handleCardClick}>
       {listingDetails.map((detail, index) => (
-        <td
-          key={index}
-          className={`text-gray-600 px-4 mb-4  pt-4`}
-        >
+        <td key={index} className={`text-gray-600 px-4 mb-4  pt-4`}>
           {detail}
         </td>
       ))}
-      <td className="text-secondary cursor-pointer px-4 mb-4" onClick={handleSave}>
-      {isSaved ? <FaHeart /> : <FaRegHeart />}{" "}
+      <td
+        className="text-secondary cursor-pointer px-4 mb-4 pt-4"
+        onClick={handleSave}
+      >
+        {isSaved ? <FaHeart /> : <FaRegHeart />}{" "}
       </td>
     </tr>
   );
