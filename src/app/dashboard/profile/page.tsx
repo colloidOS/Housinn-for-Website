@@ -56,10 +56,6 @@ function Profile() {
   };
   const { user, setUser } = useAuth();
 
-  const clearCookie = (name: string) => {
-    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-  };
-
   const triggerImageUpload = () => {
     document.getElementById("profileImageInput")?.click();
   };
@@ -70,44 +66,55 @@ function Profile() {
   const id = user?.id;
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await api.get(`/users/search/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const userData = response.data;
-        setUserData(userData);
+    // Check if the page has already been reloaded
+    const hasReloaded = sessionStorage.getItem("hasReloaded");
 
-        // If avatar exists, set it for preview
-        if (userData.data.avatar) {
-          setSelectedImage(userData.data.avatar); // Set the avatar URL
+    if (!hasReloaded) {
+      // Reload the page and set a flag to prevent further reloads
+      sessionStorage.setItem("hasReloaded", "true");
+      window.location.reload();
+    } else {
+      // Fetch the data after reload
+      const fetchData = async () => {
+        try {
+          const response = await api.get(`/users/search/${id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          const userData = response.data;
+          setUserData(userData);
+
+          // If avatar exists, set it for preview
+          if (userData.data.avatar) {
+            setSelectedImage(userData.data.avatar); // Set the avatar URL
+          }
+
+          // Populate form fields
+          setUpdatedProfile({
+            firstName: userData.data.firstName || "",
+            lastName: userData.data.lastName || "",
+            number: userData.data.number || "",
+            company: userData.data.company || "",
+          });
+
+          setUpdateVerification({
+            state: userData.data.state || "",
+            town: userData.data.town || "",
+            address: userData.data.address || "",
+            number: userData.data.number || "",
+          });
+
+          setSelectedState(userData.data.state || ""); // Populate state dropdown
+          setSelectedCity(userData.data.town || ""); // Populate city dropdown
+
+          setLoading(false);
+          console.log(userData);
+        } catch (error) {
+          console.error("Error:", error);
         }
+      };
 
-        // Populate form fields
-        setUpdatedProfile({
-          firstName: userData.data.firstName || "",
-          lastName: userData.data.lastName || "",
-          number: userData.data.number || "",
-          company: userData.data.company || "",
-        });
-
-        setUpdateVerification({
-          state: userData.data.state || "",
-          town: userData.data.town || "",
-          address: userData.data.address || "",
-          number: userData.data.number || "",
-        });
-
-        setSelectedState(userData.data.state || ""); // Populate state dropdown
-        setSelectedCity(userData.data.town || ""); // Populate city dropdown
-
-        setLoading(false);
-        console.log(userData);
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
-    fetchData();
+      fetchData();
+    }
   }, [id, token]);
 
   const handleUpdateSubmit = async (e: React.FormEvent) => {
@@ -233,8 +240,16 @@ function Profile() {
         },
       });
 
-      clearCookie("token");
-      clearCookie("id");
+      // Function to clear all cookies
+      const clearAllCookies = () => {
+        document.cookie.split(";").forEach((cookie) => {
+          const cookieName = cookie.split("=")[0].trim();
+          document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+        });
+      };
+
+      // Clear all cookies
+      clearAllCookies();
 
       toast.success("You have been logged out. Rerouting..");
 
@@ -264,7 +279,7 @@ function Profile() {
         </div>
         <form onSubmit={handleUpdateSubmit}>
           <div className="flex flex-col gap-3">
-            <div className="flex gap-10 lg:gap-[164px]">
+            <div className="flex sm:flex-row flex-col gap-10 lg:gap-[164px]">
               <div className="flex flex-col gap-0">
                 <p className="text-lg font-semibold">Profile Photo</p>
                 <p className="text-sm font-normal text-gray-600">
@@ -316,7 +331,7 @@ function Profile() {
             <hr className="text-gray-300 pb-5" />
           </div>
           <div className="flex flex-col gap-6">
-            <div className="flex">
+            <div className="flex sm:flex-row flex-col sm:gap-0 gap-10">
               <div className="flex flex-col gap-2">
                 <p className="text-lg font-semibold">Edit Your Profile</p>
                 <p className="text-sm font-normal w-[150px] lg:w-[308px] text-gray-600">
@@ -324,7 +339,7 @@ function Profile() {
                   your social media details and your user details.
                 </p>
               </div>
-              <div className="flex flex-col px-12 lg:pt-8 gap-16 w-full">
+              <div className="flex flex-col sm:px-12 lg:pt-8 gap-16 w-full">
                 <div className="flex flex-col gap-8">
                   <div>
                     <p className="text-primary font-semibold">Account Type</p>
@@ -364,7 +379,7 @@ function Profile() {
         </form>
         <div className="flex flex-col gap-4 w-full">
           <form
-            className="flex lg:gap-[140px]"
+            className="flex sm:flex-row flex-col lg:gap-[140px]"
             onSubmit={handleVerificationSubmit}
           >
             <div className="flex flex-col gap-2 text-nowrap">
@@ -373,7 +388,7 @@ function Profile() {
                 Get your account verified!
               </p>
             </div>
-            <div className="px-12 lg:py-8 flex flex-col gap-8 w-full">
+            <div className="sm:px-12 py-8 flex flex-col gap-8 w-full">
               <div className="flex flex-col gap-4">
                 {loading ? (
                   <p>Loading...</p>
@@ -404,14 +419,17 @@ function Profile() {
               </Button>
             </div>
           </form>
-          <form className="flex gap-3 w-full" onSubmit={handlePasswordChange}>
+          <form
+            className="flex sm:flex-row flex-col gap-3 w-full"
+            onSubmit={handlePasswordChange}
+          >
             <div className="flex flex-col gap-0 ">
               <p className="text-lg font-semibold">Change Password</p>
               <p className="text-sm font-normal text-gray-600 w-[150px] lg:w-[300px]">
                 *After you change the password you will have to login again.
               </p>
             </div>
-            <div className="px-12 py-8 flex flex-col gap-8 w-full">
+            <div className="sm:px-12 py-8 flex flex-col gap-8 w-full">
               <div className="flex flex-col gap-4">
                 <div className="flex gap-6 w-full items-center">
                   <PasswordFields
@@ -441,7 +459,7 @@ function Profile() {
         </div>
         <div>
           <hr className="text-gray-300" />
-          <div className="flex gap-10 lg:gap-[202px]">
+          <div className="flex sm:flex-row flex-col gap-10 lg:gap-[202px]">
             <div className="flex flex-col gap-2 w-">
               <p className="text-lg font-semibold">Logout</p>
               <p className="text-sm font-normal text-gray-600">

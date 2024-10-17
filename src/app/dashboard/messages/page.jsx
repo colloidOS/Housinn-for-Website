@@ -17,7 +17,8 @@ import {
   differenceInDays,
 } from "date-fns";
 
-const socket = io("http://localhost:3000"); // Backend socket URL
+const socket = io("https://housinn.onrender.com"); // Backend socket URL
+//const socket = io("http://localhost:3000", {});
 
 const MessagePage = () => {
   const [chats, setChats] = useState([]);
@@ -36,6 +37,9 @@ const MessagePage = () => {
   const token = user.token;
 
   useEffect(() => {
+    socket.on("connect", () => {
+      console.log("Connected to socket server");
+    });
     // Fetch chats to update unread status, lastMessage, and lastMessageTime
     const fetchChatsAndUpdateUnread = async () => {
       try {
@@ -46,11 +50,42 @@ const MessagePage = () => {
         });
 
         const fetchedChats = chatResponse.data.data.chats;
+        console.log(fetchedChats);
+        // Join all chat rooms by emitting a `joinChat` event for each chat ID
+        fetchedChats.forEach((chat) => {
+          socket.emit("joinChat", chat.id);
+          console.log("confirmed");
+        });
         if (Array.isArray(fetchedChats)) {
           // Update the chat state with unread status, lastMessage, and lastMessageTime
           setChats(
             fetchedChats.map((chat) => {
               console.log(chat);
+              socket.emit("joinChat", chat.id); // Join the chat room
+              socket.on("newMessage", (message) => {
+                // Log the new message response
+                console.log("New message received:", message);
+
+                // Check if the message belongs to the current chat
+                if (message.chatId === chat.id) {
+                  console.log("correct chat id");
+                  // Update the chat's lastMessage and lastMessageTime
+                  setChats((prevChats) => {
+                    return prevChats.map((c) =>
+                      c.id === chat.id
+                        ? {
+                            ...c,
+                            lastMessage: message.text,
+                            lastMessageTime: message.createdAt,
+                            //unread: true, // Mark the chat as unread if it's not active
+                            //unreadCount: c.unreadCount + 1, // Increment unread count
+                          }
+                        : c
+                    );
+                  });
+                }
+              });
+
               return {
                 ...chat,
                 lastMessage: chat.lastMessage || "", // Update with the last message
@@ -73,27 +108,16 @@ const MessagePage = () => {
     fetchChatsAndUpdateUnread();
   }, [token]);
 
-  // Fetch user's chats
-  // const fetchChats = () => {
-  //   api
-  //     .get("/chats", {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`, // Use the stored token
-  //       },
-  //     })
-  //     .then((response) => {
-  //       console.log(response);
-  //       setChats(response.data.data.chats); // Set chats from response
-  //     })
-  //     .catch((error) => console.error("Error fetching chats:", error));
-  // };
-  // useEffect(() => {
-  //   fetchChats(); // Fetch chats when the component mounts
-  // }, []);
-
   // Select a chat and fetch its messages
   const selectChat = (chat) => {
+    // Before selecting a new chat, remove the old listener if any
+    if (currentChat) {
+      socket.off("chatUpdated"); // Clean up previous listener
+    }
+
+    // Set the new chat as current chat
     setCurrentChat(chat);
+
     // Mark chat as read when selected
     api
       .put(`/chats/read/${chat.id}`, {
@@ -126,6 +150,26 @@ const MessagePage = () => {
               setTimeout(() => {
                 scrollToBottom();
               }, 100);
+
+              // Set up the chatUpdated event listener only for the selected chat
+              socket.on("chatUpdated", (data) => {
+                if (data.chatId === chat.id) {
+                  const { updatedChat } = data;
+                  console.log(updatedChat, "real");
+                  // Update the current chat
+                  setCurrentChat((prevChat) => ({
+                    ...prevChat,
+                    seenBy: updatedChat.seenBy, // Update seenBy or any other necessary fields
+                  }));
+
+                  // Also update the chat list if needed
+                  setChats((prevChats) =>
+                    prevChats.map((c) =>
+                      c.id === chat.id ? { ...c, ...updatedChat } : c
+                    )
+                  );
+                }
+              });
             } else {
               console.error(
                 "Error fetching chat messages:",
@@ -139,6 +183,13 @@ const MessagePage = () => {
       })
       .catch((error) => console.error("Error marking chat as read:", error));
   };
+
+  // Clean up the socket listener when the component unmounts or chat changes
+  useEffect(() => {
+    return () => {
+      socket.off("chatUpdated"); // Clean up on component unmount or re-render
+    };
+  }, [currentChat]); // This will run when currentChat changes
 
   // Scroll to the bottom of the message list
   const scrollToBottom = () => {
@@ -194,11 +245,15 @@ const MessagePage = () => {
     if (newMessageText && currentChat) {
       setIsLoading(true); // Set loading to true when starting to send the message
       // Emit the new message via WebSocket
-      socket.emit("sendMessage", {
-        chatId: currentChat.id,
-        userId, // The sender's ID
-        text: newMessageText,
-      });
+      socket.emit(
+        "sendMessage",
+        {
+          chatId: currentChat.id,
+          userId, // The sender's ID
+          text: newMessageText,
+        },
+        console.log("sent:", newMessageText)
+      );
 
       const fetchChats = () => {
         api
@@ -271,7 +326,7 @@ const MessagePage = () => {
         const fetchedChats = response.data.data;
 
         // Update the chat list with initial data
-        console.log(fetchedChats);
+        console.log(fetchedChats.chats);
         setChats(
           fetchedChats.map((chat) => ({
             ...chat,
@@ -287,8 +342,9 @@ const MessagePage = () => {
 
   // Function to handle receiving new messages via WebSocket
   useEffect(() => {
-    socket.on("receiveMessage", (newMessage) => {
+    socket.on("newMessage", (newMessage) => {
       if (currentChat && newMessage.chatId === currentChat.id) {
+        console.log("new message coming");
         setMessages((prevMessages) => [...prevMessages, newMessage]);
 
         const updatedChats = chats.map((chat) => {
@@ -301,7 +357,7 @@ const MessagePage = () => {
           }
           return chat;
         });
-
+        console.log(updatedChats);
         setChats(
           updatedChats.sort(
             (a, b) => new Date(b.lastMessageTime) - new Date(a.lastMessageTime)

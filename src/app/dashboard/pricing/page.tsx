@@ -1,89 +1,16 @@
 "use client";
 import React, { useState } from "react";
 import { ChevronRight, CheckCircle2Icon } from "lucide-react";
+import { plans } from "@/data/pricing";
 import Image from "next/image";
 import Basic from "@/../public/icons/pricing-basic.svg";
 import Pro from "@/../public/icons/pricing-pro.svg";
 import Premium from "@/../public/icons/pricing-premium.svg";
 
 function Pricing() {
-  const [billingCycle, setBillingCycle] = useState("monthly");
-
-  const plans = {
-    monthly: [
-      {
-        name: "Basic",
-        motto: "For Starters and Testers",
-        currency: "₦",
-        price: "0",
-        duration: "/free",
-        listings: "10 Listings",
-        images: "Unlimited images / listing",
-        badge: "",
-      },
-
-      {
-        name: "Pro",
-        motto: "Most Preferred Plan",
-        currency: "₦",
-        price: "10,000",
-        duration: "/month",
-        listings: "Unlimited Listings",
-        images: "Unlimited Images / Listing",
-        sponsor: "5 Sponsored Listings",
-        badge: "Blue Verified Badge",
-      },
-
-      {
-        name: "Premium",
-        motto: "Get the Best out of Housinn",
-        currency: "₦",
-        price: "20,000",
-        duration: "/month",
-        listings: "Unlimited Listings",
-        images: "Unlimited Images / Listing",
-        sponsor: "10 Sponsored Listings",
-        recomm: "Housinn Recommendation",
-        badge: "Golden Verified Badge",
-      },
-    ],
-
-    annually: [
-      {
-        name: "Basic",
-        motto: "For Starters and Testers",
-        currency: "₦",
-        price: "0",
-        duration: "/free",
-        listings: "10 Listings",
-        images: "Unlimited images / listing",
-        badge: "",
-      },
-      {
-        name: "Pro",
-        motto: "Most Preferred Plan",
-        currency: "₦",
-        price: "90,000",
-        duration: "/year",
-        listings: "Unlimited Listings",
-        images: "Unlimited Images / Listing",
-        sponsor: "5 Sponsored Listings",
-        badge: "Blue Verified Badge",
-      },
-      {
-        name: "Premium",
-        motto: "Get the Best out of Housinn",
-        currency: "₦",
-        price: "180,000",
-        duration: "/year",
-        listings: "Unlimited Listings",
-        images: "Unlimited Images / Listing",
-        sponsor: "10 Sponsored Listings",
-        recomm: "Housinn Recommendation",
-        badge: "Golden Verified Badge",
-      },
-    ],
-  };
+  const [billingCycle, setBillingCycle] = useState<"monthly" | "annually">(
+    "monthly"
+  );
 
   return (
     <div className="w-full flex flex-col bg-background-2 gap-5 px-12 py-10">
@@ -143,7 +70,7 @@ function Pricing() {
             <div className="flex flex-col gap-4">
               <div className="flex  flex-col gap-6">
                 <div className="flex flex-col gap-3">
-                  <Image src={Basic} width={48} height={48} />
+                  <Image src={Basic} width={48} height={48} alt="" />
                   <div className="flex flex-col gap-1">
                     <h3 className="text-2xl font-semibold text-gray-700">
                       {plans[billingCycle][0].name}
@@ -189,7 +116,7 @@ function Pricing() {
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-6">
                 <div className="flex flex-col gap-3">
-                  <Image src={Pro} width={48} height={48} />
+                  <Image src={Pro} width={48} height={48} alt="" />
                   <div className="flex flex-col gap-1">
                     <h3 className="text-2xl font-semibold">
                       {plans[billingCycle][1].name}
@@ -241,7 +168,7 @@ function Pricing() {
             <div className="flex flex-col gap-4">
               <div className="flex  flex-col gap-6">
                 <div className="flex flex-col gap-3">
-                  <Image src={Premium} width={48} height={48} />
+                  <Image src={Premium} width={48} height={48} alt="" />
                   <div className="flex flex-col gap-1">
                     <h3 className="text-2xl font-semibold text-gray-700">
                       {plans[billingCycle][2].name}
