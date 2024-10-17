@@ -1,5 +1,5 @@
 import React from "react";
-import ListingsPage from "../components/listings/ListingsPage";
+import ListingsPage from "../../../components/listings/ListingsPage";
 
 function Favorites() {
   return (
@@ -7,6 +7,7 @@ function Favorites() {
       getRoute="/posts/savedPosts/post"
       dataRoute="posts"
       pageTitle="Favorites"
+      className="xl:px-12 text-gray-600 pt-10 px-5 pb-12 w-full"
     />
   );
 }

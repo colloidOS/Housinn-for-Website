@@ -22,9 +22,9 @@ const useSaveListing = (listings: any[], setListings: React.Dispatch<React.SetSt
       await api.post("/users/save", payload);
       // Show a success toast instead of alert (can use React Toastify or similar)
       if (isSaved) {
-        toast.success("Listing unsaved.");
+        toast.info("Listing unsaved.");
       } else {
-        toast.success("Listing saved.");
+        toast.info("Listing saved.");
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {

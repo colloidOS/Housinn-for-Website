@@ -6,6 +6,7 @@ export type Listings = {
   price: number;
   title: string;
   location: string;
+  cityState: string;
   beds: number;
   baths: number;
   area: string;
@@ -37,6 +38,12 @@ export type Listings = {
     desc: string | null;
     // etc.
   };
+  user: {
+    avatar: string;
+    company: string;
+    firstName: string;
+    lastName: string;
+  };
 };
 
 export interface Review {
@@ -55,8 +62,9 @@ export interface ListingsCardProps {
 export interface ListingsFilterProps {
   activeTag: string;
   onChange: (tag: string) => void;
+  applyFilters: (filters: Record<string, any>) => void; // Add this line
 }
-export interface ListingsGridProps {
+export interface ListingsTableProps {
   listing: Listing;
 }
 export interface ListingsSortProps {
@@ -72,6 +80,7 @@ export interface ListingsPageProps {
   getRoute: string; // Accept the API route as a prop
   dataRoute: string;
   pageTitle: string; // Title of the page
+  className: string;
 }
 
 export interface AddNewListings {
@@ -83,6 +92,7 @@ export interface AddNewListings {
   amenities: string[];
   propertySize: string;
   bedroom: string;
+  bathroom: string;
   price: string;
   description: string;
   category: string;
@@ -95,6 +105,10 @@ export interface ListingsProps {
 }
 export interface UserNavbarProps {
   className?: string;
+}
+interface ListingsFilterModalProps {
+  toggleModal: () => void;
+  applyFilters: (filters: Record<string, any>) => void; // Add this line
 }
 
 export interface User {
@@ -121,4 +135,30 @@ export interface User {
 export interface AuthContextType {
   user: User | null;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
+}
+// Define the type for sideItems
+export interface SideItem {
+  route: string;
+  link: string;
+  icon: React.ComponentType<{ className?: string }>; // icon is a React component with an optional className prop
+  id: string;
+}
+export interface ListingsFilterProps {
+  activeTag: string;
+  onChange: (tag: string) => void;
+  applyFilters: (filters: Record<string, any>) => void; // Add this line
+}
+export interface FilterValues {
+  minPrice?: string;
+  maxPrice?: string;
+  bedrooms?: string;
+  bathrooms?: string;
+  state?: string;
+  city?: string;
+  featured?: string;
+  status?: string;
+  minSquareFeet?: string;
+  maxSquareFeet?: string;
+  dateListedFrom?: string;
+  dateListedTo?: string;
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
+import { MdOutlineCancel } from "react-icons/md";
 interface ModalProps {
   onClose: () => void;
   children: React.ReactNode;
@@ -13,9 +13,9 @@ const Modal: React.FC<ModalProps> = ({ onClose, children }) => {
       <div className="bg-white p-6 rounded-lg shadow-lg relative">
         <button
           onClick={onClose}
-          className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+          className="absolute top-2 right-2 text-gray-500 text-3xl hover:text-gray-700"
         >
-          &times;
+         <MdOutlineCancel />
         </button>
         {children}
       </div>

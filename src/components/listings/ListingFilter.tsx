@@ -13,12 +13,12 @@ const ListingFilter: React.FC<ListingsFilterProps> = ({
   ];
 
   return (
-    <div className="flex   p-[2px] rounded-[7px] bg-background-2 gap-6">
+    <div className="flex   p-1 rounded-[7px] bg-background-2 gap-6 w-fit" >
       {tags.map((tag) => (
         <button
           key={tag.value}
           onClick={() => onChange(tag.value)}
-          className={` text-[14px] rounded-[7px] p-2 ${
+          className={` text-sm rounded-[0.4375rem] p-2 ${
             activeTag === tag.value
               ? "bg-primary-100 text-primary"
               : " text-gray-700"

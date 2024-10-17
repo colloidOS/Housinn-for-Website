@@ -17,14 +17,23 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
   const [currentImage, setCurrentImage] = useState<string | null>(null);
   const location = ` ${listing.address}, ${listing.city}, ${listing.state}.`;
   const formattedPrice = `₦${Number(listing.price).toLocaleString()}`;
-
+  console.log("listing", listing);
   const openGallery = (image?: string) => {
     if (image) {
       setCurrentImage(image);
     }
     setShowGallery(true);
   };
-
+  const Name = listing.user.company
+    ? listing.user.company.charAt(0).toUpperCase() +
+      listing.user.company.slice(1)
+    : listing.user.firstName
+    ? listing.user.firstName.charAt(0).toUpperCase() +
+      listing.user.firstName.slice(1)
+    : listing.user.lastName
+    ? listing.user.lastName.charAt(0).toUpperCase() +
+      listing.user.lastName.slice(1)
+    : null;
   const closeGallery = () => {
     setShowGallery(false);
     setCurrentImage(null);
@@ -35,11 +44,11 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
     }
 
     return (
-      <div className="flex flex-wrap gap-4 mt-4">
+      <div className="flex flex-wrap gap-4">
         {listing.postDetail.amenities.map((amenity, index) => (
           <div
             key={index}
-            className="border border-gray-300 rounded-full px-4 py-1 text-sm"
+            className="border border-primary rounded-full px-4 italic font-light py-1 text-sm"
           >
             {amenity}
           </div>
@@ -124,8 +133,8 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
       <div className="h-1/2">{renderImages()}</div>
 
       {/* Listing Info Section */}
-      <div className="flex gap-4 md:h-1/2">
-        <div className="w-1/2 flex flex-col gap-4">
+      <div className="flex flex-col md:flex-row w-full gap-x-4 gap-y-8 md:h-1/2">
+        <div className="md:w-1/2 flex flex-col gap-4">
           <div className="flex flex-col gap-2">
             <h1 className="text-4xl text-primary font-bold">
               {formattedPrice}
@@ -135,14 +144,17 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
               <Image src={PhAddress} alt="Address" width={20} height={20} />
               <p className="text-gray-500 text-[0.875rem]">{location}</p>
             </div>
-            <div className="flex gap-4">
-              <div className="flex gap-1">
-                <Image src={Bed} alt="Beds" width={20} height={20} />
-                <span>{listing.bedroom} Beds</span>
-              </div>
-              <div className="flex gap-1">
-                <Image src={Bath} alt="Baths" width={20} height={20} />
-                <span>{listing.bathroom} Baths</span>
+            <div className="flex flex-col  gap-4">
+              <div className="flex gap-2">
+                {" "}
+                <div className="flex gap-1">
+                  <Image src={Bed} alt="Beds" width={20} height={20} />
+                  <span>{listing.bedroom} Beds</span>
+                </div>
+                <div className="flex gap-1">
+                  <Image src={Bath} alt="Baths" width={20} height={20} />
+                  <span>{listing.bathroom} Baths</span>
+                </div>
               </div>
               <div className="flex gap-1">
                 <Image src={Feet} alt="Area" width={20} height={20} />
@@ -152,11 +164,18 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
               </div>
             </div>
           </div>
-          <Image src={Sanrealtor} alt="logo" width={250} height={65} />
+          <div className="flex  items-center gap-3">
+            <img
+              src={listing.user.avatar}
+              alt="logo"
+              className="w-12 h-12 rounded-full"
+            />
+            <p className="text-2xl font-semibold">{Name}</p>
+          </div>
           <div>{renderAmenities()}</div>
         </div>
 
-        <div className="w-1/2 h-full flex flex-col gap-4">
+        <div className="md:w-1/2 h-full flex flex-col gap-4">
           <img
             src="/images/map.png"
             alt="Map"

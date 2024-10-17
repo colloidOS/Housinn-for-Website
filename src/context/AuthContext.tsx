@@ -35,10 +35,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         token: token,
       };
 
+      console.log("userdata", userData)
       setUser(userData);
     }
   }, []);
-
+  
   return (
     <AuthContext.Provider value={{ user, setUser }}>
       {children}
