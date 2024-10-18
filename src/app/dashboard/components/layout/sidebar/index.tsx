@@ -94,7 +94,7 @@ const SettingsSidebar: FC<Iproperties> = ({ className }) => {
 
   return (
     <div
-      className={` ${className} h-screen hidden lg:flex flex-col gap-11 items-center justify-center bg-white-200 pt-6  md:w-[220px] md:justify-start `}
+      className={` ${className} h-full hidden lg:flex flex-col gap-11 items-center justify-center bg-white-200 pt-6  md:w-[220px] md:justify-start `}
     >
       <section className="pr-4  flex flex-col  gap-y-3">
         {filteredSideItems.map((item, index) => (

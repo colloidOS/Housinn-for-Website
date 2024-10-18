@@ -19,15 +19,19 @@ const signInSchema = z.object({
   password: z.string().min(4, "Password must be at least 6 characters"),
 });
 
-const signUpSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(4, "Password must be at least 6 characters"),
-  confirmPassword: z.string().min(6, "Password must be at least 6 characters"),
-  userType: z.string().nonempty("Please select an account type"),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
-});
+const signUpSchema = z
+  .object({
+    email: z.string().email("Invalid email address"),
+    password: z.string().min(4, "Password must be at least 6 characters"),
+    confirmPassword: z
+      .string()
+      .min(6, "Password must be at least 6 characters"),
+    userType: z.string().nonempty("Please select an account type"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
 
 const AuthPage = () => {
   const [isSignIn, setIsSignIn] = useState(true);
@@ -68,7 +72,7 @@ const AuthPage = () => {
         Object.entries(userData).forEach(([key, value]) => {
           document.cookie = `${key}=${value}; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT`;
         });
-        router.push("/dashboard");
+        window.location.href = "/dashboard";
       } else {
         response = await api.post("/auth/register", data);
         toast.success("Account created successfully!");
@@ -145,7 +149,6 @@ const AuthPage = () => {
                   name={field.name}
                   type={field.type}
                   placeholder={field.placeholder}
-                 
                   className="w-full px-2 py-2 placeholder:text-[0.875rem] border border-white-300 rounded focus:outline-none"
                 />
               </div>
@@ -170,7 +173,6 @@ const AuthPage = () => {
                     name={field.name}
                     type={field.type}
                     placeholder={field.placeholder}
-                   
                     className="w-full px-2 py-2 placeholder:text-[0.875rem] border border-white-300 rounded focus:outline-none"
                   />
                 </div>
@@ -188,7 +190,6 @@ const AuthPage = () => {
                         id={type.id}
                         name="userType"
                         value={type.value}
-                       
                       />
                       {type.label}
                       {errors.userType && (
@@ -229,11 +230,15 @@ const AuthPage = () => {
           <div className="flex flex-col w-full gap-[0.875rem] pt-3">
             <div className="flex items-center  w-full gap-2 border border-white-300 rounded py-[0.375rem] px-6 justify-center">
               <Image src={Google} alt="google icon" />
-              <p className="text-[0.875rem] font-semibold">Sign in with Google</p>
+              <p className="text-[0.875rem] font-semibold">
+                Sign in with Google
+              </p>
             </div>
             <div className="flex items-center  w-full gap-2 border border-white-300 rounded py-[0.375rem] px-6 justify-center">
               <Image src={Apple} alt="apple icon" />
-              <p className="text-[0.875rem] font-semibold">Sign in with Apple</p>
+              <p className="text-[0.875rem] font-semibold">
+                Sign in with Apple
+              </p>
             </div>
           </div>
         </form>

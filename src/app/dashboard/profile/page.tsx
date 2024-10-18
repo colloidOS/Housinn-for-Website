@@ -243,20 +243,19 @@ function Profile() {
         }
       );
 
-      // Clear all relevant cookies
-      Cookies.remove("token");
-      Cookies.remove("id");
-      Cookies.remove("email");
-      Cookies.remove("userType");
-      // Remove any other cookies related to user state
+      // Clear all cookies
+      Object.keys(Cookies.get()).forEach((cookie) => {
+        Cookies.remove(cookie);
+      });
 
       // Reset the user state in AuthContext
-      setUser(null); // This line clears the user state
+      setUser(null); // Clears user state
 
-      toast.success("You have been logged out. Rerouting...");
+      toast.success("You have been logged out. Refreshing...");
 
+      // Refresh the page and reroute to the auth page
       setTimeout(() => {
-        router.push("/auth");
+        window.location.href = "/auth"; // Refresh and redirect
       }, 2000);
     } catch (error) {
       if (axios.isAxiosError(error)) {
