@@ -52,9 +52,9 @@ const Listings: React.FC<ListingsProps> = ({
     const updateMaxListings = () => {
       const screenWidth = window.innerWidth;
       if (screenWidth < 768) {
-        setMaxListings(3); // For mobile and small tablets
+        setMaxListings(4); // For mobile and small tablets
       } else if (screenWidth < 1024) {
-        setMaxListings(4); // For iPad Pro and laptops
+        setMaxListings(6); // For iPad Pro and laptops
       } else {
         setMaxListings(8); // For desktops
       }
