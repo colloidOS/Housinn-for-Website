@@ -1,13 +1,8 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { Listings } from "@/types";
-import {
-  Bed,
-  Feet,
-  Bath,
-  PhAddress,
-  Sanrealtor,
-} from "../../../../../public/icons";
+import { Bed, Feet, Bath, PhAddress } from "../../../../../public/icons";
+import ImageGallery from "./ImageGallery";
 interface ListingDetailProps {
   listing: Listings;
 }
@@ -57,84 +52,18 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
     );
   };
 
-  const renderImages = () => {
-    const images = listing.images;
-
-    if (images.length === 1) {
-      return (
-        <div className="h-full">
-          <img
-            src={images[0]}
-            alt={listing.title}
-            className="object-cover w-full h-full cursor-pointer"
-            onClick={() => openGallery(images[0])}
-          />
-        </div>
-      );
-    } else if (images.length === 2) {
-      return (
-        <div className="grid grid-cols-2 h-full gap-2">
-          {images.slice(0, 2).map((image, index) => (
-            <div key={index} className="h-full">
-              <img
-                src={image}
-                alt={listing.title}
-                className="object-cover w-full h-full cursor-pointer"
-                onClick={() => openGallery(image)}
-              />
-            </div>
-          ))}
-        </div>
-      );
-    } else if (images.length >= 3) {
-      return (
-        <div className="grid grid-col-1 md:grid-cols-2 gap-2 md:h-96 ">
-          <div className="col-span-1 h-48  md:h-96">
-            <img
-              src={images[0]}
-              alt={listing.title}
-              className="object-cover h-48 w-full  md:h-96 cursor-pointer"
-              onClick={() => openGallery(images[0])}
-            />
-          </div>
-          <div className="flex md:flex-col gap-2 h-96">
-            <img
-              src={images[1]}
-              alt={listing.title}
-              className="object-cover w-1/2 md:w-full h-48 cursor-pointer"
-              onClick={() => openGallery(images[1])}
-            />
-
-            <div className="relative">
-              <img
-                src={images[2]}
-                alt={listing.title}
-                className="object-cover w-1/2 md:w-full h-48 cursor-pointer"
-                onClick={() => openGallery(images[2])}
-              />
-              {images.length > 2 && (
-                <div
-                  className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white cursor-pointer"
-                  onClick={() => openGallery()}
-                >
-                  <span>View More</span>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      );
-    }
-  };
-
   return (
-    <div className="w-full h-screen p-3 flex flex-col gap-5">
-      {/* Image Section */}
-      <div className="h-1/2">{renderImages()}</div>
+    <div className="w-full flex flex-col gap-5 p-2">
+      <div className="row-span-1">
+        <ImageGallery
+          images={listing.images}
+          title={listing.title}
+          openGallery={openGallery}
+        />
+      </div>
 
-      {/* Listing Info Section */}
-      <div className="flex flex-col md:flex-row w-full gap-x-4 gap-y-8 md:h-1/2">
-        <div className="md:w-1/2 flex flex-col gap-4">
+      <div className="grid grid-col-1 md:grid-cols-2 w-full gap-x-4 gap-y-8 col-span-1">
+        <div className=" flex flex-col  gap-4">
           <div className="flex flex-col gap-2">
             <h1 className="text-4xl text-primary font-bold">
               {formattedPrice}
@@ -156,12 +85,12 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
                   <span>{listing.bathroom} Baths</span>
                 </div>
               </div>
-              <div className="flex gap-1">
+              {/* <div className="flex gap-1">
                 <Image src={Feet} alt="Area" width={20} height={20} />
                 <span>
                   {listing.latitude} x {listing.longitude} sq.ft
                 </span>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="flex  items-center gap-3">
@@ -175,29 +104,19 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
           <div>{renderAmenities()}</div>
         </div>
 
-        <div className="md:w-1/2 h-full flex flex-col gap-4">
-          <img
-            src="/images/map.png"
-            alt="Map"
-            className="object-cover h-1/2 w-full"
-          />
-          <div className="h-1/2 italic flex flex-col gap-4 justify-between font-light">
-            <div className="flex flex-col gap-2">
-              <h2 className="text-base text-[#333333]">
-                What you will love about this home
-              </h2>
-              <p className="text-sm text-[#7D7D7D]">
-                {listing.postDetail.desc}
-              </p>
-            </div>
-            <button className="bg-primary rounded-[0.5rem] text-white font-semibold text-lg w-full py-3">
-              Schedule Visit
-            </button>
+        <div className=" italic flex flex-col gap-4 justify-end font-light">
+          <div className="flex flex-col gap-2">
+            <h2 className="text-base text-[#333333]">
+              What you will love about this home
+            </h2>
+            <p className="text-sm text-[#7D7D7D]">{listing.postDetail.desc}</p>
           </div>
+          <button className="bg-primary rounded-[0.5rem] text-white font-semibold text-lg w-full py-3">
+            Schedule Visit
+          </button>
         </div>
       </div>
 
-      {/* Gallery Modal */}
       {showGallery && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-75 flex items-center justify-center">
           <div className="relative w-full max-w-3xl h-full max-h-3xl">

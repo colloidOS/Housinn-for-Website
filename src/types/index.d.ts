@@ -80,7 +80,8 @@ export interface ListingsPageProps {
   getRoute: string; // Accept the API route as a prop
   dataRoute: string;
   pageTitle: string; // Title of the page
-  className: string;
+  className?: string;
+  noListingsMessage?: string;
 }
 
 export interface AddNewListings {
