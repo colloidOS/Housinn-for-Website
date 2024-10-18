@@ -15,18 +15,19 @@ export default function AdminLayout({
         <UserNavbar />
       </div>
 
+      {/* Main layout container: Sidebar and content */}
       <div className="flex flex-1 h-full">
-        {/* Sticky Sidebar */}
-        <div className="sticky top-0 z-10 h-full">
+        {/* Sidebar: Sticky but starting below the navbar */}
+        <div className="sticky top-[4rem] z-10 h-full">
           <SettingsSidebar />
         </div>
 
-        {/* Main content with smoother scrolling */}
+        {/* Main content with scrolling */}
         <div
           className="flex-1 overflow-y-auto"
           style={{
-            scrollBehavior: "smooth", // Smooth scrolling behavior
-            willChange: "transform", // Hinting to browser for optimized rendering
+            scrollBehavior: "smooth",
+            willChange: "transform",
           }}
         >
           <Suspense>{children}</Suspense>
