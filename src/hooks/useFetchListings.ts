@@ -29,13 +29,13 @@ const useFetchListings = (endpoint: string, dataRoute: string) => {
           location: ` ${post.address}, ${capitalizeFirstLetter(
             post.city
           )}, ${capitalizeFirstLetter(post.state)}.`,
-         
+
           beds: post.bedroom,
           baths: post.bathroom,
-          area: `${post.latitude} x ${post.longitude}`,
           imageUrl: post.images[0] || "/images/default-image.png",
           tag: post.type,
           desc: post.desc,
+          ownerType: post.ownerType,
           listed: new Date(post.createdAt).toLocaleDateString(),
           category: post.category,
           isSaved: post.isSaved,

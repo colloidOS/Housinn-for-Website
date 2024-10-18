@@ -7,11 +7,12 @@ import {
   Feet,
   Camera,
   Menu,
+  Government,
 } from "../../../public/icons";
 import { useRouter } from "next/navigation";
 import { ListingsCardProps } from "@/types";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
-import { FaHouse } from "react-icons/fa6";
+import { Span } from "next/dist/trace";
 
 // Combined Listing Card Component
 const ListingCard: React.FC<ListingsCardProps> = ({
@@ -43,7 +44,7 @@ const ListingCard: React.FC<ListingsCardProps> = ({
           <Image src={Camera} alt="Camera" width={15} height={15} />
           <p className="text-white text-xs">{listing.imageLength}</p>
         </div>
-        {/* Listing Tag */}
+
         <span
           className={`text-xs px-2 py-1 pr-4 clip-triangle-right absolute top-0 rounded-ss-[7px] left-0 ${
             listing.tag === "sale"
@@ -61,17 +62,27 @@ const ListingCard: React.FC<ListingsCardProps> = ({
             ? "For Rent"
             : "Short-Let"}
         </span>
+        {listing.ownerType === "private" ? (
+          <div className=" w-16 h-6 absolute top-0 right-0">
+            <Image
+              src={Government}
+              width={1}
+              height={1}
+              className="w-full h-full object-cover rounded-se-[7px]"
+              alt="government"
+            />
+          </div>
+        ) : (
+          ""
+        )}
       </div>
 
-      {/* Listing Content */}
       <div className="py-4 mb-2 flex flex-col gap-3 mx-5">
-        {/* Listing Price */}
         <div className="flex justify-between">
           <h3 className="text-xl text-primary font-semibold">
-            {listing.price} 
+            {listing.price}
           </h3>
 
-          {/* Heart Icon for Saving */}
           <div
             onClick={(e) => {
               e.stopPropagation();
@@ -81,17 +92,7 @@ const ListingCard: React.FC<ListingsCardProps> = ({
           >
             {isSaved ? <FaHeart /> : <FaRegHeart />}
           </div>
-          {/* Menu Icon */}
-          {/* <Image
-            src={Menu}
-            alt="Menu"
-            width={15}
-            height={15}
-            className="cursor-pointer"
-          /> */}
         </div>
-
-        {/* Listing Title */}
 
         <p className="p-1 w-fit rounded-[7px] bg-gray-400 text-white text-xs">
           {listing.category.charAt(0).toUpperCase() + listing.category.slice(1)}
@@ -99,13 +100,11 @@ const ListingCard: React.FC<ListingsCardProps> = ({
 
         <p className="text-gray-700 text-xs font-semibold">{listing.title}</p>
 
-        {/* Listing Location */}
         <div className="flex items-start gap-1">
           <Image src={PhAddress} width={15} height={15} alt="Address icon" />
-          <p className="text-gray-500 text-xs">{listing.location}.</p>
+          <p className="text-gray-500 text-xs">{listing.location}</p>
         </div>
 
-        {/* Property Details */}
         <div className="flex flex-col gap-3 text-gray-500 text-xs">
           <div className="flex gap-2">
             {" "}
@@ -118,10 +117,6 @@ const ListingCard: React.FC<ListingsCardProps> = ({
               {listing.baths} Baths
             </div>
           </div>
-          {/* <div className="flex gap-1">
-            <Image src={Feet} alt="Area icon" width={15} height={15} />
-            {listing.area} sq.ft
-          </div> */}
         </div>
 
         {/* Listing Date
