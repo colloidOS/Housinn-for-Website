@@ -20,7 +20,7 @@ const AboutUs = () => {
           </div>
           <div className="flex gap-5 sm:gap-[60px]">
             <div>
-              <h1 className="text-2xl sm:text-[64px] leading-[87px] font-semibold">
+              <h1 className="text-3xl sm:text-[64px] leading-[87px] font-semibold">
                 100K+
               </h1>
               <p className="text-lg font-normal">Properties Listed</p>
@@ -28,7 +28,7 @@ const AboutUs = () => {
             <Image src={line} width={4} height={90} alt="line" />
 
             <div>
-              <h1 className="text-2xl sm:text-[64px] leading-[87px] font-semibold">
+              <h1 className="text-3xl sm:text-[64px] leading-[87px] font-semibold">
                 30K+
               </h1>
               <p className="text-lg font-normal">Properties Sold</p>
@@ -41,7 +41,7 @@ const AboutUs = () => {
             width={400}
             height={400}
             alt="property-icon"
-            className="sm:w-[400px] w-11 sm:h-[300px] lg:h-[400px] h-11"
+            className="sm:w-[400px] hidden sm:block w-11 sm:h-[300px] lg:h-[400px] h-11"
           />
         </div>
       </div>

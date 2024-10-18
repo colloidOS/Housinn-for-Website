@@ -10,9 +10,9 @@ import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
-import ProfileForm from './components/ProfileForm';
-import VerificationForm from './components/VerificationForm';
-import PasswordForm from './components/PasswordForm';
+import ProfileForm from "./components/ProfileForm";
+import VerificationForm from "./components/VerificationForm";
+import PasswordForm from "./components/PasswordForm";
 function Profile() {
   const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null); // Correct typing
   const [selectedImage, setSelectedImage] = useState<string | null>(null); // For preview as a string
@@ -55,10 +55,6 @@ function Profile() {
   };
   const { user, setUser } = useAuth();
 
-  const clearCookie = (name: string) => {
-    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-  };
-
   const triggerImageUpload = () => {
     document.getElementById("profileImageInput")?.click();
   };
@@ -70,44 +66,55 @@ function Profile() {
   console.log("id", id);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await api.get(`/users/search/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const userData = response.data;
-        setUserData(userData);
+    // Check if the page has already been reloaded
+    const hasReloaded = sessionStorage.getItem("hasReloaded");
 
-        // If avatar exists, set it for preview
-        if (userData.data.avatar) {
-          setSelectedImage(userData.data.avatar); // Set the avatar URL
+    if (!hasReloaded) {
+      // Reload the page and set a flag to prevent further reloads
+      sessionStorage.setItem("hasReloaded", "true");
+      window.location.reload();
+    } else {
+      // Fetch the data after reload
+      const fetchData = async () => {
+        try {
+          const response = await api.get(`/users/search/${id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          const userData = response.data;
+          setUserData(userData);
+
+          // If avatar exists, set it for preview
+          if (userData.data.avatar) {
+            setSelectedImage(userData.data.avatar); // Set the avatar URL
+          }
+
+          // Populate form fields
+          setUpdatedProfile({
+            firstName: userData.data.firstName || "",
+            lastName: userData.data.lastName || "",
+            number: userData.data.number || "",
+            company: userData.data.company || "",
+          });
+
+          setUpdateVerification({
+            state: userData.data.state || "",
+            town: userData.data.town || "",
+            address: userData.data.address || "",
+            number: userData.data.number || "",
+          });
+
+          setSelectedState(userData.data.state || ""); // Populate state dropdown
+          setSelectedCity(userData.data.town || ""); // Populate city dropdown
+
+          setLoading(false);
+          console.log(userData);
+        } catch (error) {
+          console.error("Error:", error);
         }
+      };
 
-        // Populate form fields
-        setUpdatedProfile({
-          firstName: userData.data.firstName || "",
-          lastName: userData.data.lastName || "",
-          number: userData.data.number || "",
-          company: userData.data.company || "",
-        });
-
-        setUpdateVerification({
-          state: userData.data.state || "",
-          town: userData.data.town || "",
-          address: userData.data.address || "",
-          number: userData.data.number || "",
-        });
-
-        setSelectedState(userData.data.state || ""); // Populate state dropdown
-        setSelectedCity(userData.data.town || ""); // Populate city dropdown
-
-        setLoading(false);
-        console.log(userData);
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
-    fetchData();
+      fetchData();
+    }
   }, [id, token]);
 
   const handleUpdateSubmit = async (e: React.FormEvent) => {
@@ -140,7 +147,6 @@ function Profile() {
 
       // Set the Cloudinary avatar URL in cookies
       Cookies.set("avatar", updatedAvatarURL);
-
 
       setUser((prevUser) => ({
         ...prevUser,
@@ -227,38 +233,43 @@ function Profile() {
   const handleLogout = async () => {
     setLogoutLoading(true);
     try {
-      await api.post("/auth/logout", {}, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      await api.post(
+        "/auth/logout",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      // Clear all cookies
+      Object.keys(Cookies.get()).forEach((cookie) => {
+        Cookies.remove(cookie);
       });
 
-      // Clear all relevant cookies
-      Cookies.remove('token');
-      Cookies.remove('id');
-      Cookies.remove('email');
-      Cookies.remove('userType');
-      // Remove any other cookies related to user state
-
       // Reset the user state in AuthContext
-      setUser(null); // This line clears the user state
+      setUser(null); // Clears user state
 
-      toast.success("You have been logged out. Rerouting...");
+      toast.success("You have been logged out. Refreshing...");
 
+      // Refresh the page and reroute to the auth page
       setTimeout(() => {
-        router.push("/auth");
+        window.location.href = "/auth"; // Refresh and redirect
       }, 2000);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorMessage = error.response?.data?.message || error.message;
-        console.error("Submission Error:", error.response?.data || error.message);
+        console.error(
+          "Submission Error:",
+          error.response?.data || error.message
+        );
         toast.error(`Error: ${errorMessage}`);
       }
     } finally {
       setLogoutLoading(false);
     }
   };
-
 
   return (
     <>
@@ -268,37 +279,37 @@ function Profile() {
           <hr className="text-gray-300" />
         </div>
         <ProfileForm
-        updatedProfile={updatedProfile}
-        setUpdatedProfile={setUpdatedProfile}
-        handleUpdateSubmit={handleUpdateSubmit}
-        isProfileLoading={isProfileLoading}
-        selectedImage={selectedImage}
-        triggerImageUpload={triggerImageUpload}
-        handleImageUpload={handleImageUpload}
-      />
+          updatedProfile={updatedProfile}
+          setUpdatedProfile={setUpdatedProfile}
+          handleUpdateSubmit={handleUpdateSubmit}
+          isProfileLoading={isProfileLoading}
+          selectedImage={selectedImage}
+          triggerImageUpload={triggerImageUpload}
+          handleImageUpload={handleImageUpload}
+        />
         <div className="flex flex-col gap-4 w-full">
-        <VerificationForm
-        updateVerification={updateVerification}
-        setUpdateVerification={setUpdateVerification}
-        selectedState={selectedState}
-        setSelectedState={setSelectedState}
-        selectedCity={selectedCity}
-        setSelectedCity={setSelectedCity}
-        handleVerificationSubmit={handleVerificationSubmit}
-        isVerificationLoading={isVerificationLoading}
-        loading={loading}
-      />
-            <PasswordForm
-        updatePassword={updatePassword}
-        setUpdatedPassword={setUpdatedPassword}
-        handlePasswordChange={handlePasswordChange}
-        isPasswordLoading={isPasswordLoading}
-      />
+          <VerificationForm
+            updateVerification={updateVerification}
+            setUpdateVerification={setUpdateVerification}
+            selectedState={selectedState}
+            setSelectedState={setSelectedState}
+            selectedCity={selectedCity}
+            setSelectedCity={setSelectedCity}
+            handleVerificationSubmit={handleVerificationSubmit}
+            isVerificationLoading={isVerificationLoading}
+            loading={loading}
+          />
+          <PasswordForm
+            updatePassword={updatePassword}
+            setUpdatedPassword={setUpdatedPassword}
+            handlePasswordChange={handlePasswordChange}
+            isPasswordLoading={isPasswordLoading}
+          />
           <hr className="text-gray-300 py-2" />
         </div>
         <div>
           <hr className="text-gray-300" />
-          <div className="flex gap-10 lg:gap-[202px]">
+          <div className="flex sm:flex-row flex-col gap-10 lg:gap-[202px]">
             <div className="flex flex-col gap-2 w-">
               <p className="text-lg font-semibold">Logout</p>
               <p className="text-sm font-normal text-gray-600">

@@ -13,6 +13,7 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FC, ForwardRefExoticComponent, RefAttributes } from "react";
+import { useAuth } from "@/context/AuthContext"; // Import the useAuth hook
 
 const sideItems = [
   {
@@ -71,12 +72,11 @@ interface Iproperties {
     >;
     id: string;
   }[];
-  currenPathName?: string;
+  className?: string;
 }
-const SettingsSidebar: FC<Iproperties> = ({
-  sideNavitems = sideItems,
-  className,
-}) => {
+
+const SettingsSidebar: FC<Iproperties> = ({ className }) => {
+  const { user } = useAuth(); // Get the user data from AuthContext
   const pathname = usePathname();
   const currentPath =
     pathname?.split("/").length === 2 ? "dashboard" : pathname?.split("/")[2];
@@ -84,12 +84,20 @@ const SettingsSidebar: FC<Iproperties> = ({
   const isDashboard =
     currentPath === "dashboard" && organizationPath === undefined;
 
+  // Filter the side items based on userType
+  const filteredSideItems =
+    user?.userType === "individual"
+      ? sideItems.filter((item) =>
+          ["profile", "messages", "favorites"].includes(item.id)
+        )
+      : sideItems;
+
   return (
     <div
-      className={` ${className} h-screen hidden lg:flex flex-col gap-11 items-center justify-center bg-white-200 pt-6  md:w-[220px] md:justify-start `}
+      className={` ${className} h-full hidden lg:flex flex-col gap-11 items-center justify-center bg-white-200 pt-6  md:w-[220px] md:justify-start `}
     >
       <section className="pr-4  flex flex-col  gap-y-3">
-        {sideNavitems.map((item, index) => (
+        {filteredSideItems.map((item, index) => (
           <Link
             key={index}
             href={item.link}
@@ -108,28 +116,33 @@ const SettingsSidebar: FC<Iproperties> = ({
         ))}
       </section>
 
-      <section className="flex flex-col items-center w-full justify-center">
-        {addNewListingLinks.map((item, index) => (
-          <Link
-            key={index}
-            href={item.link}
-            data-testid={item.id}
-            role="sidebar-link"
-            className={`${
-              organizationPath === item.id
-                ? "shadow-custom-negative-shadow"
-                : " text-gray-500 hover:bg- "
-            } px-6 py-[11px]  w-fit bg-secondary text-white rounded-md text-base font-semibold flex items-center justify-center cursor-pointer transition-all duration-200 ease-in md:justify-between `}
-          >
-            <div className="flex items-center justify-start gap-2">
-              {item.icon && (
-                <item.icon className="w-[18px] h-[18px]" role="sidebar-icon" />
-              )}
-              <span className="text-base  text-nowrap">{item.route}</span>
-            </div>
-          </Link>
-        ))}
-      </section>
+      {user?.userType !== "individual" && (
+        <section className="flex flex-col items-center w-full justify-center">
+          {addNewListingLinks.map((item, index) => (
+            <Link
+              key={index}
+              href={item.link}
+              data-testid={item.id}
+              role="sidebar-link"
+              className={`${
+                organizationPath === item.id
+                  ? "shadow-custom-negative-shadow"
+                  : " text-gray-500 hover:bg- "
+              } px-6 py-[11px]  w-fit bg-secondary text-white rounded-md text-base font-semibold flex items-center justify-center cursor-pointer transition-all duration-200 ease-in md:justify-between `}
+            >
+              <div className="flex items-center justify-start gap-2">
+                {item.icon && (
+                  <item.icon
+                    className="w-[18px] h-[18px]"
+                    role="sidebar-icon"
+                  />
+                )}
+                <span className="text-base  text-nowrap">{item.route}</span>
+              </div>
+            </Link>
+          ))}
+        </section>
+      )}
     </div>
   );
 };

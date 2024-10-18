@@ -4,6 +4,7 @@ import io from "socket.io-client";
 import Image from "next/image";
 import { ClipLoader } from "react-spinners";
 import api from "@/lib/api";
+import { SendHorizontal } from "lucide-react";
 import Pfp from "../../../../public/images/pfp.png"; // Default profile image
 import Search from "../../../../public/icons/search.svg"; // Search icon
 import { useAuth } from "@/context/AuthContext";
@@ -11,13 +12,12 @@ import {
   format,
   isToday,
   isThisWeek,
-  formatDistanceToNowStrict,
   isYesterday,
   isSameDay,
   differenceInDays,
 } from "date-fns";
 
-const socket = io("http://localhost:3000"); // Backend socket URL
+const socket = io("https://housinn.onrender.com"); // Backend socket URL
 
 const MessagePage = () => {
   const [chats, setChats] = useState([]);
@@ -34,111 +34,6 @@ const MessagePage = () => {
 
   const userId = user.id;
   const token = user.token;
-
-  useEffect(() => {
-    // Fetch chats to update unread status, lastMessage, and lastMessageTime
-    const fetchChatsAndUpdateUnread = async () => {
-      try {
-        const chatResponse = await api.get("/chats", {
-          headers: {
-            Authorization: `Bearer ${token}`, // Use the stored token
-          },
-        });
-
-        const fetchedChats = chatResponse.data.data.chats;
-        if (Array.isArray(fetchedChats)) {
-          // Update the chat state with unread status, lastMessage, and lastMessageTime
-          setChats(
-            fetchedChats.map((chat) => {
-              console.log(chat);
-              return {
-                ...chat,
-                lastMessage: chat.lastMessage || "", // Update with the last message
-                lastMessageTime: chat.messages.length
-                  ? chat.messages[chat.messages.length - 1].createdAt
-                  : chat.createdAt, // Use latest message time if available
-                unread: chat.isRead === false, // Chat is unread if `isRead` is false
-                unreadCount: chat.isRead === false ? 1 : 0, // If unread, set unreadCount to 1
-              };
-            })
-          );
-        } else {
-          console.error("Error: fetched chats is not an array");
-        }
-      } catch (error) {
-        console.error("Error fetching chats:", error);
-      }
-    };
-
-    fetchChatsAndUpdateUnread();
-  }, [token]);
-
-  // Fetch user's chats
-  // const fetchChats = () => {
-  //   api
-  //     .get("/chats", {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`, // Use the stored token
-  //       },
-  //     })
-  //     .then((response) => {
-  //       console.log(response);
-  //       setChats(response.data.data.chats); // Set chats from response
-  //     })
-  //     .catch((error) => console.error("Error fetching chats:", error));
-  // };
-  // useEffect(() => {
-  //   fetchChats(); // Fetch chats when the component mounts
-  // }, []);
-
-  // Select a chat and fetch its messages
-  const selectChat = (chat) => {
-    setCurrentChat(chat);
-    // Mark chat as read when selected
-    api
-      .put(`/chats/read/${chat.id}`, {
-        seenBy: [...chat.seenBy, userId], // Add the current user ID to the seenBy array
-      })
-      .then((response) => {
-        if (response.data.status === "success") {
-          // Mark the current chat as read in the chat list
-          setChats((prevChats) =>
-            prevChats.map((c) =>
-              c.id === chat.id
-                ? { ...c, unread: false, seenBy: [...chat.seenBy, userId] }
-                : c
-            )
-          );
-        }
-
-        // Fetch messages for the selected chat
-        api
-          .get(`/chats/${chat.id}`, {
-            headers: {
-              Authorization: `Bearer ${token}`, // Use the stored token
-            },
-          })
-          .then((response) => {
-            if (response.data.status === "success") {
-              setMessages(response.data.data.messages); // Set messages from response
-
-              // Scroll to the bottom after loading messages
-              setTimeout(() => {
-                scrollToBottom();
-              }, 100);
-            } else {
-              console.error(
-                "Error fetching chat messages:",
-                response.data.message
-              );
-            }
-          })
-          .catch((error) =>
-            console.error("Error fetching chat messages:", error)
-          );
-      })
-      .catch((error) => console.error("Error marking chat as read:", error));
-  };
 
   // Scroll to the bottom of the message list
   const scrollToBottom = () => {
@@ -185,39 +80,183 @@ const MessagePage = () => {
     // If the message is older than a week, display the date in dd/mm/yyyy format
     return format(messageDate, "dd/MM/yy");
   };
+  useEffect(() => {
+    // Connect to socket server and fetch chats
+    socket.on("connect", () => {
+      console.log("Connected to socket server");
+    });
+
+    const fetchChatsAndUpdateUnread = async () => {
+      try {
+        const chatResponse = await api.get("/chats", {
+          headers: {
+            Authorization: `Bearer ${token}`, // Use the stored token
+          },
+        });
+
+        const fetchedChats = chatResponse.data.data.chats;
+        console.log(fetchedChats);
+
+        if (Array.isArray(fetchedChats)) {
+          // Join all chat rooms by emitting a `joinChat` event for each chat ID
+          fetchedChats.forEach((chat) => {
+            socket.emit("joinChat", chat.id);
+          });
+
+          // Update the chat state with unread status, lastMessage, and lastMessageTime
+          setChats(
+            fetchedChats.map((chat) => ({
+              ...chat,
+              lastMessage: chat.lastMessage || "", // Update with the last message
+              lastMessageTime: chat.messages.length
+                ? chat.messages[chat.messages.length - 1].createdAt
+                : chat.createdAt, // Use latest message time if available
+              unread: chat.isRead === false, // Chat is unread if `isRead` is false
+              unreadCount: chat.isRead === false ? 1 : 0, // If unread, set unreadCount to 1
+            }))
+          );
+        } else {
+          console.error("Error: fetched chats is not an array");
+        }
+      } catch (error) {
+        console.error("Error fetching chats:", error);
+      }
+    };
+
+    fetchChatsAndUpdateUnread();
+  }, [token]);
+
+  // Select a chat and fetch its messages
+  const selectChat = (chat) => {
+    setCurrentChat(chat); // Set current chat
+
+    // Mark chat as read when selected
+    api
+      .put(`/chats/read/${chat.id}`, {
+        seenBy: [...chat.seenBy, userId],
+      })
+      .then((response) => {
+        if (response.data.status === "success") {
+          // Update chats list to mark the chat as read without resetting the time
+          setChats((prevChats) =>
+            prevChats.map((c) =>
+              c.id === chat.id
+                ? { ...c, unread: false, unreadCount: 0 } // No lastMessageTime update here
+                : c
+            )
+          );
+        }
+      })
+      .catch((error) => console.error("Error marking chat as read:", error));
+
+    // Fetch the messages for the selected chat
+    api
+      .get(`/chats/${chat.id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        if (response.data.status === "success") {
+          setMessages(response.data.data.messages);
+          scrollToBottom();
+
+          // Listen for chat updates for the selected chat
+          socket.on("chatUpdated", (data) => {
+            if (data.chatId === chat.id) {
+              const { updatedChat } = data;
+              console.log(updatedChat);
+              // Update the chat without resetting the lastMessageTime
+              setChats((prevChats) =>
+                prevChats.map((c) =>
+                  c.id === chat.id
+                    ? {
+                        ...c,
+                        seenBy: updatedChat.seenBy,
+                        // Only update lastMessageTime if there's a newer message
+                        lastMessageTime:
+                          updatedChat.messages.length > 0
+                            ? updatedChat.messages[
+                                updatedChat.messages.length - 1
+                              ].createdAt
+                            : c.lastMessageTime,
+                      }
+                    : c
+                )
+              );
+            }
+          });
+        }
+        setTimeout(() => {
+          scrollToBottom();
+        }, 100);
+      })
+      .catch((error) => console.error("Error fetching chat messages:", error));
+  };
+
+  // Mark chat as read when user selects it
+  const markChatAsRead = (chatId) => {
+    if (currentChat?.id === chatId) {
+      api
+        .put(`/chats/read/${chatId}`, {
+          seenBy: [...currentChat.seenBy, userId],
+        })
+        .then(() => {
+          setChats((prevChats) =>
+            prevChats.map((chat) =>
+              chat.id === chatId
+                ? { ...chat, unread: false, unreadCount: 0 }
+                : chat
+            )
+          );
+        })
+        .catch((error) => console.error("Error marking chat as read:", error));
+    }
+  };
+
+  // Handle marking as unread when a new message is received and the chat isn't open
+  useEffect(() => {
+    socket.on("newMessage", (message) => {
+      if (message.chatId !== currentChat?.id) {
+        setChats((prevChats) =>
+          prevChats.map((chat) =>
+            chat.id === message.chatId
+              ? { ...chat, unread: true, unreadCount: chat.unreadCount + 1 }
+              : chat
+          )
+        );
+      }
+    });
+
+    return () => {
+      socket.off("newMessage");
+    };
+  }, [currentChat]);
+
+  // Clean up the socket listener when the component unmounts or chat changes
+  useEffect(() => {
+    return () => {
+      socket.off("chatUpdated"); // Clean up on component unmount or re-render
+    };
+  }, [currentChat]);
 
   // Function to handle sending a new message
   const [isLoading, setIsLoading] = useState(false); // State to track loading
 
-  // Function to handle sending a new message
   const handleSendMessage = () => {
     if (newMessageText && currentChat) {
-      setIsLoading(true); // Set loading to true when starting to send the message
+      setIsLoading(true); // Show loading spinner when sending the message
+
       // Emit the new message via WebSocket
-      socket.emit("sendMessage", {
-        chatId: currentChat.id,
-        userId, // The sender's ID
-        text: newMessageText,
-      });
+      socket.emit(
+        "sendMessage",
+        {
+          chatId: currentChat.id,
+          userId, // The sender's ID
+          text: newMessageText,
+        },
+        console.log("Message sent:", newMessageText)
+      );
 
-      const fetchChats = () => {
-        api
-          .get("/chats", {
-            headers: {
-              Authorization: `Bearer ${token}`, // Use the stored token
-            },
-          })
-          .then((response) => {
-            console.log(response);
-            setChats(response.data.data.chats); // Set chats from response
-          })
-          .catch((error) => console.error("Error fetching chats:", error));
-      };
-      // useEffect(() => {
-      //   fetchChats(); // Fetch chats when the component mounts
-      // }, []);
-
-      // Optionally: Also make the API call for server-side persistence
+      // Optionally: Also make an API call for server-side persistence
       api
         .post(
           `messages/${currentChat.id}`,
@@ -226,56 +265,56 @@ const MessagePage = () => {
         )
         .then((response) => {
           const messageData = response.data.data;
-          console.log(messageData);
-
-          // Immediately add the new message to the messages state
+          console.log("new mess:", messageData);
+          // Immediately add the new message to the message list
           setMessages((prevMessages) => [...prevMessages, messageData]);
 
-          // Fetch the updated chat list from the server
-          return fetchChats(); // Call fetchChats to refresh the chat list
-        })
-        .then(() => {
-          const updatedChats = chats.map((chat) => {
-            if (chat.id === currentChat.id) {
-              return {
-                ...chat,
-                lastMessage: newMessageText, // Use newMessageText for immediate update
-                lastMessageTime: new Date().toISOString(), // Use the current time
-              };
-            }
-            return chat;
-          });
-
-          setChats(
-            updatedChats.sort(
+          // Update the chats list with the latest message and time
+          setChats((prevChats) => {
+            console.log(prevChats);
+            const updatedChats = prevChats.map((chat) => {
+              if (chat.id === currentChat.id) {
+                return {
+                  ...chat,
+                  lastMessage: newMessageText, // Update with the new message text
+                  lastMessageTime: messageData.createdAt, // Use the correct timestamp for this message
+                };
+              }
+              return chat;
+            });
+            console.log(updatedChats);
+            // Sort the updated chats list by lastMessageTime
+            return updatedChats.sort(
               (a, b) =>
                 new Date(b.lastMessageTime) - new Date(a.lastMessageTime)
-            )
-          );
+            );
+          });
 
+          // Clear the message input and scroll to the bottom of the chat
           setNewMessageText("");
-          scrollToBottom();
+          setTimeout(() => {
+            scrollToBottom();
+          }, 100);
         })
         .catch((error) => console.error("Error sending message:", error))
         .finally(() => {
-          setIsLoading(false); // Set loading to false after process completes
+          setIsLoading(false); // Remove loading spinner after sending the message
         });
     }
   };
 
-  //Function to fetch chats on page load
+  // Fetch chats on page load
   useEffect(() => {
     api
       .get("/chats", { headers: { Authorization: `Bearer ${token}` } })
       .then((response) => {
         const fetchedChats = response.data.data;
-
-        // Update the chat list with initial data
         console.log(fetchedChats);
+        // Update the chat list with initial data
         setChats(
           fetchedChats.map((chat) => ({
             ...chat,
-            lastMessageTime: chat.length
+            lastMessageTime: chat.messages.length
               ? chat.messages[chat.messages.length - 1].createdAt
               : chat.createdAt, // Use the latest message time if available
             unread: chat.isRead === false, // Chat is unread if `isRead` is false
@@ -285,38 +324,52 @@ const MessagePage = () => {
       .catch((error) => console.error("Error fetching chats:", error));
   }, [token]);
 
-  // Function to handle receiving new messages via WebSocket
+  // Handle receiving new messages via WebSocket
   useEffect(() => {
-    socket.on("receiveMessage", (newMessage) => {
-      if (currentChat && newMessage.chatId === currentChat.id) {
-        setMessages((prevMessages) => [...prevMessages, newMessage]);
-
-        const updatedChats = chats.map((chat) => {
-          if (chat.id === currentChat.id) {
-            return {
-              ...chat,
-              lastMessage: newMessage.text,
-              lastMessageTime: newMessage.createdAt,
-            };
-          }
-          return chat;
+    socket.on("newMessage", (message) => {
+      console.log("socket message:", message);
+      if (message.chatId) {
+        setChats((prevChats) => {
+          const updatedChats = prevChats.map((chat) => {
+            if (chat.id === message.chatId) {
+              // Update the chat to reflect the new message and its time
+              return {
+                ...chat,
+                lastMessage: message.text, // Update with the new message's text
+                lastMessageTime: message.createdAt, // Use the current message's timestamp
+                unread: chat.id !== currentChat?.id, // Mark as unread if it's not the active chat
+                unreadCount:
+                  chat.id !== currentChat?.id ? chat.unreadCount + 1 : 0, // Increment unread count only if the chat is not active
+              };
+            }
+            return chat;
+          });
+          console.log("receive:", updatedChats);
+          // Sort the updated chats list by lastMessageTime to keep most recent chats on top
+          return updatedChats.sort(
+            (a, b) => new Date(b.lastMessageTime) - new Date(a.lastMessageTime)
+          );
         });
 
-        setChats(
-          updatedChats.sort(
-            (a, b) => new Date(b.lastMessageTime) - new Date(a.lastMessageTime)
-          )
-        );
-
-        scrollToBottom();
+        // If the message belongs to the currently open chat, update the message list
+        if (message.chatId === currentChat?.id) {
+          setMessages((prevMessages) => [...prevMessages, message]);
+          setTimeout(() => {
+            scrollToBottom();
+          }, 100);
+        }
       }
     });
 
     // Cleanup on component unmount
     return () => {
-      socket.off("receiveMessage");
+      socket.off("newMessage");
     };
   }, [currentChat, chats]);
+
+  useEffect(() => {
+    console.log("Chats updated:", chats);
+  }, [chats]); // This will log each time the chats state changes
 
   // Filter chats based on category (all or unread) and search query
   const filteredChats = chats
@@ -339,7 +392,7 @@ const MessagePage = () => {
   };
 
   return (
-    <div className="w-full flex flex-col bg-background-2 gap-5 h-auto px-8 pt-8">
+    <div className="w-full flex flex-col bg-background-2 gap-5 h-scree px-8 pt-6">
       {/* Chat List and Search */}
       <div className="flex flex-col gap-4 border-b border-gray-400">
         <h2 className="text-2xl font-bold text-black">Messages</h2>
@@ -391,12 +444,12 @@ const MessagePage = () => {
                   // Sort based on the latest message's createdAt or the chat's createdAt if no messages
                   const lastMessageTimeA =
                     a.messages.length > 0
-                      ? new Date(a.messages[0].createdAt)
-                      : new Date(a.createdAt);
+                      ? new Date(a.lastMessageTime)
+                      : new Date(a.messages[0].createdAt);
                   const lastMessageTimeB =
                     b.messages.length > 0
-                      ? new Date(b.messages[0].createdAt)
-                      : new Date(b.createdAt);
+                      ? new Date(b.lastMessageTime)
+                      : new Date(b.messages[0].createdAt);
                   return lastMessageTimeB - lastMessageTimeA;
                 })
                 .map((chat, index) => (
@@ -434,8 +487,9 @@ const MessagePage = () => {
                           <p className="font-semibold">{`${chat.receiver.firstName} ${chat.receiver.lastName}`}</p>
                           <p className="text-xs text-gray-500">
                             {chat.messages.length > 0
-                              ? formatTime(chat.messages[0].createdAt) // Use the first message's createdAt
-                              : formatTime(chat.createdAt)}{" "}
+                              ? formatTime(chat.lastMessageTime)
+                              : formatTime(chat.messages[0].createdAt)}{" "}
+                            {console.log(chat)}
                           </p>
                         </div>
                         <div className="flex w-full justify-between">
@@ -554,7 +608,7 @@ const MessagePage = () => {
                   onClick={handleSendMessage}
                   className="bg-blue-500 text-white rounded-r-lg px-4"
                 >
-                  Send
+                  <SendHorizontal />
                 </button>
               </div>
             </div>

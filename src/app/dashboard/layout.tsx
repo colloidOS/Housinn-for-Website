@@ -9,15 +9,29 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col relative">
+    <div className="flex flex-col h-screen">
+      {/* Sticky Navbar */}
       <div className="sticky top-0 z-10 w-full">
         <UserNavbar />
       </div>
-      <div className="relative w-full flex h-full max-lg:overflow-hidden ">
-        <div className="sticky left-0 top-0 z-8">
+
+      {/* Main layout container: Sidebar and content */}
+      <div className="flex flex-1 h-full">
+        {/* Sidebar: Sticky but starting below the navbar */}
+        <div className="sticky top-[4rem] z-10 h-full">
           <SettingsSidebar />
         </div>
-        <Suspense>{children}</Suspense>
+
+        {/* Main content with scrolling */}
+        <div
+          className="flex-1 overflow-y-auto"
+          style={{
+            scrollBehavior: "smooth",
+            willChange: "transform",
+          }}
+        >
+          <Suspense>{children}</Suspense>
+        </div>
       </div>
     </div>
   );
