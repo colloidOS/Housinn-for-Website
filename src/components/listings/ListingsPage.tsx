@@ -164,24 +164,35 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
             animate={{ opacity: 0.3 }}
             exit={{ opacity: 0.2 }}
           >
-            {Array(6)
+            {Array(8)
               .fill(null)
               .map((_, index) => (
                 <Skeleton
                   key={index}
-                  className="w-full h-96 rounded-[7px] cursor-pointer bg-gray-300"
+                  className="w-full h-80 rounded-[7px] cursor-pointer bg-gray-300"
                 />
               ))}
           </motion.div>
         )
       ) : filteredListings.length === 0 ? (
         <h2 className="text-xl text-center mt-24 font-bold mb-4 w-full">
-           {noListingsMessage}
+          {noListingsMessage}
         </h2>
       ) : (
         <>
           {isListView ? (
-            <ListingSort listings={filteredListings} />
+            <AnimatePresence>
+              {" "}
+              <motion.div
+                
+                initial={{ opacity: 0 }} // Start invisible
+                animate={{ opacity: 1 }} // Animate in
+                exit={{ opacity: 0 }}
+                transition={{ duration: 1 }} // Smooth transition timing
+              >
+                <ListingSort listings={filteredListings} />
+              </motion.div>
+            </AnimatePresence>
           ) : (
             <AnimatePresence>
               <motion.div
