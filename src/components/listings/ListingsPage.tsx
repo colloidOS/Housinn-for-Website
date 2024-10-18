@@ -16,7 +16,8 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
   getRoute,
   dataRoute,
   pageTitle,
-  className,
+  className = "",
+  noListingsMessage = "No listings available",
 }) => {
   const [activeTag, setActiveTag] = useState<string | null>("all-properties");
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -158,7 +159,7 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
         ) : (
           // Check if in grid view
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 gap-6 mt-4"
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-4 mt-4"
             initial={{ opacity: 1 }}
             animate={{ opacity: 0.3 }}
             exit={{ opacity: 0.2 }}
@@ -174,15 +175,9 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
           </motion.div>
         )
       ) : filteredListings.length === 0 ? (
-        <div className="flex justify-center items-center flex-col mt-24 w-full">
-          <h2 className="text-xl font-bold mb-4">No listings available</h2>
-          <button
-            className="bg-secondary text-white px-6 py-2 rounded transition"
-            onClick={() => router.push("/dashboard/add-new-listing")}
-          >
-            Add New Listing
-          </button>
-        </div>
+        <h2 className="text-xl text-center mt-24 font-bold mb-4 w-full">
+           {noListingsMessage}
+        </h2>
       ) : (
         <>
           {isListView ? (
@@ -190,7 +185,7 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
           ) : (
             <AnimatePresence>
               <motion.div
-                className="grid grid-cols-2 lg:grid-cols-3 gap-4 mt-4"
+                className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-4 mt-4"
                 initial={{ opacity: 0 }} // Start invisible
                 animate={{ opacity: 1 }} // Animate in
                 exit={{ opacity: 0 }}

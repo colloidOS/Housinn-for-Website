@@ -19,7 +19,7 @@ const Listings: React.FC<ListingsProps> = ({
   dataRoute,
 }) => {
   const [activeTag, setActiveTag] = useState<string | null>(null);
-  const [maxListings, setMaxListings] = useState<number>(6); // Default value
+  const [maxListings, setMaxListings] = useState<number>(8); // Default value
   const { listings, loading, error, setListings } = useFetchListings(
     getRoute,
     dataRoute
@@ -56,7 +56,7 @@ const Listings: React.FC<ListingsProps> = ({
       } else if (screenWidth < 1024) {
         setMaxListings(4); // For iPad Pro and laptops
       } else {
-        setMaxListings(6); // For desktops
+        setMaxListings(8); // For desktops
       }
     };
 
@@ -96,7 +96,7 @@ const Listings: React.FC<ListingsProps> = ({
 
       {error || loading ? (
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 gap-6 mt-4"
+          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-4 mt-4"
           initial={{ opacity: 1 }} // Starting with full opacity
           animate={{ opacity: 0.3 }} // Animate out
           exit={{ opacity: 0.2 }}
@@ -106,7 +106,7 @@ const Listings: React.FC<ListingsProps> = ({
       ) : (
         <AnimatePresence>
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  2xl:grid-cols-3 gap-6 mt-4"
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-4 mt-4"
             transition={{ duration: 1 }} // Smooth transition timing
           >
             {displayedListings.length > 0 ? (
