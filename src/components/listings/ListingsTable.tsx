@@ -9,18 +9,11 @@ const ListingTable: React.FC<ListingsTableProps> = ({ listing }) => {
   const router = useRouter();
   const [isSaved, setIsSaved] = useState(listing.isSaved); // Track saved state locally
   const saveListing = useSaveListing([listing], () => {});
-  console.log("listing in table", listing);
-  const capitalizeWords = (str: string) => {
-    return str
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join(" ");
-  };
 
   const listingDetails = [
-    capitalizeWords(listing.title),
-    capitalizeWords(listing.tag),
-    capitalizeWords(listing.category),
+    listing.title,
+    listing.tag,
+    listing.category,
     listing.price,
     listing.cityState,
     listing.beds,

@@ -22,11 +22,11 @@ const useFetchListings = (endpoint: string, dataRoute: string) => {
         const data = response.data.data[dataRoute].map((post: any) => ({
           id: post.id,
           price: `₦${Number(post.price).toLocaleString()}`,
-          title: post.title,
+          title: `${capitalizeFirstLetter(post.title)} `,
           cityState: `${capitalizeFirstLetter(
             post.city
           )}, ${capitalizeFirstLetter(post.state)}.`,
-          location: ` ${post.address}, ${capitalizeFirstLetter(
+          location: ` ${capitalizeFirstLetter(post.address)}, ${capitalizeFirstLetter(
             post.city
           )}, ${capitalizeFirstLetter(post.state)}.`,
 
@@ -37,7 +37,7 @@ const useFetchListings = (endpoint: string, dataRoute: string) => {
           desc: post.desc,
           ownerType: post.ownerType,
           listed: new Date(post.createdAt).toLocaleDateString(),
-          category: post.category,
+          category: `${capitalizeFirstLetter(post.category)} `,
           isSaved: post.isSaved,
           imageLength: post.images.length,
         }));
