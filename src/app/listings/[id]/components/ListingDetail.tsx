@@ -62,6 +62,7 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
         />
       </div>
 
+
       <div className="grid grid-col-1 md:grid-cols-2 w-full gap-x-4 gap-y-8 col-span-1">
         <div className=" flex flex-col  gap-4">
           <div className="flex flex-col gap-2">
