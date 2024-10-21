@@ -153,8 +153,10 @@ export interface ListingsFilterProps {
 export interface FilterValues {
   minPrice?: string;
   maxPrice?: string;
-  bedrooms?: string;
-  bathrooms?: string;
+  bedroom?: string;
+  bathroom?: string;
+  category?: string;
+  type?: string;
   state?: string;
   city?: string;
   featured?: string;
