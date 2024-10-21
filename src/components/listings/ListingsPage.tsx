@@ -32,6 +32,7 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
   const router = useRouter();
 
   const applyFilters = (selectedFilters: FilterValues) => {
+    console.log("this is it",selectedFilters)
     setFilters(selectedFilters);
   };
 
