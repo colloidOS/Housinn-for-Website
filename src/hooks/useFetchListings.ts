@@ -26,14 +26,16 @@ const useFetchListings = (endpoint: string, dataRoute: string) => {
           cityState: `${capitalizeFirstLetter(
             post.city
           )}, ${capitalizeFirstLetter(post.state)}.`,
-          location: ` ${capitalizeFirstLetter(post.address)}, ${capitalizeFirstLetter(
-            post.city
-          )}, ${capitalizeFirstLetter(post.state)}.`,
+          location: ` ${capitalizeFirstLetter(
+            post.address
+          )}, ${capitalizeFirstLetter(post.city)}, ${capitalizeFirstLetter(
+            post.state
+          )}.`,
 
           beds: post.bedroom,
           baths: post.bathroom,
           imageUrl: post.images[0] || "/images/default-image.png",
-          tag: post.type,
+          tag: `${capitalizeFirstLetter(post.type)}`,
           desc: post.desc,
           ownerType: post.ownerType,
           listed: new Date(post.createdAt).toLocaleDateString(),

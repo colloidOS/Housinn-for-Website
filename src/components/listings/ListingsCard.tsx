@@ -53,9 +53,9 @@ const ListingCard: React.FC<ListingsCardProps> = ({
               : "bg-gray-200 text-gray-700"
           }`}
         >
-          {listing.tag === "sale"
+          {listing.tag === "Sale"
             ? "For Sale"
-            : listing.tag === "rent"
+            : listing.tag === "Rent"
             ? "For Rent"
             : "Short-Let"}
         </div>
@@ -72,7 +72,7 @@ const ListingCard: React.FC<ListingsCardProps> = ({
         ) : (
           ""
         )}
-        <p className="p-1 w-fit px-2 bg-gray-700 text-white text-[10px] lg:text-xs absolute bottom-0 right-0">
+        <p className="p-1 w-fit px-2 bg-gray-700/80  text-white text-[10px] lg:text-xs absolute bottom-0 right-0">
           {listing.category}
         </p>
       </div>

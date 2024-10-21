@@ -76,7 +76,7 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
         />
       </div>
 
-      <div className="grid grid-col-1 md:grid-cols-2 w-full gap-x-4 gap-y-8 col-span-1">
+      <div className="grid grid-col-1 md:grid-cols-2 w-full gap-x-4 gap-y-8 col-span-1 px-2">
         <div className=" flex flex-col  gap-4">
           <div className="flex flex-col gap-2">
             <h1 className="text-4xl text-primary font-bold">
@@ -92,11 +92,11 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
                 {" "}
                 <div className="flex gap-1">
                   <Image src={Bed} alt="Beds" width={20} height={20} />
-                  <span>{listing.bedroom} Beds</span>
+                  <span>{listing.bedroom} Bedrooms</span>
                 </div>
                 <div className="flex gap-1">
                   <Image src={Bath} alt="Baths" width={20} height={20} />
-                  <span>{listing.bathroom} Baths</span>
+                  <span>{listing.bathroom} Bathrooms</span>
                 </div>
               </div>
             </div>
@@ -143,7 +143,7 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
         <div className="fixed inset-0 z-50 bg-black bg-opacity-75 flex items-center justify-center">
           <div className="relative w-full max-w-3xl h-full max-h-3xl">
             <div className="flex items-center justify-between p-4">
-              <h2 className="text-white">Image Gallery</h2>
+              <h2 className="text-white">Image</h2>
               <button onClick={closeGallery} className="text-white">
                 Close
               </button>

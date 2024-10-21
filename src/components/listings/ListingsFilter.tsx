@@ -12,7 +12,7 @@ const ListingsFilter: React.FC<ListingsFilterProps> = ({
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false); // State to handle modal visibility
 
-  const tags = ["all-properties", "sale", "rent", "shortlet"];
+  const tags = ["all-properties", "Sale", "Rent", "Shortlet"];
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -22,12 +22,12 @@ const ListingsFilter: React.FC<ListingsFilterProps> = ({
 
   return (
     <div className="flex items-center gap-8">
-      <div className="xl:flex hidden border-[1px] gap-6 border-gray-300 p-[2px] rounded-[7px] bg-background-2">
+      <div className="xl:flex hidden border  gap-6 border-gray-300 p-[2px] rounded-[7px] bg-background-2">
         {tags.map((tag) => (
           <button
             key={tag}
-            onClick={() => onChange(tag)}
-            className={`text-[1rem] rounded-[7px] p-2 ${
+            onClick={() => onChange(tag === activeTag ? "all-properties" : tag)}
+            className={`text-sm rounded-[7px] p-2 transition-all duration-700 ease-in-out  ${
               activeTag === tag
                 ? "bg-primary-100 text-primary"
                 : "text-gray-700"
@@ -35,11 +35,11 @@ const ListingsFilter: React.FC<ListingsFilterProps> = ({
           >
             {tag === "all-properties"
               ? "All Properties"
-              : tag === "sale"
+              : tag === "Sale"
               ? "For Sale"
-              : tag === "rent"
+              : tag === "Rent"
               ? "For Rent"
-              : tag === "shortlet"
+              : tag === "Shortlet"
               ? "Shortlet"
               : ""}
           </button>
