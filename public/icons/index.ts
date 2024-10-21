@@ -35,6 +35,7 @@ import Notification from "./notifications.svg";
 import Sanrealtor from "./sanrealtor.svg";
 import Profile from "./profile.svg";
 import Government from "./government.svg";
+import Verified from "./verified.svg";
 
 export {
   FilterArrow,
@@ -74,4 +75,5 @@ export {
   Sanrealtor,
   Profile,
   Government,
+  Verified
 };

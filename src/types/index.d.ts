@@ -27,6 +27,7 @@ export type Listings = {
   createdAt: string;
   category: string;
   desc: string;
+  ownerType: string;
   postDetail: {
     amenities: string[];
     // Other fields inside postDetail can be added as per your API response
