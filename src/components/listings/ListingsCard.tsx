@@ -40,11 +40,11 @@ const ListingCard: React.FC<ListingsCardProps> = ({
 
         <div
           className={`text-[10px] lg:text-xs px-2 py-1 pr-4 clip-triangle-right absolute top-0 rounded-ss-[7px] left-0 ${
-            listing.tag === "sale"
+            listing.tag === "Sale"
               ? "bg-green-200 text-green-700"
-              : listing.tag === "rent"
+              : listing.tag === "Rent"
               ? "bg-blue-200 text-blue-700"
-              : listing.tag === "shortlet"
+              : listing.tag === "Shortlet"
               ? "bg-yellow-200 text-yellow-700"
               : "bg-gray-200 text-gray-700"
           }`}
