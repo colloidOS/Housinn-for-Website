@@ -36,24 +36,30 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
     setFilters(selectedFilters);
   };
 
-  // Construct the dynamic endpoint based on filters
-  const constructGetRoute = () => {
-    const queryParams = new URLSearchParams();
+ // Construct the dynamic endpoint based on filters
+const constructGetRoute = () => {
+  const queryParams = new URLSearchParams();
 
-    if (filters.city) queryParams.append("city", filters.city);
-    if (filters.category) queryParams.append("category", filters.category);
-    if (filters.type) queryParams.append("type", filters.type);
-    if (filters.bedroom) queryParams.append("bedroom", filters.bedroom);
-    if (filters.minPrice) queryParams.append("minPrice", filters.minPrice);
-    if (filters.maxPrice) queryParams.append("maxPrice", filters.maxPrice);
+  // Add filters to the query string if they have values
+  if (filters.city) queryParams.append("city", filters.city);
+  if (filters.category) queryParams.append("category", filters.category);
+  if (filters.type) queryParams.append("type", filters.type);
+  if (filters.bedroom) queryParams.append("bedroom", filters.bedroom);
+  if (filters.minPrice) queryParams.append("minPrice", filters.minPrice);
+  if (filters.maxPrice) queryParams.append("maxPrice", filters.maxPrice);
+  if (filters.title) queryParams.append("title", filters.title);
+  if (filters.address) queryParams.append("address", filters.address);
+  if (filters.bathroom) queryParams.append("bathroom", filters.bathroom);
+  if (filters.state) queryParams.append("state", filters.state);
+  if (filters.ownerType) queryParams.append("ownerType", filters.ownerType);
 
-    const fullRoute = `${getRoute}?${queryParams.toString()}`;
-    
-    // Log the route to the console
-    console.log("Constructed API Route:", fullRoute);
-    
-    return fullRoute;
-  };
+  const fullRoute = `${getRoute}?${queryParams.toString()}`;
+
+  // Log the route to the console
+  console.log("Constructed API Route:", fullRoute);
+
+  return fullRoute;
+};
 
   const { listings, loading, setListings } = useFetchListings(
     constructGetRoute(), // Pass dynamically constructed route

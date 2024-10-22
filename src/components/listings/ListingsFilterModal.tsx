@@ -8,9 +8,9 @@ const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
   applyFilters,
 }) => {
   // Arrays for Bedroom and Bathroom options
-  const bedroomOptions = ["Any", "1+", "2+", "3+", "4+", "5+"];
-  const bathroomOptions = ["Any", "1+", "2+", "3+", "4+", "5+"];
-  const statusOptions = ["Any Status", "Available", "Sold"];
+  const bedroomOptions = ["1+", "2+", "3+", "4+", "5+", "6+"];
+  const bathroomOptions = ["1+", "2+", "3+", "4+", "5+", "6+"];
+  const ownerTypeOptions = ["public", "private"];
   const squareFeetOptions = ["No Min", "No Max", "500", "1000", "1500"];
   // State to keep track of selected state and city
   const [selectedState, setSelectedState] = useState<string>(""); // To track the selected state
@@ -19,17 +19,15 @@ const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
 
   const [filterValues, setFilterValues] = useState({
     minPrice: "",
+    title: "",
+    address: "",
     maxPrice: "",
     bedroom: "",
     bathroom: "",
     state: "",
     city: "",
     category: "",
-    status: "",
-    minSquareFeet: "",
-    maxSquareFeet: "",
-    dateListedFrom: "",
-    dateListedTo: "",
+    ownerType: "",
   });
 
   const handleInputChange = (
@@ -71,6 +69,29 @@ const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
         <form className="p-6 w-full grid md:grid-cols-2 gap-3">
           {/* Filter options inside modal */}
 
+          <div>
+            <label>Title</label>
+            <input
+              type="text"
+              placeholder="3 bedroom flat"
+              value={filterValues.title}
+              onChange={handleInputChange}
+              className="w-full border rounded p-2 flex-1"
+              name="title"
+            />
+          </div>
+
+          <div>
+            <label>Address</label>
+            <input
+              type="text"
+              placeholder="5, Bourdillon Road, Ikoyi, Lagos."
+              value={filterValues.address}
+              onChange={handleInputChange}
+              className="w-full border rounded p-2 flex-1"
+              name="address"
+            />
+          </div>
           {/* Min Price */}
           <div>
             <label>Min Price</label>
@@ -104,10 +125,10 @@ const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
               {bedroomOptions.map((bed, index) => (
                 <li
                   className={`border w-full text-center py-2 ${
-                    filterValues.bedroom === bed ? "bg-secondary" : ""
+                    filterValues.bedroom === bed ? "bg-primary/90 text-white" : ""
                   }`}
                   key={index}
-                  onClick={() => handleOptionChange("bedrooms", bed)}
+                  onClick={() => handleOptionChange("bedroom", bed)}
                 >
                   {bed}
                 </li>
@@ -122,10 +143,10 @@ const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
               {bathroomOptions.map((bath, index) => (
                 <li
                   className={`border w-full text-center py-2 ${
-                    filterValues.bathroom === bath ? "bg-secondary" : ""
+                    filterValues.bathroom === bath ? "bg-primary/90 text-white" : ""
                   }`}
                   key={index}
-                  onClick={() => handleOptionChange("bathrooms", bath)}
+                  onClick={() => handleOptionChange("bathroom", bath)}
                 >
                   {bath}
                 </li>
@@ -194,25 +215,27 @@ const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
             </select>
           </div>
 
-          {/* Status */}
+        
           <div className="flex flex-col">
-            <label>Status</label>
+            <label>Ownership Type</label>
             <select
-              name="status"
+              name="ownerType"
               className="p-2 border border-gray-500 rounded"
-              value={filterValues.status}
+              value={filterValues.ownerType}
               onChange={handleInputChange}
             >
-              {statusOptions.map((status, index) => (
-                <option key={index} value={status}>
-                  {status}
+              <option value="" disabled>
+                Select Type
+              </option>
+              {ownerTypeOptions.map((owner, index) => (
+                <option key={index} value={owner}>
+                  {owner}
                 </option>
               ))}
             </select>
           </div>
 
-          {/* Square Feet */}
-          <div className="flex flex-col">
+          {/* <div className="flex flex-col">
             <label>Square Feet</label>
             <div className="square-feet w-full flex gap-2">
               <select
@@ -242,7 +265,6 @@ const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
             </div>
           </div>
 
-          {/* Date Listed */}
           <div className="flex flex-col w-full">
             <label>Date Listed</label>
             <div className="gap-2 flex w-full">
@@ -261,7 +283,7 @@ const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
                 onChange={handleInputChange}
               />
             </div>
-          </div>
+          </div> */}
         </form>
 
         {/* Apply Filters Button */}

@@ -165,4 +165,8 @@ export interface FilterValues {
   maxSquareFeet?: string;
   dateListedFrom?: string;
   dateListedTo?: string;
+  title?:string;
+  address?:string;
+  ownerType?:string;
+  
 }
