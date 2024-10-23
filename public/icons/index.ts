@@ -32,7 +32,7 @@ import Logo from "./Logo-main.svg";
 import FilterArrow from "./filter-arrow.svg";
 import FilterArrow2 from "./filter-arrow-2.svg";
 import Notification from "./notifications.svg";
-import Sanrealtor from "./sanrealtor.svg";
+import Sanrealtor from "./Sanrealtor.svg";
 import Profile from "./profile.svg";
 import Government from "./government.svg";
 import Verified from "./verified.svg";
