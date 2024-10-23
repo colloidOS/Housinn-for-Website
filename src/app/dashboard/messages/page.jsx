@@ -32,8 +32,8 @@ const MessagePage = () => {
 
   const { user } = useAuth();
 
-  const userId = user.id;
-  const token = user.token;
+  const userId = user?.id;
+  const token = user?.token;
 
   // Scroll to the bottom of the message list
   const scrollToBottom = () => {
