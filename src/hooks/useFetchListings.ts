@@ -18,7 +18,7 @@ const useFetchListings = (endpoint: string, dataRoute: string) => {
       setLoading(true);
       try {
         const response = await api.get(endpoint);
-        console.log("response.data.data", response.data.data);
+        console.log("response.data", response.data.data);
         const data = response.data.data[dataRoute].map((post: any) => ({
           id: post.id,
           price: `₦${Number(post.price).toLocaleString()}`,
@@ -26,22 +26,24 @@ const useFetchListings = (endpoint: string, dataRoute: string) => {
           cityState: `${capitalizeFirstLetter(
             post.city
           )}, ${capitalizeFirstLetter(post.state)}.`,
-          location: ` ${capitalizeFirstLetter(post.address)}, ${capitalizeFirstLetter(
-            post.city
-          )}, ${capitalizeFirstLetter(post.state)}.`,
+          location: ` ${capitalizeFirstLetter(
+            post.address
+          )}, ${capitalizeFirstLetter(post.city)}, ${capitalizeFirstLetter(
+            post.state
+          )}.`,
 
           beds: post.bedroom,
           baths: post.bathroom,
           imageUrl: post.images[0] || "/images/default-image.png",
-          tag: post.type,
+          tag: `${capitalizeFirstLetter(post.type)}`,
           desc: post.desc,
           ownerType: post.ownerType,
           listed: new Date(post.createdAt).toLocaleDateString(),
           category: `${capitalizeFirstLetter(post.category)} `,
-          isSaved: post.isSaved,
+          isSaved: post.isSaved || null,
           imageLength: post.images.length,
         }));
-
+console.log("this data", data)
         setListings(data);
       } catch (err) {
         if (axios.isAxiosError(error)) {

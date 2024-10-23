@@ -7,9 +7,9 @@ const ListingFilter: React.FC<ListingsFilterProps> = ({
 }) => {
   // Map between display labels and actual tag values
   const tags = [
-    { label: "For Sale", value: "sale" },
-    { label: "For Rent", value: "rent" },
-    { label: "Short-let", value: "shortlet" },
+    { label: "For Sale", value: "Sale" },
+    { label: "For Rent", value: "Rent" },
+    { label: "Short-let", value: "Shortlet" },
   ];
 
   return (

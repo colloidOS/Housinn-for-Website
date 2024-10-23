@@ -37,30 +37,27 @@ const ListingCard: React.FC<ListingsCardProps> = ({
           alt={listing.title}
           className="rounded-t-[7px] w-full h-36 md:h-40 lg:h-44 object-cover"
         />
-        <div className="absolute flex bottom-2 gap-1 left-2">
-          <Image src={Camera} alt="Camera" width={15} height={15} />
-          <p className="text-white text-xs">{listing.imageLength}</p>
-        </div>
 
         <div
           className={`text-[10px] lg:text-xs px-2 py-1 pr-4 clip-triangle-right absolute top-0 rounded-ss-[7px] left-0 ${
-            listing.tag === "sale"
+            listing.tag === "Sale"
               ? "bg-green-200 text-green-700"
-              : listing.tag === "rent"
+              : listing.tag === "Rent"
               ? "bg-blue-200 text-blue-700"
-              : listing.tag === "shortlet"
+              : listing.tag === "Shortlet"
               ? "bg-yellow-200 text-yellow-700"
               : "bg-gray-200 text-gray-700"
           }`}
         >
-          {listing.tag === "sale"
+          {listing.tag === "Sale"
             ? "For Sale"
-            : listing.tag === "rent"
+            : listing.tag === "Rent"
             ? "For Rent"
             : "Short-Let"}
         </div>
+
         {listing.ownerType === "public" ? (
-          <div className=" w-16 h-6 absolute top-0 right-0">
+          <div className=" w-12 h-5 absolute top-0 right-0">
             <Image
               src={Government}
               width={1}
@@ -72,9 +69,19 @@ const ListingCard: React.FC<ListingsCardProps> = ({
         ) : (
           ""
         )}
-        <p className="p-1 w-fit px-2 bg-gray-700 text-white text-[10px] lg:text-xs absolute bottom-0 right-0">
-          {listing.category}
-        </p>
+        <div className="absolute flex bottom-2 gap-1 left-2">
+          <Image src={Camera} alt="Camera" width={15} height={15} />
+          <p className="text-white text-xs">{listing.imageLength}</p>
+        </div>
+        <span
+          onClick={(e) => {
+            e.stopPropagation();
+            onSave(listing.id); // Trigger save/unsave action
+          }}
+          className="  text-secondary  p-1 bg-white rounded-full place-items-center text-xs absolute bottom-1 right-1"
+        >
+          {isSaved ? <FaHeart /> : <FaRegHeart />}
+        </span>
       </div>
 
       <div className="py-2 lg:py-4 mb-2 flex flex-col gap-[6px] lg:gap-3 px-3 lg:px-5">
@@ -83,18 +90,14 @@ const ListingCard: React.FC<ListingsCardProps> = ({
             {listing.price}
           </h3>
 
-          <div
-            onClick={(e) => {
-              e.stopPropagation();
-              onSave(listing.id); // Trigger save/unsave action
-            }}
-            className="  text-secondary text-sm lg:text-lg"
-          >
-            {isSaved ? <FaHeart /> : <FaRegHeart />}
-          </div>
+          <p className="p-1 w-fit px-2 bg-gray-700/40 rounded-[7px]  text-white text-[10px] lg:text-xs ">
+            {listing.category}
+          </p>
         </div>
 
-        <p className="text-gray-700 text-sm font-medium w-full overflow-hidden text-ellipsis whitespace-nowrap">{listing.title}</p>
+        <p className="text-gray-700 text-sm font-medium w-full overflow-hidden text-ellipsis whitespace-nowrap">
+          {listing.title}
+        </p>
 
         <div className="flex items-start gap-1">
           <Image src={PhAddress} width={15} height={15} alt="Address icon" />

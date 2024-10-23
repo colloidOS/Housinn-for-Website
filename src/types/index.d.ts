@@ -27,6 +27,7 @@ export type Listings = {
   createdAt: string;
   category: string;
   desc: string;
+  ownerType: string;
   postDetail: {
     amenities: string[];
     // Other fields inside postDetail can be added as per your API response
@@ -152,8 +153,10 @@ export interface ListingsFilterProps {
 export interface FilterValues {
   minPrice?: string;
   maxPrice?: string;
-  bedrooms?: string;
-  bathrooms?: string;
+  bedroom?: string;
+  bathroom?: string;
+  category?: string;
+  type?: string;
   state?: string;
   city?: string;
   featured?: string;
@@ -162,4 +165,8 @@ export interface FilterValues {
   maxSquareFeet?: string;
   dateListedFrom?: string;
   dateListedTo?: string;
+  title?:string;
+  address?:string;
+  ownerType?:string;
+  
 }

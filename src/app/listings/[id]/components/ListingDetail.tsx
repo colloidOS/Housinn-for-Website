@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { Listings } from "@/types";
-import { Bed, Feet, Bath, PhAddress } from "../../../../../public/icons";
+import {
+  Bed,
+  Feet,
+  Bath,
+  PhAddress,
+  Verified,
+} from "../../../../../public/icons";
 import ImageGallery from "./ImageGallery";
 interface ListingDetailProps {
   listing: Listings;
@@ -10,7 +16,15 @@ interface ListingDetailProps {
 const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
   const [showGallery, setShowGallery] = useState(false);
   const [currentImage, setCurrentImage] = useState<string | null>(null);
-  const location = ` ${listing.address}, ${listing.city}, ${listing.state}.`;
+  const capitalizeFirstLetter = (str: string) => {
+    if (!str) return str; // Return if the string is empty
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  };
+  const location = ` ${capitalizeFirstLetter(
+    listing.address
+  )}, ${capitalizeFirstLetter(listing.city)}, ${capitalizeFirstLetter(
+    listing.state
+  )}.`;
   const formattedPrice = `₦${Number(listing.price).toLocaleString()}`;
   console.log("listing", listing);
   const openGallery = (image?: string) => {
@@ -35,7 +49,7 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
   };
   const renderAmenities = () => {
     if (!listing.postDetail || listing.postDetail.amenities.length === 0) {
-      return <p>No amenities available</p>;
+      return <p></p>;
     }
 
     return (
@@ -53,7 +67,7 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
   };
 
   return (
-    <div className="w-full flex flex-col gap-5 p-2">
+    <div className="w-full min-h-screen justify-between flex flex-col gap-5 p-2">
       <div className="row-span-1">
         <ImageGallery
           images={listing.images}
@@ -62,7 +76,7 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
         />
       </div>
 
-      <div className="grid grid-col-1 md:grid-cols-2 w-full gap-x-4 gap-y-8 col-span-1">
+      <div className="grid grid-col-1 md:grid-cols-2 w-full gap-x-4 gap-y-8 col-span-1 px-2">
         <div className=" flex flex-col  gap-4">
           <div className="flex flex-col gap-2">
             <h1 className="text-4xl text-primary font-bold">
@@ -78,19 +92,13 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
                 {" "}
                 <div className="flex gap-1">
                   <Image src={Bed} alt="Beds" width={20} height={20} />
-                  <span>{listing.bedroom} Beds</span>
+                  <span>{listing.bedroom} Bedrooms</span>
                 </div>
                 <div className="flex gap-1">
                   <Image src={Bath} alt="Baths" width={20} height={20} />
-                  <span>{listing.bathroom} Baths</span>
+                  <span>{listing.bathroom} Bathrooms</span>
                 </div>
               </div>
-              {/* <div className="flex gap-1">
-                <Image src={Feet} alt="Area" width={20} height={20} />
-                <span>
-                  {listing.latitude} x {listing.longitude} sq.ft
-                </span>
-              </div> */}
             </div>
           </div>
           <div className="flex  items-center gap-3">
@@ -99,7 +107,21 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
               alt="logo"
               className="w-12 h-12 rounded-full"
             />
-            <p className="text-2xl font-semibold">{Name}</p>
+            <div className="flex gap-1 items-center">
+              {" "}
+              <p className="text-2xl font-semibold">{Name}</p>
+              {listing.ownerType === "public" ? (
+                <Image
+                  src={Verified}
+                  width={1}
+                  height={1}
+                  alt="verified"
+                  className="h-6 w-6"
+                />
+              ) : (
+                ""
+              )}
+            </div>
           </div>
           <div>{renderAmenities()}</div>
         </div>
@@ -121,7 +143,7 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
         <div className="fixed inset-0 z-50 bg-black bg-opacity-75 flex items-center justify-center">
           <div className="relative w-full max-w-3xl h-full max-h-3xl">
             <div className="flex items-center justify-between p-4">
-              <h2 className="text-white">Image Gallery</h2>
+              <h2 className="text-white">Image</h2>
               <button onClick={closeGallery} className="text-white">
                 Close
               </button>

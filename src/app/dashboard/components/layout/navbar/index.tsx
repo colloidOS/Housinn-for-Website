@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { Logo, Notification } from "../../../../../../public/icons";
 import { UserNavbarProps } from "@/types";
-import SkeletonLoader from "./SkeletonLoader";
+
 
 const navlinks = [
   {

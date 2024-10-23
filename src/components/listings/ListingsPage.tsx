@@ -27,13 +27,45 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
     }
     return false; // Default to grid view if localStorage is not available
   });
-  const [filters, setFilters] = useState({}); // Store selected filters
+  const [filters, setFilters] = useState<FilterValues>({}); // Correctly typed filters
+
   const router = useRouter();
 
+  const applyFilters = (selectedFilters: FilterValues) => {
+    console.log("this is it",selectedFilters)
+    setFilters(selectedFilters);
+  };
+
+ // Construct the dynamic endpoint based on filters
+const constructGetRoute = () => {
+  const queryParams = new URLSearchParams();
+
+  // Add filters to the query string if they have values
+  if (filters.city) queryParams.append("city", filters.city);
+  if (filters.category) queryParams.append("category", filters.category);
+  if (filters.type) queryParams.append("type", filters.type);
+  if (filters.bedroom) queryParams.append("bedroom", filters.bedroom);
+  if (filters.minPrice) queryParams.append("minPrice", filters.minPrice);
+  if (filters.maxPrice) queryParams.append("maxPrice", filters.maxPrice);
+  if (filters.title) queryParams.append("title", filters.title);
+  if (filters.address) queryParams.append("address", filters.address);
+  if (filters.bathroom) queryParams.append("bathroom", filters.bathroom);
+  if (filters.state) queryParams.append("state", filters.state);
+  if (filters.ownerType) queryParams.append("ownerType", filters.ownerType);
+
+  const fullRoute = `${getRoute}?${queryParams.toString()}`;
+
+  // Log the route to the console
+  console.log("Constructed API Route:", fullRoute);
+
+  return fullRoute;
+};
+
   const { listings, loading, setListings } = useFetchListings(
-    getRoute,
+    constructGetRoute(), // Pass dynamically constructed route
     dataRoute
-  ); // Use the custom hook
+  );
+
   const saveListing = useSaveListing(listings, setListings);
   const handleSave = (id: string, isSaved: boolean) => {
     saveListing(id, isSaved);
@@ -53,10 +85,6 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
     localStorage.setItem("viewMode", newView ? "list" : "grid");
   };
 
-  const applyFilters = (selectedFilters: FilterValues) => {
-    // console.log("Filters received in ListingsPage: ", selectedFilters);
-    setFilters(selectedFilters);
-  };
   useEffect(() => {
     localStorage.removeItem("viewMode");
   }, []);
@@ -184,7 +212,6 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
             <AnimatePresence>
               {" "}
               <motion.div
-                
                 initial={{ opacity: 0 }} // Start invisible
                 animate={{ opacity: 1 }} // Animate in
                 exit={{ opacity: 0 }}
