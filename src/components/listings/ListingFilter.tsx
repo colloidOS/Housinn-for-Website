@@ -1,7 +1,7 @@
 import React from "react";
-import { ListingsFilterProps } from "@/types";
+import { ListingFilterProps } from "@/types";
 
-const ListingFilter: React.FC<ListingsFilterProps> = ({
+const ListingFilter: React.FC<ListingFilterProps> = ({
   activeTag,
   onChange,
 }) => {

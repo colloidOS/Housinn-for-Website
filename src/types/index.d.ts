@@ -148,7 +148,11 @@ export interface SideItem {
 export interface ListingsFilterProps {
   activeTag: string;
   onChange: (tag: string) => void;
-  // applyFilters: (filters: Record<string, any>) => void; // Add this line
+  applyFilters: (filters: Record<string, any>) => void; // Add this line
+}
+export interface ListingFilterProps {
+  activeTag: string;
+  onChange: (tag: string) => void;
 }
 export interface FilterValues {
   minPrice?: string;
@@ -165,8 +169,7 @@ export interface FilterValues {
   maxSquareFeet?: string;
   dateListedFrom?: string;
   dateListedTo?: string;
-  title?:string;
-  address?:string;
-  ownerType?:string;
-  
+  title?: string;
+  address?: string;
+  ownerType?: string;
 }
