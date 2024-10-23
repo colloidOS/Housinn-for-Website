@@ -63,7 +63,7 @@ export interface ListingsCardProps {
 export interface ListingsFilterProps {
   activeTag: string;
   onChange: (tag: string) => void;
-  applyFilters: (filters: Record<string, any>) => void; // Add this line
+  // applyFilters: (filters: Record<string, any>) => void; // Add this line
 }
 export interface ListingsTableProps {
   listing: Listing;
@@ -148,7 +148,7 @@ export interface SideItem {
 export interface ListingsFilterProps {
   activeTag: string;
   onChange: (tag: string) => void;
-  applyFilters: (filters: Record<string, any>) => void; // Add this line
+  // applyFilters: (filters: Record<string, any>) => void; // Add this line
 }
 export interface FilterValues {
   minPrice?: string;
