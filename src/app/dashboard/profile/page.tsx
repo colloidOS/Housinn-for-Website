@@ -148,10 +148,10 @@ function Profile() {
       // Set the Cloudinary avatar URL in cookies
       Cookies.set("avatar", updatedAvatarURL);
 
-      setUser((prevUser) => ({
-        ...prevUser,
-        avatar: updatedAvatarURL, // Update the avatar in the user context
-      }));
+      // setUser((prevUser) => ({
+      //   ...prevUser,
+      //   avatar: updatedAvatarURL, // Update the avatar in the user context
+      // }));
 
       // Also save user info in cookies or localStorage based on your current strategy
       Cookies.set("firstName", updatedProfile.firstName);
