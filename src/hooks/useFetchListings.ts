@@ -39,7 +39,7 @@ const useFetchListings = (endpoint: string, dataRoute: string) => {
           desc: post.desc,
           ownerType: post.ownerType,
           listed: new Date(post.createdAt).toLocaleDateString(),
-          category: `${capitalizeFirstLetter(post.category)} `,
+          category: post.category,
           isSaved: post.isSaved || null,
           imageLength: post.images.length,
         }));
