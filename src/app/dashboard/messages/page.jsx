@@ -461,11 +461,11 @@ const MessagePage = () => {
                   const lastMessageTimeA =
                     a.messages.length > 0
                       ? new Date(a.lastMessageTime)
-                      : new Date(a.messages.createdAt);
+                      : new Date(a.createdAt);
                   const lastMessageTimeB =
                     b.messages.length > 0
                       ? new Date(b.lastMessageTime)
-                      : new Date(b.messages.createdAt);
+                      : new Date(b.createdAt);
                   return lastMessageTimeB - lastMessageTimeA;
                 })
                 .map((chat, index) => (
@@ -502,9 +502,11 @@ const MessagePage = () => {
                         <div className="flex w-full justify-between items-center">
                           <p className="font-semibold">{`${chat.receiver.firstName} ${chat.receiver.lastName}`}</p>
                           <p className="text-xs text-gray-500">
-                            {chat.messages.length > 0
+                            {chat.lastMessageTime === null
+                              ? formatTime(chat.createdAt)
+                              : chat.messages.length > 0
                               ? formatTime(chat.lastMessageTime)
-                              : formatTime(chat.messages.createdAt)}{" "}
+                              : formatTime(chat.createdAt)}
                             {console.log(chat)}
                           </p>
                         </div>
