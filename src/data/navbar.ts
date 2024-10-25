@@ -89,8 +89,8 @@ export const sideItems: SideItem[] = [
     },
   };
 
-  export const linkData = [
-    { name: "Rent", tag: "Rent" },
-    { name: "Sale", tag: "Sale" },
-    { name: "Short Let", tag: "Shortlet" },
+  export const tagData = [
+    { name: "Rent", tag: "rent" },
+    { name: "Sale", tag: "sale" },
+    { name: "Short Let", tag: "shortlet" },
   ];

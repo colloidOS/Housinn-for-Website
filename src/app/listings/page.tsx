@@ -7,12 +7,12 @@ const MyListings: React.FC = () => {
   return (
     <div>
       <Navbar colorScheme="alternate" />
-      <Wrapper className="py-2">
+      <Wrapper disablePadding >
         <ListingsPage
           getRoute="/posts"
           dataRoute="posts"
           pageTitle="Listings"
-          className=""
+          className="px-8"
         />
       </Wrapper>
     </div>

@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { Logo, Notification } from "../../../../../../public/icons";
 import { UserNavbarProps } from "@/types";
+import { tagData } from "@/data/navbar";
 
 const navlinks = [
   {
@@ -41,19 +42,20 @@ const UserNavbar: React.FC<UserNavbarProps> = ({ className }) => {
     >
       <div className="flex items-center justify-between gap-2">
         <div className="flex w-full justify-between gap-1 items-center">
-          <div className="flex items-center justify-between gap-1">
-            {navlinks.map((item, index) => (
+          <ul
+            className={`sm:flex gap-2 text-gray-500 
+          `}
+          >
+            {tagData.map((tag) => (
               <Link
-                key={index}
-                href={item.link}
-                className={`text-base font-semibold transition-all p-[10px] duration-200 text-gray-500 hover:text-primary ${
-                  currentPath === item.id ? "text-primary" : "text-gray-500"
-                }`}
+                key={tag.tag}
+                href={`/listings?tag=${tag.tag}`} // Use href directly
+                className={`text-base font-semibold transition-all p-2.5 duration-500 ease-in-out  hover:text-gray`}
               >
-                {item.route}
+                {tag.name}
               </Link>
             ))}
-          </div>
+          </ul>
           <Link href={`/`}>
             <Image src={Logo} alt="Housinn logo" width={80} height={48} />
           </Link>

@@ -35,7 +35,7 @@ const useFetchListings = (endpoint: string, dataRoute: string) => {
           beds: post.bedroom,
           baths: post.bathroom,
           imageUrl: post.images[0] || "/images/default-image.png",
-          tag: `${capitalizeFirstLetter(post.type)}`,
+          tag: post.type,
           desc: post.desc,
           ownerType: post.ownerType,
           listed: new Date(post.createdAt).toLocaleDateString(),
@@ -43,7 +43,7 @@ const useFetchListings = (endpoint: string, dataRoute: string) => {
           isSaved: post.isSaved || null,
           imageLength: post.images.length,
         }));
-console.log("this data", data)
+        console.log("this data", data);
         setListings(data);
       } catch (err) {
         if (axios.isAxiosError(error)) {

@@ -40,18 +40,18 @@ const ListingCard: React.FC<ListingsCardProps> = ({
 
         <div
           className={`text-[10px] lg:text-xs px-2 py-1 pr-4 clip-triangle-right absolute top-0 rounded-ss-[7px] left-0 ${
-            listing.tag === "Sale"
+            listing.tag === "sale"
               ? "bg-green-200 text-green-700"
-              : listing.tag === "Rent"
+              : listing.tag === "rent"
               ? "bg-blue-200 text-blue-700"
-              : listing.tag === "Shortlet"
+              : listing.tag === "shortlet"
               ? "bg-yellow-200 text-yellow-700"
               : "bg-gray-200 text-gray-700"
           }`}
         >
-          {listing.tag === "Sale"
+          {listing.tag === "sale"
             ? "For Sale"
-            : listing.tag === "Rent"
+            : listing.tag === "rent"
             ? "For Rent"
             : "Short-Let"}
         </div>

@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { Logo } from "../../public/icons";
+import { Logo, Notification } from "../../public/icons";
 import Link from "next/link";
 import {
   dropdownVariants,
-  linkData,
+  tagData,
   sideItems,
   textVariants,
 } from "@/data/navbar"; // assuming this contains all items
-import { ChevronDown, ChevronUp, User } from "lucide-react";
+import { Bell, ChevronDown, ChevronUp, Heart, User } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { motion } from "framer-motion";
 import SkeletonLoader from "./SkeletonLoader";
@@ -70,32 +70,31 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
   const image = user?.avatar || "icons/profile.svg";
   const isDefaultScheme = colorScheme === "default";
 
-  const handleLinkClick = (tag: string) => {
-    // Navigate to listings page with the selected tag
-    // window.location.href = `/listings?tag=${tag}`;
-    router.push(`/listings?tag=${tag}`);
-    console.log("rhis is working ", tag);
-  };
+  // const handleLinkClick = (tag: string) => {
+  //   // Navigate to listings page with the selected tag
+  //   // window.location.href = `/listings?tag=${tag}`;
+  //   router.push(`/listings?tag=${tag}`);
+  // };
 
   return (
-    <Wrapper>
+    <Wrapper disablePadding>
       <nav
-        className={`w-full grid grid-cols-2 lg:grid-cols-3 items-center justify-between ] py-[14px]`}
+        className={`w-full grid grid-cols-2 lg:grid-cols-3 items-center justify-between  py-[14px]`}
       >
         <ul
           className={`sm:flex gap-2 ${
-            isDefaultScheme ? "text-white" : "text-primary"
+            isDefaultScheme ? "text-white/80" : "text-primary/80 "
           } hidden`}
         >
-          {linkData.map((link) => (
+          {tagData.map((tag) => (
             <Link
-              key={link.tag}
-              href={`/listings?tag=${link.tag}`} // Use href directly
-              className={`p-2 ${
-                isDefaultScheme ? "hover:text-primary duration-200" : ""
+              key={tag.tag}
+              href={`/listings?tag=${tag.tag}`} // Use href directly
+              className={`text-base font-semibold transition-all p-2.5 duration-500 ease-in-out ${
+                isDefaultScheme ? "hover:text-primary " : "hover:text-black"
               }`}
             >
-              {link.name}
+              {tag.name}
             </Link>
           ))}
         </ul>
@@ -110,7 +109,15 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
           />
         </Link>
 
-        <div className="flex justify-end">
+        <div className="flex justify-end items-center gap-4">
+          {/* {loading ? (
+            ""
+          ) : (
+            <div className={`flex gap-4 ${isDefaultScheme?"text-gray-300":"text-primary"}`}>
+              <Heart />
+              <Bell/>
+            </div>
+          )} */}
           {loading ? (
             <SkeletonLoader /> // Display the skeleton loader while checking authentication
           ) : isLoggedIn ? (
@@ -151,7 +158,7 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
                       className={`flex items-center px-4 py-2 text-sm cursor-pointer ${
                         isDefaultScheme
                           ? "text-gray-700 hover:bg-gray-300"
-                          : "text-gray-300 hover:bg-gray-700"
+                          : "text-gray-300 hover:bg-secondary"
                       }`}
                     >
                       <item.icon className="mr-2 h-4 w-4" />
@@ -163,6 +170,7 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
             </div>
           ) : (
             <div className="flex gap-4">
+              <Image src={Notification} alt="info" width={20} height={21} />
               <button
                 className={`${
                   isDefaultScheme
