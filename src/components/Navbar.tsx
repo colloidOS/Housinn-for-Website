@@ -105,7 +105,7 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
             alt="Housinn logo"
             width={0}
             height={0}
-            className="w-auto h-16"
+            className={`w-auto  ${isDefaultScheme?"h-16":"h-12"}`}
           />
         </Link>
 
