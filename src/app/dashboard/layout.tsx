@@ -11,25 +11,20 @@ export default function AdminLayout({
   return (
     <div className="flex flex-col h-screen">
       {/* Sticky Navbar */}
-      <div className="sticky top-0 z-10 w-full">
+      <div className="fixed top-0 z-10 w-full bg-white">
         <UserNavbar />
       </div>
 
-      {/* Main layout container: Sidebar and content */}
-      <div className="flex flex-1 h-full">
-        {/* Sidebar: Sticky but starting below the navbar */}
-        <div className="sticky top-[4rem] z-10 h-full">
+      <div className="flex flex-1">
+        {/* Sidebar: Sticky and positioned below the navbar */}
+        <div className="sticky top-20 z-10 h-[calc(100vh-5rem)] bg-gray-100">
+          {" "}
+          {/* Adjust top based on navbar height */}
           <SettingsSidebar />
         </div>
 
-        {/* Main content with scrolling */}
-        <div
-          className="flex-1 overflow-y-auto"
-          style={{
-            scrollBehavior: "smooth",
-            willChange: "transform",
-          }}
-        >
+        {/* Main content area that is scrollable */}
+        <div className="flex-1 overflow-y-auto mt-16">
           <Suspense>{children}</Suspense>
         </div>
       </div>

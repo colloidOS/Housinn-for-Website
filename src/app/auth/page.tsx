@@ -72,7 +72,7 @@ const AuthPage = () => {
         Object.entries(userData).forEach(([key, value]) => {
           document.cookie = `${key}=${value}; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT`;
         });
-        window.location.href = "/dashboard";
+        window.location.href = "/";
       } else {
         response = await api.post("/auth/register", data);
         toast.success("Account created successfully!");

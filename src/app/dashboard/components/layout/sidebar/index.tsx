@@ -14,6 +14,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FC, ForwardRefExoticComponent, RefAttributes } from "react";
 import { useAuth } from "@/context/AuthContext"; // Import the useAuth hook
+import SkeletonLoader from "./Skeleton";
 
 const sideItems = [
   {
@@ -84,6 +85,17 @@ const SettingsSidebar: FC<Iproperties> = ({ className }) => {
   const isDashboard =
     currentPath === "dashboard" && organizationPath === undefined;
 
+  // If user data is not yet loaded, show the skeleton loader
+  if (!user) {
+    return (
+      <div
+        className={` ${className} h-full hidden lg:flex flex-col gap-11 items-center justify-center bg-white-200 pt-6  md:w-[220px] md:justify-start `}
+      >
+        <SkeletonLoader />
+      </div>
+    );
+  }
+
   // Filter the side items based on userType
   const filteredSideItems =
     user?.userType === "individual"
@@ -96,7 +108,7 @@ const SettingsSidebar: FC<Iproperties> = ({ className }) => {
     <div
       className={` ${className} h-full hidden lg:flex flex-col gap-11 items-center justify-center bg-white-200 pt-6  md:w-[220px] md:justify-start `}
     >
-      <section className="pr-4  flex flex-col  gap-y-3">
+      <section className="pr-4 flex flex-col gap-y-3">
         {filteredSideItems.map((item, index) => (
           <Link
             key={index}
@@ -128,7 +140,7 @@ const SettingsSidebar: FC<Iproperties> = ({ className }) => {
                 organizationPath === item.id
                   ? "shadow-custom-negative-shadow"
                   : " text-gray-500 hover:bg- "
-              } px-6 py-[11px]  w-fit bg-secondary text-white rounded-md text-base font-semibold flex items-center justify-center cursor-pointer transition-all duration-200 ease-in md:justify-between `}
+              } px-6 py-[11px] w-fit bg-secondary text-white rounded-md text-base font-semibold flex items-center justify-center cursor-pointer transition-all duration-200 ease-in md:justify-between `}
             >
               <div className="flex items-center justify-start gap-2">
                 {item.icon && (
@@ -137,7 +149,7 @@ const SettingsSidebar: FC<Iproperties> = ({ className }) => {
                     role="sidebar-icon"
                   />
                 )}
-                <span className="text-base  text-nowrap">{item.route}</span>
+                <span className="text-base text-nowrap">{item.route}</span>
               </div>
             </Link>
           ))}

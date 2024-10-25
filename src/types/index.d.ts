@@ -45,6 +45,7 @@ export type Listings = {
     firstName: string;
     lastName: string;
   };
+  userId: string;
 };
 
 export interface Review {
