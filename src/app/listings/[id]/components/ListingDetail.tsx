@@ -111,14 +111,12 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
   };
 
   return (
-    <div className="w-full min-h-screen justify-between flex flex-col gap-5 p-2">
-      <div className="">
-        <ImageGallery
-          images={listing.images}
-          title={listing.title}
-          openGallery={openGallery}
-        />
-      </div>
+    <div className="w-full h-screen justify-between flex flex-col gap-5 p-2">
+      <ImageGallery
+        images={listing.images}
+        title={listing.title}
+        openGallery={openGallery}
+      />
 
       <div className="grid grid-col-1 md:grid-cols-2 w-full gap-x-4 gap-y-8 col-span-1 px-2">
         <div className=" flex flex-col  gap-4">
@@ -170,7 +168,9 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
               </div>
             </div>
             {listing.ownerType === "public" ? (
-              <p className="py-2.5 px-7 bg-[#62D050]/20 rounded-[8px] w-fit italic font-normal text-sm" >This Account is affiliated with the Nigerian Government</p>
+              <p className="py-2.5 px-7 bg-[#62D050]/20 rounded-[8px] w-fit italic font-normal text-sm">
+                This Account is affiliated with the Nigerian Government
+              </p>
             ) : (
               ""
             )}
