@@ -2,12 +2,18 @@ import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { Logo } from "../../public/icons";
 import Link from "next/link";
-import { dropdownVariants, linkData, sideItems, textVariants } from "@/data/navbar"; // assuming this contains all items
+import {
+  dropdownVariants,
+  linkData,
+  sideItems,
+  textVariants,
+} from "@/data/navbar"; // assuming this contains all items
 import { ChevronDown, ChevronUp, User } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { motion } from "framer-motion";
 import SkeletonLoader from "./SkeletonLoader";
 import Wrapper from "./ui/Wrapper";
+import { useRouter } from "next/navigation";
 
 interface NavbarProps {
   colorScheme?: "default" | "alternate";
@@ -18,6 +24,7 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
   const [loading, setLoading] = useState<boolean>(true); // Loading state
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const router = useRouter();
   const { user } = useAuth(); // Get the user from AuthContext
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
@@ -62,9 +69,12 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
 
   const image = user?.avatar || "icons/profile.svg";
   const isDefaultScheme = colorScheme === "default";
+
   const handleLinkClick = (tag: string) => {
     // Navigate to listings page with the selected tag
-    window.location.href = `/listings?tag=${tag}`;
+    // window.location.href = `/listings?tag=${tag}`;
+    router.push(`/listings?tag=${tag}`);
+    console.log("rhis is working ", tag);
   };
 
   return (
@@ -77,11 +87,10 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
             isDefaultScheme ? "text-white" : "text-primary"
           } hidden`}
         >
-          {linkData .map((link) => (
+          {linkData.map((link) => (
             <Link
               key={link.tag}
-              href="#"
-              onClick={() => handleLinkClick(link.tag)}
+              href={`/listings?tag=${link.tag}`} // Use href directly
               className={`p-2 ${
                 isDefaultScheme ? "hover:text-primary duration-200" : ""
               }`}
