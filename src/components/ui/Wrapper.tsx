@@ -7,7 +7,7 @@ interface WrapperProps {
 
 const Wrapper: React.FC<WrapperProps> = ({ children, className = "" }) => {
   return (
-    <section className={` px-6  lg:px-24 sm:px-14  pt-9 pb-12 w-full ${className}`}>
+    <section className={` px-6  lg:px-24 sm:px-14   w-full ${className}`}>
       {children}
     </section>
   );

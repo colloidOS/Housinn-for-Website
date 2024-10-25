@@ -112,7 +112,7 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
 
   return (
     <div className="w-full min-h-screen justify-between flex flex-col gap-5 p-2">
-      <div className="row-span-1">
+      <div className="">
         <ImageGallery
           images={listing.images}
           title={listing.title}
@@ -145,28 +145,37 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
               </div>
             </div>
           </div>
-          <div className="flex  items-center gap-3">
-            <img
-              src={listing.user.avatar}
-              alt="logo"
-              className="w-12 h-12 rounded-full"
-            />
-            <div className="flex gap-1 items-center">
-              {" "}
-              <p className="text-2xl font-semibold">{Name}</p>
-              {listing.ownerType === "public" ? (
-                <Image
-                  src={Verified}
-                  width={1}
-                  height={1}
-                  alt="verified"
-                  className="h-6 w-6"
-                />
-              ) : (
-                ""
-              )}
+          <div className="flex flex-col gap-1">
+            <div className="flex  items-center gap-3">
+              <img
+                src={listing.user.avatar}
+                alt="logo"
+                className="w-12 h-12 rounded-full"
+              />
+
+              <div className="flex gap-1 items-center">
+                {" "}
+                <p className="text-2xl font-semibold">{Name}</p>
+                {listing.ownerType === "public" ? (
+                  <Image
+                    src={Verified}
+                    width={1}
+                    height={1}
+                    alt="verified"
+                    className="h-6 w-6"
+                  />
+                ) : (
+                  ""
+                )}
+              </div>
             </div>
+            {listing.ownerType === "public" ? (
+              <p className="py-2.5 px-7 bg-[#62D050]/20 rounded-[8px] w-fit italic font-normal text-sm" >This Account is affiliated with the Nigerian Government</p>
+            ) : (
+              ""
+            )}
           </div>
+
           <div>{renderAmenities()}</div>
         </div>
 

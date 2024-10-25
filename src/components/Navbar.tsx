@@ -7,6 +7,7 @@ import { ChevronDown, ChevronUp, User } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { motion } from "framer-motion";
 import SkeletonLoader from "./SkeletonLoader";
+import Wrapper from "./ui/Wrapper";
 
 interface NavbarProps {
   colorScheme?: "default" | "alternate";
@@ -110,8 +111,9 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
   };
 
   return (
-    <nav
-      className={`w-full grid grid-cols-3 items-center px-9 lg:px-[104px] py-[14px]`}
+  <Wrapper>
+      <nav
+      className={`w-full grid grid-cols-2 lg:grid-cols-3 items-center justify-between ] py-[14px]`}
     >
       <ul
         className={`sm:flex gap-2 ${
@@ -164,9 +166,9 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
         </li>
       </ul>
 
-      <div className="flex justify-center">
-        <Image src={Logo} alt="Housinn logo" width={80} height={48} />
-      </div>
+      <Link href="/" className="flex lg:justify-center">
+        <Image src={Logo} alt="Housinn logo" width={0} height={0} className="w-auto h-16"/>
+      </Link>
 
       <div className="flex justify-end">
         {loading ? (
@@ -234,6 +236,7 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
         )}
       </div>
     </nav>
+  </Wrapper>
   );
 };
 
