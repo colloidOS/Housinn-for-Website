@@ -83,7 +83,7 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
       >
         <ul
           className={`sm:flex gap-2 ${
-            isDefaultScheme ? "text-white/80" : "text-primary/80 "
+            isDefaultScheme ? "text-gray-300" : "text-gray-600 "
           } hidden`}
         >
           {tagData.map((tag) => (
