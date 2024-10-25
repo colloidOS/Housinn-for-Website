@@ -461,11 +461,11 @@ const MessagePage = () => {
                   const lastMessageTimeA =
                     a.messages.length > 0
                       ? new Date(a.lastMessageTime)
-                      : new Date(a.messages[0].createdAt);
+                      : new Date(a.messages.createdAt);
                   const lastMessageTimeB =
                     b.messages.length > 0
                       ? new Date(b.lastMessageTime)
-                      : new Date(b.messages[0].createdAt);
+                      : new Date(b.messages.createdAt);
                   return lastMessageTimeB - lastMessageTimeA;
                 })
                 .map((chat, index) => (
