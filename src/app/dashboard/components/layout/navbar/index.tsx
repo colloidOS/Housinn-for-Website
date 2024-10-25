@@ -6,7 +6,6 @@ import { useAuth } from "@/context/AuthContext";
 import { Logo, Notification } from "../../../../../../public/icons";
 import { UserNavbarProps } from "@/types";
 
-
 const navlinks = [
   {
     route: "For Sale",
@@ -60,7 +59,7 @@ const UserNavbar: React.FC<UserNavbarProps> = ({ className }) => {
           </Link>
           <div className="flex gap-5 ">
             <Image src={Notification} alt="info" width={20} height={21} />
-            <div className="w-[150px] border-[1.5px] border-gray-600 py-2.5 rounded-3xl flex gap-2.5 justify-center items-center ">
+            <div className="w-fit px-6 border-[1.5px] border-gray-600 py-2.5 rounded-3xl flex gap-2.5 justify-center items-center ">
               {user ? (
                 <>
                   <img

@@ -15,6 +15,10 @@ import {
   isYesterday,
   isSameDay,
   differenceInDays,
+  isAfter,
+  isBefore,
+  addYears,
+  subDays,
 } from "date-fns";
 
 const socket = io("https://housinn.onrender.com"); // Backend socket URL
@@ -64,8 +68,11 @@ const MessagePage = () => {
   };
 
   // Helper function to format time
+
   const formatTime = (timestamp) => {
     const messageDate = new Date(timestamp);
+    const oneHundredYearsAgo = addYears(new Date(), -100);
+    const sixDaysAgo = subDays(new Date(), 6);
 
     // If it's today, display the time
     if (isToday(messageDate)) {
@@ -77,9 +84,18 @@ const MessagePage = () => {
       return format(messageDate, "EEEE"); // e.g., Tuesday
     }
 
-    // If the message is older than a week, display the date in dd/mm/yyyy format
-    return format(messageDate, "dd/MM/yy");
+    // If the message is older than 6 days but less than 100 years
+    if (
+      isBefore(messageDate, sixDaysAgo) &&
+      isAfter(messageDate, oneHundredYearsAgo)
+    ) {
+      return format(messageDate, "dd/MM/yy");
+    }
+
+    // Handle other cases if necessary
+    return ""; // Optional: For dates older than 100 years or future dates
   };
+
   useEffect(() => {
     // Connect to socket server and fetch chats
     socket.on("connect", () => {
@@ -445,11 +461,11 @@ const MessagePage = () => {
                   const lastMessageTimeA =
                     a.messages.length > 0
                       ? new Date(a.lastMessageTime)
-                      : new Date(a.messages[0].createdAt);
+                      : new Date(a.messages.createdAt);
                   const lastMessageTimeB =
                     b.messages.length > 0
                       ? new Date(b.lastMessageTime)
-                      : new Date(b.messages[0].createdAt);
+                      : new Date(b.messages.createdAt);
                   return lastMessageTimeB - lastMessageTimeA;
                 })
                 .map((chat, index) => (
@@ -488,7 +504,7 @@ const MessagePage = () => {
                           <p className="text-xs text-gray-500">
                             {chat.messages.length > 0
                               ? formatTime(chat.lastMessageTime)
-                              : formatTime(chat.messages[0].createdAt)}{" "}
+                              : formatTime(chat.messages.createdAt)}{" "}
                             {console.log(chat)}
                           </p>
                         </div>

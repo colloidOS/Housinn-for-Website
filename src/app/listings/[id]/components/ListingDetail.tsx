@@ -9,6 +9,11 @@ import {
   Verified,
 } from "../../../../../public/icons";
 import ImageGallery from "./ImageGallery";
+import api from "@/lib/api";
+import axios from "axios";
+import { useAuth } from "@/context/AuthContext";
+import { toast } from "sonner";
+
 interface ListingDetailProps {
   listing: Listings;
 }
@@ -27,6 +32,7 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
   )}.`;
   const formattedPrice = `₦${Number(listing.price).toLocaleString()}`;
   console.log("listing", listing);
+  console.log(listing.userId);
   const openGallery = (image?: string) => {
     if (image) {
       setCurrentImage(image);
@@ -46,6 +52,44 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
   const closeGallery = () => {
     setShowGallery(false);
     setCurrentImage(null);
+  };
+  const { user } = useAuth();
+
+  const id = user?.id;
+  const token = user?.token;
+  const AddToChat = async () => {
+    if (id === listing.userId) {
+      toast.error("Cannot message yourself");
+    } else {
+      try {
+        const response = await api.post(
+          "/chats",
+          { receiverId: listing.userId },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log("Response:", response.data);
+
+        toast.success("Opening messages");
+
+        // Refresh the page and reroute to the auth page
+        setTimeout(() => {
+          window.location.href = "/dashboard/messages"; // Refresh and redirect
+        }, 1000);
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          const errorMessage = error.response?.data?.message || error.message;
+          console.error(
+            "Submission Error:",
+            error.response?.data || error.message
+          );
+          toast.error(`Error: ${errorMessage}`);
+        }
+      }
+    }
   };
   const renderAmenities = () => {
     if (!listing.postDetail || listing.postDetail.amenities.length === 0) {
@@ -133,8 +177,11 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
             </h2>
             <p className="text-sm text-[#7D7D7D]">{listing.postDetail.desc}</p>
           </div>
-          <button className="bg-primary rounded-[0.5rem] text-white font-semibold text-lg w-full py-3">
-            Schedule Visit
+          <button
+            className="bg-primary rounded-[0.5rem] text-white font-semibold text-lg w-full py-3"
+            onClick={AddToChat}
+          >
+            Message
           </button>
         </div>
       </div>
