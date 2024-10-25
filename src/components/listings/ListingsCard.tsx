@@ -25,7 +25,7 @@ const ListingCard: React.FC<ListingsCardProps> = ({
   const handleCardClick = () => {
     router.push(`/listings/${listing.id}`);
   };
-
+console.log("listingtag", listing.category)
   return (
     <div
       className="relative rounded-[7px] shadow-custom-property-shadow cursor-pointer"
@@ -40,18 +40,18 @@ const ListingCard: React.FC<ListingsCardProps> = ({
 
         <div
           className={`text-[10px] lg:text-xs px-2 py-1 pr-4 clip-triangle-right absolute top-0 rounded-ss-[7px] left-0 ${
-            listing.tag === "Sale"
+            listing.tag === "sale"
               ? "bg-green-200 text-green-700"
-              : listing.tag === "Rent"
+              : listing.tag === "rent"
               ? "bg-blue-200 text-blue-700"
-              : listing.tag === "Shortlet"
+              : listing.tag === "shortlet"
               ? "bg-yellow-200 text-yellow-700"
               : "bg-gray-200 text-gray-700"
           }`}
         >
-          {listing.tag === "Sale"
+          {listing.tag === "sale"
             ? "For Sale"
-            : listing.tag === "Rent"
+            : listing.tag === "rent"
             ? "For Rent"
             : "Short-Let"}
         </div>
@@ -90,7 +90,23 @@ const ListingCard: React.FC<ListingsCardProps> = ({
             {listing.price}
           </h3>
 
-          <p className="p-1 w-fit px-2 bg-gray-700/40 rounded-[7px]  text-white text-[10px] lg:text-xs ">
+          <p
+            className={`p-1 w-fit px-2 rounded-[7px] text-[10px] lg:text-xs ${
+              listing.category === "apartment"
+                ? "bg-teal-100 text-teal-600"
+                : listing.category === "land"
+                ? "bg-green-100 text-green-600"
+                : listing.category === "duplex"
+                ? "bg-yellow-100 text-yellow-600"
+                : listing.category === "office"
+                ? "bg-blue-100 text-blue-600"
+                : listing.category === "condo"
+                ? "bg-purple-100 text-purple-600"
+                : listing.category === "store"
+                ? "bg-pink-100 text-pink-600"
+                : "bg-gray-100 text-gray-600" // Fallback color
+            }`}
+          >
             {listing.category}
           </p>
         </div>

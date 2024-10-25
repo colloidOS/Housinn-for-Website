@@ -12,7 +12,7 @@ const ListingsFilter: React.FC<ListingsFilterProps> = ({
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false); // State to handle modal visibility
 
-  const tags = ["all-properties", "Sale", "Rent", "Shortlet"];
+  const tags = ["all-properties", "sale", "rent", "shortlet"];
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -35,11 +35,11 @@ const ListingsFilter: React.FC<ListingsFilterProps> = ({
           >
             {tag === "all-properties"
               ? "All Properties"
-              : tag === "Sale"
+              : tag === "sale"
               ? "For Sale"
-              : tag === "Rent"
+              : tag === "rent"
               ? "For Rent"
-              : tag === "Shortlet"
+              : tag === "shortlet"
               ? "Shortlet"
               : ""}
           </button>

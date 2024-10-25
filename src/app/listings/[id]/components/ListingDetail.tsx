@@ -20,6 +20,8 @@ interface ListingDetailProps {
 
 const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
   const [showGallery, setShowGallery] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
   const [currentImage, setCurrentImage] = useState<string | null>(null);
   const capitalizeFirstLetter = (str: string) => {
     if (!str) return str; // Return if the string is empty
@@ -34,11 +36,10 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
   console.log("listing", listing);
   console.log(listing.userId);
   const openGallery = (image?: string) => {
-    if (image) {
-      setCurrentImage(image);
-    }
+    setCurrentImage(image || listing.images[0]); // Set the selected or default first image
     setShowGallery(true);
   };
+  
   const Name = listing.user.company
     ? listing.user.company.charAt(0).toUpperCase() +
       listing.user.company.slice(1)
@@ -111,14 +112,12 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
   };
 
   return (
-    <div className="w-full min-h-screen justify-between flex flex-col gap-5 p-2">
-      <div className="row-span-1">
-        <ImageGallery
-          images={listing.images}
-          title={listing.title}
-          openGallery={openGallery}
-        />
-      </div>
+    <div className="w-full h-screen justify-between flex flex-col gap-5 p-2">
+      <ImageGallery
+        images={listing.images}
+        title={listing.title}
+        openGallery={openGallery}
+      />
 
       <div className="grid grid-col-1 md:grid-cols-2 w-full gap-x-4 gap-y-8 col-span-1 px-2">
         <div className=" flex flex-col  gap-4">
@@ -145,28 +144,39 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
               </div>
             </div>
           </div>
-          <div className="flex  items-center gap-3">
-            <img
-              src={listing.user.avatar}
-              alt="logo"
-              className="w-12 h-12 rounded-full"
-            />
-            <div className="flex gap-1 items-center">
-              {" "}
-              <p className="text-2xl font-semibold">{Name}</p>
-              {listing.ownerType === "public" ? (
-                <Image
-                  src={Verified}
-                  width={1}
-                  height={1}
-                  alt="verified"
-                  className="h-6 w-6"
-                />
-              ) : (
-                ""
-              )}
+          <div className="flex flex-col gap-1">
+            <div className="flex  items-center gap-3">
+              <img
+                src={listing.user.avatar}
+                alt="logo"
+                className="w-12 h-12 rounded-full"
+              />
+
+              <div className="flex gap-1 items-center">
+                {" "}
+                <p className="text-2xl font-semibold">{Name}</p>
+                {listing.ownerType === "public" ? (
+                  <Image
+                    src={Verified}
+                    width={1}
+                    height={1}
+                    alt="verified"
+                    className="h-6 w-6"
+                  />
+                ) : (
+                  ""
+                )}
+              </div>
             </div>
+            {listing.ownerType === "public" ? (
+              <p className="py-2.5 px-7 bg-[#62D050]/20 rounded-[8px] w-fit italic font-normal text-sm">
+                This Account is affiliated with the Nigerian Government
+              </p>
+            ) : (
+              ""
+            )}
           </div>
+
           <div>{renderAmenities()}</div>
         </div>
 
@@ -186,29 +196,26 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
         </div>
       </div>
 
-      {showGallery && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-75 flex items-center justify-center">
-          <div className="relative w-full max-w-3xl h-full max-h-3xl">
-            <div className="flex items-center justify-between p-4">
-              <h2 className="text-white">Image</h2>
-              <button onClick={closeGallery} className="text-white">
-                Close
-              </button>
-            </div>
-            <div className="flex overflow-x-auto h-full">
-              {listing.images.map((image, index) => (
-                <img
-                  key={index}
-                  src={image}
-                  alt={listing.title}
-                  className="object-contain h-full w-auto cursor-pointer"
-                  onClick={() => setCurrentImage(image)}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
+      {showGallery && currentImage && (
+  <div className="fixed inset-0 z-50 bg-black bg-opacity-75 flex items-center justify-center">
+    <div className="relative w-full max-w-3xl h-full max-h-3xl">
+      <div className="flex items-center justify-between p-4">
+        <h2 className="text-white">Image</h2>
+        <button onClick={closeGallery} className="text-white">
+          Close
+        </button>
+      </div>
+      <div className="flex overflow-x-auto h-full">
+        <img
+          src={currentImage}
+          alt={listing.title}
+          className="object-contain h-full w-auto"
+        />
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };

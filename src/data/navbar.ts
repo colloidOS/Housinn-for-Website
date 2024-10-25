@@ -45,3 +45,52 @@ export const sideItems: SideItem[] = [
       id: "save-searches",
     },
   ];
+
+  export const dropdownVariants = {
+    open: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring",
+        stiffness: 260,
+        damping: 20,
+        staggerChildren: 0.1,
+        duration: 0.5,
+      },
+    },
+    closed: {
+      opacity: 0,
+      y: -5,
+      transition: {
+        type: "spring",
+        stiffness: 260,
+        damping: 20,
+        duration: 0.5,
+      },
+    },
+  };
+  
+  export const textVariants = {
+    hidden: {
+      opacity: 0,
+      y: 10,
+      transition: {
+        duration: 0.4,
+        ease: "easeInOut",
+      },
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.4,
+        ease: "easeInOut",
+      },
+    },
+  };
+
+  export const tagData = [
+    { name: "Rent", tag: "rent" },
+    { name: "Sale", tag: "sale" },
+    { name: "Short Let", tag: "shortlet" },
+  ];

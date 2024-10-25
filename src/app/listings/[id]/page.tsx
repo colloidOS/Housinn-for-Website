@@ -7,6 +7,7 @@ import { TailSpin } from "react-loader-spinner";
 import { toast } from "sonner";
 import axios from "axios";
 
+
 const ListingDetailPage: React.FC = () => {
   const params = useParams(); // Get the dynamic id from params
   const id = params.id;
@@ -37,6 +38,7 @@ const ListingDetailPage: React.FC = () => {
 
   return (
     <div className=" w-full">
+      
       {loading ? (
         <div className="flex justify-center h-screen items-center w-full">
           <TailSpin

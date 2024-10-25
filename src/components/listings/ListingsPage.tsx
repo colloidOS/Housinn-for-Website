@@ -1,8 +1,7 @@
-"use client";
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+
 import { GridView, ListView, Search } from "../../../public/icons";
 import { FilterValues, ListingsPageProps } from "@/types";
 import useFetchListings from "@/hooks/useFetchListings";
@@ -11,6 +10,7 @@ import useSaveListing from "@/hooks/useSaveListing";
 import ListingsFilter from "./ListingsFilter";
 import ListingSort from "./ListingSort";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useSearchParams } from "next/navigation";
 
 const ListingsPage: React.FC<ListingsPageProps> = ({
   getRoute,
@@ -21,6 +21,7 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
 }) => {
   const [activeTag, setActiveTag] = useState<string | null>("all-properties");
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const searchParams = useSearchParams(); // Use useSearchParams
   const [isListView, setIsListView] = useState<boolean>(() => {
     if (typeof window !== "undefined") {
       return localStorage.getItem("viewMode") === "list";
@@ -29,37 +30,47 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
   });
   const [filters, setFilters] = useState<FilterValues>({}); // Correctly typed filters
 
-  const router = useRouter();
+  const query = searchParams.get("search");
 
+  useEffect(() => {
+    if (query) setSearchTerm(query);
+  }, [query]);
+  const tag = searchParams.get("tag");
+  useEffect(() => {
+    if (tag) {
+      setActiveTag(tag); // Set the activeTag based on the query parameter
+    }
+    console.log("activetag", activeTag);
+  }, [tag]);
+  console.log("this is the tag", tag);
   const applyFilters = (selectedFilters: FilterValues) => {
-    console.log("this is it",selectedFilters)
+    console.log("this is it", selectedFilters);
     setFilters(selectedFilters);
   };
 
- // Construct the dynamic endpoint based on filters
-const constructGetRoute = () => {
-  const queryParams = new URLSearchParams();
+  const constructGetRoute = () => {
+    const queryParams = new URLSearchParams();
 
-  // Add filters to the query string if they have values
-  if (filters.city) queryParams.append("city", filters.city);
-  if (filters.category) queryParams.append("category", filters.category);
-  if (filters.type) queryParams.append("type", filters.type);
-  if (filters.bedroom) queryParams.append("bedroom", filters.bedroom);
-  if (filters.minPrice) queryParams.append("minPrice", filters.minPrice);
-  if (filters.maxPrice) queryParams.append("maxPrice", filters.maxPrice);
-  if (filters.title) queryParams.append("title", filters.title);
-  if (filters.address) queryParams.append("address", filters.address);
-  if (filters.bathroom) queryParams.append("bathroom", filters.bathroom);
-  if (filters.state) queryParams.append("state", filters.state);
-  if (filters.ownerType) queryParams.append("ownerType", filters.ownerType);
+    // Add filters to the query string if they have values
+    if (filters.city) queryParams.append("city", filters.city);
+    if (filters.category) queryParams.append("category", filters.category);
+    if (filters.type) queryParams.append("type", filters.type);
+    if (filters.bedroom) queryParams.append("bedroom", filters.bedroom);
+    if (filters.minPrice) queryParams.append("minPrice", filters.minPrice);
+    if (filters.maxPrice) queryParams.append("maxPrice", filters.maxPrice);
+    if (filters.title) queryParams.append("title", filters.title);
+    if (filters.address) queryParams.append("address", filters.address);
+    if (filters.bathroom) queryParams.append("bathroom", filters.bathroom);
+    if (filters.state) queryParams.append("state", filters.state);
+    if (filters.ownerType) queryParams.append("ownerType", filters.ownerType);
 
-  const fullRoute = `${getRoute}?${queryParams.toString()}`;
+    const fullRoute = `${getRoute}?${queryParams.toString()}`;
 
-  // Log the route to the console
-  console.log("Constructed API Route:", fullRoute);
+    // Log the route to the console
+    console.log("Constructed API Route:", fullRoute);
 
-  return fullRoute;
-};
+    return fullRoute;
+  };
 
   const { listings, loading, setListings } = useFetchListings(
     constructGetRoute(), // Pass dynamically constructed route
