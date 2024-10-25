@@ -20,6 +20,8 @@ interface ListingDetailProps {
 
 const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
   const [showGallery, setShowGallery] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
   const [currentImage, setCurrentImage] = useState<string | null>(null);
   const capitalizeFirstLetter = (str: string) => {
     if (!str) return str; // Return if the string is empty
@@ -34,11 +36,10 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
   console.log("listing", listing);
   console.log(listing.userId);
   const openGallery = (image?: string) => {
-    if (image) {
-      setCurrentImage(image);
-    }
+    setCurrentImage(image || listing.images[0]); // Set the selected or default first image
     setShowGallery(true);
   };
+  
   const Name = listing.user.company
     ? listing.user.company.charAt(0).toUpperCase() +
       listing.user.company.slice(1)
@@ -195,29 +196,26 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
         </div>
       </div>
 
-      {showGallery && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-75 flex items-center justify-center">
-          <div className="relative w-full max-w-3xl h-full max-h-3xl">
-            <div className="flex items-center justify-between p-4">
-              <h2 className="text-white">Image</h2>
-              <button onClick={closeGallery} className="text-white">
-                Close
-              </button>
-            </div>
-            <div className="flex overflow-x-auto h-full">
-              {listing.images.map((image, index) => (
-                <img
-                  key={index}
-                  src={image}
-                  alt={listing.title}
-                  className="object-contain h-full w-auto cursor-pointer"
-                  onClick={() => setCurrentImage(image)}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
+      {showGallery && currentImage && (
+  <div className="fixed inset-0 z-50 bg-black bg-opacity-75 flex items-center justify-center">
+    <div className="relative w-full max-w-3xl h-full max-h-3xl">
+      <div className="flex items-center justify-between p-4">
+        <h2 className="text-white">Image</h2>
+        <button onClick={closeGallery} className="text-white">
+          Close
+        </button>
+      </div>
+      <div className="flex overflow-x-auto h-full">
+        <img
+          src={currentImage}
+          alt={listing.title}
+          className="object-contain h-full w-auto"
+        />
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };

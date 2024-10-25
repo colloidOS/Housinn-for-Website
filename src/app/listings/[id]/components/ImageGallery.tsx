@@ -10,7 +10,6 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({
   images,
   title,
   openGallery,
-  
 }) => {
   if (images.length === 1) {
     return (
