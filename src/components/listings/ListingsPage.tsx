@@ -21,6 +21,7 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
 }) => {
   const [activeTag, setActiveTag] = useState<string | null>("all-properties");
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const searchParams = useSearchParams(); // Use useSearchParams
   const [isListView, setIsListView] = useState<boolean>(() => {
     if (typeof window !== "undefined") {
       return localStorage.getItem("viewMode") === "list";
@@ -29,20 +30,24 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
   });
   const [filters, setFilters] = useState<FilterValues>({}); // Correctly typed filters
 
-  const searchParams = useSearchParams(); // Use useSearchParams
+  const query = searchParams.get("search");
+
+  useEffect(() => {
+    if (query) setSearchTerm(query);
+  }, [query]);
   const tag = searchParams.get("tag");
   useEffect(() => {
     if (tag) {
       setActiveTag(tag); // Set the activeTag based on the query parameter
     }
-    console.log("activetag", activeTag)
+    console.log("activetag", activeTag);
   }, [tag]);
   console.log("this is the tag", tag);
   const applyFilters = (selectedFilters: FilterValues) => {
     console.log("this is it", selectedFilters);
     setFilters(selectedFilters);
   };
- 
+
   const constructGetRoute = () => {
     const queryParams = new URLSearchParams();
 

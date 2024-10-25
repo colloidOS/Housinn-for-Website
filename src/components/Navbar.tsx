@@ -13,7 +13,6 @@ import { useAuth } from "@/context/AuthContext";
 import { motion } from "framer-motion";
 import SkeletonLoader from "./SkeletonLoader";
 import Wrapper from "./ui/Wrapper";
-import { useRouter } from "next/navigation";
 
 interface NavbarProps {
   colorScheme?: "default" | "alternate";
@@ -24,7 +23,7 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
   const [loading, setLoading] = useState<boolean>(true); // Loading state
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
-  const router = useRouter();
+
   const { user } = useAuth(); // Get the user from AuthContext
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
@@ -105,7 +104,7 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
             alt="Housinn logo"
             width={0}
             height={0}
-            className={`w-auto  ${isDefaultScheme?"h-16":"h-12"}`}
+            className={`w-auto  ${isDefaultScheme ? "h-16" : "h-12"}`}
           />
         </Link>
 
