@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
@@ -40,11 +41,11 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
     if (tag) {
       setActiveTag(tag); // Set the activeTag based on the query parameter
     }
-    console.log("activetag", activeTag);
+    // console.log("activetag", activeTag);
   }, [tag]);
-  console.log("this is the tag", tag);
+  // console.log("this is the tag", tag);
   const applyFilters = (selectedFilters: FilterValues) => {
-    console.log("this is it", selectedFilters);
+    // console.log("this is it", selectedFilters);
     setFilters(selectedFilters);
   };
 
@@ -65,7 +66,7 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
     if (filters.ownerType) queryParams.append("ownerType", filters.ownerType);
 
     const fullRoute = `${getRoute}?${queryParams.toString()}`;
-
+    console.log("searchitem2", searchTerm);
     // Log the route to the console
     console.log("Constructed API Route:", fullRoute);
 
@@ -74,7 +75,8 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
 
   const { listings, loading, setListings } = useFetchListings(
     constructGetRoute(), // Pass dynamically constructed route
-    dataRoute
+    dataRoute,
+    searchTerm
   );
 
   const saveListing = useSaveListing(listings, setListings);
@@ -85,10 +87,9 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
     setActiveTag(tag === activeTag ? null : tag);
   };
 
-  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value.toLowerCase());
+  const handleSearch = () => {
+    setSearchTerm(searchTerm);
   };
-
   const toggleView = () => {
     const newView = !isListView;
     setIsListView(newView);
@@ -100,29 +101,29 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
     localStorage.removeItem("viewMode");
   }, []);
 
-  const handleSearch = () => {
-    return listings.filter((listing) => {
-      const matchesTag =
-        activeTag === "all-properties" || listing.tag === activeTag;
+  // const handleSearch = () => {
+  //   return listings.filter((listing) => {
+  //     const matchesTag =
+  //       activeTag === "all-properties" || listing.tag === activeTag;
 
-      const lowerCaseSearchTerm = searchTerm.toLowerCase();
+  //     const lowerCaseSearchTerm = searchTerm.toLowerCase();
 
-      const matchesSearch = [
-        listing.location || "",
-        listing.price?.toString() || "",
-        listing.beds?.toString() || "",
-        listing.baths?.toString() || "",
-        listing.area || "",
-        listing.title || "",
-        listing.tag || "",
-        listing.category || "",
-      ].some((field) => field.toLowerCase().includes(lowerCaseSearchTerm));
+  //     const matchesSearch = [
+  //       listing.location || "",
+  //       listing.price?.toString() || "",
+  //       listing.beds?.toString() || "",
+  //       listing.baths?.toString() || "",
+  //       listing.area || "",
+  //       listing.title || "",
+  //       listing.tag || "",
+  //       listing.category || "",
+  //     ].some((field) => field.toLowerCase().includes(lowerCaseSearchTerm));
 
-      return matchesTag && matchesSearch;
-    });
-  };
+  //     return matchesTag && matchesSearch;
+  //   });
+  // };
 
-  const filteredListings = handleSearch();
+  // const filteredListings = handleSearch();
 
   return (
     <div className={` ${className || ""}`}>
@@ -137,15 +138,15 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
           onChange={handleFilterChange}
           applyFilters={applyFilters}
         />
-        <div className="flex relative items-center flex-1  h-full">
+      <div className="flex relative items-center flex-1 h-full">
           <input
             type="text"
             placeholder="Search listings..."
             value={searchTerm}
-            onChange={handleSearchInputChange}
-            className="pr-2 text-right flex flex-1   p-2 h-11 border border-gray-300  rounded w-full placeholder:text-sm text-sm  placeholder:text-right "
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pr-2 text-right flex flex-1 p-2 h-11 border border-gray-300 rounded w-full placeholder:text-sm text-sm placeholder:text-right"
           />
-          <button className="rounded-[5px] absolute left-2">
+          <button onClick={handleSearch} className="rounded-[5px] absolute left-2">
             <Image
               src={Search}
               alt="search"
@@ -213,7 +214,7 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
               ))}
           </motion.div>
         )
-      ) : filteredListings.length === 0 ? (
+      ) : listings.length === 0 ? (
         <h2 className="text-xl text-center mt-24 font-bold mb-4 w-full">
           {noListingsMessage}
         </h2>
@@ -228,7 +229,7 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
                 exit={{ opacity: 0 }}
                 transition={{ duration: 1 }} // Smooth transition timing
               >
-                <ListingSort listings={filteredListings} />
+                <ListingSort listings={listings} />
               </motion.div>
             </AnimatePresence>
           ) : (
@@ -240,7 +241,7 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
                 exit={{ opacity: 0 }}
                 transition={{ duration: 1 }} // Smooth transition timing
               >
-                {filteredListings.map((listing) => (
+                {listings.map((listing) => (
                   <ListingCard
                     key={listing.id}
                     listing={listing}

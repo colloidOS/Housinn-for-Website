@@ -25,7 +25,7 @@ const ListingCard: React.FC<ListingsCardProps> = ({
   const handleCardClick = () => {
     router.push(`/listings/${listing.id}`);
   };
-console.log("listingtag", listing.category)
+// console.log("listingtag", listing.category)
   return (
     <div
       className="relative rounded-[7px] shadow-custom-property-shadow cursor-pointer"
