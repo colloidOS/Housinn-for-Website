@@ -16,6 +16,7 @@ import { useSearchParams } from "next/navigation";
 const ListingsPageContent: React.FC<ListingsPageProps> = ({
   getRoute,
   dataRoute,
+
   pageTitle,
   className = "",
   noListingsMessage = "No listings available",
@@ -88,6 +89,7 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
   };
 
   const handleSearch = () => {
+    
     setSearchTerm(searchTerm);
   };
   const toggleView = () => {

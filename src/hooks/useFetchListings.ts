@@ -4,7 +4,11 @@ import { Listings } from "@/types";
 import axios from "axios";
 import { toast } from "sonner";
 
-const useFetchListings = (endpoint: string, dataRoute: string, searchTerm?: string) => {
+const useFetchListings = (
+  endpoint: string,
+  dataRoute: string,
+  searchTerm?: string
+) => {
   const [listings, setListings] = useState<Listings[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -12,13 +16,15 @@ const useFetchListings = (endpoint: string, dataRoute: string, searchTerm?: stri
     if (!str) return str; // Return if the string is empty
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   };
-console.log("searvchterm", searchTerm)
+  console.log("searvchterm", searchTerm);
   useEffect(() => {
     const fetchListings = async () => {
       setLoading(true);
       try {
-        const responsePath= `${endpoint}searchText=${searchTerm}`
-        console.log("response", responsePath)
+        const responsePath = searchTerm
+          ? `${endpoint}?searchText=${searchTerm}`
+          : endpoint;
+        console.log("response", responsePath);
         const response = await api.get(responsePath);
         console.log("response.data", response.data.data);
         const data = response.data.data[dataRoute].map((post: any) => ({

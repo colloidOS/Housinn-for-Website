@@ -9,6 +9,7 @@ const MyListings: React.FC = () => {
       dataRoute="userPosts"
       pageTitle="My Listings"
       className="xl:px-12 text-gray-600 pt-10 px-5 pb-12 w-full"
+      
     />
   );
 };
