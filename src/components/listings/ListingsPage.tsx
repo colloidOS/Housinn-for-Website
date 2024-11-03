@@ -48,6 +48,7 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
   const applyFilters = (selectedFilters: FilterValues) => {
     // console.log("this is it", selectedFilters);
     setFilters(selectedFilters);
+    console.log("selected", selectedFilters)
   };
 
   const constructGetRoute = () => {
@@ -56,7 +57,7 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
     // Add filters to the query string if they have values
     if (filters.city) queryParams.append("city", filters.city);
     if (filters.category) queryParams.append("category", filters.category);
-    if (filters.type) queryParams.append("type", filters.type);
+    if (filters.type && filters.type !== "all-properties") queryParams.append("type", filters.type); // Only add if not "all-properties"
     if (filters.bedroom) queryParams.append("bedroom", filters.bedroom);
     if (filters.minPrice) queryParams.append("minPrice", filters.minPrice);
     if (filters.maxPrice) queryParams.append("maxPrice", filters.maxPrice);
@@ -85,9 +86,12 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
     saveListing(id, isSaved);
   };
   const handleFilterChange = (tag: string) => {
-    setActiveTag(tag === activeTag ? null : tag);
+    setActiveTag(tag === activeTag ? "all-properties" : tag);
+    setFilters((prev) => ({
+      ...prev,
+      type: tag === "all-properties" ? undefined : tag, // Set `type` or reset
+    }));
   };
-
   const handleSearch = () => {
     
     setSearchTerm(searchTerm);
