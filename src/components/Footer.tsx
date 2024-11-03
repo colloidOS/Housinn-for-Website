@@ -6,7 +6,7 @@ import Wrapper from "./ui/Wrapper";
 const Footer: React.FC = () => {
   return (
     <footer>
-      <Wrapper className="bg-gray-100 gap-16 md:gap-12 flex flex-col text-white">
+      <Wrapper className="bg-gray-100 gap-16 md:gap-12 flex flex-col text-white mt-24">
         <div className="gap-12 md:gap-7 flex flex-col justify-between md:flex-row">
           <div className="flex flex-col flex-1 gap-3">
             <h1 className="font-semibold text-2xl">About</h1>
