@@ -11,10 +11,10 @@ import {
 } from "../../public/icons/index";
 
 export const socialLinks = [
-  { src: Twitter, alt: "Twitter", href: "" },
+  { src: Twitter, alt: "Twitter", href: "https://x.com/housinnafrica" },
   { src: Facebook, alt: "Facebook", href: "" },
-  { src: Linkedin, alt: "LinkedIn", href: "" },
-  { src: Instagram, alt: "Instagram", href: "" },
+  { src: Linkedin, alt: "LinkedIn", href: "https://www.linkedin.com/company/housinnafrica" },
+  { src: Instagram, alt: "Instagram", href: "https://instagram.com/housinn.africa" },
 ];
 
 export const contactDetails = [
@@ -24,7 +24,7 @@ export const contactDetails = [
     alt: "Address",
   },
   { src: Telephone, text: "+234-90 1234 5678", alt: "Telephone" },
-  { src: Mail, text: "info@housinn.com", alt: "Mail" },
+  { src: Mail, text: "housinnafrica@gmail.com", alt: "Mail" },
 ];
 
 export const downloadLinks = [
