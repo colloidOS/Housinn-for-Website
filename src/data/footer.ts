@@ -12,7 +12,7 @@ import {
 
 export const socialLinks = [
   { src: Twitter, alt: "Twitter", href: "https://x.com/housinnafrica" },
-  { src: Facebook, alt: "Facebook", href: "" },
+  // { src: Facebook, alt: "Facebook", href: "" },
   { src: Linkedin, alt: "LinkedIn", href: "https://www.linkedin.com/company/housinnafrica" },
   { src: Instagram, alt: "Instagram", href: "https://instagram.com/housinn.africa" },
 ];
