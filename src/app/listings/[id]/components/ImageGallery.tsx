@@ -1,83 +1,43 @@
 import React from "react";
-
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "./ui/ImageCarousel";
 interface ImageGalleryProps {
-  images: string[];
-  title: string;
-  openGallery: (image?: string) => void;
+  images: string[]; // Array of image URLs
 }
 
-const ImageGallery: React.FC<ImageGalleryProps> = ({
-  images,
-  title,
-  openGallery,
-}) => {
-  if (images.length === 1) {
-    return (
-      <div className="h-full">
-        <img
-          src={images[0]}
-          alt={title}
-          className="object-fill w-full h-[60vh] rounded-[7px]"
-          onClick={() => openGallery(images[0])}
-        />
+const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
+  return (
+    <Carousel className="w-full ">
+      <CarouselContent>
+        {images.map((image, index) => (
+          <CarouselItem key={index}>
+            <div className="">
+              <Card>
+                <CardContent className="flex  items-center justify-center ">
+                  <img
+                    src={image}
+                    alt={`Slide ${index}`}
+                    className=" object-fill"
+                  />
+                </CardContent>
+              </Card>
+            </div>
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+      <div className="flex gap-5 w-fit justify-between">
+        {" "}
+      <div className="pr-4">  <CarouselPrevious /></div>
+        <CarouselNext />
       </div>
-    );
-  } else if (images.length === 2) {
-    return (
-      <div className="grid md:grid-cols-2 w-full   gap-2 ">
-        <img
-          src={images[0]}
-          alt={title}
-          className=" object-fill w-full h-[60vh] rounded-[7px]"
-          onClick={() => openGallery(images[0])}
-        />{" "}
-        <img
-          src={images[1]}
-          alt={title}
-          className="object-fill w-full h-[60vh] rounded-[7px] "
-          onClick={() => openGallery(images[1])}
-        />
-      </div>
-    );
-  } else if (images.length >= 3) {
-    return (
-      <div className="grid grid-col-1 md:grid-cols-2 gap-2 ">
-        <div className="col-span-1 ">
-          <img
-            src={images[0]}
-            alt={title}
-            className="object-fill w-full h-[60vh] rounded-[7px]"
-            onClick={() => openGallery(images[0])}
-          />
-        </div>
-        <div className="flex md:flex-col gap-2 ">
-          <img
-            src={images[1]}
-            alt={title}
-            className="object-fill w-full h-[30vh] rounded-[7px]"
-            onClick={() => openGallery(images[1])}
-          />
-          <div className="relative">
-            <img
-              src={images[2]}
-              alt={title}
-              className="object-fill w-full h-[30vh] rounded-[7px]"
-              onClick={() => openGallery(images[2])}
-            />
-            {images.length > 3 && (
-              <div
-                className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white "
-                onClick={() => openGallery()}
-              >
-                <span>View More</span>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  }
-  return null;
+    </Carousel>
+  );
 };
 
 export default ImageGallery;

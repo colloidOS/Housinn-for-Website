@@ -15,7 +15,7 @@ export default function Home() {
       <AboutUs />
       <Services />
       <ChooseUsReviewContainer />
-      <GetOurApp />
+      {/* <GetOurApp /> */}
       <Footer />
     </main>
   );

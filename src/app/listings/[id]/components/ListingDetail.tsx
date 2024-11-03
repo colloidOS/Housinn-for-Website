@@ -8,11 +8,13 @@ import {
   PhAddress,
   Verified,
 } from "../../../../../public/icons";
-import ImageGallery from "./ImageGallery";
+
 import api from "@/lib/api";
 import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
+import ImageSection from "./ImageSection";
+import ImageGallery from "./ImageGallery";
 
 interface ListingDetailProps {
   listing: Listings;
@@ -39,7 +41,7 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
     setCurrentImage(image || listing.images[0]); // Set the selected or default first image
     setShowGallery(true);
   };
-  
+
   const Name = listing.user.company
     ? listing.user.company.charAt(0).toUpperCase() +
       listing.user.company.slice(1)
@@ -113,7 +115,7 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
 
   return (
     <div className="w-full h-screen justify-between flex flex-col gap-5 p-2">
-      <ImageGallery
+      <ImageSection
         images={listing.images}
         title={listing.title}
         openGallery={openGallery}
@@ -197,25 +199,20 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
       </div>
 
       {showGallery && currentImage && (
-  <div className="fixed inset-0 z-50 bg-black bg-opacity-75 flex items-center justify-center">
-    <div className="relative w-full max-w-3xl h-full max-h-3xl">
-      <div className="flex items-center justify-between p-4">
-        <h2 className="text-white">Image</h2>
-        <button onClick={closeGallery} className="text-white">
-          Close
-        </button>
-      </div>
-      <div className="flex overflow-x-auto h-full">
-        <img
-          src={currentImage}
-          alt={listing.title}
-          className="object-contain h-full w-auto"
-        />
-      </div>
-    </div>
-  </div>
-)}
-
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-75 flex items-center justify-center">
+          <div className="relative w-full max-w-5xl h-full max-h-5xl">
+            <div className="flex items-center justify-between p-4">
+              <h2 className="text-white">Image</h2>
+              <button onClick={closeGallery} className="text-white">
+                Close
+              </button>
+            </div>
+            <div className="flex overflow-x-auto h-full">
+            <ImageGallery images={listing.images} />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

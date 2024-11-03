@@ -22,6 +22,7 @@ const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
     title: "",
     address: "",
     maxPrice: "",
+    type:"",
     bedroom: "",
     bathroom: "",
     state: "",

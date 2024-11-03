@@ -222,12 +222,12 @@ const AuthPage = () => {
               </a>
             </div>
           )}
-          <div className="flex items-center justify-center gap-2 text-white-300">
+          {/* <div className="flex items-center justify-center gap-2 text-white-300">
             <div className="flex-1 border border-white-300"></div>
             or
             <div className="flex-1 border border-white-300"></div>
-          </div>
-          <div className="flex flex-col w-full gap-[0.875rem] pt-3">
+          </div> */}
+          {/* <div className="flex flex-col w-full gap-[0.875rem] pt-3">
             <div className="flex items-center  w-full gap-2 border border-white-300 rounded py-[0.375rem] px-6 justify-center">
               <Image src={Google} alt="google icon" />
               <p className="text-[0.875rem] font-semibold">
@@ -240,7 +240,7 @@ const AuthPage = () => {
                 Sign in with Apple
               </p>
             </div>
-          </div>
+          </div> */}
         </form>
       </div>
     </div>
