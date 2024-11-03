@@ -75,6 +75,7 @@ export interface ListingsSortProps {
 export interface ListingsProps {
   shouldSlice?: boolean;
   getRoute: string; // Add this
+  searchTerm?: string;
   dataRoute: string; // Add this
 }
 

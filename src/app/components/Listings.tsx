@@ -22,7 +22,7 @@ const Listings: React.FC<ListingsProps> = ({
   const [maxListings, setMaxListings] = useState<number>(8); // Default value
   const { listings, loading, error, setListings } = useFetchListings(
     getRoute,
-    dataRoute
+    dataRoute,
   );
   const saveListing = useSaveListing(listings, setListings);
   const router = useRouter();

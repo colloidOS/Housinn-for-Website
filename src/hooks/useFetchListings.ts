@@ -4,7 +4,7 @@ import { Listings } from "@/types";
 import axios from "axios";
 import { toast } from "sonner";
 
-const useFetchListings = (endpoint: string, dataRoute: string, searchTerm: string) => {
+const useFetchListings = (endpoint: string, dataRoute: string, searchTerm?: string) => {
   const [listings, setListings] = useState<Listings[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);

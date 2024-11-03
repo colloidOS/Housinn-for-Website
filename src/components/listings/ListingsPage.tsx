@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 
@@ -13,7 +13,7 @@ import ListingSort from "./ListingSort";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useSearchParams } from "next/navigation";
 
-const ListingsPage: React.FC<ListingsPageProps> = ({
+const ListingsPageContent: React.FC<ListingsPageProps> = ({
   getRoute,
   dataRoute,
   pageTitle,
@@ -257,5 +257,10 @@ const ListingsPage: React.FC<ListingsPageProps> = ({
     </div>
   );
 };
+const ListingsPage: React.FC<ListingsPageProps> = (props) => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <ListingsPageContent {...props} />
+  </Suspense>
+);
 
 export default ListingsPage;
