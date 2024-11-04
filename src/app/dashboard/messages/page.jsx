@@ -437,7 +437,7 @@ const MessagePage = () => {
       </div>
 
       <div className="flex gap-5 w-full h-[560px]">
-        <div className="flex flex-col gap-6 w-2/5 rounded-lg px-3 lg:px-6 py-3 bg-white-200">
+        <div className="flex flex-col gap-6 w-2/5 rounded-lg px-3 lg:px-4 xl:px-6 py-3 bg-white-200">
           {/* Search Input */}
           <div className="flex justify-between border border-gray-300 items-center w-full pl-4 pr-8 py-2 text-sm rounded-lg text-gray-800 text-black">
             <input
@@ -631,7 +631,7 @@ const MessagePage = () => {
               </div>
             </div>
           ) : (
-            <div className="w-2/3 flex justify-center items-center">
+            <div className="w-2/3 flex p-5 justify-center items-center">
               <h2 className="text-xl">Select a chat to start messaging</h2>
             </div>
           )}
