@@ -106,7 +106,7 @@ const SettingsSidebar: FC<Iproperties> = ({ className }) => {
 
   return (
     <div
-      className={` ${className} h-full hidden lg:flex flex-col gap-11 items-center justify-center bg-white-200 pt-6  md:w-[220px] md:justify-start `}
+      className={` ${className} h-full hidden lg:flex flex-col gap-11 items-center justify-center bg-white-200 pt-6  md:w-[200px] md:justify-start `}
     >
       <section className="pr-4 flex flex-col gap-y-3">
         {filteredSideItems.map((item, index) => (
@@ -120,7 +120,7 @@ const SettingsSidebar: FC<Iproperties> = ({ className }) => {
               (isDashboard && item.id === "dashboard")
                 ? "bg-active text-primary"
                 : "bg-transparent text-gray-500 hover:bg-gray-300"
-            } flex cursor-pointer items-center justify-center gap-5 rounded-full pl-11 pr-6 py-3 text-lg transition-all duration-300 ease-in md:h-auto md:w-auto md:justify-start md:rounded-sm`}
+            } flex cursor-pointer items-center justify-center gap-5 rounded-full pl-6 xl:pl-11 pr-6 py-3 text-lg transition-all duration-300 ease-in md:h-auto md:w-auto md:justify-start md:rounded-sm`}
           >
             {item.icon && <item.icon className="h-5 w-5" role="sidebar-icon" />}
             <span className="text-nowrap">{item.route}</span>
