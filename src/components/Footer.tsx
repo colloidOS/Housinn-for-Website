@@ -24,7 +24,7 @@ const Footer: React.FC = () => {
           <div className="flex flex-col gap-5 flex-1 ">
             <h1 className="font-semibold text-2xl">Contact Us</h1>
             {contactDetails.map((item, index) => (
-              <a href="#" target="_blank" key={index}>
+              <a href={item.href || "#"} target="_blank" key={index} rel="noopener noreferrer">
                 <div className="flex items-center gap-3">
                   <Image src={item.src} width={21} height={21} alt={item.alt} />
                   <p>{item.text}</p>

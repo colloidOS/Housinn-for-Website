@@ -212,7 +212,7 @@ const AuthPage = () => {
             {isSignIn ? "Sign in" : "Create Account"}
           </PrimaryButton>
 
-          {isSignIn && (
+          {/* {isSignIn && (
             <div className="mb-2 text-center">
               <a
                 href="#"
@@ -221,7 +221,7 @@ const AuthPage = () => {
                 Forgot your password?
               </a>
             </div>
-          )}
+          )} */}
           {/* <div className="flex items-center justify-center gap-2 text-white-300">
             <div className="flex-1 border border-white-300"></div>
             or
