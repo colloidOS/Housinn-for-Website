@@ -15,7 +15,7 @@ function Pricing() {
   return (
     <div className="w-full flex flex-col bg-background-2 gap-5 px-12 py-10">
       <div className="flex flex-col gap-4">
-        <h2 className="text-2xl font-bold text-black">Dashboard</h2>
+        <h2 className="text-2xl font-bold text-black">Pricing</h2>
         <p className="flex gap-0.5 text-gray-600">
           Dashboard <ChevronRight /> Pricing
         </p>
@@ -159,8 +159,11 @@ function Pricing() {
                 </li>
               </ul>
             </div>
-            <button className="mt-6 px-4 py-2 bg-white text-blue-500 rounded-sm flex-nowrap">
-              Get Started
+            <button
+              disabled
+              className="mt-6 px-4 py-2 disabled:text-gray-500 disabled:bg-gray-200  bg-white text-blue-500 rounded-sm flex-nowrap"
+            >
+              Coming Soon
             </button>
           </div>
 
@@ -215,8 +218,11 @@ function Pricing() {
                 </li>
               </ul>
             </div>
-            <button className="mt-6 px-4 py-2 bg-blue-500 text-white rounded-sm flex-nowrap">
-              Get Started
+            <button
+              disabled
+              className="mt-6 px-4 py-2 disabled:text-gray-500 disabled:bg-gray-200  bg-blue-500 text-white rounded-sm flex-nowrap"
+            >
+              Coming Soon
             </button>
           </div>
         </div>
