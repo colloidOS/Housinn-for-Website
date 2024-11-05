@@ -7,11 +7,12 @@ import { signInFields, newAccountFields, accountTypes } from "@/data/auth";
 import Apple from "../../../public/icons/apple.svg";
 import Google from "../../../public/icons/google.svg";
 import api from "../../lib/api";
-import Logo from "../../../public/icons/Logo.svg";
+
 import PrimaryButton from "@/components/ui/PrimaryButton";
 import { toast } from "sonner";
 import { z } from "zod";
 import { ZodError } from "zod";
+import { Logo } from "../../../public/icons";
 
 // Validation schemas for sign-in and sign-up
 const signInSchema = z.object({
