@@ -29,11 +29,11 @@ const PasswordFields = ({ updatePassword, setUpdatedPassword }) => {
       id: "confirmPassword",
       type: "password",
       placeholder: "Confirm new password",
-      value: updatePassword.newPassword,
+      value: updatePassword.confirmPassword,
       onChange: (e) =>
         setUpdatedPassword({
           ...updatePassword,
-          newPassword: e.target.value,
+          confirmPassword: e.target.value,
         }),
     },
   ];

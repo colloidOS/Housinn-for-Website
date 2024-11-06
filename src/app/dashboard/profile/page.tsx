@@ -118,7 +118,7 @@ function Profile() {
   }, [id, token]);
 
   const handleUpdateSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    // e.preventDefault();
     setProfileLoading(true);
     const formData = new FormData();
 
@@ -273,7 +273,7 @@ function Profile() {
 
   return (
     <>
-      <div className="flex flex-col px-12 py-10 gap-8 bg-background-2 w-full">
+      <div className="flex flex-col p-8 sm:px-12 sm:py-10 gap-8 bg-background-2 w-full">
         <div className="flex flex-col gap-4">
           <h3 className="text-2xl font-bold text-black">Profile</h3>
           <hr className="text-gray-300" />
@@ -309,7 +309,7 @@ function Profile() {
         </div>
         <div>
           <hr className="text-gray-300" />
-          <div className="flex sm:flex-row flex-col gap-10 lg:gap-[202px]">
+          <div className="flex sm:flex-row flex-col gap-6 sm:gap-10 lg:gap-[140px] xl:gap-[202px]">
             <div className="flex flex-col gap-2 w-">
               <p className="text-lg font-semibold">Logout</p>
               <p className="text-sm font-normal text-gray-600">

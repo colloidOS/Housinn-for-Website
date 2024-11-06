@@ -1,7 +1,26 @@
-// ProfileFields.js
-import React from "react";
+import React, { useState } from "react";
 
 const ProfileFields = ({ updatedProfile, setUpdatedProfile }) => {
+  const [phoneError, setPhoneError] = useState("");
+
+  // Handle phone number change
+  const handlePhoneChange = (e) => {
+    const phoneNumber = e.target.value.replace(/\D/g, ""); // Only allow digits
+    if (phoneNumber.length > 11) return; // Limit to 10 digits after +234
+
+    setUpdatedProfile({
+      ...updatedProfile,
+      number: phoneNumber,
+    });
+
+    // Show error if phone number is less than 10 digits
+    // if (phoneNumber.length < 10) {
+    //   setPhoneError("Phone number must be at least 10 digits.");
+    // } else {
+    //   setPhoneError("");
+    // }
+  };
+
   const profileFields = [
     {
       label: "First Name",
@@ -39,42 +58,14 @@ const ProfileFields = ({ updatedProfile, setUpdatedProfile }) => {
           company: e.target.value,
         }),
     },
-    // {
-    //   label: "Email",
-    //   id: "email",
-    //   type: "email",
-    //   placeholder: "mikesrealties@gmail.com",
-    //   value: updatedProfile.email,
-    //   onChange: (e) =>
-    //     setUpdatedProfile({
-    //       ...updatedProfile,
-    //       email: e.target.value,
-    //     }),
-    // },
     {
       label: "Phone Number",
       id: "phoneNumber",
-      type: "number",
+      type: "tel",
       placeholder: "08012345678",
       value: updatedProfile.number || "",
-      onChange: (e) =>
-        setUpdatedProfile({
-          ...updatedProfile,
-          number: e.target.value,
-        }),
+      onChange: handlePhoneChange,
     },
-    // {
-    //   label: "Password",
-    //   id: "password",
-    //   type: "password",
-    //   placeholder: "••••••••",
-    //   value: updatedProfile.password,
-    //   onChange: (e) =>
-    //     setUpdatedProfile({
-    //       ...updatedProfile,
-    //       password: e.target.value,
-    //     }),
-    // },
   ];
 
   return (
@@ -87,14 +78,30 @@ const ProfileFields = ({ updatedProfile, setUpdatedProfile }) => {
           >
             {field.label}
           </label>
-          <input
-            id={field.id}
-            type={field.type}
-            placeholder={field.placeholder}
-            className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-            value={field.value}
-            onChange={field.onChange}
-          />
+          {field.id === "phoneNumber" ? (
+            <div className="flex items-center text-nowrap gap-1 w-full bg-white px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px]">
+              <input
+                id={field.id}
+                type={field.type}
+                placeholder={field.placeholder}
+                className=" focus:outline-none w-full"
+                value={field.value}
+                onChange={field.onChange}
+              />
+            </div>
+          ) : (
+            <input
+              id={field.id}
+              type={field.type}
+              placeholder={field.placeholder}
+              className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline-none"
+              value={field.value}
+              onChange={field.onChange}
+            />
+          )}
+          {field.id === "phoneNumber" && phoneError && (
+            <p className="text-red-500 text-sm">{phoneError}</p>
+          )}
         </div>
       ))}
     </div>

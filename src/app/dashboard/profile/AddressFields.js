@@ -54,18 +54,18 @@ const AddressFields = ({
           address: e.target.value,
         }),
     },
-    {
-      label: "CAC Number",
-      id: "cacNumber",
-      type: "text",
-      placeholder: "Enter your CAC Registration Code",
-      value: updateVerification.cacNumber,
-      onChange: (e) =>
-        setUpdateVerification({
-          ...updateVerification,
-          cacNumber: e.target.value,
-        }),
-    },
+    // {
+    //   label: "CAC Number",
+    //   id: "cacNumber",
+    //   type: "number",
+    //   placeholder: "Enter your CAC Registration Code",
+    //   value: updateVerification.cacNumber,
+    //   onChange: (e) =>
+    //     setUpdateVerification({
+    //       ...updateVerification,
+    //       cacNumber: e.target.value,
+    //     }),
+    // },
   ];
 
   return (
@@ -97,7 +97,7 @@ const AddressFields = ({
         ))}
       </div>
 
-      <div className="flex md:flex-col flex-row gap-6">
+      <div className="flex flex-col gap-6">
         {/* Display the text fields (Street and CAC Number) in columns */}
         {addressFields.slice(2, 4).map((field) => (
           <div key={field.id} className="w-full">
