@@ -16,46 +16,46 @@ const VerificationForm = ({
 }) => {
   return (
     <form
-    className="flex lg:gap-[140px]"
-    onSubmit={handleVerificationSubmit}
-  >
-    <div className="flex flex-col gap-2 text-nowrap">
-      <p className="text-lg font-semibold">Verification</p>
-      <p className="text-sm font-normal text-gray-600 w-[150px]">
-        Get your account verified!
-      </p>
-    </div>
-    <div className="px-12 lg:py-8 flex flex-col gap-8 w-full">
-      <div className="flex flex-col gap-4">
-        {loading ? (
-          <p>Loading...</p>
-        ) : (
-          <AddressFields
-            updateVerification={updateVerification}
-            setUpdateVerification={setUpdateVerification}
-            selectedState={selectedState}
-            setSelectedState={setSelectedState}
-            selectedCity={selectedCity}
-            setSelectedCity={setSelectedCity}
-          />
-        )}
+      className="flex flex-col sm:flex-row gap-8 lg:gap-[90px] xl:gap-[160px]"
+      onSubmit={handleVerificationSubmit}
+    >
+      <div className="flex flex-col gap-2 text-nowrap">
+        <p className="text-lg font-semibold">Verification</p>
+        <p className="text-sm font-normal text-gray-600 sm:w-[150px]">
+          Get your account verified!
+        </p>
       </div>
-      <Button
-        type="submit"
-        className="w-fit"
-        onClick={null}
-        disabled={isVerificationLoading}
-      >
-        {isVerificationLoading ? (
-          <span className="flex items-center gap-2">
-            Verifying <ClipLoader color="#fff" size={20} />
-          </span>
-        ) : (
-          "Verify Account"
-        )}
-      </Button>
-    </div>
-  </form>
+      <div className="sm:px-12 lg:py-8 flex flex-col gap-8 w-full">
+        <div className="flex flex-col gap-4">
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <AddressFields
+              updateVerification={updateVerification}
+              setUpdateVerification={setUpdateVerification}
+              selectedState={selectedState}
+              setSelectedState={setSelectedState}
+              selectedCity={selectedCity}
+              setSelectedCity={setSelectedCity}
+            />
+          )}
+        </div>
+        <Button
+          type="submit"
+          className="w-fit"
+          onClick={null}
+          disabled={isVerificationLoading}
+        >
+          {isVerificationLoading ? (
+            <span className="flex items-center gap-2">
+              Verifying <ClipLoader color="#fff" size={20} />
+            </span>
+          ) : (
+            "Verify Account"
+          )}
+        </Button>
+      </div>
+    </form>
   );
 };
 
