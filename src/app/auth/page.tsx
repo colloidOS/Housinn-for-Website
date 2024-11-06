@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { ZodError } from "zod";
 import { Logo } from "../../../public/icons";
+import Link from "next/link";
 
 // Validation schemas for sign-in and sign-up
 const signInSchema = z.object({
@@ -132,28 +133,35 @@ const AuthPage = () => {
         </div>
         <form className="px-3 flex flex-col w-full" onSubmit={handleSubmit}>
           {isSignIn ? (
-            signInFields.map((field) => (
-              <div key={field.id} className="mb-3 text-left">
-                <label
-                  htmlFor={field.id}
-                  className="text-[0.875rem] font-semibold"
-                >
-                  {field.label}
-                  {errors[field.name] && (
-                    <span className="text-red-600 ml-2 text-sm">
-                      {errors[field.name]}
-                    </span>
-                  )}
-                </label>
-                <input
-                  id={field.id}
-                  name={field.name}
-                  type={field.type}
-                  placeholder={field.placeholder}
-                  className="w-full px-2 py-2 placeholder:text-[0.875rem] border border-white-300 rounded focus:outline-none"
-                />
+            <>
+              {signInFields.map((field) => (
+                <div key={field.id} className="mb-3 text-left">
+                  <label
+                    htmlFor={field.id}
+                    className="text-[0.875rem] font-semibold"
+                  >
+                    {field.label}
+                    {errors[field.name] && (
+                      <span className="text-red-600 ml-2 text-sm">
+                        {errors[field.name]}
+                      </span>
+                    )}
+                  </label>
+                  <input
+                    id={field.id}
+                    name={field.name}
+                    type={field.type}
+                    placeholder={field.placeholder}
+                    className="w-full px-2 py-2 placeholder:text-[0.875rem] border border-white-300 rounded focus:outline-none"
+                  />
+                </div>
+              ))}{" "}
+              <div className="pt-3 text-[0.875rem]">
+                <input type="checkbox" required name="" id="" /> I agree to the{" "}
+                <Link href="/terms-and-conditions" className="text-[0.875rem] font-semibold">Terms and Conditions</Link> and{" "}
+                <Link href="/privacy-policy" className="text-[0.875rem] font-semibold">Privacy Policy</Link>
               </div>
-            ))
+            </>
           ) : (
             <>
               {newAccountFields.map((field) => (
