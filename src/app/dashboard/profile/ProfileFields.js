@@ -6,7 +6,7 @@ const ProfileFields = ({ updatedProfile, setUpdatedProfile }) => {
   // Handle phone number change
   const handlePhoneChange = (e) => {
     const phoneNumber = e.target.value.replace(/\D/g, ""); // Only allow digits
-    if (phoneNumber.length > 10) return; // Limit to 10 digits after +234
+    if (phoneNumber.length > 11) return; // Limit to 10 digits after +234
 
     setUpdatedProfile({
       ...updatedProfile,
@@ -62,7 +62,7 @@ const ProfileFields = ({ updatedProfile, setUpdatedProfile }) => {
       label: "Phone Number",
       id: "phoneNumber",
       type: "tel",
-      placeholder: "8012345678",
+      placeholder: "08012345678",
       value: updatedProfile.number || "",
       onChange: handlePhoneChange,
     },
@@ -80,7 +80,6 @@ const ProfileFields = ({ updatedProfile, setUpdatedProfile }) => {
           </label>
           {field.id === "phoneNumber" ? (
             <div className="flex items-center text-nowrap gap-1 w-full bg-white px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px]">
-              <span className=" rounded-l-md text-gray-600/50">+234 - </span>
               <input
                 id={field.id}
                 type={field.type}
