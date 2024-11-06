@@ -23,12 +23,17 @@ const signInSchema = z.object({
 
 const signUpSchema = z
   .object({
+    firstName: z.string().nonempty(" Required"),
+    lastName: z.string().nonempty("Required"),
     email: z.string().email("Invalid email address"),
     password: z.string().min(4, "Password must be at least 6 characters"),
     confirmPassword: z
       .string()
       .min(6, "Password must be at least 6 characters"),
     userType: z.string().nonempty("Please select an account type"),
+    termsAccepted: z.literal(true, {
+      errorMap: () => ({ message: "You must accept the terms and conditions" }),
+    }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
@@ -156,20 +161,12 @@ const AuthPage = () => {
                   />
                 </div>
               ))}{" "}
-              <div className="pt-3 text-[0.875rem]">
-                <input type="checkbox" required name="" id="" /> I agree to the{" "}
-                <Link href="/terms-and-conditions" className="text-[0.875rem] font-semibold">Terms and Conditions</Link> and{" "}
-                <Link href="/privacy-policy" className="text-[0.875rem] font-semibold">Privacy Policy</Link>
-              </div>
             </>
           ) : (
             <>
               {newAccountFields.map((field) => (
                 <div key={field.id} className="mb-3 text-left">
-                  <label
-                    htmlFor={field.id}
-                    className="text-[0.875rem] font-semibold"
-                  >
+                  <label htmlFor={field.id} className="text-sm font-semibold">
                     {field.label}
                     {errors[field.name] && (
                       <span className="text-red-600 ml-2 text-sm">
@@ -209,6 +206,27 @@ const AuthPage = () => {
                     </label>
                   ))}
                 </div>
+              </div>
+              <div className="pt-8 text-[0.875rem] text-left">
+                <input type="checkbox" name="" id="" /> I agree to the{" "}
+                <Link
+                  href="/terms-and-conditions"
+                  className="text-[0.875rem] font-semibold"
+                >
+                  Terms and Conditions
+                </Link>{" "}
+                and{" "}
+                <Link
+                  href="/privacy-policy"
+                  className="text-[0.875rem] font-semibold"
+                >
+                  Privacy Policy
+                </Link>
+                {errors.termsAccepted && (
+                  <span className="text-red-600 ml-2 text-sm">
+                    {errors.termsAccepted}
+                  </span>
+                )}{" "}
               </div>
             </>
           )}
