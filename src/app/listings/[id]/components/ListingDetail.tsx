@@ -15,6 +15,7 @@ import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
 import ImageSection from "./ImageSection";
 import ImageGallery from "./ImageGallery";
+import Navbar from "@/components/Navbar";
 
 interface ListingDetailProps {
   listing: Listings;
@@ -114,105 +115,110 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
   };
 
   return (
-    <div className="w-full h-screen justify-between flex flex-col gap-5 p-2">
-      <ImageSection
-        images={listing.images}
-        title={listing.title}
-        openGallery={openGallery}
-      />
+    <div className="w-full min-h-screen">
+      <Navbar colorScheme="alternate" />
+      <div className=" justify-between flex flex-col gap-5 p-2">
+        <ImageSection
+          images={listing.images}
+          title={listing.title}
+          openGallery={openGallery}
+        />
 
-      <div className="grid grid-col-1 md:grid-cols-2 w-full gap-x-4 gap-y-8 col-span-1 px-2">
-        <div className=" flex flex-col  gap-4">
-          <div className="flex flex-col gap-2">
-            <h1 className="text-4xl text-primary font-bold">
-              {formattedPrice}
-            </h1>
-            <h1 className="text-xl font-bold">{listing.title}</h1>
-            <div className="flex gap-2">
-              <Image src={PhAddress} alt="Address" width={20} height={20} />
-              <p className="text-gray-500 text-[0.875rem]">{location}</p>
-            </div>
-            <div className="flex flex-col  gap-4">
+        <div className="grid grid-col-1 md:grid-cols-2 w-full gap-x-4 gap-y-8 col-span-1 px-2">
+          <div className=" flex flex-col  gap-4">
+            <div className="flex flex-col gap-2">
+              <h1 className="text-4xl text-primary font-bold">
+                {formattedPrice}
+              </h1>
+              <h1 className="text-xl font-bold">{listing.title}</h1>
               <div className="flex gap-2">
-                {" "}
-                <div className="flex gap-1">
-                  <Image src={Bed} alt="Beds" width={20} height={20} />
-                  <span>{listing.bedroom} Bedrooms</span>
-                </div>
-                <div className="flex gap-1">
-                  <Image src={Bath} alt="Baths" width={20} height={20} />
-                  <span>{listing.bathroom} Bathrooms</span>
+                <Image src={PhAddress} alt="Address" width={20} height={20} />
+                <p className="text-gray-500 text-[0.875rem]">{location}</p>
+              </div>
+              <div className="flex flex-col  gap-4">
+                <div className="flex gap-2">
+                  {" "}
+                  <div className="flex gap-1">
+                    <Image src={Bed} alt="Beds" width={20} height={20} />
+                    <span>{listing.bedroom} Bedrooms</span>
+                  </div>
+                  <div className="flex gap-1">
+                    <Image src={Bath} alt="Baths" width={20} height={20} />
+                    <span>{listing.bathroom} Bathrooms</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="flex flex-col gap-1">
-            <div className="flex  items-center gap-3">
-              <img
-                src={listing.user.avatar}
-                alt="logo"
-                className="w-12 h-12 rounded-full"
-              />
+            <div className="flex flex-col gap-1">
+              <div className="flex  items-center gap-3">
+                <img
+                  src={listing.user.avatar}
+                  alt="logo"
+                  className="w-12 h-12 rounded-full"
+                />
 
-              <div className="flex gap-1 items-center">
-                {" "}
-                <p className="text-2xl font-semibold">{Name}</p>
-                {listing.ownerType === "public" ? (
-                  <Image
-                    src={Verified}
-                    width={1}
-                    height={1}
-                    alt="verified"
-                    className="h-6 w-6"
-                  />
-                ) : (
-                  ""
-                )}
+                <div className="flex gap-1 items-center">
+                  {" "}
+                  <p className="text-2xl font-semibold">{Name}</p>
+                  {listing.ownerType === "public" ? (
+                    <Image
+                      src={Verified}
+                      width={1}
+                      height={1}
+                      alt="verified"
+                      className="h-6 w-6"
+                    />
+                  ) : (
+                    ""
+                  )}
+                </div>
               </div>
+              {listing.ownerType === "public" ? (
+                <p className="py-2.5 px-7 bg-[#62D050]/20 rounded-[8px] w-fit italic font-normal text-sm">
+                  This Account is affiliated with the Nigerian Government
+                </p>
+              ) : (
+                ""
+              )}
             </div>
-            {listing.ownerType === "public" ? (
-              <p className="py-2.5 px-7 bg-[#62D050]/20 rounded-[8px] w-fit italic font-normal text-sm">
-                This Account is affiliated with the Nigerian Government
+
+            <div>{renderAmenities()}</div>
+          </div>
+
+          <div className=" italic flex flex-col gap-4 justify-end font-light">
+            <div className="flex flex-col gap-2">
+              <h2 className="text-base text-[#333333]">
+                What you will love about this home
+              </h2>
+              <p className="text-sm text-[#7D7D7D]">
+                {listing.postDetail.desc}
               </p>
-            ) : (
-              ""
-            )}
+            </div>
+            <button
+              className="bg-primary rounded-[0.5rem] text-white font-semibold text-lg w-full py-3"
+              onClick={AddToChat}
+            >
+              Message
+            </button>
           </div>
-
-          <div>{renderAmenities()}</div>
         </div>
 
-        <div className=" italic flex flex-col gap-4 justify-end font-light">
-          <div className="flex flex-col gap-2">
-            <h2 className="text-base text-[#333333]">
-              What you will love about this home
-            </h2>
-            <p className="text-sm text-[#7D7D7D]">{listing.postDetail.desc}</p>
+        {showGallery && currentImage && (
+          <div className="fixed inset-0 z-50 bg-black bg-opacity-75 flex items-center justify-center">
+            <div className="relative w-full max-w-5xl h-full max-h-5xl">
+              <div className="flex items-center justify-between p-4">
+                <h2 className="text-white">Image</h2>
+                <button onClick={closeGallery} className="text-white">
+                  Close
+                </button>
+              </div>
+              <div className="flex overflow-x-auto h-full">
+                <ImageGallery images={listing.images} />
+              </div>
+            </div>
           </div>
-          <button
-            className="bg-primary rounded-[0.5rem] text-white font-semibold text-lg w-full py-3"
-            onClick={AddToChat}
-          >
-            Message
-          </button>
-        </div>
+        )}
       </div>
-
-      {showGallery && currentImage && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-75 flex items-center justify-center">
-          <div className="relative w-full max-w-5xl h-full max-h-5xl">
-            <div className="flex items-center justify-between p-4">
-              <h2 className="text-white">Image</h2>
-              <button onClick={closeGallery} className="text-white">
-                Close
-              </button>
-            </div>
-            <div className="flex overflow-x-auto h-full">
-            <ImageGallery images={listing.images} />
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

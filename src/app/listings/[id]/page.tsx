@@ -22,7 +22,7 @@ const ListingDetailPage: React.FC = () => {
       try {
         const response = await api.get(`/posts/${id}`);
         setListing(response.data.data);
-        console.log("dfghtrd", response)
+        console.log("dfghtrd", response);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           const errorMessage = error.response?.data?.message || error.message;
@@ -38,7 +38,6 @@ const ListingDetailPage: React.FC = () => {
 
   return (
     <div className=" w-full">
-      
       {loading ? (
         <div className="flex justify-center h-screen items-center w-full">
           <TailSpin
@@ -51,9 +50,13 @@ const ListingDetailPage: React.FC = () => {
           />
         </div>
       ) : listing ? (
-        <ListingDetail listing={listing} />
+  
+          <ListingDetail listing={listing} />
+       
       ) : (
-        <p className="flex justify-center items-center w-full h-screen">Listing not found</p>
+        <p className="flex justify-center items-center w-full h-screen">
+          Listing not found
+        </p>
       )}
     </div>
   );

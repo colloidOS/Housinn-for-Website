@@ -24,17 +24,17 @@ const ImageSection: React.FC<ImageSectionProps> = ({
     );
   } else if (images.length === 2) {
     return (
-      <div className="grid md:grid-cols-2 w-full   gap-2 ">
+      <div className="grid xl:grid-cols-2 w-full   gap-2 ">
         <img
           src={images[0]}
           alt={title}
-          className=" object-fill w-full h-[60vh] rounded-[7px]"
+          className=" object-cover xl:object-fill w-full h-[30vh] xl:h-[50vh] rounded-[7px]"
           onClick={() => openGallery(images[0])}
         />{" "}
         <img
           src={images[1]}
           alt={title}
-          className="object-fill w-full h-[60vh] rounded-[7px] "
+          className="object-cover xl:object-fill w-full h-[30vh] xl:h-[50vh] rounded-[7px] "
           onClick={() => openGallery(images[1])}
         />
       </div>
