@@ -1,15 +1,16 @@
 "use client";
 import Navbar from "@/components/Navbar";
 import React from "react";
-import PrivacyPolicyData from "./components/PrivacyPolicyData";
+import PrivacyPolicy from "./components/PrivacyPolicy";
 
-const PrivacyPolicy = () => {
+
+const PrivacyPolicyPage = () => {
   return (
     <div>
       <Navbar colorScheme="alternate" />
-      <PrivacyPolicyData/>
+      <PrivacyPolicy/>
     </div>
   );
 };
 
-export default PrivacyPolicy;
+export default PrivacyPolicyPage;

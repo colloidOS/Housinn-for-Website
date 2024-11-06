@@ -1,15 +1,15 @@
-"use client"
+"use client";
 import Navbar from "@/components/Navbar";
 import React from "react";
-import TermsAndConditionsData from "./components/TermsAndConditionData";
+import TermsAndConditions from "./components/TermsAndConditions";
 
-const TermsAndCondition = () => {
+const TermsAndConditionsPage = () => {
   return (
     <div>
       <Navbar colorScheme="alternate" />
-      <TermsAndConditionsData />
+      <TermsAndConditions />
     </div>
   );
 };
 
-export default TermsAndCondition;
+export default TermsAndConditionsPage;
