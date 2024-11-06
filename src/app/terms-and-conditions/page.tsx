@@ -1,9 +1,15 @@
-import React from 'react'
+"use client"
+import Navbar from "@/components/Navbar";
+import React from "react";
+import TermsAndConditionsData from "./components/TermsAndConditionData";
 
-const page = () => {
+const TermsAndCondition = () => {
   return (
-    <div>page</div>
-  )
-}
+    <div>
+      <Navbar colorScheme="alternate" />
+      <TermsAndConditionsData />
+    </div>
+  );
+};
 
-export default page
+export default TermsAndCondition;
