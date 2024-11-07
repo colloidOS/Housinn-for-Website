@@ -135,7 +135,7 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
         <div className="grid grid-col-1 md:grid-cols-2  w-full gap-x-4 gap-y-8 col-span-1 px-2">
           <div className=" flex flex-col  gap-4">
             <div className="flex flex-col gap-2">
-              <h1 className="text-4xl text-primary font-bold">
+              <h1 className=" text-4xl text-primary font-bold">
                 {formattedPrice}
               </h1>
               <h1 className="text-xl font-bold">{listing.title}</h1>

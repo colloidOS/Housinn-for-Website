@@ -14,6 +14,7 @@ import { z } from "zod";
 import { ZodError } from "zod";
 import { Logo } from "../../../public/icons";
 import Link from "next/link";
+import { Eye, EyeOff } from "lucide-react";
 
 // Validation schemas for sign-in and sign-up
 const signInSchema = z.object({
@@ -45,7 +46,11 @@ const AuthPage = () => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({}); // Store field errors
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false); // State for password visibility
 
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
   const toggleView = () => {
     setIsSignIn(!isSignIn);
     setErrors({}); // Reset errors when toggling
@@ -174,13 +179,32 @@ const AuthPage = () => {
                       </span>
                     )}
                   </label>
-                  <input
-                    id={field.id}
-                    name={field.name}
-                    type={field.type}
-                    placeholder={field.placeholder}
-                    className="w-full px-2 py-2 placeholder:text-[0.875rem] border border-white-300 rounded focus:outline-none"
-                  />
+                  <div className="relative">
+                    {" "}
+                    <input
+                      id={field.id}
+                      name={field.name}
+                      type={
+                        field.name === "password" && showPassword
+                          ? "text"
+                          : field.type
+                      }
+                      placeholder={field.placeholder}
+                      className="w-full px-2 py-2 placeholder:text-[0.875rem] border border-white-300 rounded focus:outline-none"
+                    />
+                    {field.name === "password" && (
+                      <span
+                        className="absolute right-2 top-[20%] cursor-pointer"
+                        onClick={togglePasswordVisibility}
+                      >
+                        {showPassword ? (
+                          <Eye className="text-xs w-5" />
+                        ) : (
+                          <EyeOff className="text-xs w-5" />
+                        )}
+                      </span>
+                    )}
+                  </div>
                 </div>
               ))}
               <div className="pt-3">
