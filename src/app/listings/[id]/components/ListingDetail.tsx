@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
+
+
 import { Listings } from "@/types";
 import {
   Bed,
@@ -24,7 +26,13 @@ interface ListingDetailProps {
 const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
   const [showGallery, setShowGallery] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1
+  };
   const [currentImage, setCurrentImage] = useState<string | null>(null);
   const capitalizeFirstLetter = (str: string) => {
     if (!str) return str; // Return if the string is empty
@@ -123,7 +131,7 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
           title={listing.title}
           openGallery={openGallery}
         />
-
+ 
         <div className="grid grid-col-1 md:grid-cols-2  w-full gap-x-4 gap-y-8 col-span-1 px-2">
           <div className=" flex flex-col  gap-4">
             <div className="flex flex-col gap-2">

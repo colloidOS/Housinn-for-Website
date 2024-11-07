@@ -1,12 +1,6 @@
 import React from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
+import Slider from "react-slick";
+
 interface ImageSectionProps {
   images: string[];
   title: string;
@@ -17,7 +11,21 @@ const ImageSection: React.FC<ImageSectionProps> = ({
   images,
   title,
   openGallery,
-}) => {
+}) => { const settings = {
+  customPaging: function(i:number) {
+    return (
+      <a>
+        <img src={images[i]} alt={`Thumbnail ${i + 1}`} />
+      </a>
+    );
+  },
+  dots: true,
+  dotsClass: "slick-dots slick-thumb",
+  infinite: true,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1
+};
   if (images.length === 1) {
     return (
       <div className="h-full">
@@ -32,46 +40,30 @@ const ImageSection: React.FC<ImageSectionProps> = ({
   } else if (images.length === 2) {
     return (
       <div>
-        <div>
-          {" "}
-          <Carousel className="w-full max-w-xs">
-            <CarouselContent>
-              {images.map((image, index) => (
-                <CarouselItem key={index}>
-                  <div className="p-1">
-                    <Card>
-                      <CardContent className="flex w-full ">
-                        <img
-                          src={image}
-                          alt={`${title} ${index + 1}`}
-                          className="object-cover w-full h-full"
-                          onClick={() => openGallery(image)}
-                        />
-                      </CardContent>
-                    </Card>
-                    <span className="">{`${index + 1}/${images.length}`}</span>
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-          </Carousel>
-        </div>
+        <div className="slider-container xl:hidden">
+      <Slider {...settings}>
+        {images.map((image, index) => (
+          <div key={index}>
+            <img src={image} className="w-full h-[30vh] md:h-[40vh] object-cover" alt={`Slide ${index + 1}`} />
+          </div>
+        ))}
+      </Slider>
+    </div>
+
         <div className=" hidden xl:grid xl:grid-cols-2 w-full   gap-2 ">
-          <img
-            src={images[0]}
-            alt={title}
-            className=" object-cover xl:object-fill w-full h-[30vh] xl:h-[50vh] rounded-[7px]"
-            onClick={() => openGallery(images[0])}
-          />{" "}
-          <img
-            src={images[1]}
-            alt={title}
-            className="object-cover xl:object-fill w-full h-[30vh] xl:h-[50vh] rounded-[7px] "
-            onClick={() => openGallery(images[1])}
-          />
-        </div>
+        <img
+          src={images[0]}
+          alt={title}
+          className=" object-cover xl:object-fill w-full h-[30vh] xl:h-[50vh] rounded-[7px]"
+          onClick={() => openGallery(images[0])}
+        />{" "}
+        <img
+          src={images[1]}
+          alt={title}
+          className="object-cover xl:object-fill w-full h-[30vh] xl:h-[50vh] rounded-[7px] "
+          onClick={() => openGallery(images[1])}
+        />
+      </div>
       </div>
     );
   } else if (images.length >= 3) {

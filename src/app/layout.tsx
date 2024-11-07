@@ -6,7 +6,8 @@ import { Open_Sans } from 'next/font/google';
 import "./globals.css";
 import { Toaster} from 'sonner'
 const sans = Open_Sans({ subsets: ["latin"] });
-
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 export const metadata = {
   title: "Housinn",
   description: "Nigeria’s innovated property marketplace",
