@@ -157,13 +157,32 @@ const AuthPage = () => {
                       </span>
                     )}
                   </label>
-                  <input
-                    id={field.id}
-                    name={field.name}
-                    type={field.type}
-                    placeholder={field.placeholder}
-                    className="w-full px-2 py-2 placeholder:text-[0.875rem] border border-white-300 rounded focus:outline-none"
-                  />
+                  <div className="relative">
+                    {" "}
+                    <input
+                      id={field.id}
+                      name={field.name}
+                      type={
+                        field.name === "password" && showPassword
+                          ? "text"
+                          : field.type
+                      }
+                      placeholder={field.placeholder}
+                      className="w-full px-2 py-2 placeholder:text-[0.875rem] border border-white-300 rounded focus:outline-none"
+                    />
+                    {field.name === "password" && (
+                      <span
+                        className="absolute right-2 top-[20%] cursor-pointer"
+                        onClick={togglePasswordVisibility}
+                      >
+                        {showPassword ? (
+                          <Eye className="text-xs w-5" />
+                        ) : (
+                          <EyeOff className="text-xs w-5" />
+                        )}
+                      </span>
+                    )}
+                  </div>
                 </div>
               ))}{" "}
             </>
