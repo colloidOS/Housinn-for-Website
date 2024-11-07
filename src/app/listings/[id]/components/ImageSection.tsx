@@ -44,7 +44,7 @@ const ImageSection: React.FC<ImageSectionProps> = ({
       <Slider {...settings}>
         {images.map((image, index) => (
           <div key={index}>
-            <img src={image} className="w-full h-[30vh] md:h-[40vh] object-cover" alt={`Slide ${index + 1}`} />
+            <img src={image} className="w-full h-[40vh] md:h-[45vh] object-cover" alt={`Slide ${index + 1}`} />
           </div>
         ))}
       </Slider>
