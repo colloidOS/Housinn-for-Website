@@ -120,15 +120,15 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
     <div className="w-full min-h-screen">
       <Navbar colorScheme="alternate" />
     
-      <div className=" justify-between min-h-[90vh] w-full flex flex-col gap-5 p-2">
+      <div className=" justify-between min-h-[90vh] w-full flex flex-col gap-5 py-2 px-2 md:px-4 md:pb-2">
         <ImageSection
           images={listing.images}
           title={listing.title}
           openGallery={openGallery}
         />
          
-        <div className="flex flex-col xl:flex-row justify-between w-full gap-x-4 gap-y-4 md:gap-y-8  px-2">
-          <div className=" flex flex-col flex-1 gap-4 md:gap-8">
+        <div className="flex flex-col xl:flex-row justify-between w-full gap-x-4 gap-y-4 md:gap-y-8   px-2">
+          <div className=" flex flex-col flex-1 gap-4 md:gap-5">
             <div className="flex flex-col gap-2">
               <h1 className=" text-4xl text-primary font-bold">
                 {formattedPrice}

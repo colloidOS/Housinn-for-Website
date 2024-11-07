@@ -51,7 +51,7 @@ const ImageSection: React.FC<ImageSectionProps> = ({
             <div key={index} className="">
               <img
                 src={image}
-                className="p-1 w-[200vh] rounded-[14px] h-[40vh] md:h-[45vh] lg:h-[50vh] object-cover"
+                className="p-2 w-full rounded-[14px] h-[40vh] md:h-[45vh] lg:h-[50vh] object-cover"
                 alt={`Slide ${index + 1}`}
                 onClick={() => openGallery(image, index)} // Pass image and index
               />
