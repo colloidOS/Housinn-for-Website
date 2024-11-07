@@ -46,10 +46,12 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
   const formattedPrice = `₦${Number(listing.price).toLocaleString()}`;
   console.log("listing", listing);
   console.log(listing.userId);
-  const openGallery = (image?: string) => {
-    setCurrentImage(image || listing.images[0]); // Set the selected or default first image
+  const openGallery = (image?: string, index?: number) => {
+    setCurrentImage(image || listing.images[0]);
+    setCurrentImageIndex(index ?? 0); // Set the clicked image index or default to 0
     setShowGallery(true);
   };
+  
 
   const Name = listing.user.company
     ? listing.user.company.charAt(0).toUpperCase() +
@@ -125,15 +127,15 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
   return (
     <div className="w-full min-h-screen">
       <Navbar colorScheme="alternate" />
-      <div className=" justify-between  h-[93vh] flex flex-col gap-5 p-2">
+      <div className=" justify-between  min-h-[93vh] xl:min-h-[90vh] flex flex-col gap-5 p-2">
         <ImageSection
           images={listing.images}
           title={listing.title}
           openGallery={openGallery}
         />
  
-        <div className="flex flex-col xl:flex-row justify-between w-full gap-x-4 gap-y-8  px-2">
-          <div className=" flex flex-col flex-1  gap-8">
+        <div className="flex flex-col xl:flex-row justify-between w-full gap-x-4 gap-y-4 md:gap-y-8  px-2">
+          <div className=" flex flex-col flex-1 gap-4 md:gap-8">
             <div className="flex flex-col gap-2">
               <h1 className=" text-4xl text-primary font-bold">
                 {formattedPrice}
@@ -210,22 +212,32 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
             </button>
           </div>
         </div>
-
         {showGallery && currentImage && (
-          <div className="fixed inset-0 z-50 bg-black bg-opacity-75 flex items-center justify-center">
-            <div className="relative w-full max-w-5xl h-full max-h-5xl">
-              <div className="flex items-center justify-between p-4">
-                <h2 className="text-white">Image</h2>
-                <button onClick={closeGallery} className="text-white">
-                  Close
-                </button>
-              </div>
-              <div className="flex overflow-x-auto h-full">
-                <ImageGallery images={listing.images} />
-              </div>
-            </div>
-          </div>
-        )}
+  <div
+    className="fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center"
+    onClick={closeGallery} // Closes the modal when clicking outside the content
+  >
+    <div
+      className="relative w-full max-w-3xl"
+      onClick={(e) => e.stopPropagation()} // Prevents closing when clicking inside the content
+    >
+      <div className="flex items-center justify-between p-4">
+        <h2 className="text-white">Image</h2>
+        <button onClick={closeGallery} className="text-white">
+          Close
+        </button>
+      </div>
+      <div className="flex overflow-x-auto p-6">
+        <ImageGallery
+          images={listing.images}
+          currentImage={currentImage}
+          currentIndex={currentImageIndex} // Pass index here
+        />
+      </div>
+    </div>
+  </div>
+)}
+
       </div>
     </div>
   );
