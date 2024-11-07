@@ -18,14 +18,25 @@ export const socialLinks = [
 ];
 
 export const contactDetails = [
-  {
-    src: Address,
-    text: "7, University road, Nsukka, Enugu Nigeria. zip 900101",
-    alt: "Address",
+  // {
+  //   src: Address,
+  //   text: "7, University road, Nsukka, Enugu Nigeria. zip 900101",
+  //   alt: "Address",
+  // },
+  { 
+    src: Telephone, 
+    text: "+234-90 1234 5678", 
+    alt: "Telephone", 
+    href: "tel:+2349012345678" 
   },
-  { src: Telephone, text: "+234-90 1234 5678", alt: "Telephone" },
-  { src: Mail, text: "housinnafrica@gmail.com", alt: "Mail" },
+  { 
+    src: Mail, 
+    text: "housinnafrica@gmail.com", 
+    alt: "Mail", 
+    href: "mailto:housinnafrica@gmail.com" 
+  },
 ];
+
 
 export const downloadLinks = [
   { src: GoogleDownloadButton, alt: "Sign in with Google" },

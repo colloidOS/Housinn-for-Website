@@ -30,6 +30,6 @@
     "src/app/dashboard/favorites/page.jsx",
     "src/app/dashboard/components/layout/pricing/index.tsx",
     "src/app/test/page.tsx"
-  ],
+, "src/app/terms-and-conditions/components/TermsAndConditions.tsx"  ],
   "exclude": ["node_modules"]
 }

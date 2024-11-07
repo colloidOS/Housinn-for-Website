@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardContent } from "@/components/ui/card";
+
 import {
   Carousel,
   CarouselContent,
@@ -7,11 +7,19 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "./ui/ImageCarousel";
+import { Card, CardContent } from "./ui/ImageCard";
 interface ImageGalleryProps {
   images: string[]; // Array of image URLs
+  currentImage: string | null;
+  currentIndex: number; // Add this prop to handle the starting index
 }
 
-const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
+const ImageGallery: React.FC<ImageGalleryProps> = ({
+  images,
+  currentImage,
+  currentIndex,
+}) => {
+  console.log("cureent", currentIndex);
   return (
     <Carousel className="w-full ">
       <CarouselContent>
@@ -23,7 +31,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
                   <img
                     src={image}
                     alt={`Slide ${index}`}
-                    className=" object-fill"
+                    className=" object-fill rounded-xl h-[30vh] md:h-[40vh] w-full xl:w-[100vh]  xl:h-[70vh]  "
                   />
                 </CardContent>
               </Card>
@@ -31,9 +39,9 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
           </CarouselItem>
         ))}
       </CarouselContent>
-      <div className="flex gap-5 w-fit justify-between">
+      <div className="flex gap-5 w-full  justify-center mt-6">
         {" "}
-      <div className="pr-4">  <CarouselPrevious /></div>
+        <CarouselPrevious />
         <CarouselNext />
       </div>
     </Carousel>

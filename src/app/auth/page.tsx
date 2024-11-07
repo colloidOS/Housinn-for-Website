@@ -7,11 +7,14 @@ import { signInFields, newAccountFields, accountTypes } from "@/data/auth";
 import Apple from "../../../public/icons/apple.svg";
 import Google from "../../../public/icons/google.svg";
 import api from "../../lib/api";
-import Logo from "../../../public/icons/Logo.svg";
+
 import PrimaryButton from "@/components/ui/PrimaryButton";
 import { toast } from "sonner";
 import { z } from "zod";
 import { ZodError } from "zod";
+import { Logo } from "../../../public/icons";
+import Link from "next/link";
+import { Eye, EyeOff } from "lucide-react";
 
 // Validation schemas for sign-in and sign-up
 const signInSchema = z.object({
@@ -21,12 +24,17 @@ const signInSchema = z.object({
 
 const signUpSchema = z
   .object({
+    firstName: z.string().nonempty(" Required"),
+    lastName: z.string().nonempty("Required"),
     email: z.string().email("Invalid email address"),
     password: z.string().min(4, "Password must be at least 6 characters"),
     confirmPassword: z
       .string()
       .min(6, "Password must be at least 6 characters"),
     userType: z.string().nonempty("Please select an account type"),
+    termsAccepted: z.literal(true, {
+      errorMap: () => ({ message: "You must accept the terms and conditions" }),
+    }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
@@ -38,7 +46,11 @@ const AuthPage = () => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({}); // Store field errors
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false); // State for password visibility
 
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
   const toggleView = () => {
     setIsSignIn(!isSignIn);
     setErrors({}); // Reset errors when toggling
@@ -131,31 +143,8 @@ const AuthPage = () => {
         </div>
         <form className="px-3 flex flex-col w-full" onSubmit={handleSubmit}>
           {isSignIn ? (
-            signInFields.map((field) => (
-              <div key={field.id} className="mb-3 text-left">
-                <label
-                  htmlFor={field.id}
-                  className="text-[0.875rem] font-semibold"
-                >
-                  {field.label}
-                  {errors[field.name] && (
-                    <span className="text-red-600 ml-2 text-sm">
-                      {errors[field.name]}
-                    </span>
-                  )}
-                </label>
-                <input
-                  id={field.id}
-                  name={field.name}
-                  type={field.type}
-                  placeholder={field.placeholder}
-                  className="w-full px-2 py-2 placeholder:text-[0.875rem] border border-white-300 rounded focus:outline-none"
-                />
-              </div>
-            ))
-          ) : (
             <>
-              {newAccountFields.map((field) => (
+              {signInFields.map((field) => (
                 <div key={field.id} className="mb-3 text-left">
                   <label
                     htmlFor={field.id}
@@ -168,13 +157,73 @@ const AuthPage = () => {
                       </span>
                     )}
                   </label>
-                  <input
-                    id={field.id}
-                    name={field.name}
-                    type={field.type}
-                    placeholder={field.placeholder}
-                    className="w-full px-2 py-2 placeholder:text-[0.875rem] border border-white-300 rounded focus:outline-none"
-                  />
+                  <div className="relative">
+                    {" "}
+                    <input
+                      id={field.id}
+                      name={field.name}
+                      type={
+                        field.name === "password" && showPassword
+                          ? "text"
+                          : field.type
+                      }
+                      placeholder={field.placeholder}
+                      className="w-full px-2 py-2 placeholder:text-[0.875rem] border border-white-300 rounded focus:outline-none"
+                    />
+                    {field.name === "password" && (
+                      <span
+                        className="absolute right-2 top-[20%] cursor-pointer"
+                        onClick={togglePasswordVisibility}
+                      >
+                        {showPassword ? (
+                          <Eye className="text-xs w-5" />
+                        ) : (
+                          <EyeOff className="text-xs w-5" />
+                        )}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}{" "}
+            </>
+          ) : (
+            <>
+              {newAccountFields.map((field) => (
+                <div key={field.id} className="mb-3 text-left">
+                  <label htmlFor={field.id} className="text-sm font-semibold">
+                    {field.label}
+                    {errors[field.name] && (
+                      <span className="text-red-600 ml-2 text-sm">
+                        {errors[field.name]}
+                      </span>
+                    )}
+                  </label>
+                  <div className="relative">
+                    {" "}
+                    <input
+                      id={field.id}
+                      name={field.name}
+                      type={
+                        field.name === "password" && showPassword
+                          ? "text"
+                          : field.type
+                      }
+                      placeholder={field.placeholder}
+                      className="w-full px-2 py-2 placeholder:text-[0.875rem] border border-white-300 rounded focus:outline-none"
+                    />
+                    {field.name === "password" && (
+                      <span
+                        className="absolute right-2 top-[20%] cursor-pointer"
+                        onClick={togglePasswordVisibility}
+                      >
+                        {showPassword ? (
+                          <Eye className="text-xs w-5" />
+                        ) : (
+                          <EyeOff className="text-xs w-5" />
+                        )}
+                      </span>
+                    )}
+                  </div>
                 </div>
               ))}
               <div className="pt-3">
@@ -201,6 +250,27 @@ const AuthPage = () => {
                   ))}
                 </div>
               </div>
+              <div className="pt-8 text-[0.875rem] text-left">
+                <input type="checkbox" name="" id="" /> I agree to the{" "}
+                <Link
+                  href="/terms-and-conditions"
+                  className="text-[0.875rem] font-semibold"
+                >
+                  Terms and Conditions
+                </Link>{" "}
+                and{" "}
+                <Link
+                  href="/privacy-policy"
+                  className="text-[0.875rem] font-semibold"
+                >
+                  Privacy Policy
+                </Link>
+                {errors.termsAccepted && (
+                  <span className="text-red-600 ml-2 text-sm">
+                    {errors.termsAccepted}
+                  </span>
+                )}{" "}
+              </div>
             </>
           )}
           <PrimaryButton
@@ -212,7 +282,7 @@ const AuthPage = () => {
             {isSignIn ? "Sign in" : "Create Account"}
           </PrimaryButton>
 
-          {isSignIn && (
+          {/* {isSignIn && (
             <div className="mb-2 text-center">
               <a
                 href="#"
@@ -221,7 +291,7 @@ const AuthPage = () => {
                 Forgot your password?
               </a>
             </div>
-          )}
+          )} */}
           {/* <div className="flex items-center justify-center gap-2 text-white-300">
             <div className="flex-1 border border-white-300"></div>
             or

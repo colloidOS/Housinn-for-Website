@@ -78,7 +78,7 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
   return (
     <Wrapper disablePadding>
       <nav
-        className={`w-full grid grid-cols-2 lg:grid-cols-3 items-center justify-between  py-[14px]`}
+        className={`w-full grid grid-cols-2 sm:grid-cols-3 items-center justify-between  `}
       >
         <ul
           className={`sm:flex gap-2 ${
@@ -98,7 +98,7 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
           ))}
         </ul>
 
-        <Link href="/" className="flex lg:justify-center">
+        <Link href="/" className="flex sm:justify-center">
           <Image
             src={Logo}
             alt="Housinn logo"

@@ -6,7 +6,7 @@ import api from "../../../lib/api";
 import { TailSpin } from "react-loader-spinner";
 import { toast } from "sonner";
 import axios from "axios";
-
+import { Skeleton } from "@/components/ui/skeleton";
 
 const ListingDetailPage: React.FC = () => {
   const params = useParams(); // Get the dynamic id from params
@@ -22,7 +22,7 @@ const ListingDetailPage: React.FC = () => {
       try {
         const response = await api.get(`/posts/${id}`);
         setListing(response.data.data);
-        console.log("dfghtrd", response)
+        console.log("dfghtrd", response);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           const errorMessage = error.response?.data?.message || error.message;
@@ -38,22 +38,30 @@ const ListingDetailPage: React.FC = () => {
 
   return (
     <div className=" w-full">
-      
       {loading ? (
-        <div className="flex justify-center h-screen items-center w-full">
-          <TailSpin
+        <div className="flex flex-col  w-full p-2 gap-2">
+          {/* <TailSpin
             visible={true}
             height="80"
             width="80"
             color="#002A50"
             ariaLabel="tail-spin-loading"
             radius="1"
-          />
+          /> */}
+          <Skeleton className="h-[10vh] w-full rounded-[14px]" />
+          <Skeleton className="rounded-[14px] h-[40vh] md:h-[45vh] lg:h-[50vh] w-full" />
+
+          <div className="flex flex-col xl:flex-row gap-2">
+            <Skeleton className="rounded-[14px] h-[20vh] xl:h-[40vh] md:h-[45vh] lg:h-[50vh] w-full" />{" "}
+            <Skeleton className="rounded-[14px] h-[20vh] xl:h-[40vh] md:h-[45vh] lg:h-[50vh] w-full" />
+          </div>
         </div>
       ) : listing ? (
         <ListingDetail listing={listing} />
       ) : (
-        <p className="flex justify-center items-center w-full h-screen">Listing not found</p>
+        <p className="flex justify-center items-center w-full h-screen">
+          Listing not found
+        </p>
       )}
     </div>
   );

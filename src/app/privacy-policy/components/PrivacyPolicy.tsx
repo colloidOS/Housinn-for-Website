@@ -1,8 +1,8 @@
 import Wrapper from "@/components/ui/Wrapper";
-import { policySections } from "@/data/privacypolicy";
+import { policySections } from "@/data/privacy-policy";
 import React from "react";
 
-const PrivacyPolicyData: React.FC = () => {
+const PrivacyPolicy: React.FC = () => {
   return (
     <Wrapper>
       <h1 className="uppercase text-2xl font-bold text-center mb-6 underline">
@@ -60,4 +60,4 @@ const PrivacyPolicyData: React.FC = () => {
   );
 };
 
-export default PrivacyPolicyData;
+export default PrivacyPolicy;
