@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
 
-
 import { Listings } from "@/types";
 import {
   Bed,
@@ -19,6 +18,7 @@ import ImageSection from "./ImageSection";
 import ImageGallery from "./ImageGallery";
 import Navbar from "@/components/Navbar";
 
+
 interface ListingDetailProps {
   listing: Listings;
 }
@@ -26,13 +26,7 @@ interface ListingDetailProps {
 const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
   const [showGallery, setShowGallery] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1
-  };
+ 
   const [currentImage, setCurrentImage] = useState<string | null>(null);
   const capitalizeFirstLetter = (str: string) => {
     if (!str) return str; // Return if the string is empty
@@ -44,14 +38,12 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
     listing.state
   )}.`;
   const formattedPrice = `₦${Number(listing.price).toLocaleString()}`;
-  console.log("listing", listing);
-  console.log(listing.userId);
+
   const openGallery = (image?: string, index?: number) => {
     setCurrentImage(image || listing.images[0]);
     setCurrentImageIndex(index ?? 0); // Set the clicked image index or default to 0
     setShowGallery(true);
   };
-  
 
   const Name = listing.user.company
     ? listing.user.company.charAt(0).toUpperCase() +
@@ -127,13 +119,14 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
   return (
     <div className="w-full min-h-screen">
       <Navbar colorScheme="alternate" />
-      <div className=" justify-between  min-h-[93vh] xl:min-h-[90vh] flex flex-col gap-5 p-2">
+    
+      <div className=" justify-between min-h-[90vh] flex flex-col gap-5 p-2">
         <ImageSection
           images={listing.images}
           title={listing.title}
           openGallery={openGallery}
         />
- 
+         
         <div className="flex flex-col xl:flex-row justify-between w-full gap-x-4 gap-y-4 md:gap-y-8  px-2">
           <div className=" flex flex-col flex-1 gap-4 md:gap-8">
             <div className="flex flex-col gap-2">
@@ -213,31 +206,30 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
           </div>
         </div>
         {showGallery && currentImage && (
-  <div
-    className="fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center"
-    onClick={closeGallery} // Closes the modal when clicking outside the content
-  >
-    <div
-      className="relative w-full max-w-3xl"
-      onClick={(e) => e.stopPropagation()} // Prevents closing when clicking inside the content
-    >
-      <div className="flex items-center justify-between p-4">
-        <h2 className="text-white">Image</h2>
-        <button onClick={closeGallery} className="text-white">
-          Close
-        </button>
-      </div>
-      <div className="flex overflow-x-auto p-6">
-        <ImageGallery
-          images={listing.images}
-          currentImage={currentImage}
-          currentIndex={currentImageIndex} // Pass index here
-        />
-      </div>
-    </div>
-  </div>
-)}
-
+          <div
+            className="fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center"
+            onClick={closeGallery} // Closes the modal when clicking outside the content
+          >
+            <div
+              className="relative w-full max-w-3xl"
+              onClick={(e) => e.stopPropagation()} // Prevents closing when clicking inside the content
+            >
+              <div className="flex items-center justify-between p-4">
+                <h2 className="text-white">Image</h2>
+                <button onClick={closeGallery} className="text-white">
+                  Close
+                </button>
+              </div>
+              <div className="flex overflow-x-auto p-6">
+                <ImageGallery
+                  images={listing.images}
+                  currentImage={currentImage}
+                  currentIndex={currentImageIndex} // Pass index here
+                />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
