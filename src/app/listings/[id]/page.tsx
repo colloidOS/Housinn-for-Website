@@ -39,7 +39,7 @@ const ListingDetailPage: React.FC = () => {
   return (
     <div className=" w-full">
       {loading ? (
-        <div className="flex flex-col  w-full p-4 gap-4">
+        <div className="flex flex-col  w-full p-2 gap-2">
           {/* <TailSpin
             visible={true}
             height="80"
@@ -51,7 +51,7 @@ const ListingDetailPage: React.FC = () => {
           <Skeleton className="h-[10vh] w-full rounded-[14px]" />
           <Skeleton className="rounded-[14px] h-[40vh] md:h-[45vh] lg:h-[50vh] w-full" />
 
-          <div className="flex flex-col xl:flex-row gap-4">
+          <div className="flex flex-col xl:flex-row gap-2">
             <Skeleton className="rounded-[14px] h-[20vh] xl:h-[40vh] md:h-[45vh] lg:h-[50vh] w-full" />{" "}
             <Skeleton className="rounded-[14px] h-[20vh] xl:h-[40vh] md:h-[45vh] lg:h-[50vh] w-full" />
           </div>

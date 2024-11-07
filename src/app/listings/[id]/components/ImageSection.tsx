@@ -39,7 +39,7 @@ const ImageSection: React.FC<ImageSectionProps> = ({
     dotsClass: "slick-dots slick-thumb",
     infinite: images.length > 1,
     speed: 1000,
-    slidesToShow: slidesToShow,
+    slidesToShow: images.length === 1 ? 1 : slidesToShow,
     slidesToScroll: 1,
   };
 
@@ -51,7 +51,7 @@ const ImageSection: React.FC<ImageSectionProps> = ({
             <div key={index} className="">
               <img
                 src={image}
-                className="w-full p-1 rounded-[14px] h-[40vh] md:h-[45vh] lg:h-[50vh] object-cover"
+                className="p-1 w-[200vh] rounded-[14px] h-[40vh] md:h-[45vh] lg:h-[50vh] object-cover"
                 alt={`Slide ${index + 1}`}
                 onClick={() => openGallery(image, index)} // Pass image and index
               />

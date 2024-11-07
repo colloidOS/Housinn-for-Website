@@ -120,7 +120,7 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
     <div className="w-full min-h-screen">
       <Navbar colorScheme="alternate" />
     
-      <div className=" justify-between min-h-[90vh] flex flex-col gap-5 p-2">
+      <div className=" justify-between min-h-[90vh] w-full flex flex-col gap-5 p-2">
         <ImageSection
           images={listing.images}
           title={listing.title}
