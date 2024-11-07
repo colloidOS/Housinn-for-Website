@@ -134,11 +134,11 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
   return (
     <div className={` ${className || ""}`}>
       <div>
-        <h1 className="font-bold text-2xl mb-4">{pageTitle}</h1>{" "}
+        <h1 className="font-bold text-xl text-center md:text-left md:text-2xl mb-4">{pageTitle}</h1>{" "}
         {/* Dynamic title */}
       </div>
 
-      <div className="flex items-center gap-8 mb-5 justify-between w-full">
+      <div className="flex items-center gap-2 md:gap-8 mb-5 justify-between w-full">
         <ListingsFilter
           activeTag={activeTag || ""}
           onChange={handleFilterChange}

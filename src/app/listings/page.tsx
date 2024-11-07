@@ -12,7 +12,7 @@ const MyListings: React.FC = () => {
           getRoute="/posts"
           dataRoute="posts"
           pageTitle="Listings"
-          className="px-8"
+          className="md:px-8"
         />
       </Wrapper>
     </div>
