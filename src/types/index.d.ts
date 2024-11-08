@@ -175,3 +175,8 @@ export interface FilterValues {
   address?: string;
   ownerType?: string;
 }
+export interface ImageGalleryProps {
+  images: string[]; // Array of image URLs
+  currentImage: string | null;
+  currentIndex: number; // Add this prop to handle the starting index
+}

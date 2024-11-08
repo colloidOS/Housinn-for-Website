@@ -8,11 +8,8 @@ import {
   CarouselPrevious,
 } from "./ui/ImageCarousel";
 import { Card, CardContent } from "./ui/ImageCard";
-interface ImageGalleryProps {
-  images: string[]; // Array of image URLs
-  currentImage: string | null;
-  currentIndex: number; // Add this prop to handle the starting index
-}
+import { ImageGalleryProps } from "@/types";
+
 
 const ImageGallery: React.FC<ImageGalleryProps> = ({
   images,
