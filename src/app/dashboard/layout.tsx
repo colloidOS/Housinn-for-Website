@@ -9,6 +9,7 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
+    
     <div className="flex flex-col h-screen">
       {/* Sticky Navbar */}
       <div className="fixed top-0 z-10 w-full bg-white">
