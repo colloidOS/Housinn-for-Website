@@ -19,6 +19,7 @@ import {
   isBefore,
   addYears,
   subDays,
+  formatDate,
 } from "date-fns";
 
 const socket = io("https://housinn.onrender.com"); // Backend socket URL
@@ -30,6 +31,10 @@ const MessagePage = () => {
   const [newMessageText, setNewMessageText] = useState("");
   const [category, setCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [showChatList, setShowChatList] = useState(true); // Initially show chat list
+  const [loadingChats, setLoadingChats] = useState(true);
+  const [loadingMessages, setLoadingMessages] = useState(false);
+  const messageInputRef = useRef(null);
 
   // Ref to keep track of the last message for auto-scroll
   const scrollRef = useRef(null);
@@ -311,12 +316,67 @@ const MessagePage = () => {
           setTimeout(() => {
             scrollToBottom();
           }, 100);
+          setNewMessageText("");
+          if (messageInputRef.current) {
+            messageInputRef.current.style.height = "auto"; // Reset height after message is sent
+          }
         })
         .catch((error) => console.error("Error sending message:", error))
         .finally(() => {
           setIsLoading(false); // Remove loading spinner after sending the message
         });
     }
+  };
+
+
+
+  // Focus on the input when a chat is opened
+  useEffect(() => {
+    if (currentChat && messageInputRef.current) {
+      messageInputRef.current.focus();
+      adjustInputHeight(); // Adjust height on load if there's existing text
+    }
+  }, [currentChat]);
+
+  // Adjust input height dynamically
+  const adjustInputHeight = () => {
+    if (messageInputRef.current) {
+      messageInputRef.current.style.height = "auto"; // Reset height to recalculate
+      messageInputRef.current.style.height = `${messageInputRef.current.scrollHeight}px`; // Set to scrollHeight
+    }
+  };
+
+  const handleInputChange = (e) => {
+    setNewMessageText(e.target.value);
+    adjustInputHeight();
+  };
+
+  const handleMessageChange = (e) => {
+    setNewMessageText(e.target.value);
+
+    // Adjust the height of the textarea based on content
+    e.target.style.height = "auto";
+    e.target.style.height = `${e.target.scrollHeight}px`; // Set height based on scroll height
+  };
+
+  useEffect(() => {
+    // Simulate loading chats on page load
+    setTimeout(() => {
+      setLoadingChats(false); // Set to false once chats are loaded
+    }, 3000); // Adjust delay as necessary for your application
+  }, []);
+
+  const handleSelectChat = (chat) => {
+    selectChat(chat);
+    setShowChatList(false); // Hide chat list on selecting a chat
+    setLoadingMessages(true); // Start loading messages
+    setTimeout(() => {
+      setLoadingMessages(false); // Set to false when messages are loaded
+    }, 1000);
+  };
+
+  const handleGoBack = () => {
+    setShowChatList(true); // Show chat list when going back
   };
 
   // Fetch chats on page load
@@ -408,14 +468,18 @@ const MessagePage = () => {
   };
 
   return (
-    <div className="w-full flex flex-col bg-background-2 gap-5 h-scree px-8 pt-6">
+    <div className="w-full flex flex-col h-full bg-background-2 gap-5 h-scree px-4 sm:px-8 pt-6">
       {/* Chat List and Search */}
-      <div className="flex flex-col gap-4 border-b border-gray-400">
+      <div className="flex flex-col gap-4 lg:border-b border-gray-400">
         <h2 className="text-2xl font-bold text-black">Messages</h2>
-        <div className="flex gap-6 w-fit bg-white p-1">
+        <div
+          className={`flex gap-6 sm:w-fit bg-white p-1 ${
+            showChatList ? "block" : "hidden sm:flex"
+          }`}
+        >
           <div
             onClick={() => setCategory("all")}
-            className={`px-4 py-2 rounded cursor-pointer ${
+            className={`px-4 py-2 rounded cursor-pointer w-full text-center sm:w-fit text-sm lg:text-base ${
               category === "all"
                 ? "bg-primary-2 text-primary duration-300 outline-none"
                 : ""
@@ -425,7 +489,7 @@ const MessagePage = () => {
           </div>
           <div
             onClick={() => setCategory("unread")}
-            className={`px-4 py-2 rounded cursor-pointer active:outline-none ${
+            className={`px-4 py-2 rounded cursor-pointer w-full text-center sm:w-fit text-sm lg:text-base active:outline-none ${
               category === "unread"
                 ? "bg-primary-2 text-primary duration-300 outline-none"
                 : ""
@@ -436,8 +500,13 @@ const MessagePage = () => {
         </div>
       </div>
 
-      <div className="flex gap-5 w-full h-[560px]">
-        <div className="flex flex-col gap-6 w-2/5 rounded-lg px-3 lg:px-4 xl:px-6 py-3 bg-white-200">
+      <div className="flex gap-5 w-full h-full md:h-[560px]">
+        <div
+          className={`flex flex-col gap-6 w-full lg:w-2/5 rounded-lg px-3 lg:px-4 xl:px-6 py-3 bg-white-200 ${
+            showChatList ? "block" : "hidden lg:block"
+          }`}
+        >
+          {" "}
           {/* Search Input */}
           <div className="flex justify-between border border-gray-300 items-center w-full pl-4 pr-8 py-2 text-sm rounded-lg text-gray-800 text-black">
             <input
@@ -445,19 +514,21 @@ const MessagePage = () => {
               placeholder="Search Messages"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="placeholder:text-gray-500 placeholder:text-sm w-full focus:outline-none appearance-none"
+              className="placeholder:text-gray-500 placeholder:text-sm bg-transparent w-full focus:outline-none appearance-none"
             />
             <span className="bg">
               <Image src={Search} width={20} height={20} alt="search-icon" />
             </span>
           </div>
-
           {/* Chat List */}
           <div className="w-full overflow-y-auto custom-scrollbar duration-300 gap-3">
-            {filteredChats.length > 0 ? (
+            {loadingChats ? (
+              <div className="text-gray-500 text-center p-4">
+                Loading Chats...
+              </div>
+            ) : filteredChats.length > 0 ? (
               filteredChats
                 .sort((a, b) => {
-                  // Sort based on the latest message's createdAt or the chat's createdAt if no messages
                   const lastMessageTimeA =
                     a.messages.length > 0
                       ? new Date(a.lastMessageTime)
@@ -471,10 +542,9 @@ const MessagePage = () => {
                 .map((chat, index) => (
                   <>
                     <hr className="bg-gray-500 " />
-
                     <div
                       key={index}
-                      onClick={() => selectChat(chat)}
+                      onClick={() => handleSelectChat(chat)}
                       className={`px-3 py-3 rounded-lg flex gap-6 cursor-pointer w-full duration-300 ${
                         currentChat?.id === chat.id
                           ? "bg-primary-1 text-primary"
@@ -483,7 +553,7 @@ const MessagePage = () => {
                     >
                       {chat?.receiver.avatar ? (
                         <img
-                          src={chat.receiver.avatar} // Use a default avatar if not available
+                          src={chat.receiver.avatar}
                           alt={chat.receiver.firstName}
                           width={40}
                           height={40}
@@ -491,7 +561,7 @@ const MessagePage = () => {
                         />
                       ) : (
                         <Image
-                          src={Pfp} // Use a default avatar if not available
+                          src={Pfp}
                           alt={chat.receiver.firstName}
                           width={48}
                           height={48}
@@ -507,15 +577,16 @@ const MessagePage = () => {
                               : chat.messages.length > 0
                               ? formatTime(chat.lastMessageTime)
                               : formatTime(chat.createdAt)}
-                            {console.log(chat)}
                           </p>
                         </div>
                         <div className="flex w-full justify-between">
                           <p className="text-sm text-gray-600 truncate max-w-[300px]">
                             {chat.lastMessage || "No messages yet"}
                           </p>
-                          {chat.unread && (
+                          {chat.unread ? (
                             <span className="text-white bg-primary-3 px-2.5 py-0.5 rounded-full text-xs font-bold"></span>
+                          ) : (
+                            <span className="text-gray-300"></span> // Empty div when no unread messages
                           )}
                         </div>
                       </div>
@@ -523,20 +594,32 @@ const MessagePage = () => {
                   </>
                 ))
             ) : (
-              <div>Loading Chats...</div>
+              <div className="text-gray-500 text-center p-4">
+                No Chats Available
+              </div> // No Chats message
             )}
           </div>
         </div>
 
         {/* Message Section */}
-        <div className="w-3/5 bg-white-200 rounded-lg  flex flex-col justify-between">
+        <div
+          className={`${
+            showChatList ? "hidden lg:flex" : "flex"
+          } w-full h-full lg:w-3/5 bg-white-200 rounded-lg flex flex-col justify-between`}
+        >
           {currentChat ? (
-            <div className="">
-              <div className="p-4 bg-blue-100 rounded-t-lg  flex items-center">
+            <div className="h-full">
+              <div className="p-4 bg-blue-100 rounded-t-lg flex items-center">
                 {currentChat.receiver && (
                   <>
+                    <button
+                      onClick={handleGoBack}
+                      className=" lg:hidden mr-4 text-blue-500 font-bold text-lg"
+                    >
+                      ←
+                    </button>
                     <img
-                      src={currentChat.receiver.avatar || "/property.png"} // Use a default avatar if not available
+                      src={currentChat.receiver.avatar || "/property.png"}
                       alt={currentChat.receiver.firstName}
                       width={40}
                       height={40}
@@ -550,16 +633,17 @@ const MessagePage = () => {
               </div>
 
               {/* Messages Section */}
-              <div className="relative flex flex-col overflow-y-auto p-4 px-10 w-full custom-scrollbar ">
-                {messages.length > 0 ? (
+              <div className="relative flex flex-col overflow-y-auto p-4 px-10 h-full w-full custom-scrollbar">
+                {loadingMessages ? (
+                  <p className="h-[500px] w-full flex items-center justify-center">
+                    Loading messages... <ClipLoader color="#000" size={20} />
+                  </p>
+                ) : messages.length > 0 ? (
                   messages.reduce((acc, message, index, arr) => {
                     const currentMessageDate = new Date(message.createdAt);
-
-                    // Get the previous message date to compare
                     const previousMessageDate =
                       index > 0 ? new Date(arr[index - 1].createdAt) : null;
 
-                    // If it's the first message or the day has changed, insert a date header
                     if (
                       !previousMessageDate ||
                       !isSameDay(currentMessageDate, previousMessageDate)
@@ -567,14 +651,13 @@ const MessagePage = () => {
                       acc.push(
                         <div
                           key={`date-${message.id}`}
-                          className="text-center  mx-auto text-gray-500 text-xs p-1 px-2 bg-gray-600/20 rounded-lg w-fit "
+                          className="text-center mx-auto text-gray-500 text-xs p-1 px-2 bg-gray-600/20 rounded-lg w-fit "
                         >
                           {formatDateHeader(message.createdAt)}
                         </div>
                       );
                     }
 
-                    // Now insert the message itself
                     acc.push(
                       <div
                         key={message.id}
@@ -584,7 +667,7 @@ const MessagePage = () => {
                             : "justify-start"
                         }`}
                       >
-                        <div className="my-2 flex bg-white px-2 justify-between max-w-[400px] gap-3">
+                        <div className="my-2 flex bg-white px-2 justify-between max-w-[400px] text-wrap truncate gap-3">
                           <div
                             className={`inline-block p-2 rounded-lg text-sm ${
                               message.userId === userId
@@ -605,22 +688,23 @@ const MessagePage = () => {
                     return acc;
                   }, [])
                 ) : (
-                  <p className="h-[500px] w-full">
-                    Loading messages...
-                    <ClipLoader color="#000" size={20} />
-                  </p>
+                  <p className="h-[500px] w-full">No messages yet</p>
                 )}
               </div>
 
               {/* Message Input */}
               <div className="flex p-4 border-t border-gray-300">
-                <input
-                  type="text"
+                <textarea
+                  ref={messageInputRef}
                   value={newMessageText}
-                  onChange={(e) => setNewMessageText(e.target.value)}
+                  onChange={handleInputChange}
                   onKeyDown={handleKeyDown}
-                  className="border w-full p-2 rounded-l-lg"
+                  rows={1}
+                  className="w-full p-2 rounded-lg resize-none overflow-hidden focus:outline-none"
                   placeholder="Type a message"
+                  style={{
+                    maxHeight: "150px", // Maximum height for textarea
+                  }}
                 />
                 <button
                   onClick={handleSendMessage}

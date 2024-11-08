@@ -70,15 +70,10 @@ const PasswordForm = ({
           className="w-fit"
           type="submit"
           disabled={isPasswordLoading}
+          loading={isPasswordLoading}
+          child={`Resetting`}
         >
-          {isPasswordLoading ? (
-            <span className="flex items-center gap-2">
-              Resetting
-              <ClipLoader color="#fff" size={20} />
-            </span>
-          ) : (
-            "Reset Password"
-          )}
+          Reset Password
         </Button>
       </div>
     </form>
