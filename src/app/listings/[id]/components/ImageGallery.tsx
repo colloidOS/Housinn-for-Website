@@ -16,7 +16,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({
   currentImage,
   currentIndex,
 }) => {
-  console.log("cureent", currentIndex);
+
   return (
     <Carousel className="w-full ">
       <CarouselContent>
