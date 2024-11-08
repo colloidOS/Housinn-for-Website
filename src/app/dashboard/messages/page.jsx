@@ -328,8 +328,6 @@ const MessagePage = () => {
     }
   };
 
-
-
   // Focus on the input when a chat is opened
   useEffect(() => {
     if (currentChat && messageInputRef.current) {
@@ -545,7 +543,7 @@ const MessagePage = () => {
                     <div
                       key={index}
                       onClick={() => handleSelectChat(chat)}
-                      className={`px-3 py-3 rounded-lg flex gap-6 cursor-pointer w-full duration-300 ${
+                      className={`px-3 py-3 rounded-lg flex gap-6 cursor-pointer truncate  w-full duration-300 ${
                         currentChat?.id === chat.id
                           ? "bg-primary-1 text-primary"
                           : "bg-white hover:bg-background-2 text-black"
@@ -568,9 +566,9 @@ const MessagePage = () => {
                           className="rounded-"
                         />
                       )}
-                      <div className="flex flex-col gap-2 w-full">
+                      <div className="flex flex-col gap-2 w-full truncate">
                         <div className="flex w-full justify-between items-center">
-                          <p className="font-semibold">{`${chat.receiver.firstName} ${chat.receiver.lastName}`}</p>
+                          <p className="font-semibold truncate">{`${chat.receiver.firstName} ${chat.receiver.lastName}`}</p>
                           <p className="text-xs text-gray-500">
                             {chat.lastMessageTime === null
                               ? formatTime(chat.createdAt)
