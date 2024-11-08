@@ -30,6 +30,7 @@ const config: Config = {
         secondary: {
           DEFAULT: "#0D66B7",
           foreground: "hsl(var(--secondary-foreground))",
+          hover: "#0b4f8e",
         },
         white: "#FFFFFF",
         "white-200": "#FBFBFB",
@@ -37,6 +38,7 @@ const config: Config = {
         gray: "#4E4E4E",
         background: "hsl(var(--background))",
         "background-2": "#F5F5F5",
+
         black: "#000000",
         "gray-100": "#131B22",
         "gray-200": "#E8E8E8",

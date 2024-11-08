@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "../Button";
 import AddressFields from "../AddressFields";
 import { ClipLoader } from "react-spinners";
@@ -45,14 +45,10 @@ const VerificationForm = ({
           className="w-fit"
           onClick={null}
           disabled={isVerificationLoading}
+          loading={isVerificationLoading}
+          child={'Verifying'}
         >
-          {isVerificationLoading ? (
-            <span className="flex items-center gap-2">
-              Verifying <ClipLoader color="#fff" size={20} />
-            </span>
-          ) : (
-            "Verify Account"
-          )}
+          Verify Account
         </Button>
       </div>
     </form>

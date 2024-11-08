@@ -284,6 +284,7 @@ function Profile() {
           handleUpdateSubmit={handleUpdateSubmit}
           isProfileLoading={isProfileLoading}
           selectedImage={selectedImage}
+        
           triggerImageUpload={triggerImageUpload}
           handleImageUpload={handleImageUpload}
         />
@@ -319,8 +320,10 @@ function Profile() {
             <div>
               <Button
                 type="button"
+                loading={loading}
                 onClick={handleLogout}
                 disabled={isLogoutLoading}
+                child={''}
               >
                 {isLogoutLoading ? (
                   <span className="flex items-center gap-2">

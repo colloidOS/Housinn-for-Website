@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "../Button";
 import ProfileFields from "../ProfileFields";
 import { ClipLoader } from "react-spinners";
 import profile from "../../../../../public/icons/profile.svg";
 import Image from "next/image";
 import { z } from "zod";
-import {toast} from 'sonner'
+import { toast } from "sonner";
 
 // Define Zod schema for validation
 const profileSchema = z.object({
@@ -27,6 +27,8 @@ const ProfileForm = ({
   handleImageUpload,
 }) => {
   // Handler for form submission with validation
+  const [loading, setLoading] = useState(false);
+
   const handleFormSubmit = (e) => {
     e.preventDefault();
 
@@ -36,7 +38,7 @@ const ProfileForm = ({
     });
 
     if (!validationResult.success) {
-      console.log(validationResult)
+      console.log(validationResult);
       // Show error toast if phone number is invalid
       toast.error(validationResult.error.errors[0].message);
       return;
@@ -80,8 +82,10 @@ const ProfileForm = ({
               <Button
                 type="button"
                 onClick={triggerImageUpload}
-                className="focus:outline-none text-nowrap"
+                className="focus:outline-none text-nowrap duration-500 "
                 disabled={isProfileLoading}
+                child={`Uploading`}
+                loading={isProfileLoading}
               >
                 Select your Image/Photo
               </Button>
@@ -125,7 +129,13 @@ const ProfileForm = ({
                 />
               </div>
             </div>
-            <Button type="submit" className="w-fit" disabled={isProfileLoading}>
+            <Button
+              type="submit"
+              className="w-fit disabled:bg-gray"
+              loading={isProfileLoading}
+              disabled={isProfileLoading}
+              child={"Uploading "}
+            >
               {isProfileLoading ? (
                 <span className="flex items-center gap-2">
                   Uploading <ClipLoader color="#fff" size={20} />
