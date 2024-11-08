@@ -1,9 +1,25 @@
+import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
+import { useState } from "react";
+
 const PasswordFields = ({ updatePassword, setUpdatedPassword }) => {
+  const [visible, setVisible] = useState({
+    currentPassword: false,
+    newPassword: false,
+    confirmPassword: false,
+  });
+
+  // Toggle password visibility for a specific field
+  const toggleVisibility = (fieldId) => {
+    setVisible((prev) => ({
+      ...prev,
+      [fieldId]: !prev[fieldId],
+    }));
+  };
+
   const passwordFields = [
     {
       label: "Current Password",
       id: "currentPassword",
-      type: "password",
       placeholder: "Enter your current password",
       value: updatePassword.oldPassword,
       onChange: (e) =>
@@ -15,7 +31,6 @@ const PasswordFields = ({ updatePassword, setUpdatedPassword }) => {
     {
       label: "New Password",
       id: "newPassword",
-      type: "password",
       placeholder: "Enter your new password",
       value: updatePassword.newPassword,
       onChange: (e) =>
@@ -27,7 +42,6 @@ const PasswordFields = ({ updatePassword, setUpdatedPassword }) => {
     {
       label: "Confirm New Password",
       id: "confirmPassword",
-      type: "password",
       placeholder: "Confirm new password",
       value: updatePassword.confirmPassword,
       onChange: (e) =>
@@ -40,47 +54,33 @@ const PasswordFields = ({ updatePassword, setUpdatedPassword }) => {
 
   return (
     <div className="flex flex-col gap-6 w-full">
-      {/* First field (row layout) */}
-      <div className="flex gap-6 w-full items-center">
-        <div key={passwordFields[0].id} className="w-full gap-1">
+      {passwordFields.map((field) => (
+        <div key={field.id} className="w-full gap-1 relative">
           <label
             className="block text-gray-700 text-sm font-bold"
-            htmlFor={passwordFields[0].id}
+            htmlFor={field.id}
           >
-            {passwordFields[0].label}
+            {field.label}
           </label>
-          <input
-            id={passwordFields[0].id}
-            type={passwordFields[0].type}
-            placeholder={passwordFields[0].placeholder}
-            className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
-            value={passwordFields[0].value}
-            onChange={passwordFields[0].onChange}
-          />
-        </div>
-      </div>
-
-      {/* Last two fields (column layout) */}
-      <div className="flex lg:flex-row flex-col gap-6 w-full">
-        {passwordFields.slice(1).map((field) => (
-          <div key={field.id} className="w-full gap-1">
-            <label
-              className="block text-gray-700 text-sm font-bold"
-              htmlFor={field.id}
-            >
-              {field.label}
-            </label>
+          <div className="relative">
             <input
               id={field.id}
-              type={field.type}
+              type={visible[field.id] ? "text" : "password"} // Toggle type based on visibility
               placeholder={field.placeholder}
               className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
               value={field.value}
               onChange={field.onChange}
             />
+            <button
+              type="button"
+              className="absolute right-3 top-1/2 transform focus:outline-none -translate-y-1/2 text-gray-500"
+              onClick={() => toggleVisibility(field.id)}
+            >
+              {visible[field.id] ? <IoEyeOutline /> : <IoEyeOffOutline />}
+            </button>
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   );
 };
