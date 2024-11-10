@@ -32,9 +32,9 @@ const signUpSchema = z
       .string()
       .min(6, "Password must be at least 6 characters"),
     userType: z.string().nonempty("Please select an account type"),
-    termsAccepted: z.literal(true, {
-      errorMap: () => ({ message: "You must accept the terms and conditions" }),
-    }),
+    // termsAccepted: z.literal(true, {
+    //   errorMap: () => ({ message: "You must accept the terms and conditions" }),
+    // }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
@@ -251,7 +251,7 @@ const AuthPage = () => {
                 </div>
               </div>
               <div className="pt-8 text-[0.875rem] text-left">
-                <input type="checkbox" name="" id="" /> I agree to the{" "}
+                <input required type="checkbox" name="" id="" /> I agree to the{" "}
                 <Link
                   href="/terms-and-conditions"
                   className="text-[0.875rem] font-semibold"
@@ -263,13 +263,13 @@ const AuthPage = () => {
                   href="/privacy-policy"
                   className="text-[0.875rem] font-semibold"
                 >
-                  Privacy Policy
+                  Privacy Policy 
                 </Link>
-                {errors.termsAccepted && (
+                {/* {errors.termsAccepted && (
                   <span className="text-red-600 ml-2 text-sm">
                     {errors.termsAccepted}
                   </span>
-                )}{" "}
+                )}{" "} */}
               </div>
             </>
           )}
