@@ -1,11 +1,13 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "../ui/Modal"; // Assuming you have a Modal component
-import { ListingsFilterModalProps } from "@/types";
+import { FilterType, ListingsFilterModalProps } from "@/types";
 import { categories, cities, states } from "@/data/new-listing";
 const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
   toggleModal,
   applyFilters,
+  initialFilters,
+
 }) => {
   // Arrays for Bedroom and Bathroom options
   const bedroomOptions = ["1", "2", "3", "4", "5", "6"];
@@ -17,20 +19,26 @@ const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
   const [availableCities, setAvailableCities] = useState<string[]>([]); // To store cities of the selected state
   const [selectedCity, setSelectedCity] = useState<string>(""); // To track the selected city
 
-  const [filterValues, setFilterValues] = useState({
-    minPrice: "",
-    title: "",
-    address: "",
-    maxPrice: "",
-    type:"",
-    bedroom: "",
-    bathroom: "",
-    state: "",
-    city: "",
-    category: "",
-    ownerType: "",
-  });
+  // const [filterValues, setFilterValues] = useState({
+  //   minPrice: "",
+  //   title: "",
+  //   address: "",
+  //   maxPrice: "",
+  //   type:"",
+  //   bedroom: "",
+  //   bathroom: "",
+  //   state: "",
+  //   city: "",
+  //   category: "",
+  //   ownerType: "",
+  // });
 
+  const [filterValues, setFilterValues] = useState<FilterType>(initialFilters);
+
+  // Set initial filter values only once when modal opens
+  useEffect(() => {
+    setFilterValues(initialFilters);
+  }, [initialFilters]);
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -240,56 +248,6 @@ const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
             </select>
           </div>
 
-          {/* <div className="flex flex-col">
-            <label>Square Feet</label>
-            <div className="square-feet w-full flex gap-2">
-              <select
-                name="minSquareFeet"
-                className="p-2 border border-gray-500 rounded w-full"
-                value={filterValues.minSquareFeet}
-                onChange={handleInputChange}
-              >
-                {squareFeetOptions.map((option, index) => (
-                  <option key={index} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-              <select
-                name="maxSquareFeet"
-                className="p-2 border border-gray-500 rounded w-full"
-                value={filterValues.maxSquareFeet}
-                onChange={handleInputChange}
-              >
-                {squareFeetOptions.map((option, index) => (
-                  <option key={index} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          <div className="flex flex-col w-full">
-            <label>Date Listed</label>
-            <div className="gap-2 flex w-full">
-              <input
-                type="date"
-                name="dateListedFrom"
-                className="p-2 border border-gray-500 rounded"
-                value={filterValues.dateListedFrom}
-                onChange={handleInputChange}
-              />
-              <input
-                type="date"
-                name="dateListedTo"
-                className="p-2 border border-gray-500 rounded"
-                value={filterValues.dateListedTo}
-                onChange={handleInputChange}
-              />
-            </div>
-          </div> */}
-        {/* Apply Filters Button */}
         <div className="flex col-span-2 justify-between mt-4">
         <button
             className="px-4 py-2 bg-secondary/10 border border-secondary  text-secondary rounded-[5px]"

@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { FilterArrow, FilterArrow2 } from "../../../public/icons";
 import Image from "next/image";
 import ListingsFilterModal from "./ListingsFilterModal";
-import { ListingsFilterProps } from "@/types";
-
+import { FilterType, ListingsFilterProps } from "@/types";
 
 const ListingsFilter: React.FC<ListingsFilterProps> = ({
   activeTag,
   onChange,
   applyFilters,
+  constructGetRoute,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false); // State to handle modal visibility
 
@@ -17,16 +17,28 @@ const ListingsFilter: React.FC<ListingsFilterProps> = ({
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
+  const [filters, setFilters] = useState<FilterType>({ type: activeTag }); // State to track all filters
 
+  const handleTagClick = (tag: string) => {
+    const newFilters =
+      tag === "all-properties" ? {} : { ...filters, type: tag };
+    setFilters(newFilters); // Update filters in state
+    constructGetRoute(newFilters);
+    onChange(tag === activeTag ? "all-properties" : tag);
+  };
 
-
+  const handleApplyFilters = (modalFilters: FilterType) => {
+    const newFilters = { ...filters, ...modalFilters };
+    setFilters(newFilters); // Update filters to include modal selections
+    constructGetRoute(newFilters);
+  };
   return (
     <div className="flex items-center gap-8">
       <div className="xl:flex hidden border  gap-6 border-gray-300 p-[2px] rounded-[7px] bg-background-2">
         {tags.map((tag) => (
           <button
             key={tag}
-            onClick={() => onChange(tag === activeTag ? "all-properties" : tag)}
+            onClick={() => handleTagClick(tag)}
             className={`text-sm rounded-[7px] p-2 transition-all duration-700 ease-in-out  ${
               activeTag === tag
                 ? "bg-primary-100 text-primary"
@@ -71,7 +83,11 @@ const ListingsFilter: React.FC<ListingsFilterProps> = ({
       </button>
 
       {isModalOpen && (
-     <ListingsFilterModal toggleModal={toggleModal} applyFilters={applyFilters}/>
+        <ListingsFilterModal
+          toggleModal={toggleModal}
+          applyFilters={applyFilters}
+          initialFilters={filters}
+        />
       )}
     </div>
   );

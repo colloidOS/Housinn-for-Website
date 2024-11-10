@@ -63,6 +63,7 @@ export interface ListingsCardProps {
 
 export interface ListingsFilterProps {
   activeTag: string;
+  constructGetRoute: (filters: FilterValues) => void;
   onChange: (tag: string) => void;
   // applyFilters: (filters: Record<string, any>) => void; // Add this line
 }
@@ -112,8 +113,22 @@ export interface UserNavbarProps {
 }
 interface ListingsFilterModalProps {
   toggleModal: () => void;
-  applyFilters: (filters: Record<string, any>) => void; // Add this line
+  applyFilters: (filters: FilterType) => void;
+  initialFilters: FilterType;
 }
+export type FilterType = {
+  minPrice?: string;
+  title?: string;
+  address?: string;
+  maxPrice?: string;
+  type?: string;
+  bedroom?: string;
+  bathroom?: string;
+  state?: string;
+  city?: string;
+  category?: string;
+  ownerType?: string;
+};
 
 export interface User {
   id: string;
