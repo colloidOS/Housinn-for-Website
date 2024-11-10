@@ -24,7 +24,7 @@ const ListingsFilter: React.FC<ListingsFilterProps> = ({
       tag === "all-properties" ? {} : { ...filters, type: tag };
     setFilters(newFilters); // Update filters in state
     constructGetRoute(newFilters);
-    onChange(tag === activeTag ? "all-properties" : tag);
+    onChange(tag === activeTag ? "all-properties" : tag); // Pass selected tag to parent
   };
 
   const handleApplyFilters = (modalFilters: FilterType) => {

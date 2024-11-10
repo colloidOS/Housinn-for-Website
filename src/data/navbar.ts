@@ -90,7 +90,7 @@ export const sideItems: SideItem[] = [
   };
 
   export const tagData = [
-    { name: "Rent", tag: "rent" },
     { name: "Sale", tag: "sale" },
+    { name: "Rent", tag: "rent" },
     { name: "Short Let", tag: "shortlet" },
   ];
