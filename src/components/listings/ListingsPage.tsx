@@ -48,24 +48,39 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
   const applyFilters = (selectedFilters: FilterValues) => {
     // console.log("this is it", selectedFilters);
     setFilters(selectedFilters);
-    console.log("selected", selectedFilters)
+    console.log("selected", selectedFilters);
   };
 
   const constructGetRoute = () => {
     const queryParams = new URLSearchParams();
 
     // Add filters to the query string if they have values
-    if (filters.city) queryParams.append("city", filters.city);
-    if (filters.category) queryParams.append("category", filters.category);
-    if (filters.type && filters.type !== "all-properties") queryParams.append("type", filters.type); // Only add if not "all-properties"
-    if (filters.bedroom) queryParams.append("bedroom", filters.bedroom);
-    if (filters.minPrice) queryParams.append("minPrice", filters.minPrice);
-    if (filters.maxPrice) queryParams.append("maxPrice", filters.maxPrice);
+
+    if (filters.city)
+      queryParams.append("city", filters.city.toLocaleLowerCase());
+    if (filters.category)
+      queryParams.append("category", filters.category.toLocaleLowerCase());
+    if (filters.type || activeTag) {
+      queryParams.append(
+        "type",
+        (filters.type ?? activeTag ?? "").toLowerCase()
+      );
+    }
+
+    if (filters.bedroom)
+      queryParams.append("bedroom", filters.bedroom.toLocaleLowerCase());
+    if (filters.minPrice)
+      queryParams.append("minPrice", filters.minPrice.toLocaleLowerCase());
+    if (filters.maxPrice)
+      queryParams.append("maxPrice", filters.maxPrice.toLocaleLowerCase());
     if (filters.title) queryParams.append("title", filters.title);
-    if (filters.address) queryParams.append("address", filters.address);
+    if (filters.address)
+      queryParams.append("address", filters.address.toLocaleLowerCase());
     if (filters.bathroom) queryParams.append("bathroom", filters.bathroom);
-    if (filters.state) queryParams.append("state", filters.state);
-    if (filters.ownerType) queryParams.append("ownerType", filters.ownerType);
+    if (filters.state)
+      queryParams.append("state", filters.state.toLocaleLowerCase());
+    if (filters.ownerType)
+      queryParams.append("ownerType", filters.ownerType.toLocaleLowerCase());
 
     const fullRoute = `${getRoute}?${queryParams.toString()}`;
     console.log("searchitem2", searchTerm);
@@ -87,13 +102,16 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
   };
   const handleFilterChange = (tag: string) => {
     setActiveTag(tag === activeTag ? "all-properties" : tag);
-    setFilters((prev) => ({
-      ...prev,
-      type: tag === "all-properties" ? undefined : tag, // Set `type` or reset
-    }));
+    if (tag === "all-properties") {
+      setFilters({}); // Clear all filters when selecting "all-properties"
+    } else {
+      setFilters((prev) => ({
+        ...prev,
+        type: tag, // Set `type` or reset
+      }));
+    }
   };
   const handleSearch = () => {
-    
     setSearchTerm(searchTerm);
   };
   const toggleView = () => {
@@ -107,34 +125,12 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
     localStorage.removeItem("viewMode");
   }, []);
 
-  // const handleSearch = () => {
-  //   return listings.filter((listing) => {
-  //     const matchesTag =
-  //       activeTag === "all-properties" || listing.tag === activeTag;
-
-  //     const lowerCaseSearchTerm = searchTerm.toLowerCase();
-
-  //     const matchesSearch = [
-  //       listing.location || "",
-  //       listing.price?.toString() || "",
-  //       listing.beds?.toString() || "",
-  //       listing.baths?.toString() || "",
-  //       listing.area || "",
-  //       listing.title || "",
-  //       listing.tag || "",
-  //       listing.category || "",
-  //     ].some((field) => field.toLowerCase().includes(lowerCaseSearchTerm));
-
-  //     return matchesTag && matchesSearch;
-  //   });
-  // };
-
-  // const filteredListings = handleSearch();
-
   return (
     <div className={` ${className || ""}`}>
       <div>
-        <h1 className="font-bold text-xl text-center md:text-left md:text-2xl mb-4">{pageTitle}</h1>{" "}
+        <h1 className="font-bold text-xl text-center md:text-left md:text-2xl mb-4">
+          {pageTitle}
+        </h1>{" "}
         {/* Dynamic title */}
       </div>
 
@@ -142,9 +138,10 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
         <ListingsFilter
           activeTag={activeTag || ""}
           onChange={handleFilterChange}
+          constructGetRoute={constructGetRoute}
           applyFilters={applyFilters}
         />
-      <div className="flex relative items-center flex-1 h-full">
+        <div className="flex relative items-center flex-1 h-full">
           <input
             type="text"
             placeholder="Search listings..."
@@ -152,7 +149,10 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pr-2 text-right flex flex-1 p-2 h-11 border border-gray-300 rounded w-full placeholder:text-sm text-sm placeholder:text-right"
           />
-          <button onClick={handleSearch} className="rounded-[5px] absolute left-2">
+          <button
+            onClick={handleSearch}
+            className="rounded-[5px] absolute left-2"
+          >
             <Image
               src={Search}
               alt="search"
