@@ -22,22 +22,7 @@ const AboutUs = () => {
               Housinn is your ultimate destination for all your property needs.
             </p>
           </div>
-          {/* <div className="flex gap-5 sm:gap-[60px]">
-            <div>
-              <h1 className="text-3xl sm:text-[64px] leading-[87px] font-semibold">
-                100K+
-              </h1>
-              <p className="text-lg font-normal">Properties Listed</p>
-            </div>
-            <Image src={line} width={4} height={90} alt="line" />
-
-            <div>
-              <h1 className="text-3xl sm:text-[64px] leading-[87px] font-semibold">
-                30K+
-              </h1>
-              <p className="text-lg font-normal">Properties Sold</p>
-            </div>
-          </div> */}
+          
           <div className="flex justify-between md:justify-start gap-4">
             <Image
               src={GoogleDownloadButton}
