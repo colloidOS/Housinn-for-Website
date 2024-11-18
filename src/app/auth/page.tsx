@@ -19,27 +19,34 @@ import { Eye, EyeOff } from "lucide-react";
 // Validation schemas for sign-in and sign-up
 const signInSchema = z.object({
   email: z.string().email("Invalid email address"),
-  password: z.string().min(4, "Password must be at least 6 characters"),
+  password: z
+  .string()
+  .min(6, "Password must be at least 6 characters")
+  .max(20, "Password can't be more than 20 characters"),
 });
+
 
 const signUpSchema = z
   .object({
     firstName: z.string().nonempty(" Required"),
     lastName: z.string().nonempty("Required"),
     email: z.string().email("Invalid email address"),
-    password: z.string().min(4, "Password must be at least 6 characters"),
-    confirmPassword: z
-      .string()
-      .min(6, "Password must be at least 6 characters"),
+    password: z
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .max(20, "Password can't be more than 20 characters"),
+    // confirmPassword: z
+    //   .string()
+    //   .min(6, "Password must be at least 6 characters"),
     userType: z.string().nonempty("Please select an account type"),
     // termsAccepted: z.literal(true, {
     //   errorMap: () => ({ message: "You must accept the terms and conditions" }),
     // }),
   })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-  });
+  // .refine((data) => data.password === data.confirmPassword, {
+  //   message: "Passwords don't match",
+  //   path: ["confirmPassword"],
+  // });
 
 const AuthPage = () => {
   const [isSignIn, setIsSignIn] = useState(true);
