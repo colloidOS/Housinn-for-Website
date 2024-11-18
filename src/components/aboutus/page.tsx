@@ -1,6 +1,5 @@
 import React from "react";
 import property from "../../../public/icons/property.png";
-import line from "../../../public/icons/line.svg";
 import Image from "next/image";
 import {
   AppleDownloadButton,
@@ -22,8 +21,7 @@ const AboutUs = () => {
               Housinn is your ultimate destination for all your property needs.
             </p>
           </div>
-          
-          <div className="flex justify-between md:justify-start gap-4">
+          <div className="flex justify-between md:justify-start gap-4 size">
             <Image
               src={GoogleDownloadButton}
               width={0}
