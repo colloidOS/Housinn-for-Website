@@ -58,13 +58,13 @@ export const accountTypes = [
   { id: "account-type-individual", value: "Individual", label: "Individual" },
   {
     id: "account-type-property-owner",
-    value: "Property Owner",
+    value: "Owner",
     label: "Property Owner",
   },
   { id: "account-type-agent", value: "Agent", label: "Agent" },
   {
     id: "account-type-property-developer",
-    value: "Property Developer",
+    value: "Developer",
     label: "Property Developer",
   },
 ];
