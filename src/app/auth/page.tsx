@@ -20,11 +20,10 @@ import { Eye, EyeOff } from "lucide-react";
 const signInSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z
-  .string()
-  .min(6, "Password must be at least 6 characters")
-  .max(20, "Password can't be more than 20 characters"),
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .max(20, "Password can't be more than 20 characters"),
 });
-
 
 const signUpSchema = z
   .object({
@@ -32,21 +31,21 @@ const signUpSchema = z
     lastName: z.string().nonempty("Required"),
     email: z.string().email("Invalid email address"),
     password: z
-    .string()
-    .min(6, "Password must be at least 6 characters")
-    .max(20, "Password can't be more than 20 characters"),
-    // confirmPassword: z
-    //   .string()
-    //   .min(6, "Password must be at least 6 characters"),
+      .string()
+      .min(6, "Password must be at least 6 characters")
+      .max(20, "Password can't be more than 20 characters"),
+    confirmPassword: z
+      .string()
+      .min(6, "Password must be at least 6 characters"),
     userType: z.string().nonempty("Please select an account type"),
     // termsAccepted: z.literal(true, {
     //   errorMap: () => ({ message: "You must accept the terms and conditions" }),
     // }),
   })
-  // .refine((data) => data.password === data.confirmPassword, {
-  //   message: "Passwords don't match",
-  //   path: ["confirmPassword"],
-  // });
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
 
 const AuthPage = () => {
   const [isSignIn, setIsSignIn] = useState(true);
@@ -80,7 +79,10 @@ const AuthPage = () => {
       const validationSchema = isSignIn ? signInSchema : signUpSchema;
       validationSchema.parse(data); // Throws error if validation fails
       setErrors({}); // Clear any previous errors if validation is successful
-
+      if (!isSignIn) {
+        // Remove confirmPassword before sending to API
+        delete data.confirmPassword;
+      }
       let response;
       if (isSignIn) {
         response = await api.post("/auth/login", data);
@@ -211,14 +213,17 @@ const AuthPage = () => {
                       id={field.id}
                       name={field.name}
                       type={
-                        field.name === "password" && showPassword
+                        (field.name === "password" ||
+                          field.name === "confirmPassword") &&
+                        showPassword
                           ? "text"
                           : field.type
                       }
                       placeholder={field.placeholder}
                       className="w-full px-2 py-2 placeholder:text-[0.875rem] border border-white-300 rounded focus:outline-none"
                     />
-                    {field.name === "password" && (
+                    {(field.name === "password" ||
+                      field.name === "confirmPassword") && (
                       <span
                         className="absolute right-2 top-[20%] cursor-pointer"
                         onClick={togglePasswordVisibility}
@@ -270,7 +275,7 @@ const AuthPage = () => {
                   href="/privacy-policy"
                   className="text-[0.875rem] font-semibold"
                 >
-                  Privacy Policy 
+                  Privacy Policy
                 </Link>
                 {/* {errors.termsAccepted && (
                   <span className="text-red-600 ml-2 text-sm">
