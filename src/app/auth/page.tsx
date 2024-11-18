@@ -79,6 +79,7 @@ const AuthPage = () => {
       const validationSchema = isSignIn ? signInSchema : signUpSchema;
       validationSchema.parse(data); // Throws error if validation fails
       setErrors({}); // Clear any previous errors if validation is successful
+      console.log("data", data)
       if (!isSignIn) {
         // Remove confirmPassword before sending to API
         delete data.confirmPassword;
@@ -96,6 +97,7 @@ const AuthPage = () => {
         window.location.href = "/";
       } else {
         response = await api.post("/auth/register", data);
+
         toast.success("Account created successfully!");
         setIsSignIn(true);
       }
