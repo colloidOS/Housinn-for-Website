@@ -442,7 +442,7 @@ function AddNewListing() {
           >
             Save and Resume
           </button>
-          <Button disabled={loading} type="submit" onClick={null}>
+          <Button disabled={loading} type="submit" onClick={null} child={``} loading={``}>
             {loading ? (
               <div className="px-8">
                 {" "}
