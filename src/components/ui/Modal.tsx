@@ -9,7 +9,7 @@ interface ModalProps {
 const Modal: React.FC<ModalProps> = ({ onClose, children }) => {
   // Create a portal for the modal so it renders outside of the normal DOM hierarchy
   return ReactDOM.createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 px-2">
       <div className="bg-white p-6 rounded-lg shadow-lg relative">
         <button
           onClick={onClose}

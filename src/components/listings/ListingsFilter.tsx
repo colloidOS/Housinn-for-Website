@@ -32,6 +32,7 @@ const ListingsFilter: React.FC<ListingsFilterProps> = ({
     setFilters(newFilters); // Update filters to include modal selections
     constructGetRoute(newFilters);
   };
+  
   return (
     <div className="flex items-center gap-8">
       <div className="xl:flex hidden border  gap-6 border-gray-300 p-[2px] rounded-[7px] bg-background-2">
@@ -87,6 +88,7 @@ const ListingsFilter: React.FC<ListingsFilterProps> = ({
           toggleModal={toggleModal}
           applyFilters={applyFilters}
           initialFilters={filters}
+
         />
       )}
     </div>

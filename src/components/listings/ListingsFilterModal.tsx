@@ -7,7 +7,6 @@ const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
   toggleModal,
   applyFilters,
   initialFilters,
-
 }) => {
   // Arrays for Bedroom and Bathroom options
   const bedroomOptions = ["1", "2", "3", "4", "5", "6"];
@@ -75,10 +74,10 @@ const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
     <div>
       {" "}
       <Modal onClose={toggleModal}>
-        <form className="p-6 w-full grid grid-cols-1 md:grid-cols-2 gap-3">
+        <form className="p-6 w-full grid grid-cols-2 gap-3">
           {/* Filter options inside modal */}
 
-          <div className="col-span-1">
+          <div className="">
             <label>Title</label>
             <input
               type="text"
@@ -91,7 +90,7 @@ const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
             />
           </div>
 
-          <div className="col-span-1">
+          <div className="">
             <label>Address</label>
             <input
               type="text"
@@ -129,7 +128,7 @@ const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
           </div>
 
           {/* Bedrooms */}
-          <div>
+          <div className="col-span-2">
             <label>Bedrooms</label>
             <ul className="flex w-full justify-between">
               {bedroomOptions.map((bed, index) => (
@@ -149,7 +148,7 @@ const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
           </div>
 
           {/* Bathrooms */}
-          <div>
+          <div className="col-span-2">
             <label>Bathrooms</label>
             <ul className="flex w-full justify-between">
               {bathroomOptions.map((bath, index) => (
@@ -248,23 +247,19 @@ const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
             </select>
           </div>
 
-        <div className="flex col-span-2 justify-between mt-4">
-        <button
-            className="px-4 py-2 bg-secondary/10 border border-secondary  text-secondary rounded-[5px]"
-            onClick={handleApplyFilters}
-          >
-          Reset All Filters
-          </button>
-     
-          <button
-            className="px-4 py-2 bg-primary text-white rounded-[5px]"
-            onClick={handleApplyFilters}
-          >
-            Apply Filters
-          </button>
-        </div>
-        </form>
+          <div className="flex col-span-2 justify-between mt-4">
+            <button className="px-4 py-2 bg-secondary/10 border border-secondary  text-secondary rounded-[5px]">
+              Reset All Filters
+            </button>
 
+            <button
+              className="px-4 py-2 bg-primary text-white rounded-[5px]"
+              onClick={handleApplyFilters}
+            >
+              Apply Filters
+            </button>
+          </div>
+        </form>
       </Modal>
     </div>
   );
