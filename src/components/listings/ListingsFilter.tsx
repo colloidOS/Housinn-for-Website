@@ -30,9 +30,14 @@ const ListingsFilter: React.FC<ListingsFilterProps> = ({
   const handleApplyFilters = (modalFilters: FilterType) => {
     const newFilters = { ...filters, ...modalFilters };
     setFilters(newFilters); // Update filters to include modal selections
-    constructGetRoute(newFilters);
+    applyFilters(newFilters); // Pass updated filters to parent
+    setIsModalOpen(false); // Close modal after applying
   };
-  
+  const handleResetFilters = () => {
+    setFilters({});
+    applyFilters({}); // Pass an empty object to clear filters and reset the URL
+    setIsModalOpen(false); 
+  };
   return (
     <div className="flex items-center gap-8">
       <div className="xl:flex hidden border  gap-6 border-gray-300 p-[2px] rounded-[7px] bg-background-2">
@@ -86,8 +91,9 @@ const ListingsFilter: React.FC<ListingsFilterProps> = ({
       {isModalOpen && (
         <ListingsFilterModal
           toggleModal={toggleModal}
-          applyFilters={applyFilters}
+          applyFilters={handleApplyFilters} 
           initialFilters={filters}
+          handleResetFilters={handleResetFilters}
 
         />
       )}

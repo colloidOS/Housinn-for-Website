@@ -6,31 +6,18 @@ import { categories, cities, states } from "@/data/new-listing";
 import { bathroomOptions, bedroomOptions, ownerTypeOptions } from "@/data/filter";
 const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
   toggleModal,
-  applyFilters,
+  applyFilters, 
   initialFilters,
+  handleResetFilters
 }) => {
   const [selectedState, setSelectedState] = useState<string>(""); // To track the selected state
   const [availableCities, setAvailableCities] = useState<string[]>([]); // To store cities of the selected state
   const [selectedCity, setSelectedCity] = useState<string>(""); // To track the selected city
 
-  const handleResetFilters = () => {
-    setFilterValues({});
-    applyFilters({}); // Pass an empty object to clear filters and reset the URL
-    toggleModal(); // Close the modal after resetting filters
-  };
+  
   const [filterValues, setFilterValues] = useState<FilterType>(initialFilters);
 
-  useEffect(() => {
-    // Set initial filter values and dependent states when modal opens
-    setFilterValues(initialFilters);
-    setSelectedState(initialFilters.state || ""); // Synchronize state dropdown
-    setSelectedCity(initialFilters.city || ""); // Synchronize city dropdown
-  
-    if (initialFilters.state) {
-      setAvailableCities(cities[initialFilters.state as keyof typeof cities] || []);
-    }
-  }, [initialFilters]);
-  
+ 
   
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -45,6 +32,13 @@ const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
       [name]: value,
     }));
   };
+  useEffect(() => {
+    if (initialFilters.city && selectedState) {
+      setSelectedCity(initialFilters.city);
+    }
+  }, [initialFilters.city, selectedState]);
+  
+  
 
   const handleStateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selected = event.target.value;
@@ -243,9 +237,9 @@ const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
 
           <div className="flex col-span-2 justify-between mt-4">
             <button
-              onClick={handleResetFilters}
+           
               className="px-4 py-2 bg-secondary/10 border border-secondary  text-secondary rounded-[5px]"
-            >
+            onClick={handleResetFilters}>
               Reset All Filters
             </button>
 
