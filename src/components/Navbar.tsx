@@ -99,7 +99,7 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
             alt="Housinn logo"
             width={0}
             height={0}
-            className={`w-auto  ${isDefaultScheme ? "h-12 lg:h-16" : "h-12"}`}
+            className={`w-auto h-12 ${isDefaultScheme ? "lg:h-16" : "lg:h-14"}`}
           />
         </Link>
 
@@ -115,11 +115,11 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
                   isDefaultScheme
                     ? "border-white text-white"
                     : "border-primary text-primary"
-                } px-2 py-1.5 rounded-xl flex gap-3 lg:gap-5 justify-center items-center`}
+                } p-1 rounded-full flex gap-2  justify-center items-center`}
               >
                <img
                     src={image}
-                    className="w-7 h-6 rounded-full"
+                    className="w-7 h-7  rounded-full"
                     alt="profile"
                     onError={(e) => {
                       e.currentTarget.src = "/icons/profile.svg";
