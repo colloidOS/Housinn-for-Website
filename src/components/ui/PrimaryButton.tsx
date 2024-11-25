@@ -20,7 +20,7 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({
 }) => {
   return (
     <button
-      className={` bg-primary text-white rounded ${className} ${
+      className={` bg-primary text-white rounded disabled:cursor-not-allowed disabled:opacity-50 ${className} ${
         disabled || loading
       }`}
       onClick={onClick}
