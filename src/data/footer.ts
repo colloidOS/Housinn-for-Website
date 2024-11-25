@@ -25,7 +25,7 @@ export const contactDetails = [
   // },
   { 
     src: Telephone, 
-    text: "+234-90 1234 5678", 
+    text: "+234 903 954 0722", 
     alt: "Telephone", 
     href: "tel:+2349012345678" 
   },
