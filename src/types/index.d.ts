@@ -115,6 +115,7 @@ interface ListingsFilterModalProps {
   toggleModal: () => void;
   applyFilters: (filters: FilterType) => void;
   initialFilters: FilterType;
+  handleResetFilters: () => void;
 }
 export type FilterType = {
   minPrice?: string;

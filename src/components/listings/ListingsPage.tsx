@@ -60,12 +60,13 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
       queryParams.append("city", filters.city.toLocaleLowerCase());
     if (filters.category)
       queryParams.append("category", filters.category.toLocaleLowerCase());
-    if (filters.type || activeTag) {
+    if ((filters.type || activeTag) && activeTag !== "all-properties") {
       queryParams.append(
         "type",
         (filters.type ?? activeTag ?? "").toLowerCase()
       );
     }
+  
 
     if (filters.bedroom)
       queryParams.append("bedroom", filters.bedroom.toLocaleLowerCase());
