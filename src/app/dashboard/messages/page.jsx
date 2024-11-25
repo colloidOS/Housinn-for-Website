@@ -459,17 +459,23 @@ const MessagePage = () => {
       return receiverName.includes(searchQuery.toLowerCase());
     });
 
-  const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
-      handleSendMessage();
-    }
+
+  // States for managing transitions and button behavior
+const [sendingMessage, setSendingMessage] =useState(false)
+  const handleSendMessageClick = async () => {
+    if (!newMessageText.trim()) return; // Prevent sending empty messages
+    console.log("Button clicked: Disabling...");
+    setSendingMessage(true); // Disable button
+    handleSendMessage(); // Call your send message logic
+    console.log("Re-enabling button...");
+    setSendingMessage(false); // Re-enable button
   };
 
   return (
     <div className="w-full flex flex-col h-full bg-background-2 gap-5 h-scree px-4 sm:px-8 pt-6">
       {/* Chat List and Search */}
       <div className="flex flex-col gap-4 lg:border-b border-gray-400">
-        <h2 className="text-2xl font-bold text-black">Messages</h2>
+        <h2 className={`text-2xl font-bold text-black ${showChatList ? 'block': 'hidden'}`}>Messages</h2>
         <div
           className={`flex gap-6 sm:w-fit bg-white p-1 ${
             showChatList ? "block" : "hidden sm:flex"
@@ -499,6 +505,7 @@ const MessagePage = () => {
       </div>
 
       <div className="flex gap-5 w-full h-full md:h-[560px]">
+        
         <div
           className={`flex flex-col gap-6 w-full lg:w-2/5 rounded-lg px-3 lg:px-4 xl:px-6 py-3 bg-white-200 ${
             showChatList ? "block" : "hidden lg:block"
@@ -607,7 +614,7 @@ const MessagePage = () => {
         >
           {currentChat ? (
             <div className="h-full">
-              <div className="p-4 bg-blue-100 rounded-t-lg flex items-center">
+              <div className="p-2 sm:p-4 bg-blue-100 rounded-t-lg flex items-center">
                 {currentChat.receiver && (
                   <>
                     <button
@@ -631,7 +638,7 @@ const MessagePage = () => {
               </div>
 
               {/* Messages Section */}
-              <div className="relative flex flex-col overflow-y-auto p-4 px-10 h-full w-full custom-scrollbar">
+              <div className="relative flex flex-col overflow-y-auto p-4 sm:px-10 h-full w-full custom-scrollbar">
                 {loadingMessages ? (
                   <p className="h-[500px] w-full flex items-center justify-center">
                     Loading messages... <ClipLoader color="#000" size={20} />
@@ -693,10 +700,8 @@ const MessagePage = () => {
               {/* Message Input */}
               <div className="flex p-4 border-t border-gray-300">
                 <textarea
-                  ref={messageInputRef}
                   value={newMessageText}
                   onChange={handleInputChange}
-                  onKeyDown={handleKeyDown}
                   rows={1}
                   className="w-full p-2 rounded-lg resize-none overflow-hidden focus:outline-none"
                   placeholder="Type a message"
@@ -705,9 +710,15 @@ const MessagePage = () => {
                   }}
                 />
                 <button
-                  onClick={handleSendMessage}
-                  className="bg-blue-500 text-white rounded-r-lg px-4"
-                >
+                  onClick={handleSendMessageClick}
+                  disabled={
+                    sendingMessage || !newMessageText.trim() // Disable button based on conditions
+                  }
+                  className={`${
+                    sendingMessage || !newMessageText.trim()
+                      ? "bg-gray-300 cursor-not-allowed"
+                      : "bg-blue-500"
+                  } text-white rounded-r-lg px-4`}>
                   <SendHorizontal />
                 </button>
               </div>

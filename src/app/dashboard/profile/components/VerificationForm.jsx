@@ -16,7 +16,7 @@ const VerificationForm = ({
 }) => {
   return (
     <form
-      className="flex flex-col sm:flex-row gap-8 lg:gap-[90px] xl:gap-[160px]"
+      className="flex flex-col sm:flex-row gap-8 sm:gap-0 lg:gap-[90px] xl:gap-[160px]"
       onSubmit={handleVerificationSubmit}
     >
       <div className="flex flex-col gap-2 text-nowrap">

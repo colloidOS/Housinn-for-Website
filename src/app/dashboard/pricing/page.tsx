@@ -65,7 +65,7 @@ function Pricing() {
         </div>
 
         {/* Plan cards */}
-        <div className="flex gap-6 w-full">
+        <div className="flex flex-col md:flex-row gap-6 w-full">
           <div className="w-full flex-nowrap flex flex-col justify-between py-6 px-4 border border-white rounded-lg  bg-white">
             <div className="flex flex-col gap-4">
               <div className="flex  flex-col gap-6">
