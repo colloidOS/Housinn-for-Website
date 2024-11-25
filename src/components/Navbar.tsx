@@ -127,10 +127,10 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
                   isDefaultScheme
                     ? "border-white text-white"
                     : "border-primary text-primary"
-                } px-2 py-1.5 rounded-3xl flex gap-6 justify-center items-center`}
+                } px-2 py-1.5 rounded-xl flex gap-3 lg:gap-5 justify-center items-center`}
               >
                 {image ? (
-                  <img src={image} alt="1" className="w-8 h-8 rounded-full" />
+                  <img src={image} alt="1" className="w-8 h-7 rounded-full" />
                 ) : (
                   <User />
                 )}
@@ -143,37 +143,36 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
               </div>
 
               {dropdownOpen && (
-  <motion.div
-    initial="closed"
-    animate="open"
-    exit="closed" // Optional, if you want to add exit animation
-    variants={dropdownVariants}
-    className={`absolute right-0 mt-2 w-48 ${
-      isDefaultScheme ? "bg-white" : "bg-primary"
-    } rounded-lg shadow-lg py-2 z-10`}
-  >
-    {filteredSideItems.map((item) => (
-      <motion.div key={item.id} variants={textVariants}>
-        <Link
-          href={item.link}
-          className={`flex items-center px-4 py-2 text-sm cursor-pointer ${
-            isDefaultScheme
-              ? "text-gray-700 hover:bg-gray-300"
-              : "text-gray-300 hover:bg-secondary"
-          }`}
-        >
-          <item.icon className="mr-2 h-4 w-4" />
-          {item.route}
-        </Link>
-      </motion.div>
-    ))}
-  </motion.div>
-)}
-
+                <motion.div
+                  initial="closed"
+                  animate="open"
+                  exit="closed" // Optional, if you want to add exit animation
+                  variants={dropdownVariants}
+                  className={`absolute right-0 mt-2 w-48 ${
+                    isDefaultScheme ? "bg-white" : "bg-primary"
+                  } rounded-lg shadow-lg py-2 z-10`}
+                >
+                  {filteredSideItems.map((item) => (
+                    <motion.div key={item.id} variants={textVariants}>
+                      <Link
+                        href={item.link}
+                        className={`flex items-center px-4 py-2 text-sm cursor-pointer ${
+                          isDefaultScheme
+                            ? "text-gray-700 hover:bg-gray-300"
+                            : "text-gray-300 hover:bg-secondary"
+                        }`}
+                      >
+                        <item.icon className="mr-2 h-4 w-4" />
+                        {item.route}
+                      </Link>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              )}
             </div>
           ) : (
             <div className="flex gap-4">
-              <Image src={Notification} alt="info" width={20} height={21} />
+              {/* <Image src={Notification} alt="info" width={20} height={21} /> */}
               <button
                 className={`${
                   isDefaultScheme
