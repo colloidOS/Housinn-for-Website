@@ -62,12 +62,12 @@ const UserNavbar: React.FC<UserNavbarProps> = ({ className }) => {
               alt="Housinn logo"
               width={0}
               height={0}
-              className={`w-auto  h-12 lg:h-16`}
+              className={`w-auto  h-12 lg:h-14`}
             />
           </Link>
           <div className="flex gap-5 ">
             {/* <Image src={Notification} alt="info" width={20} height={21} /> */}
-            <div className="w-fit px-6 border-[1.5px] border-gray-600 py-2.5 rounded-3xl flex gap-2.5 justify-center items-center ">
+            <div className="w-fit px-4 border-[1.5px] border-gray-600 py-2.5 rounded-xl flex gap-2.5 justify-center items-center ">
               {user ? (
                 <>
                   <img
