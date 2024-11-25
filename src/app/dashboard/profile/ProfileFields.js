@@ -79,12 +79,12 @@ const ProfileFields = ({ updatedProfile, setUpdatedProfile }) => {
             {field.label}
           </label>
           {field.id === "phoneNumber" ? (
-            <div className="flex items-center text-nowrap gap-1 w-full bg-white px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px]">
+            <div className="flex items-center ">
               <input
                 id={field.id}
                 type={field.type}
                 placeholder={field.placeholder}
-                className=" focus:outline-none w-full"
+                className=" focus:border-black w-full text-nowrap bg-white px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] active:rounded-[4px] duration-200"
                 value={field.value}
                 onChange={field.onChange}
               />
@@ -94,7 +94,7 @@ const ProfileFields = ({ updatedProfile, setUpdatedProfile }) => {
               id={field.id}
               type={field.type}
               placeholder={field.placeholder}
-              className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline-none"
+              className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:border-black duration-300"
               value={field.value}
               onChange={field.onChange}
             />

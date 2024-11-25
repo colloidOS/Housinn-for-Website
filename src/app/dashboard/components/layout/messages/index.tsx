@@ -2,33 +2,16 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Profile from "@/../public/icons/pfp.svg";
+import { useRouter } from "next/navigation";
+import messages from "@/data/message";
 
 function MessageList() {
-  const messages = [
-    {
-      name: "Gregory Weh",
-      message: "Hello, wanted to contact you for the property...",
-      time: "9:16 AM",
-      isUnread: true,
-    },
-    {
-      name: "Patricia Okah",
-      message: "I'll get back to you",
-      time: "7:22 AM",
-    },
-    {
-      name: "Samuel Nnanna",
-      message: "I'll be willing to meet up for an inspection",
-      time: "5:06 PM",
-      isDelivered: true,
-    },
-    {
-      name: "Baraka Oman",
-      message: "That's fair",
-      time: "6:18 PM",
-      isUnread: true,
-    },
-  ];
+  const router = useRouter()
+
+  const MessageClick = () => {
+    router.push('dashboard/messages')
+  }
+
   return (
     <>
       <div className="flex flex-col px-6 w-full gap-[18px] pt-6 pb-11 bg-white rounded-xl">
@@ -41,8 +24,8 @@ function MessageList() {
             See All
           </Link>
         </div>
-        <div>
-          <div className="">
+        <div onClick={MessageClick}>
+          <div className="blur-sm">
             {messages.map((msg, index) => (
               <div
                 key={index}
@@ -78,7 +61,7 @@ function MessageList() {
                     </span>
                   )}
                   {msg.isDelivered && (
-                    <span className="text-gray-500 text-xl">✔️</span>
+                    <span className="text-gray-500 text-sm">✔️</span>
                   )}
                 </div>
               </div>

@@ -86,9 +86,9 @@ const AddressFields = ({
               value={field.value}
               onChange={(e) => field.onChange(e.target.value)}
             >
-              <option value="">Select {field.label}</option>
+              <option value="" className="w-[300px] ">Select {field.label}</option>
               {field.options.map((option, index) => (
-                <option key={index} value={option}>
+                <option key={index} value={option} className="">
                   {option}
                 </option>
               ))}
@@ -111,7 +111,7 @@ const AddressFields = ({
               id={field.id}
               type={field.type}
               placeholder={field.placeholder}
-              className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
+              className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:border-black"
               value={field.value}
               onChange={(e) => field.onChange(e)}
             />
