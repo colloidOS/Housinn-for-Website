@@ -14,7 +14,7 @@ const Wrapper: React.FC<WrapperProps> = ({
   return (
     <section
       className={` w-full ${
-        disablePadding ? "py-2 px-3 sm:px-10 xl:px-16" : "pt-9 pb-12 px-2 xl:px-24 sm:px-14" // Conditionally add padding
+        disablePadding ? "py-2 px-4 sm:px-10 xl:px-16" : "pt-9 pb-12 px-4 xl:px-24 sm:px-14" // Conditionally add padding
       } ${className}`}
     >
       {children}
