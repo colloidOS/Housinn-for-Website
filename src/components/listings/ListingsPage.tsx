@@ -135,7 +135,7 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
         {/* Dynamic title */}
       </div>
 
-      <div className="flex items-center gap-2 md:gap-8 mb-5 justify-between w-full">
+      <div className="flex flex-row-reverse md:flex-row items-center gap-2 md:gap-8 mb-5 justify-between w-full">
         <ListingsFilter
           activeTag={activeTag || ""}
           onChange={handleFilterChange}
@@ -159,26 +159,27 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
               alt="search"
               width={20}
               height={20}
-              className="cursor-pointer opacity-60"
+              className=" cursor-pointer opacity-60"
             />
           </button>
         </div>
-        <button onClick={toggleView}>
+        <button className="hidden md:flex" onClick={toggleView}>
           {isListView ? (
             <Image
               src={GridView}
               alt="Grid view"
-              width={86}
-              height={44}
-              className="cursor-pointer"
+              width={0}
+              height={0}
+              
+              className="cursor-pointer w-21 h-11"
             />
           ) : (
             <Image
               src={ListView}
               alt="List view"
-              width={86}
-              height={44}
-              className="cursor-pointer"
+              width={0}
+              height={0}
+              className="cursor-pointer w-21 h-11"
             />
           )}
         </button>
