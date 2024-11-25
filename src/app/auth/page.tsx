@@ -79,7 +79,7 @@ const AuthPage = () => {
       const validationSchema = isSignIn ? signInSchema : signUpSchema;
       validationSchema.parse(data); // Throws error if validation fails
       setErrors({}); // Clear any previous errors if validation is successful
-      console.log("data", data)
+      console.log("data", data);
       if (!isSignIn) {
         // Remove confirmPassword before sending to API
         delete data.confirmPassword;
@@ -129,7 +129,7 @@ const AuthPage = () => {
         <Image src={Logo} alt="Housinn logo" width={80} height={48} />
       </div>
 
-      <div className="flex flex-col gap-7 xl:pb-36  text-center px-6 md:px-48 lg:px-56 xl:px-28 xl:pt-9 xl:items-center h-screen xl:h-full justify-center w-full xl:w-1/2">
+      <div className="flex flex-col gap-7 xl:pb-36  text-center px-6 md:px-48 lg:px-56 xl:px-28 xl:pt-9 py-5 xl:items-center min-h-screen xl:h-full justify-center w-full xl:w-1/2">
         <div className="flex justify-center items-center xl:hidden">
           <Image src={Logo} alt="Housinn logo" width={80} height={48} />
         </div>
@@ -264,21 +264,25 @@ const AuthPage = () => {
                   ))}
                 </div>
               </div>
-              <div className="pt-8 text-[0.875rem] text-left">
-                <input required type="checkbox" name="" id="" /> I agree to the{" "}
-                <Link
-                  href="/terms-and-conditions"
-                  className="text-[0.875rem] font-semibold"
-                >
-                  Terms and Conditions
-                </Link>{" "}
-                and{" "}
-                <Link
-                  href="/privacy-policy"
-                  className="text-[0.875rem] font-semibold"
-                >
-                  Privacy Policy
-                </Link>
+              <div className="flex items-start gap-2 pt-8 text-[0.875rem] text-left">
+                <input required type="checkbox" name="" id="" className="mt-1" />
+                <p>
+                  {" "}
+                  I agree to the{" "}
+                  <Link
+                    href="/terms-and-conditions"
+                    className="text-[0.875rem] font-semibold"
+                  >
+                    Terms and Conditions
+                  </Link>{" "}
+                  and{" "}
+                  <Link
+                    href="/privacy-policy"
+                    className="text-[0.875rem] font-semibold"
+                  >
+                    Privacy Policy
+                  </Link>
+                </p>
                 {/* {errors.termsAccepted && (
                   <span className="text-red-600 ml-2 text-sm">
                     {errors.termsAccepted}
