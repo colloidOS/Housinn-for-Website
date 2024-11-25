@@ -179,8 +179,9 @@ const AuthPage = () => {
                           : field.type
                       }
                       placeholder={field.placeholder}
-                      className="w-full px-2 py-2 placeholder:text-sm border border-white-300 rounded focus:outline-none"
+                      className="w-full  px-2 py-2 placeholder:text-sm border border-white-300 rounded  focus:outline focus:outline-primary"
                     />
+                    
                     {field.name === "password" && (
                       <span
                         className="absolute right-2 top-[20%] cursor-pointer"
@@ -222,7 +223,7 @@ const AuthPage = () => {
                           : field.type
                       }
                       placeholder={field.placeholder}
-                      className="w-full px-2 py-2 placeholder:text-sm border border-white-300 rounded focus:outline-none"
+                      className="w-full px-2 py-2 placeholder:text-sm border border-white-300 rounded focus:outline focus:outline-primary"
                     />
                     {(field.name === "password" ||
                       field.name === "confirmPassword") && (
