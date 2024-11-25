@@ -37,13 +37,13 @@ const UserNavbar: React.FC<UserNavbarProps> = ({ className }) => {
 
   return (
     <nav
-      className={` ${className} bg-white px-[74px] py-2.5 md:left-[220px] lg:left-[252px] w-full`}
+      className={` ${className} bg-white  py-2 px-6 sm:px-10 xl:px-16 w-full`}
       role="navbar"
     >
       <div className="flex items-center justify-between gap-2">
         <div className="flex w-full justify-between gap-1 items-center">
           <ul
-            className={`sm:flex gap-2 text-gray-500 
+            className={`hidden md:flex gap-2 text-gray-500 
           `}
           >
             {tagData.map((tag) => (
@@ -57,10 +57,16 @@ const UserNavbar: React.FC<UserNavbarProps> = ({ className }) => {
             ))}
           </ul>
           <Link href={`/`}>
-            <Image src={Logo} alt="Housinn logo" width={80} height={48} />
+            <Image
+              src={Logo}
+              alt="Housinn logo"
+              width={0}
+              height={0}
+              className={`w-auto  h-12 lg:h-16`}
+            />
           </Link>
           <div className="flex gap-5 ">
-            <Image src={Notification} alt="info" width={20} height={21} />
+            {/* <Image src={Notification} alt="info" width={20} height={21} /> */}
             <div className="w-fit px-6 border-[1.5px] border-gray-600 py-2.5 rounded-3xl flex gap-2.5 justify-center items-center ">
               {user ? (
                 <>

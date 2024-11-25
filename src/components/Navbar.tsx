@@ -23,8 +23,8 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
   const [loading, setLoading] = useState<boolean>(true); // Loading state
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
-
   const { user } = useAuth(); // Get the user from AuthContext
+
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   };
@@ -69,11 +69,6 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
   const image = user?.avatar || "icons/profile.svg";
   const isDefaultScheme = colorScheme === "default";
 
-  // const handleLinkClick = (tag: string) => {
-  //   // Navigate to listings page with the selected tag
-  //   // window.location.href = `/listings?tag=${tag}`;
-  //   router.push(`/listings?tag=${tag}`);
-  // };
 
   return (
     <Wrapper disablePadding>
@@ -109,14 +104,7 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
         </Link>
 
         <div className="flex justify-end items-center gap-4">
-          {/* {loading ? (
-            ""
-          ) : (
-            <div className={`flex gap-4 ${isDefaultScheme?"text-gray-300":"text-primary"}`}>
-              <Heart />
-              <Bell/>
-            </div>
-          )} */}
+       
           {loading ? (
             <SkeletonLoader /> // Display the skeleton loader while checking authentication
           ) : isLoggedIn ? (
@@ -129,11 +117,14 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
                     : "border-primary text-primary"
                 } px-2 py-1.5 rounded-xl flex gap-3 lg:gap-5 justify-center items-center`}
               >
-                {image ? (
-                  <img src={image} alt="1" className="w-8 h-7 rounded-full" />
-                ) : (
-                  <User />
-                )}
+               <img
+                    src={image}
+                    className="w-7 h-6 rounded-full"
+                    alt="profile"
+                    onError={(e) => {
+                      e.currentTarget.src = "/icons/profile.svg";
+                    }}
+                  />
                 <motion.div
                   animate={{ rotate: dropdownOpen ? 180 : 0 }}
                   transition={{ duration: 0.3 }}
