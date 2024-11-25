@@ -3,22 +3,23 @@ import React, { useEffect, useState } from "react";
 import Modal from "../ui/Modal"; // Assuming you have a Modal component
 import { FilterType, ListingsFilterModalProps } from "@/types";
 import { categories, cities, states } from "@/data/new-listing";
-import { bathroomOptions, bedroomOptions, ownerTypeOptions } from "@/data/filter";
+import {
+  bathroomOptions,
+  bedroomOptions,
+  ownerTypeOptions,
+} from "@/data/filter";
 const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
   toggleModal,
-  applyFilters, 
+  applyFilters,
   initialFilters,
-  handleResetFilters
+  handleResetFilters,
 }) => {
   const [selectedState, setSelectedState] = useState<string>(""); // To track the selected state
   const [availableCities, setAvailableCities] = useState<string[]>([]); // To store cities of the selected state
   const [selectedCity, setSelectedCity] = useState<string>(""); // To track the selected city
 
-  
   const [filterValues, setFilterValues] = useState<FilterType>(initialFilters);
 
- 
-  
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -37,8 +38,6 @@ const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
       setSelectedCity(initialFilters.city);
     }
   }, [initialFilters.city, selectedState]);
-  
-  
 
   const handleStateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selected = event.target.value;
@@ -62,10 +61,10 @@ const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
     <div>
       {" "}
       <Modal onClose={toggleModal}>
-        <form className="p-6 w-full grid grid-cols-2 gap-3">
+        <form className=" w-full grid grid-cols-2 gap-3">
           {/* Filter options inside modal */}
 
-          <div className="">
+          <div className="col-span-2">
             <label>Title</label>
             <input
               type="text"
@@ -78,7 +77,7 @@ const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
             />
           </div>
 
-          <div className="">
+          <div className="col-span-2">
             <label>Address</label>
             <input
               type="text"
@@ -116,43 +115,29 @@ const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
           </div>
 
           {/* Bedrooms */}
-          <div className="col-span-2">
+          <div className="">
             <label>Bedrooms</label>
-            <ul className="flex w-full justify-between">
-              {bedroomOptions.map((bed, index) => (
-                <li
-                  className={`border w-full text-center py-2 ${
-                    filterValues.bedroom === bed
-                      ? "bg-primary/90 text-white"
-                      : ""
-                  }`}
-                  key={index}
-                  onClick={() => handleOptionChange("bedroom", bed)}
-                >
-                  {bed}
-                </li>
-              ))}
-            </ul>
+            <input
+              type="number"
+              placeholder="bedroom"
+              value={filterValues.bedroom}
+              onChange={handleInputChange}
+              className="w-full border rounded p-2 flex-1"
+              name="bedroom"
+            />
           </div>
 
           {/* Bathrooms */}
-          <div className="col-span-2">
+          <div className="">
             <label>Bathrooms</label>
-            <ul className="flex w-full justify-between">
-              {bathroomOptions.map((bath, index) => (
-                <li
-                  className={`border w-full text-center py-2 ${
-                    filterValues.bathroom === bath
-                      ? "bg-primary/90 text-white"
-                      : ""
-                  }`}
-                  key={index}
-                  onClick={() => handleOptionChange("bathroom", bath)}
-                >
-                  {bath}
-                </li>
-              ))}
-            </ul>
+            <input
+              type="number"
+              placeholder="bathroom"
+              value={filterValues.bathroom}
+              onChange={handleInputChange}
+              className="w-full border rounded p-2 flex-1"
+              name="bathroom"
+            />
           </div>
 
           {/* State */}
@@ -181,7 +166,7 @@ const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
             <select
               name="city"
               className="p-2 border border-gray-500 rounded"
-              value={filterValues.city || ""} 
+              value={filterValues.city || ""}
               onChange={handleCityChange}
               disabled={!selectedState}
             >
@@ -235,16 +220,16 @@ const ListingsFilterModal: React.FC<ListingsFilterModalProps> = ({
             </select>
           </div>
 
-          <div className="flex col-span-2 justify-between mt-4">
+          <div className="flex col-span-2 gap-3 justify-between mt-4">
             <button
-           
-              className="px-4 py-2 bg-secondary/10 border border-secondary  text-secondary rounded-[5px]"
-            onClick={handleResetFilters}>
+              className="px-4 py-2 w-full bg-secondary/10 border border-secondary  text-secondary rounded-[5px]"
+              onClick={handleResetFilters}
+            >
               Reset All Filters
             </button>
 
             <button
-              className="px-4 py-2 bg-primary text-white rounded-[5px]"
+              className="px-4 py-2 bg-primary text-white rounded-[5px] w-full"
               onClick={handleApplyFilters}
             >
               Apply Filters
