@@ -32,11 +32,8 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
   });
   const [filters, setFilters] = useState<FilterValues>({}); // Correctly typed filters
 
-  const query = searchParams.get("search");
 
-  useEffect(() => {
-    if (query) setSearchTerm(query);
-  }, [query]);
+
   const tag = searchParams.get("tag");
   useEffect(() => {
     if (tag) {
@@ -82,7 +79,7 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
       queryParams.append("state", filters.state.toLocaleLowerCase());
     if (filters.ownerType)
       queryParams.append("ownerType", filters.ownerType.toLocaleLowerCase());
-
+    if (searchTerm) queryParams.append("searchText", searchTerm);
     const fullRoute = `${getRoute}?${queryParams.toString()}`;
     console.log("searchitem2", searchTerm);
     // Log the route to the console

@@ -21,11 +21,8 @@ const useFetchListings = (
     const fetchListings = async () => {
       setLoading(true);
       try {
-        const responsePath = searchTerm
-          ? `${endpoint}?searchText=${searchTerm}`
-          : endpoint;
-        console.log("response", responsePath);
-        const response = await api.get(responsePath);
+     console.log("endpoint", endpoint)
+        const response = await api.get(endpoint);
         console.log("response.data", response.data.data);
         const data = response.data.data[dataRoute].map((post: any) => ({
           id: post.id,
