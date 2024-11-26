@@ -25,21 +25,39 @@ const ListingCard: React.FC<ListingsCardProps> = ({
   const handleCardClick = () => {
     router.push(`/listings/${listing.id}`);
   };
-// console.log("listingtag", listing.category)
+  // console.log("listingtag", listing.category)
+  const getCategoryStyle = () => {
+    switch (listing.category) {
+      case "apartment":
+        return "bg-teal-100 text-teal-600";
+      case "land":
+        return "bg-green-100 text-green-600";
+      case "duplex":
+        return "bg-yellow-100 text-yellow-600";
+      case "office":
+        return "bg-blue-100 text-blue-600";
+      case "condo":
+        return "bg-purple-100 text-purple-600";
+      case "store":
+        return "bg-pink-100 text-pink-600";
+      default:
+        return "bg-gray-100 text-gray-600"; // Fallback color
+    }
+  };
   return (
     <div
-      className="relative rounded-[7px] shadow-custom-property-shadow cursor-pointer"
+      className="relative rounded-md shadow-custom-property-shadow cursor-pointer"
       onClick={handleCardClick}
     >
       <div className="flex relative gap-1  cursor-pointer ">
         <img
           src={listing.imageUrl}
           alt={listing.title}
-          className="rounded-t-[7px] w-full h-36 md:h-40 lg:h-44 object-cover"
+          className="rounded-t-md w-full h-36 md:h-40 lg:h-44 object-cover"
         />
 
         <div
-          className={`text-[10px] lg:text-xs px-2 py-1 pr-4 clip-triangle-right absolute top-0 rounded-ss-[7px] left-0 ${
+          className={`text-[10px] lg:text-xs px-2 py-1 pr-4 clip-triangle-right absolute top-0 rounded-ss-md left-0 ${
             listing.tag === "sale"
               ? "bg-green-200 text-green-700"
               : listing.tag === "rent"
@@ -62,7 +80,7 @@ const ListingCard: React.FC<ListingsCardProps> = ({
               src={Government}
               width={1}
               height={1}
-              className="w-full h-full object-cover rounded-se-[7px]"
+              className="w-full h-full object-cover rounded-se-md"
               alt="government"
             />
           </div>
@@ -89,23 +107,8 @@ const ListingCard: React.FC<ListingsCardProps> = ({
           <h3 className="text-xl text-primary font-semibold">
             {listing.price}
           </h3>
-
           <p
-            className={`p-1 w-fit px-2 rounded-[7px] text-[10px] lg:text-xs ${
-              listing.category === "apartment"
-                ? "bg-teal-100 text-teal-600"
-                : listing.category === "land"
-                ? "bg-green-100 text-green-600"
-                : listing.category === "duplex"
-                ? "bg-yellow-100 text-yellow-600"
-                : listing.category === "office"
-                ? "bg-blue-100 text-blue-600"
-                : listing.category === "condo"
-                ? "bg-purple-100 text-purple-600"
-                : listing.category === "store"
-                ? "bg-pink-100 text-pink-600"
-                : "bg-gray-100 text-gray-600" // Fallback color
-            }`}
+            className={`hidden md:flex p-1 w-fit px-2 rounded-md text-[10px] lg:text-xs ${getCategoryStyle()}`}
           >
             {listing.category}
           </p>
@@ -155,8 +158,16 @@ const ListingCard: React.FC<ListingsCardProps> = ({
           </div>
         </div>
 
-        <div className="text-gray-500 text-xs">
-          <p>{listing.listed}</p>
+        <div className="flex  justify-between items-center">
+          {" "}
+          <div className="text-gray-500 text-xs">
+            <p>{listing.listed}</p>
+          </div>
+          <p
+            className={`flex md:hidden p-1 w-fit px-2 rounded-md text-[10px] lg:text-xs ${getCategoryStyle()}`}
+          >
+            {listing.category}
+          </p>
         </div>
       </div>
     </div>

@@ -79,7 +79,7 @@ const AuthPage = () => {
       const validationSchema = isSignIn ? signInSchema : signUpSchema;
       validationSchema.parse(data); // Throws error if validation fails
       setErrors({}); // Clear any previous errors if validation is successful
-      console.log("data", data)
+      console.log("data", data);
       if (!isSignIn) {
         // Remove confirmPassword before sending to API
         delete data.confirmPassword;
@@ -129,14 +129,14 @@ const AuthPage = () => {
         <Image src={Logo} alt="Housinn logo" width={80} height={48} />
       </div>
 
-      <div className="flex flex-col gap-7 xl:pb-36  text-center px-6 md:px-48 lg:px-56 xl:px-28 xl:pt-9 xl:items-center h-screen xl:h-full justify-center w-full xl:w-1/2">
+      <div className="flex flex-col gap-7 xl:pb-36  text-center px-6 md:px-48 lg:px-56 xl:px-28 xl:pt-9 py-5 xl:items-center min-h-screen xl:h-full justify-center w-full xl:w-1/2">
         <div className="flex justify-center items-center xl:hidden">
           <Image src={Logo} alt="Housinn logo" width={80} height={48} />
         </div>
         <h1 className="text-2xl font-bold">Welcome To Housinn</h1>
         <div className="flex justify-center w-full px-3">
           <button
-            className={`px-8 py-2 text-[0.875rem] border-b-2 focus:outline-none ${
+            className={`px-8 py-2 text-sm border-b-2 focus:outline-none ${
               isSignIn ? "border-primary" : "border-white-300"
             }`}
             onClick={toggleView}
@@ -144,7 +144,7 @@ const AuthPage = () => {
             Sign in
           </button>
           <button
-            className={`px-6 py-2 text-[0.875rem] border-b-2 focus:outline-none ${
+            className={`px-6 py-2 text-sm border-b-2 focus:outline-none ${
               !isSignIn ? "border-primary" : "border-white-300"
             }`}
             onClick={toggleView}
@@ -159,7 +159,7 @@ const AuthPage = () => {
                 <div key={field.id} className="mb-3 text-left">
                   <label
                     htmlFor={field.id}
-                    className="text-[0.875rem] font-semibold"
+                    className="text-sm font-semibold"
                   >
                     {field.label}
                     {errors[field.name] && (
@@ -179,8 +179,9 @@ const AuthPage = () => {
                           : field.type
                       }
                       placeholder={field.placeholder}
-                      className="w-full px-2 py-2 placeholder:text-[0.875rem] border border-white-300 rounded focus:outline-none"
+                      className="w-full  px-2 py-2 placeholder:text-sm border border-white-300 rounded  focus:outline focus:outline-primary"
                     />
+                    
                     {field.name === "password" && (
                       <span
                         className="absolute right-2 top-[20%] cursor-pointer"
@@ -222,7 +223,7 @@ const AuthPage = () => {
                           : field.type
                       }
                       placeholder={field.placeholder}
-                      className="w-full px-2 py-2 placeholder:text-[0.875rem] border border-white-300 rounded focus:outline-none"
+                      className="w-full px-2 py-2 placeholder:text-sm border border-white-300 rounded focus:outline focus:outline-primary"
                     />
                     {(field.name === "password" ||
                       field.name === "confirmPassword") && (
@@ -241,12 +242,12 @@ const AuthPage = () => {
                 </div>
               ))}
               <div className="pt-3">
-                <p className="text-[0.875rem] font-semibold">Account Type</p>
+                <p className="text-sm font-semibold">Account Type</p>
                 <div className="grid grid-cols-2 grid-rows-2 mt-2">
                   {accountTypes.map((type) => (
                     <label
                       key={type.id}
-                      className="flex items-center gap-1 text-[0.875rem]"
+                      className="flex items-center gap-1 text-sm"
                     >
                       <input
                         type="radio"
@@ -264,21 +265,25 @@ const AuthPage = () => {
                   ))}
                 </div>
               </div>
-              <div className="pt-8 text-[0.875rem] text-left">
-                <input required type="checkbox" name="" id="" /> I agree to the{" "}
-                <Link
-                  href="/terms-and-conditions"
-                  className="text-[0.875rem] font-semibold"
-                >
-                  Terms and Conditions
-                </Link>{" "}
-                and{" "}
-                <Link
-                  href="/privacy-policy"
-                  className="text-[0.875rem] font-semibold"
-                >
-                  Privacy Policy
-                </Link>
+              <div className="flex items-start gap-2 pt-8 text-sm text-left">
+                <input required type="checkbox" name="" id="" className="mt-1" />
+                <p>
+                  {" "}
+                  I agree to the{" "}
+                  <Link
+                    href="/terms-and-conditions"
+                    className="text-sm font-semibold"
+                  >
+                    Terms and Conditions
+                  </Link>{" "}
+                  and{" "}
+                  <Link
+                    href="/privacy-policy"
+                    className="text-sm font-semibold"
+                  >
+                    Privacy Policy
+                  </Link>
+                </p>
                 {/* {errors.termsAccepted && (
                   <span className="text-red-600 ml-2 text-sm">
                     {errors.termsAccepted}
@@ -300,7 +305,7 @@ const AuthPage = () => {
             <div className="mb-2 text-center">
               <a
                 href="#"
-                className="text-[0.875rem] font-semibold text-primary"
+                className="text-sm font-semibold text-primary"
               >
                 Forgot your password?
               </a>
@@ -311,16 +316,16 @@ const AuthPage = () => {
             or
             <div className="flex-1 border border-white-300"></div>
           </div> */}
-          {/* <div className="flex flex-col w-full gap-[0.875rem] pt-3">
+          {/* <div className="flex flex-col w-full gap-sm pt-3">
             <div className="flex items-center  w-full gap-2 border border-white-300 rounded py-[0.375rem] px-6 justify-center">
               <Image src={Google} alt="google icon" />
-              <p className="text-[0.875rem] font-semibold">
+              <p className="text-sm font-semibold">
                 Sign in with Google
               </p>
             </div>
             <div className="flex items-center  w-full gap-2 border border-white-300 rounded py-[0.375rem] px-6 justify-center">
               <Image src={Apple} alt="apple icon" />
-              <p className="text-[0.875rem] font-semibold">
+              <p className="text-sm font-semibold">
                 Sign in with Apple
               </p>
             </div>

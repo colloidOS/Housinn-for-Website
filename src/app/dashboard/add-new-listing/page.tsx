@@ -86,33 +86,53 @@ function AddNewListing() {
       city: e.target.value,
     }));
   };
-
+  const MAX_FILES = 10;
+  const MAX_FILE_SIZE = 30 * 1024 * 1024; // 30MB in bytes
+  
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const files = e.dataTransfer.files; // FileList
-    if (
-      files.length > 0 &&
-      (files[0].type === "image/jpeg" || files[0].type === "video/mp4")
-    ) {
-      const fileArray = Array.from(files); // Convert FileList to Array
-      setFormData((prevState) => ({
-        ...prevState,
-        images: fileArray, // Set the File[] here
-      }));
+    if (files.length > 0) {
+      const validFiles = Array.from(files).filter(
+        (file) =>
+          (file.type.startsWith("image/") || file.type === "video/mp4") &&
+          file.size <= MAX_FILE_SIZE
+      );
+  
+      if (validFiles.length + formData.images.length > MAX_FILES) {
+        toast.error("You can upload a maximum of 10 images or videos.");
+      } else if (validFiles.length !== files.length) {
+        toast.error("Some files are too large. Maximum file size is 30MB.");
+      } else {
+        setFormData((prevState) => ({
+          ...prevState,
+          images: [...prevState.images, ...validFiles],
+        }));
+      }
     }
   };
-
+  
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files; // This is a FileList
     if (files) {
-      const fileArray = Array.from(files); // Convert FileList to Array
-      setFormData((prevState) => ({
-        ...prevState,
-        images: fileArray, // Save the File[] to the state
-      }));
+      const validFiles = Array.from(files).filter(
+        (file) =>
+          (file.type.startsWith("image/") || file.type === "video/mp4") &&
+          file.size <= MAX_FILE_SIZE
+      );
+  
+      if (validFiles.length + formData.images.length > MAX_FILES) {
+        toast.error("You can upload a maximum of 10 images or videos.");
+      } else if (validFiles.length !== files.length) {
+        toast.error("Some files are too large. Maximum file size is 30MB.");
+      } else {
+        setFormData((prevState) => ({
+          ...prevState,
+          images: [...prevState.images, ...validFiles],
+        }));
+      }
     }
   };
-
   const handleRemoveFile = (index: number) => {
     setFormData((prevState) => {
       // Convert FileList to an array
@@ -193,18 +213,18 @@ function AddNewListing() {
             <h1 className="font-semibold text-base text-primary">
               Category <span className="text-red-600">*</span>
             </h1>
-            <div className="flex gap-9 text-gray-600 w-full">
+            <div className="flex flex-wrap gap-y-3  gap-x-5  text-gray-600 w-full">
               {categories.map((category) => (
                 <label
                   key={category.value}
-                  className="flex items-center gap-1 text-sm"
+                  className="flex items-center  gap-1 text-sm "
                 >
                   <input
                     type="radio"
                     name="category"
                     value={category.value}
                     required
-                    className="border border-gray-400 rounded-full checked:bg-gray-500 checked:border-transparent focus:outline-none focus:ring-0 focus:ring-offset-2"
+                    className="border  border-gray-400 rounded-full checked:bg-gray-500 checked:border-transparent focus:outline-none focus:ring-0 focus:ring-offset-2"
                     onChange={(e) =>
                       setFormData((prevState) => ({
                         ...prevState,
@@ -217,7 +237,7 @@ function AddNewListing() {
               ))}
             </div>
           </div>
-          <FormFieldWrapper label="Property Type">
+          <FormFieldWrapper label="Property Type" required>
             <select
               className="w-full bg-white p-2 border border-gray-300 rounded-md"
               name="type"
@@ -247,7 +267,7 @@ function AddNewListing() {
               onChange={handleChange}
             />
           </FormFieldWrapper>
-          <FormFieldWrapper label="Number of bedroom">
+          <FormFieldWrapper label="Number of bedroom" required>
             <input
               type="number"
               name="bedroom"
@@ -257,7 +277,7 @@ function AddNewListing() {
               onChange={handleChange}
             />
           </FormFieldWrapper>
-          <FormFieldWrapper label="Number of bathroom">
+          <FormFieldWrapper label="Number of bathroom" required>
             <input
               type="number"
               name="bathroom"
@@ -435,13 +455,8 @@ function AddNewListing() {
             </span>
           </div>
         </section>
-        <section className="w-full flex justify-between">
-          <button
-            onClick={handleNavigate}
-            className="border border-secondary py-3 px-6 rounded-md text-secondary bg-[#0D66B71A]"
-          >
-            Save and Resume
-          </button>
+        <section className="w-full flex justify-center md:justify-end">
+         
           <Button disabled={loading} type="submit" onClick={null} child={``} loading={``}>
             {loading ? (
               <div className="px-8">

@@ -39,7 +39,7 @@ interface WrapperProps {
 export const Wrapper: React.FC<WrapperProps> = ({ title, children }) => {
   return (
     <div className="w-full flex flex-col gap-5 bg-background-2">
-      <h1 className="py-4 px-12 text-2xl font-bold border-b border-gray-500">
+      <h1 className="py-4 px-12 text-2xl text-center md:text-left  font-bold border-b border-gray-500">
         {title}
       </h1>
       {children}

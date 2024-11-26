@@ -65,15 +65,16 @@ const ListingsFilter: React.FC<ListingsFilterProps> = ({
       </div>
       <button
         onClick={toggleModal}
-        className="p-3 h-11 flex items-center gap-2 border border-gray-300 rounded-[7px]"
+        className=" p-1 md:p-3 h-11 flex items-center gap-2 border border-gray-300 rounded-[7px]"
       >
         <span className="flex gap-1">
           <Image
             src={FilterArrow}
             alt="filter arrow"
-            width={20}
-            height={20}
-            className="cursor-pointer"
+            width={0}
+            height={0}
+
+            className="cursor-pointer w-4 h-4"
           />
           <p className="text-sm text-gray-700 flex  w-full">
             <span className="hidden xl:flex">More</span>&nbsp;Filters
@@ -82,9 +83,9 @@ const ListingsFilter: React.FC<ListingsFilterProps> = ({
         <Image
           src={FilterArrow2}
           alt="filter arrow 2"
-          width={20}
-          height={20}
-          className="cursor-pointer"
+          width={0}
+          height={0}
+          className="cursor-pointer w-4 h-4"  
         />
       </button>
 
