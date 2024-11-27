@@ -23,8 +23,8 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
   const [loading, setLoading] = useState<boolean>(true); // Loading state
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
-
   const { user } = useAuth(); // Get the user from AuthContext
+
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   };
@@ -69,11 +69,6 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
   const image = user?.avatar || "icons/profile.svg";
   const isDefaultScheme = colorScheme === "default";
 
-  // const handleLinkClick = (tag: string) => {
-  //   // Navigate to listings page with the selected tag
-  //   // window.location.href = `/listings?tag=${tag}`;
-  //   router.push(`/listings?tag=${tag}`);
-  // };
 
   return (
     <Wrapper disablePadding>
@@ -104,19 +99,12 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
             alt="Housinn logo"
             width={0}
             height={0}
-            className={`w-auto  ${isDefaultScheme ? "h-16" : "h-12"}`}
+            className={`w-auto h-12 ${isDefaultScheme ? "lg:h-16" : "lg:h-14"}`}
           />
         </Link>
 
         <div className="flex justify-end items-center gap-4">
-          {/* {loading ? (
-            ""
-          ) : (
-            <div className={`flex gap-4 ${isDefaultScheme?"text-gray-300":"text-primary"}`}>
-              <Heart />
-              <Bell/>
-            </div>
-          )} */}
+       
           {loading ? (
             <SkeletonLoader /> // Display the skeleton loader while checking authentication
           ) : isLoggedIn ? (
@@ -127,13 +115,16 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
                   isDefaultScheme
                     ? "border-white text-white"
                     : "border-primary text-primary"
-                } px-2 py-1.5 rounded-3xl flex gap-6 justify-center items-center`}
+                } p-1 rounded-full flex gap-2  justify-center items-center`}
               >
-                {image ? (
-                  <img src={image} alt="1" className="w-8 h-8 rounded-full" />
-                ) : (
-                  <User />
-                )}
+               <img
+                    src={image}
+                    className="w-7 h-7  rounded-full"
+                    alt="profile"
+                    onError={(e) => {
+                      e.currentTarget.src = "/icons/profile.svg";
+                    }}
+                  />
                 <motion.div
                   animate={{ rotate: dropdownOpen ? 180 : 0 }}
                   transition={{ duration: 0.3 }}
@@ -143,37 +134,36 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
               </div>
 
               {dropdownOpen && (
-  <motion.div
-    initial="closed"
-    animate="open"
-    exit="closed" // Optional, if you want to add exit animation
-    variants={dropdownVariants}
-    className={`absolute right-0 mt-2 w-48 ${
-      isDefaultScheme ? "bg-white" : "bg-primary"
-    } rounded-lg shadow-lg py-2 z-10`}
-  >
-    {filteredSideItems.map((item) => (
-      <motion.div key={item.id} variants={textVariants}>
-        <Link
-          href={item.link}
-          className={`flex items-center px-4 py-2 text-sm cursor-pointer ${
-            isDefaultScheme
-              ? "text-gray-700 hover:bg-gray-300"
-              : "text-gray-300 hover:bg-secondary"
-          }`}
-        >
-          <item.icon className="mr-2 h-4 w-4" />
-          {item.route}
-        </Link>
-      </motion.div>
-    ))}
-  </motion.div>
-)}
-
+                <motion.div
+                  initial="closed"
+                  animate="open"
+                  exit="closed" // Optional, if you want to add exit animation
+                  variants={dropdownVariants}
+                  className={`absolute right-0 mt-2 w-48 ${
+                    isDefaultScheme ? "bg-white" : "bg-primary"
+                  } rounded-lg shadow-lg py-2 z-10`}
+                >
+                  {filteredSideItems.map((item) => (
+                    <motion.div key={item.id} variants={textVariants}>
+                      <Link
+                        href={item.link}
+                        className={`flex items-center px-4 py-2 text-sm cursor-pointer ${
+                          isDefaultScheme
+                            ? "text-gray-700 hover:bg-gray-300"
+                            : "text-gray-300 hover:bg-secondary"
+                        }`}
+                      >
+                        <item.icon className="mr-2 h-4 w-4" />
+                        {item.route}
+                      </Link>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              )}
             </div>
           ) : (
             <div className="flex gap-4">
-              <Image src={Notification} alt="info" width={20} height={21} />
+              {/* <Image src={Notification} alt="info" width={20} height={21} /> */}
               <button
                 className={`${
                   isDefaultScheme
