@@ -89,7 +89,7 @@ function AddNewListing() {
   };
   const MAX_FILES = 10;
   const MAX_FILE_SIZE = 30 * 1024 * 1024; // 30MB in bytes
-
+  
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const files = e.dataTransfer.files; // FileList
@@ -99,7 +99,7 @@ function AddNewListing() {
           (file.type.startsWith("image/") || file.type === "video/mp4") &&
           file.size <= MAX_FILE_SIZE
       );
-
+  
       if (validFiles.length + formData.images.length > MAX_FILES) {
         toast.error("You can upload a maximum of 10 images or videos.");
       } else if (validFiles.length !== files.length) {
@@ -112,7 +112,7 @@ function AddNewListing() {
       }
     }
   };
-
+  
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files; // This is a FileList
     if (files) {
@@ -121,7 +121,7 @@ function AddNewListing() {
           (file.type.startsWith("image/") || file.type === "video/mp4") &&
           file.size <= MAX_FILE_SIZE
       );
-
+  
       if (validFiles.length + formData.images.length > MAX_FILES) {
         toast.error("You can upload a maximum of 10 images or videos.");
       } else if (validFiles.length !== files.length) {
@@ -319,7 +319,7 @@ function AddNewListing() {
               <option value="">Select a State</option>
               {states.map((state) => (
                 <option key={state} value={state}>
-                  {capitalizeWords(state)}
+                 {capitalizeWords(state)}
                 </option>
               ))}
             </select>
@@ -337,7 +337,7 @@ function AddNewListing() {
               {formData.state &&
                 cities[formData.state as keyof typeof cities]?.map((city) => (
                   <option key={city} value={city}>
-                    {capitalizeWords(city)}
+                 {capitalizeWords(city)}
                   </option>
                 ))}
             </select>
@@ -457,13 +457,8 @@ function AddNewListing() {
           </div>
         </section>
         <section className="w-full flex justify-center md:justify-end">
-          <Button
-            disabled={loading}
-            type="submit"
-            onClick={null}
-            child={``}
-            loading={``}
-          >
+         
+          <Button disabled={loading} type="submit" onClick={null} child={``} loading={``}>
             {loading ? (
               <div className="px-8">
                 {" "}

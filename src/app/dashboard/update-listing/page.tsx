@@ -7,7 +7,7 @@ import Upload from "../../../../public/icons/upload.svg";
 import api from "../../../lib/api";
 import Select, { MultiValue } from "react-select";
 
-import { AddNewListings, UpdateListings } from "@/types";
+import { AddNewListings, FormDataToSend, UpdateListings } from "@/types";
 import { toast } from "sonner";
 import axios from "axios";
 import { TailSpin } from "react-loader-spinner";
@@ -20,13 +20,13 @@ import {
 import { categories, cities, propertyTypes, states } from "@/data/new-listing";
 import Button from "../profile/Button";
 import { capitalizeWords } from "@/utils/stringUtils";
+import { useAuth } from "@/context/AuthContext";
 
 function UpdateListing() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const id = "674469b0f57ef47424e444f6";
- 
-  
+  const { user, setUser } = useAuth();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<UpdateListings>({
     title: "",
@@ -46,8 +46,9 @@ function UpdateListing() {
       desc: "",
     },
   });
-  
-
+  const [amenitiesOptions, setAmenitiesOptions] = useState<
+    { value: string; label: string }[]
+  >([]);
   useEffect(() => {
     const fetchListing = async () => {
       try {
@@ -55,6 +56,15 @@ function UpdateListing() {
         const { data } = await api.get(`/posts/${id}`);
         console.log("updatedata", data.data);
         const updateData = data.data;
+
+        // Map amenities from API response to { value, label } format
+        const mappedAmenities =
+          updateData.postDetail.amenities.map((amenity: string) => ({
+            value: amenity,
+            label: amenity,
+          })) || [];
+
+        setAmenitiesOptions(mappedAmenities); // Set options for multi-select
         setFormData(updateData);
       } catch (error) {
         console.error("Error fetching listing:", error);
@@ -63,14 +73,13 @@ function UpdateListing() {
         setLoading(false);
       }
     };
-  
+
     if (id) fetchListing();
   }, [id]);
-  
+
   useEffect(() => {
     console.log("formData updated:", formData);
   }, [formData]);
-  
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -91,7 +100,18 @@ function UpdateListing() {
       amenities: selectedValues,
     }));
   };
-
+  const handleRemoveFile = (index: number) => {
+    setFormData((prevState) => {
+      // Convert FileList to an array
+      const newImages = Array.from(prevState.images); // No need for null check now
+      // Remove the image at the specified index
+      newImages.splice(index, 1);
+      return {
+        ...prevState,
+        images: newImages.length > 0 ? newImages : [], // Return an empty array if no images left
+      };
+    });
+  };
   const handleStateChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const state = e.target.value;
     setFormData((prevState) => ({
@@ -107,38 +127,79 @@ function UpdateListing() {
       city: e.target.value,
     }));
   };
+  const MAX_FILES = 10;
+  const MAX_FILE_SIZE = 30 * 1024 * 1024; // 30MB in bytes
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    const files = Array.from(e.dataTransfer.files);
-    const validFiles = files.filter((file) => file.size <= 30 * 1024 * 1024);
-    setFormData((prevState) => ({
-      ...prevState,
-      images: [...prevState.images, ...validFiles],
-    }));
+    const files = e.dataTransfer.files; // FileList
+    if (files.length > 0) {
+      const validFiles = Array.from(files).filter(
+        (file) =>
+          (file.type.startsWith("image/") || file.type === "video/mp4") &&
+          file.size <= MAX_FILE_SIZE
+      );
+
+      if (validFiles.length + formData.images.length > MAX_FILES) {
+        toast.error("You can upload a maximum of 10 images or videos.");
+      } else if (validFiles.length !== files.length) {
+        toast.error("Some files are too large. Maximum file size is 30MB.");
+      } else {
+        setFormData((prevState) => ({
+          ...prevState,
+          images: [...prevState.images, ...validFiles],
+        }));
+      }
+    }
+  };
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files; // This is a FileList
+    if (files) {
+      const validFiles = Array.from(files).filter(
+        (file) =>
+          (file.type.startsWith("image/") || file.type === "video/mp4") &&
+          file.size <= MAX_FILE_SIZE
+      );
+
+      if (validFiles.length + formData.images.length > MAX_FILES) {
+        toast.error("You can upload a maximum of 10 images or videos.");
+      } else if (validFiles.length !== files.length) {
+        toast.error("Some files are too large. Maximum file size is 30MB.");
+      } else {
+        setFormData((prevState) => ({
+          ...prevState,
+          images: [...prevState.images, ...validFiles],
+        }));
+      }
+    }
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
-
-    const formDataToSend = new FormData();
-    Object.entries(formData).forEach(([key, value]) => {
-      if (key === "images" && Array.isArray(value)) {
-        value.forEach((file) => formDataToSend.append("images", file));
-      }
-      //   else if (key === "amenities") {
-      //     value.forEach((amenity) => formDataToSend.append("amenities", amenity));
-      //   }
-      else {
-        formDataToSend.append(key, value as string);
-      }
-    });
-
+    const formDataToSend: FormDataToSend = {
+        
+       
+        bedroom: formData.bedroom,
+        bathroom: formData.bathroom,
+      
+      };
+      const formDataToSendInstance = new FormData();
+      Object.keys(formDataToSend).forEach((key) => {
+        if (formDataToSend[key as keyof FormDataToSend] !== undefined && formDataToSend[key as keyof FormDataToSend] !== null) {
+          formDataToSendInstance.append(key, formDataToSend[key as keyof FormDataToSend] as string);
+        }
+      });
+    console.log("Prepared formData for submission:");
+   
+    
     try {
+        console.log("updateformdatatosend", formDataToSend);
       await api.put(`/posts/${id}`, formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
+            "Authorization": `Bearer ${user?.token}`
         },
       });
       toast.success("Listing updated successfully!");
@@ -236,20 +297,20 @@ function UpdateListing() {
               onChange={handleChange}
             />
           </FormFieldWrapper>
-          {/* <FormFieldWrapper label="Amenities">
+          <FormFieldWrapper label="Amenities">
             <Select
               isMulti
               name="amenities"
               options={amenitiesOptions}
               // Bind the value prop to match the structure of MultiValue<OptionType>
               value={amenitiesOptions.filter((option) =>
-                formData.amenities.includes(option.value)
+                formData.postDetail.amenities.includes(option.value)
               )}
               onChange={handleAmenitiesChange} // Update form data when selection changes
               className="basic-multi-select"
               classNamePrefix="select"
             />
-          </FormFieldWrapper> */}
+          </FormFieldWrapper>
 
           <h2 className="text-base text-primary font-semibold col-span-2 ">
             Location
@@ -267,7 +328,7 @@ function UpdateListing() {
               <option value="">Select a State</option>
               {states.map((state) => (
                 <option key={state} value={state}>
-                 {capitalizeWords(state)}
+                  {capitalizeWords(state)}
                 </option>
               ))}
             </select>
@@ -343,6 +404,72 @@ function UpdateListing() {
             ></textarea>
           </div>
         </SectionWrapper>
+        <section className="flex flex-col gap-8 items-center w-full">
+          <h2 className="text-lg font-bold text-center text-primary">
+            Photos and Videos of Property
+          </h2>
+          <div
+            className="flex flex-col py-4 w-full gap-4 justify-center items-center border-secondary border-2 border-dashed rounded-md"
+            onDrop={handleDrop}
+            onDragOver={(e) => e.preventDefault()}
+          >
+            <Image src={Upload} width={42} height={42} alt="Upload Icon" />
+            <span>
+              {formData.images ? (
+                <div className="flex flex-col items-center justify-center gap-7 w-full">
+                  <span className="text-base">Images:</span>
+                  <div className="flex gap-4">
+                    {Array.from(formData.images).map((file, idx) => {
+                      if (file instanceof File) {
+                        // Ensure it's a File object
+                        return (
+                          <div className="relative" key={idx}>
+                            <img
+                              src={URL.createObjectURL(file)} // Create a URL for the image
+                              alt={`uploaded-image-${idx}`} // Provide a unique alt text
+                              className="w-24 h-24 object-cover rounded-md" // Adjust styles as needed
+                            />
+                            <button
+                              onClick={() => handleRemoveFile(idx)} // Pass the index to the remove function
+                              className="absolute -top-3 -right-1 text-black rounded-full "
+                            >
+                              &times; {/* "X" character */}
+                            </button>
+                          </div>
+                        );
+                      }
+                      return null; // Skip invalid files
+                    })}
+                  </div>
+                </div>
+              ) : (
+                <p className="text-center max-w-80">
+                  Drag your documents, photos, or videos here to start uploading
+                </p>
+              )}
+            </span>
+
+            <p>OR</p>
+            <input
+              type="file"
+              id="fileUpload"
+              accept=".jpg,.jpeg,.mp4"
+              className="hidden"
+              multiple // Allow multiple file uploads
+              onChange={handleFileChange}
+            />
+            <label
+              htmlFor="fileUpload"
+              className="px-6 py-2 border-2 border-secondary rounded-lg text-secondary cursor-pointer"
+            >
+              Browse files
+            </label>
+            <span className="text-center">
+              Files Supported: JPG, MP4 <br />
+              File Size: 30MB max
+            </span>
+          </div>
+        </section>
         <Button
           type="submit"
           disabled={loading}

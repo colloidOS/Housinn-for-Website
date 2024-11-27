@@ -29,7 +29,18 @@ export const amenities = [
   "Security",
   // Add more amenities if needed
 ];
-
+export const keysToInclude = [
+  "title",
+  "state",
+  "city",
+  "type",
+  "propertySize",
+  "bedroom",
+  "bathroom",
+  "price",
+  "category",
+  "address",
+];
 // data/locations.ts
 
 export const states = [
