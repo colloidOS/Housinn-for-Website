@@ -103,7 +103,27 @@ export interface AddNewListings {
   category: string;
   address: string;
   landmark: string;
+
 }
+export interface UpdateListings {
+  title: string;
+  images: File[]; // Array of files for images
+  state: string;
+  city: string;
+  type: string;
+  propertySize: string;
+  bedroom: string;
+  bathroom: string;
+  price: string;
+  category: string;
+  address: string;
+  landmark: string;
+  postDetail: {
+    amenities: string[];
+    desc: string;
+  };
+}
+
 
 export interface ListingsProps {
   shouldSlice?: boolean;
