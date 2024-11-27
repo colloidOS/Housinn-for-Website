@@ -10,6 +10,8 @@ import "slick-carousel/slick/slick-theme.css";
 import NProgress from "nprogress";
 import "../styles/nprogress.css";
 import { useRouter } from "next/navigation";
+import { metadata } from "./metadata";
+import axios from "axios";
 
 const sans = Open_Sans({ subsets: ["latin"] });
 
@@ -43,8 +45,38 @@ export default function RootLayout({
     };
   }, [router]);
 
+  useEffect(() => {
+    // Start NProgress on request
+    const requestInterceptor = axios.interceptors.request.use((config) => {
+      NProgress.start();
+      return config;
+    });
+
+    // Stop NProgress on response
+    const responseInterceptor = axios.interceptors.response.use(
+      (response) => {
+        NProgress.done();
+        return response;
+      },
+      (error) => {
+        NProgress.done();
+        return Promise.reject(error);
+      }
+    );
+
+    // Cleanup interceptors on unmount
+    return () => {
+      axios.interceptors.request.eject(requestInterceptor);
+      axios.interceptors.response.eject(responseInterceptor);
+    };
+  }, []);
+
   return (
     <html lang="en" className="w-full">
+      <head>
+        <title>{metadata.title}</title>
+        <meta name="description" content={metadata.description} />
+      </head>
       <body className={`${sans.className} w-full`}>
         <AuthProvider>
           {children}

@@ -14,7 +14,7 @@ function MessageList() {
 
   return (
     <>
-      <div className="flex flex-col px-6 w-full gap-[18px] pt-6 pb-11 bg-white rounded-xl">
+      <div className="flex flex-col px-3 w-full gap-[18px] pt-6 pb-11 bg-white rounded-xl">
         <div className="flex justify-between">
           <h1 className="text-lg font-semibold text-gray-700">Messages</h1>
           <Link
@@ -47,7 +47,7 @@ function MessageList() {
                       className={`text-[10px] ${
                         msg.isUnread ? "" : "text-gray-500"
                       } truncate`}
-                      style={{ width: "240px" }}
+                      style={{ width: "160px" }}
                     >
                       {msg.message}
                     </p>

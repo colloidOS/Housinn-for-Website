@@ -1,5 +1,7 @@
 import axios, { AxiosInstance } from "axios";
 import Cookies from "js-cookie";
+import NProgress from "nprogress";
+import "../styles/nprogress.css"; // Ensure this path is correct
 
 // Create an Axios instance with the base URL
 const api: AxiosInstance = axios.create({
@@ -20,5 +22,29 @@ if (typeof window !== "undefined") {
     console.error("No token found in localStorage.");
   }
 }
+
+
+// Add NProgress to monitor API requests
+api.interceptors.request.use(
+  (config) => {
+    NProgress.start(); // Start the progress bar
+    return config;
+  },
+  (error) => {
+    NProgress.done(); // Stop the progress bar on error
+    return Promise.reject(error);
+  }
+);
+
+api.interceptors.response.use(
+  (response) => {
+    NProgress.done(); // Stop the progress bar on success
+    return response;
+  },
+  (error) => {
+    NProgress.done(); // Stop the progress bar on error
+    return Promise.reject(error);
+  }
+);
 
 export default api;

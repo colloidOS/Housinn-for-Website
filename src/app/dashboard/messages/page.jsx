@@ -4,9 +4,9 @@ import io from "socket.io-client";
 import Image from "next/image";
 import { ClipLoader } from "react-spinners";
 import api from "@/lib/api";
-import { SendHorizontal } from "lucide-react";
-import Pfp from "../../../../public/images/pfp.png"; // Default profile image
-import Search from "../../../../public/icons/search.svg"; // Search icon
+import { SendHorizontal, ArrowLeftIcon } from "lucide-react";
+import Pfp from "../../../../public/images/pfp.png"; 
+import Search from "../../../../public/icons/search.svg"; 
 import { useAuth } from "@/context/AuthContext";
 import {
   format,
@@ -263,6 +263,7 @@ const MessagePage = () => {
   const [isLoading, setIsLoading] = useState(false); // State to track loading
 
   const handleSendMessage = () => {
+   
     if (newMessageText && currentChat) {
       setIsLoading(true); // Show loading spinner when sending the message
 
@@ -463,7 +464,14 @@ const MessagePage = () => {
   // States for managing transitions and button behavior
 const [sendingMessage, setSendingMessage] =useState(false)
   const handleSendMessageClick = async () => {
-    if (!newMessageText.trim()) return; // Prevent sending empty messages
+    
+    if (!newMessageText.trim()) return;
+    if (newMessageText.trim()) {
+      newMessageText.trimStart()
+      // Simulate sending message while preserving formatting
+      console.log("Sending message:", newMessageText);
+      setNewMessageText(""); // Clear input after sending
+    } // Prevent sending empty messages
     console.log("Button clicked: Disabling...");
     setSendingMessage(true); // Disable button
     handleSendMessage(); // Call your send message logic
@@ -472,12 +480,12 @@ const [sendingMessage, setSendingMessage] =useState(false)
   };
 
   return (
-    <div className="w-full flex flex-col h-full bg-background-2 gap-5 h-scree px-4 sm:px-8 pt-6">
+    <div className={`w-full flex flex-col h-full bg-background-2 gap-5 h-scree px-4 sm:px-8 ${showChatList ? 'pt-6': 'p-0'} `}>
       {/* Chat List and Search */}
       <div className="flex flex-col gap-4 lg:border-b border-gray-400">
         <h2 className={`text-2xl font-bold text-black ${showChatList ? 'block': 'hidden'}`}>Messages</h2>
         <div
-          className={`flex gap-6 sm:w-fit bg-white p-1 ${
+          className={`flex sm:gap-6 sm:w-fit bg-white p-1 ${
             showChatList ? "block" : "hidden sm:flex"
           }`}
         >
@@ -619,9 +627,10 @@ const [sendingMessage, setSendingMessage] =useState(false)
                   <>
                     <button
                       onClick={handleGoBack}
-                      className=" lg:hidden mr-4 text-blue-500 font-bold text-lg"
+                      className=" lg:hidden  text-primary mr-2 font-bold text-lg"
                     >
-                      ←
+                      <ArrowLeftIcon className="w-7 h-7"/>
+                      {/* <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> */}
                     </button>
                     <img
                       src={currentChat.receiver.avatar || "/property.png"}
@@ -657,6 +666,7 @@ const [sendingMessage, setSendingMessage] =useState(false)
                         <div
                           key={`date-${message.id}`}
                           className="text-center mx-auto text-gray-500 text-xs p-1 px-2 bg-gray-600/20 rounded-lg w-fit "
+                          
                         >
                           {formatDateHeader(message.createdAt)}
                         </div>
@@ -679,8 +689,9 @@ const [sendingMessage, setSendingMessage] =useState(false)
                                 ? "text-black"
                                 : "text-black"
                             }`}
+                            style={{ whiteSpace: "pre-wrap" }}
                           >
-                            {message.text}
+                            {message.text.replace(/^\n+/, "")}
                           </div>
                           <div className="text-[10px] w-11 flex items-end text-nowrap">
                             {messageformatTime(message.createdAt)}

@@ -64,11 +64,12 @@ const SettingsSidebar: FC<Iproperties> = ({ className }) => {
           href={item.link}
           data-testid={item.id}
           role="sidebar-link"
+          onClick={() => setIsMobileMenuOpen(false)} // Close menu on link click
           className={`${
             currentPath === item.id || (isDashboard && item.id === "dashboard")
               ? "bg-active text-primary"
               : "bg-transparent text-gray-500 hover:bg-gray-300"
-          } flex cursor-pointer items-center lg:justify-cente gap-5 rounded-lg pl-6 xl:pl-11 pr-6 py-3 text-lg transition-all duration-300 ease-in md:h-auto md:w-auto md:justify-start md:rounded-sm`}
+          } flex cursor-pointer items-center lg:justify-cente gap-5 rounded-lg px-3 sm:px-6 xl:pl-11 py-3 text-base sm:text-lg transition-all duration-300 ease-in md:h-auto md:w-auto md:justify-start md:rounded-sm`}
         >
           {item.icon && <item.icon className="h-5 w-5" role="sidebar-icon" />}
           <span className="text-nowrap">{item.route}</span>
@@ -82,11 +83,12 @@ const SettingsSidebar: FC<Iproperties> = ({ className }) => {
               href={item.link}
               data-testid={item.id}
               role="sidebar-link"
+              onClick={() => setIsMobileMenuOpen(false)} // Close menu on link click
               className={`${
                 organizationPath === item.id
                   ? "shadow-custom-negative-shadow"
                   : " text-gray-500 hover:bg- "
-              } px-6 py-[11px] w-fit bg-secondary text-white rounded-md text-base font-semibold flex items-center justify-center cursor-pointer transition-all duration-200 ease-in md:justify-between `}
+              } px-3 sm:px-6 py-3 w-fit bg-secondary text-white rounded-md text-nowrap text-base font-semibold flex items-center justify-center cursor-pointer transition-all duration-200 ease-in md:justify-between`}
             >
               <div className="flex items-center justify-start gap-2">
                 {item.icon && (
@@ -108,7 +110,7 @@ const SettingsSidebar: FC<Iproperties> = ({ className }) => {
     <>
       {/* Hamburger Icon for Mobile */}
       <button
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-md shadow-md"
+        className="lg:hidden fixed top-3 left-4 z-50 p-2 bg-white rounded-md shadow-md"
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
       >
         {isMobileMenuOpen ? (
