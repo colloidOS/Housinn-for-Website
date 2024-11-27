@@ -1,19 +1,13 @@
 "use client";
-import React, { useState, ChangeEvent, FormEvent } from "react";
-import { useRouter } from "next/router";
+import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Upload from "../../../../public/icons/upload.svg";
-import Button from "../profile/Button";
-import api from "../../../lib/api"; // Adjust the import path accordingly
+
+import api from "../../../lib/api";
 import Select, { MultiValue } from "react-select";
-import {
-  categories,
-  states,
-  cities,
-  amenities,
-  propertyTypes,
-} from "../../../data/new-listing"; // Adjust the path as needed
-import { AddNewListings } from "@/types";
+
+import { AddNewListings, FormDataToSend, UpdateListings } from "@/types";
 import { toast } from "sonner";
 import axios from "axios";
 import { TailSpin } from "react-loader-spinner";
@@ -23,26 +17,69 @@ import {
   SectionWrapper,
   Wrapper,
 } from "./components/FormFieldWrapper";
+import { categories, cities, propertyTypes, states } from "@/data/new-listing";
+import Button from "../profile/Button";
 import { capitalizeWords } from "@/utils/stringUtils";
+import { useAuth } from "@/context/AuthContext";
 
-function AddNewListing() {
-  const [loading, setLoading] = useState<boolean>(false); // State for loading
-  const [formData, setFormData] = useState<AddNewListings>({
+function UpdateListing() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const id = "674469b0f57ef47424e444f6";
+  const { user, setUser } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState<UpdateListings>({
     title: "",
     images: [],
     state: "",
     city: "",
     type: "",
-    amenities: [],
     propertySize: "",
     bedroom: "",
     bathroom: "",
     price: "",
-    description: "",
     category: "",
     address: "",
     landmark: "",
+    postDetail: {
+      amenities: [],
+      desc: "",
+    },
   });
+  const [amenitiesOptions, setAmenitiesOptions] = useState<
+    { value: string; label: string }[]
+  >([]);
+  useEffect(() => {
+    const fetchListing = async () => {
+      try {
+        setLoading(true);
+        const { data } = await api.get(`/posts/${id}`);
+        console.log("updatedata", data.data);
+        const updateData = data.data;
+
+        // Map amenities from API response to { value, label } format
+        const mappedAmenities =
+          updateData.postDetail.amenities.map((amenity: string) => ({
+            value: amenity,
+            label: amenity,
+          })) || [];
+
+        setAmenitiesOptions(mappedAmenities); // Set options for multi-select
+        setFormData(updateData);
+      } catch (error) {
+        console.error("Error fetching listing:", error);
+        toast.error("Error fetching listing details.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) fetchListing();
+  }, [id]);
+
+  useEffect(() => {
+    console.log("formData updated:", formData);
+  }, [formData]);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -53,86 +90,15 @@ function AddNewListing() {
       [name]: value,
     }));
   };
-  type OptionType = {
-    value: string;
-    label: string;
-  };
 
-  const handleAmenitiesChange = (selectedOptions: MultiValue<OptionType>) => {
+  const handleAmenitiesChange = (
+    selectedOptions: MultiValue<{ value: string; label: string }>
+  ) => {
     const selectedValues = selectedOptions.map((option) => option.value);
     setFormData((prevState) => ({
       ...prevState,
-      amenities: selectedValues, // Update the form data with selected values
+      amenities: selectedValues,
     }));
-  };
-
-  // Map amenities to amenity options
-  const amenitiesOptions: OptionType[] = amenities.map((amenity) => ({
-    value: amenity,
-    label: amenity,
-  }));
-
-  const handleStateChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const state = e.target.value;
-    setFormData((prevState) => ({
-      ...prevState,
-      state: state,
-      city: "", // Clear city selection when state changes
-    }));
-  };
-
-  const handleCityChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      city: e.target.value,
-    }));
-  };
-  const MAX_FILES = 10;
-  const MAX_FILE_SIZE = 30 * 1024 * 1024; // 30MB in bytes
-  
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    const files = e.dataTransfer.files; // FileList
-    if (files.length > 0) {
-      const validFiles = Array.from(files).filter(
-        (file) =>
-          (file.type.startsWith("image/") || file.type === "video/mp4") &&
-          file.size <= MAX_FILE_SIZE
-      );
-  
-      if (validFiles.length + formData.images.length > MAX_FILES) {
-        toast.error("You can upload a maximum of 10 images or videos.");
-      } else if (validFiles.length !== files.length) {
-        toast.error("Some files are too large. Maximum file size is 30MB.");
-      } else {
-        setFormData((prevState) => ({
-          ...prevState,
-          images: [...prevState.images, ...validFiles],
-        }));
-      }
-    }
-  };
-  
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files; // This is a FileList
-    if (files) {
-      const validFiles = Array.from(files).filter(
-        (file) =>
-          (file.type.startsWith("image/") || file.type === "video/mp4") &&
-          file.size <= MAX_FILE_SIZE
-      );
-  
-      if (validFiles.length + formData.images.length > MAX_FILES) {
-        toast.error("You can upload a maximum of 10 images or videos.");
-      } else if (validFiles.length !== files.length) {
-        toast.error("Some files are too large. Maximum file size is 30MB.");
-      } else {
-        setFormData((prevState) => ({
-          ...prevState,
-          images: [...prevState.images, ...validFiles],
-        }));
-      }
-    }
   };
   const handleRemoveFile = (index: number) => {
     setFormData((prevState) => {
@@ -146,69 +112,111 @@ function AddNewListing() {
       };
     });
   };
+  const handleStateChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const state = e.target.value;
+    setFormData((prevState) => ({
+      ...prevState,
+      state,
+      city: "",
+    }));
+  };
+
+  const handleCityChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      city: e.target.value,
+    }));
+  };
+  const MAX_FILES = 10;
+  const MAX_FILE_SIZE = 30 * 1024 * 1024; // 30MB in bytes
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const files = e.dataTransfer.files; // FileList
+    if (files.length > 0) {
+      const validFiles = Array.from(files).filter(
+        (file) =>
+          (file.type.startsWith("image/") || file.type === "video/mp4") &&
+          file.size <= MAX_FILE_SIZE
+      );
+
+      if (validFiles.length + formData.images.length > MAX_FILES) {
+        toast.error("You can upload a maximum of 10 images or videos.");
+      } else if (validFiles.length !== files.length) {
+        toast.error("Some files are too large. Maximum file size is 30MB.");
+      } else {
+        setFormData((prevState) => ({
+          ...prevState,
+          images: [...prevState.images, ...validFiles],
+        }));
+      }
+    }
+  };
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files; // This is a FileList
+    if (files) {
+      const validFiles = Array.from(files).filter(
+        (file) =>
+          (file.type.startsWith("image/") || file.type === "video/mp4") &&
+          file.size <= MAX_FILE_SIZE
+      );
+
+      if (validFiles.length + formData.images.length > MAX_FILES) {
+        toast.error("You can upload a maximum of 10 images or videos.");
+      } else if (validFiles.length !== files.length) {
+        toast.error("Some files are too large. Maximum file size is 30MB.");
+      } else {
+        setFormData((prevState) => ({
+          ...prevState,
+          images: [...prevState.images, ...validFiles],
+        }));
+      }
+    }
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
-
-    // Creating a new FormData object to handle both text and file inputs
-    const formDataToSend = new FormData();
-    const formatString = (str: string) =>
-      str.toLowerCase().replace(/\s+/g, "_");
-
-    // Append text fields
-    formDataToSend.append("title", formData.title);
-    formDataToSend.append("price", formData.price);
-    formDataToSend.append("address", formData.address);
-    formDataToSend.append("city", formatString(formData.city));
-    formDataToSend.append("state", formatString(formData.state));
-    formDataToSend.append("bedroom", formData.bedroom);
-    formDataToSend.append("bathroom", formData.bathroom);
-    formDataToSend.append("type", formData.type);
-    formDataToSend.append("propertySize", formData.propertySize);
-    formDataToSend.append("desc", formData.description);
-    formDataToSend.append("category", formData.category);
-    formData.amenities.forEach((amenity, idx) => {
-      formDataToSend.append(`amenities`, amenity);
-    });
-
-    // Log and append images (assuming formData.images is an array of File objects)
-    if (formData.images && formData.images.length > 0) {
-      Array.from(formData.images).forEach((file, idx) => {
-        console.log(`Image ${idx}:`, file); // Log each file here
-        formDataToSend.append(`images`, file);
+    const formDataToSend: FormDataToSend = {
+        
+       
+        bedroom: formData.bedroom,
+        bathroom: formData.bathroom,
+      
+      };
+      const formDataToSendInstance = new FormData();
+      Object.keys(formDataToSend).forEach((key) => {
+        if (formDataToSend[key as keyof FormDataToSend] !== undefined && formDataToSend[key as keyof FormDataToSend] !== null) {
+          formDataToSendInstance.append(key, formDataToSend[key as keyof FormDataToSend] as string);
+        }
       });
-    }
-
+    console.log("Prepared formData for submission:");
+   
+    
     try {
-      // Send POST request with formData
-      const response = await api.post("/posts", formDataToSend, {
+        console.log("updateformdatatosend", formDataToSend);
+      await api.put(`/posts/${id}`, formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
+            "Authorization": `Bearer ${user?.token}`
         },
       });
-      toast.success("Post created successfully!");
+      toast.success("Listing updated successfully!");
+      router.push("/dashboard");
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const errorMessage = error.response?.data?.message || error.message;
-        console.error(
-          "Submission Error:",
-          error.response?.data || error.message
-        );
-        toast.error(`Error: ${errorMessage}`);
-      }
+      console.error("Update Error:", error);
+      toast.error("Failed to update listing.");
     } finally {
-      setLoading(false); // Hide loader after fetching
+      setLoading(false);
     }
   };
 
-  const handleNavigate = () => {
-    const router = useRouter();
-    router.push("/dashboard");
-  };
   return (
-    <Wrapper title="Add New Listing">
+    <Wrapper title="Update Listing">
       <FormWrapper onSubmit={handleSubmit}>
+        {/* Your existing form fields here */}
+
         <SectionWrapper title="Property Information">
           <div className="flex flex-col gap-3 col-span-2">
             <h1 className="font-semibold text-base text-primary">
@@ -224,6 +232,7 @@ function AddNewListing() {
                     type="radio"
                     name="category"
                     value={category.value}
+                    checked={formData.category === category.value}
                     required
                     className="border  border-gray-400 rounded-full checked:bg-gray-500 checked:border-transparent focus:outline-none focus:ring-0 focus:ring-offset-2"
                     onChange={(e) =>
@@ -295,7 +304,7 @@ function AddNewListing() {
               options={amenitiesOptions}
               // Bind the value prop to match the structure of MultiValue<OptionType>
               value={amenitiesOptions.filter((option) =>
-                formData.amenities.includes(option.value)
+                formData.postDetail.amenities.includes(option.value)
               )}
               onChange={handleAmenitiesChange} // Update form data when selection changes
               className="basic-multi-select"
@@ -319,7 +328,7 @@ function AddNewListing() {
               <option value="">Select a State</option>
               {states.map((state) => (
                 <option key={state} value={state}>
-                 {capitalizeWords(state)}
+                  {capitalizeWords(state)}
                 </option>
               ))}
             </select>
@@ -337,7 +346,7 @@ function AddNewListing() {
               {formData.state &&
                 cities[formData.state as keyof typeof cities]?.map((city) => (
                   <option key={city} value={city}>
-                 {capitalizeWords(city)}
+                    {capitalizeWords(city)}
                   </option>
                 ))}
             </select>
@@ -389,13 +398,12 @@ function AddNewListing() {
             <textarea
               name="description"
               className="p-2 w-full h-28 resize-none border border-gray-300 rounded-md"
-              value={formData.description}
+              value={formData.postDetail.desc}
               required
               onChange={handleChange}
             ></textarea>
           </div>
         </SectionWrapper>
-
         <section className="flex flex-col gap-8 items-center w-full">
           <h2 className="text-lg font-bold text-center text-primary">
             Photos and Videos of Property
@@ -411,21 +419,27 @@ function AddNewListing() {
                 <div className="flex flex-col items-center justify-center gap-7 w-full">
                   <span className="text-base">Images:</span>
                   <div className="flex gap-4">
-                    {Array.from(formData.images).map((file, idx) => (
-                      <div className="relative" key={idx}>
-                        <img
-                          src={URL.createObjectURL(file)} // Create a URL for the image
-                          alt={`uploaded-image-${idx}`} // Provide a unique alt text
-                          className="w-24 h-24 object-cover rounded-md" // Adjust styles as needed
-                        />
-                        <button
-                          onClick={() => handleRemoveFile(idx)} // Pass the index to the remove function
-                          className="absolute -top-3 -right-1  text-black rounded-full "
-                        >
-                          &times; {/* "X" character */}
-                        </button>
-                      </div>
-                    ))}
+                    {Array.from(formData.images).map((file, idx) => {
+                      if (file instanceof File) {
+                        // Ensure it's a File object
+                        return (
+                          <div className="relative" key={idx}>
+                            <img
+                              src={URL.createObjectURL(file)} // Create a URL for the image
+                              alt={`uploaded-image-${idx}`} // Provide a unique alt text
+                              className="w-24 h-24 object-cover rounded-md" // Adjust styles as needed
+                            />
+                            <button
+                              onClick={() => handleRemoveFile(idx)} // Pass the index to the remove function
+                              className="absolute -top-3 -right-1 text-black rounded-full "
+                            >
+                              &times; {/* "X" character */}
+                            </button>
+                          </div>
+                        );
+                      }
+                      return null; // Skip invalid files
+                    })}
                   </div>
                 </div>
               ) : (
@@ -456,29 +470,22 @@ function AddNewListing() {
             </span>
           </div>
         </section>
-        <section className="w-full flex justify-center md:justify-end">
-         
-          <Button disabled={loading} type="submit" onClick={null} child={``} loading={``}>
-            {loading ? (
-              <div className="px-8">
-                {" "}
-                <TailSpin
-                  visible={true}
-                  height="30"
-                  width="30"
-                  color="#fff"
-                  ariaLabel="tail-spin-loading"
-                  radius="2"
-                />
-              </div>
-            ) : (
-              "List Property"
-            )}
-          </Button>
-        </section>
+        <Button
+          type="submit"
+          disabled={loading}
+          onClick={null}
+          child={``}
+          loading={``}
+        >
+          {loading ? (
+            <TailSpin height={20} width={20} color="#fff" ariaLabel="Loading" />
+          ) : (
+            "Update Listing"
+          )}
+        </Button>
       </FormWrapper>
     </Wrapper>
   );
 }
 
-export default AddNewListing;
+export default UpdateListing;
