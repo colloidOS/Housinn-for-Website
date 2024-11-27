@@ -67,13 +67,13 @@ const PasswordFields = ({ updatePassword, setUpdatedPassword }) => {
               id={field.id}
               type={visible[field.id] ? "text" : "password"} // Toggle type based on visibility
               placeholder={field.placeholder}
-              className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:outline"
+              className="w-full px-4 py-2 border border-gray-300 placeholder:text-gray-500 text-gray-600 rounded-[4px] focus:border-black duration-300 "
               value={field.value}
               onChange={field.onChange}
             />
             <button
               type="button"
-              className="absolute right-3 top-1/2 transform focus:outline-none -translate-y-1/2 text-gray-500"
+              className="absolute right-3 top-1/2 transform focus:outline-none -translate-y-1/2 text-gray-500 duration-300"
               onClick={() => toggleVisibility(field.id)}
             >
               {visible[field.id] ? <IoEyeOutline /> : <IoEyeOffOutline />}

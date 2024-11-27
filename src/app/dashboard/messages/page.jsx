@@ -4,9 +4,9 @@ import io from "socket.io-client";
 import Image from "next/image";
 import { ClipLoader } from "react-spinners";
 import api from "@/lib/api";
-import { SendHorizontal } from "lucide-react";
-import Pfp from "../../../../public/images/pfp.png"; // Default profile image
-import Search from "../../../../public/icons/search.svg"; // Search icon
+import { SendHorizontal, ArrowLeftIcon } from "lucide-react";
+import Pfp from "../../../../public/images/pfp.png"; 
+import Search from "../../../../public/icons/search.svg"; 
 import { useAuth } from "@/context/AuthContext";
 import {
   format,
@@ -263,6 +263,7 @@ const MessagePage = () => {
   const [isLoading, setIsLoading] = useState(false); // State to track loading
 
   const handleSendMessage = () => {
+   
     if (newMessageText && currentChat) {
       setIsLoading(true); // Show loading spinner when sending the message
 
@@ -459,19 +460,32 @@ const MessagePage = () => {
       return receiverName.includes(searchQuery.toLowerCase());
     });
 
-  const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
-      handleSendMessage();
-    }
+
+  // States for managing transitions and button behavior
+const [sendingMessage, setSendingMessage] =useState(false)
+  const handleSendMessageClick = async () => {
+    
+    if (!newMessageText.trim()) return;
+    if (newMessageText.trim()) {
+      newMessageText.trimStart()
+      // Simulate sending message while preserving formatting
+      console.log("Sending message:", newMessageText);
+      setNewMessageText(""); // Clear input after sending
+    } // Prevent sending empty messages
+    console.log("Button clicked: Disabling...");
+    setSendingMessage(true); // Disable button
+    handleSendMessage(); // Call your send message logic
+    console.log("Re-enabling button...");
+    setSendingMessage(false); // Re-enable button
   };
 
   return (
-    <div className="w-full flex flex-col h-full bg-background-2 gap-5 h-scree px-4 sm:px-8 pt-6">
+    <div className={`w-full flex flex-col h-full bg-background-2 gap-5 h-scree px-4 sm:px-8 ${showChatList ? 'pt-6': 'p-0'} `}>
       {/* Chat List and Search */}
       <div className="flex flex-col gap-4 lg:border-b border-gray-400">
-        <h2 className="text-2xl font-bold text-black">Messages</h2>
+        <h2 className={`text-2xl font-bold text-black ${showChatList ? 'block': 'hidden'}`}>Messages</h2>
         <div
-          className={`flex gap-6 sm:w-fit bg-white p-1 ${
+          className={`flex sm:gap-6 sm:w-fit bg-white p-1 ${
             showChatList ? "block" : "hidden sm:flex"
           }`}
         >
@@ -499,6 +513,7 @@ const MessagePage = () => {
       </div>
 
       <div className="flex gap-5 w-full h-full md:h-[560px]">
+        
         <div
           className={`flex flex-col gap-6 w-full lg:w-2/5 rounded-lg px-3 lg:px-4 xl:px-6 py-3 bg-white-200 ${
             showChatList ? "block" : "hidden lg:block"
@@ -607,14 +622,15 @@ const MessagePage = () => {
         >
           {currentChat ? (
             <div className="h-full">
-              <div className="p-4 bg-blue-100 rounded-t-lg flex items-center">
+              <div className="p-2 sm:p-4 bg-blue-100 rounded-t-lg flex items-center">
                 {currentChat.receiver && (
                   <>
                     <button
                       onClick={handleGoBack}
-                      className=" lg:hidden mr-4 text-blue-500 font-bold text-lg"
+                      className=" lg:hidden  text-primary mr-2 font-bold text-lg"
                     >
-                      ←
+                      <ArrowLeftIcon className="w-7 h-7"/>
+                      {/* <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> */}
                     </button>
                     <img
                       src={currentChat.receiver.avatar || "/property.png"}
@@ -631,7 +647,7 @@ const MessagePage = () => {
               </div>
 
               {/* Messages Section */}
-              <div className="relative flex flex-col overflow-y-auto p-4 px-10 h-full w-full custom-scrollbar">
+              <div className="relative flex flex-col overflow-y-auto p-4 sm:px-10 h-full w-full custom-scrollbar">
                 {loadingMessages ? (
                   <p className="h-[500px] w-full flex items-center justify-center">
                     Loading messages... <ClipLoader color="#000" size={20} />
@@ -650,6 +666,7 @@ const MessagePage = () => {
                         <div
                           key={`date-${message.id}`}
                           className="text-center mx-auto text-gray-500 text-xs p-1 px-2 bg-gray-600/20 rounded-lg w-fit "
+                          
                         >
                           {formatDateHeader(message.createdAt)}
                         </div>
@@ -672,8 +689,9 @@ const MessagePage = () => {
                                 ? "text-black"
                                 : "text-black"
                             }`}
+                            style={{ whiteSpace: "pre-wrap" }}
                           >
-                            {message.text}
+                            {message.text.replace(/^\n+/, "")}
                           </div>
                           <div className="text-[10px] w-11 flex items-end text-nowrap">
                             {messageformatTime(message.createdAt)}
@@ -693,10 +711,8 @@ const MessagePage = () => {
               {/* Message Input */}
               <div className="flex p-4 border-t border-gray-300">
                 <textarea
-                  ref={messageInputRef}
                   value={newMessageText}
                   onChange={handleInputChange}
-                  onKeyDown={handleKeyDown}
                   rows={1}
                   className="w-full p-2 rounded-lg resize-none overflow-hidden focus:outline-none"
                   placeholder="Type a message"
@@ -705,9 +721,15 @@ const MessagePage = () => {
                   }}
                 />
                 <button
-                  onClick={handleSendMessage}
-                  className="bg-blue-500 text-white rounded-r-lg px-4"
-                >
+                  onClick={handleSendMessageClick}
+                  disabled={
+                    sendingMessage || !newMessageText.trim() // Disable button based on conditions
+                  }
+                  className={`${
+                    sendingMessage || !newMessageText.trim()
+                      ? "bg-gray-300 cursor-not-allowed"
+                      : "bg-blue-500"
+                  } text-white rounded-r-lg px-4`}>
                   <SendHorizontal />
                 </button>
               </div>

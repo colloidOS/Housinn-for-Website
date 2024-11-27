@@ -1,68 +1,14 @@
 "use client";
-import {
-  LayoutDashboard,
-  ChevronDown,
-  Heart,
-  Home,
-  LucideProps,
-  Mail,
-  User,
-  Search,
-  SquarePlus,
-} from "lucide-react";
+import { LucideProps, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FC, ForwardRefExoticComponent, RefAttributes } from "react";
-import { useAuth } from "@/context/AuthContext"; // Import the useAuth hook
+import { FC, ForwardRefExoticComponent, RefAttributes, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "@/context/AuthContext";
 import SkeletonLoader from "./Skeleton";
-
-const sideItems = [
-  {
-    route: "Dashboard",
-    link: "/dashboard",
-    icon: LayoutDashboard,
-    id: "dashboard",
-  },
-  {
-    route: "Profile",
-    link: "/dashboard/profile",
-    icon: User,
-    id: "profile",
-  },
-  {
-    route: "My Listings",
-    link: "/dashboard/listings",
-    icon: Home,
-    id: "listings",
-  },
-  {
-    route: "Messages",
-    link: "/dashboard/messages",
-    icon: Mail,
-    id: "messages",
-  },
-  {
-    route: "Favorites",
-    link: "/dashboard/favorites",
-    icon: Heart,
-    id: "favorites",
-  },
-  {
-    route: "Saved Searches",
-    link: "/dashboard/saved-searches",
-    icon: Search,
-    id: "save-searches",
-  },
-];
-
-const addNewListingLinks = [
-  {
-    route: "Add New Listing",
-    link: "/dashboard/add-new-listing",
-    icon: SquarePlus,
-    id: "add-new-listing",
-  },
-];
+import Image from "next/image";
+import { sideItems, addNewListingLinks } from "@/data/sidebar";
+import { Logo } from "../../../../../../public/icons";
 
 interface Iproperties {
   sideNavitems?: {
@@ -85,6 +31,8 @@ const SettingsSidebar: FC<Iproperties> = ({ className }) => {
   const isDashboard =
     currentPath === "dashboard" && organizationPath === undefined;
 
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // Track mobile menu state
+
   // If user data is not yet loaded, show the skeleton loader
   if (!user) {
     return (
@@ -104,30 +52,29 @@ const SettingsSidebar: FC<Iproperties> = ({ className }) => {
         )
       : sideItems;
 
-  return (
-    <div
-      className={` ${className} h-full hidden lg:flex flex-col gap-11 items-center justify-center bg-white-200 pt-6  md:w-[200px] md:justify-start `}
-    >
-      <section className="pr-4 flex flex-col gap-y-3">
-        {filteredSideItems.map((item, index) => (
-          <Link
-            key={index}
-            href={item.link}
-            data-testid={item.id}
-            role="sidebar-link"
-            className={`${
-              currentPath === item.id ||
-              (isDashboard && item.id === "dashboard")
-                ? "bg-active text-primary"
-                : "bg-transparent text-gray-500 hover:bg-gray-300"
-            } flex cursor-pointer items-center justify-center gap-5 rounded-full pl-6 xl:pl-11 pr-6 py-3 text-lg transition-all duration-300 ease-in md:h-auto md:w-auto md:justify-start md:rounded-sm`}
-          >
-            {item.icon && <item.icon className="h-5 w-5" role="sidebar-icon" />}
-            <span className="text-nowrap">{item.route}</span>
-          </Link>
-        ))}
-      </section>
-
+  // Sidebar Content
+  const SidebarContent = (
+    <section className=" sm:pr-4 flex flex-col gap-y-3 justify-center">
+      <Link href={`/`} className="flex items-end justify-end  lg:hidden">
+        <Image src={Logo} alt="" />
+      </Link>
+      {filteredSideItems.map((item, index) => (
+        <Link
+          key={index}
+          href={item.link}
+          data-testid={item.id}
+          role="sidebar-link"
+          onClick={() => setIsMobileMenuOpen(false)} // Close menu on link click
+          className={`${
+            currentPath === item.id || (isDashboard && item.id === "dashboard")
+              ? "bg-active text-primary"
+              : "bg-transparent text-gray-500 hover:bg-gray-300"
+          } flex cursor-pointer items-center lg:justify-cente gap-5 rounded-lg px-3 sm:px-6 xl:pl-11 py-3 text-base sm:text-lg transition-all duration-300 ease-in md:h-auto md:w-auto md:justify-start md:rounded-sm`}
+        >
+          {item.icon && <item.icon className="h-5 w-5" role="sidebar-icon" />}
+          <span className="text-nowrap">{item.route}</span>
+        </Link>
+      ))}
       {user?.userType !== "individual" && (
         <section className="flex flex-col items-center w-full justify-center">
           {addNewListingLinks.map((item, index) => (
@@ -136,11 +83,12 @@ const SettingsSidebar: FC<Iproperties> = ({ className }) => {
               href={item.link}
               data-testid={item.id}
               role="sidebar-link"
+              onClick={() => setIsMobileMenuOpen(false)} // Close menu on link click
               className={`${
                 organizationPath === item.id
                   ? "shadow-custom-negative-shadow"
                   : " text-gray-500 hover:bg- "
-              } px-6 py-[11px] w-fit bg-secondary text-white rounded-md text-base font-semibold flex items-center justify-center cursor-pointer transition-all duration-200 ease-in md:justify-between `}
+              } px-3 sm:px-6 py-3 w-fit bg-secondary text-white rounded-md text-nowrap text-base font-semibold flex items-center justify-center cursor-pointer transition-all duration-200 ease-in md:justify-between`}
             >
               <div className="flex items-center justify-start gap-2">
                 {item.icon && (
@@ -155,7 +103,57 @@ const SettingsSidebar: FC<Iproperties> = ({ className }) => {
           ))}
         </section>
       )}
-    </div>
+    </section>
+  );
+
+  return (
+    <>
+      {/* Hamburger Icon for Mobile */}
+      <button
+        className="lg:hidden fixed top-3 left-4 z-50 p-2 bg-white rounded-md shadow-md"
+        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+      >
+        {isMobileMenuOpen ? (
+          <X className="h-6 w-6" />
+        ) : (
+          <Menu className="h-6 w-6" />
+        )}
+      </button>
+
+      {/* Sidebar for Desktop */}
+      <div
+        className={` ${className} h-full hidden lg:flex flex-col gap-11 items-center justify-center bg-white-200 pt-6 lg:w-[230px] xl:w-[270px] md:justify-start `}
+      >
+        {SidebarContent}
+      </div>
+
+      {/* Mobile Sidebar */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <>
+            <motion.div
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="fixed top-0 left-0 z-40 w-3/5 sm:w-2/5 h-screen bg-white shadow-lg flex flex-col p-4"
+            >
+              {SidebarContent}
+            </motion.div>
+
+            {/* Background Overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-30"
+              onClick={() => setIsMobileMenuOpen(false)} // Close sidebar when overlay is clicked
+            />
+          </>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 

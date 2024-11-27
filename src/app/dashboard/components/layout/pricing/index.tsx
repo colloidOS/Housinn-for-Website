@@ -11,10 +11,10 @@ function Subscription() {
           <h2 className="text-lg font-semibold px-3">Subscription</h2>
           <div className="flex flex-col gap-1">
             <p className="text-center">Pro</p>
-            <span className="text-2xl font-bold pl-14">₦10,000 / Month</span>
+            <span className="text-2xl font-bold xl:pl-14">₦10,000 / Month</span>
           </div>
         </div>
-        <div className="flex flex-col gap-2 pl-14">
+        <div className="flex flex-col gap-2 xl:pl-14 text-nowrap">
           <div className="flex gap-2">
             <Image src={Check} width={16} height={16} alt="check" />
             <p>Unlimited Listings</p>

@@ -4,7 +4,7 @@ const PieChart = () => {
   return (
     <div className="w-full flex flex-col items-center justify-center bg-white shadow-md rounded-lg p-6">
       <h2 className="text-lg font-semibold mb-4">Total Listings</h2>
-      <div className="relative w-[150px] h-[150px]">
+      <div className="relative w-[120px]  xl:w-[150px] h-[150px]">
         <svg viewBox="0 0 36 36" className="w-full h-full">
           <circle
             cx="18"

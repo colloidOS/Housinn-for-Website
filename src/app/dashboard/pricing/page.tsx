@@ -13,7 +13,7 @@ function Pricing() {
   );
 
   return (
-    <div className="w-full flex flex-col bg-background-2 gap-5 px-12 py-10">
+    <div className="w-full flex flex-col bg-background-2 gap-5 px-5 lg:px-12 py-10">
       <div className="flex flex-col gap-4">
         <h2 className="text-2xl font-bold text-black">Pricing</h2>
         <p className="flex gap-0.5 text-gray-600">
@@ -65,7 +65,7 @@ function Pricing() {
         </div>
 
         {/* Plan cards */}
-        <div className="flex gap-6 w-full">
+        <div className="flex flex-col md:flex-row gap-6 w-full">
           <div className="w-full flex-nowrap flex flex-col justify-between py-6 px-4 border border-white rounded-lg  bg-white">
             <div className="flex flex-col gap-4">
               <div className="flex  flex-col gap-6">

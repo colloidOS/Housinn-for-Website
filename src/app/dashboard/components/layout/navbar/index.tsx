@@ -3,27 +3,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { Logo, Notification } from "../../../../../../public/icons";
+import { Logo } from "../../../../../../public/icons";
 import { UserNavbarProps } from "@/types";
 import { tagData } from "@/data/navbar";
-
-const navlinks = [
-  {
-    route: "For Sale",
-    link: "",
-    id: "dashboard",
-  },
-  {
-    route: "Rent",
-    link: "",
-    id: "rent",
-  },
-  {
-    route: "Short Let",
-    link: "/",
-    id: "short let",
-  },
-];
 
 const UserNavbar: React.FC<UserNavbarProps> = ({ className }) => {
   const pathname = usePathname();
@@ -43,7 +25,7 @@ const UserNavbar: React.FC<UserNavbarProps> = ({ className }) => {
       <div className="flex items-center justify-between gap-2">
         <div className="flex w-full justify-between gap-1 items-center">
           <ul
-            className={`hidden md:flex gap-2 text-gray-500 
+            className={`hidden pl-10 md:flex gap-2 text-gray-500 
           `}
           >
             {tagData.map((tag) => (
@@ -56,7 +38,7 @@ const UserNavbar: React.FC<UserNavbarProps> = ({ className }) => {
               </Link>
             ))}
           </ul>
-          <Link href={`/`}>
+          <Link href={`/`} className="pl-10 sm:p-0">
             <Image
               src={Logo}
               alt="Housinn logo"
