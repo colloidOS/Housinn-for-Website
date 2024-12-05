@@ -20,7 +20,7 @@ const HeroSection = () => {
   };
 
   return (
-    <div className="flex relative flex-col items-center justify-center w-full gap-[67px] h-screen text-center text-white z-10">
+    <div className="flex relative flex-col items-center justify-center w-full gap-[67px] h-screen text-center text-white z-0">
       <h1 className="text-5xl font-bold sm:text-[64px] leading-[60px] sm:leading-[87px] text-center max-w-[1000px] sm:font-semibold">
         Africa’s Innovative Property Marketplace
       </h1>
