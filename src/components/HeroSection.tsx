@@ -22,7 +22,7 @@ const HeroSection = () => {
   return (
     <div className="flex relative flex-col items-center justify-center w-full gap-[67px] h-screen text-center text-white z-0">
       <h1 className="text-5xl font-bold sm:text-[64px] leading-[60px] sm:leading-[87px] text-center max-w-[1000px] sm:font-semibold">
-        Your Key to Extraordinary Living Begins Here
+        Africa’s Innovative Property Marketplace
       </h1>
       <div className="relative flex w-full justify-center sm:px-0 px-4">
         <input

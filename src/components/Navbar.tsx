@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { Logo, Notification } from "../../public/icons";
+import { Logo, LogoWhite, Notification } from "../../public/icons";
 import Link from "next/link";
 import {
   dropdownVariants,
@@ -69,11 +69,10 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
   const image = user?.avatar || "icons/profile.svg";
   const isDefaultScheme = colorScheme === "default";
 
-
   return (
     <Wrapper disablePadding>
       <nav
-        className={`w-full grid grid-cols-2 sm:grid-cols-3 items-center justify-between  `}
+        className={`w-full grid grid-cols-2 sm:grid-cols-3 items-center justify-between relative z-0 `}
       >
         <ul
           className={`sm:flex gap-2 ${
@@ -94,17 +93,30 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
         </ul>
 
         <Link href="/" className="flex sm:justify-center">
-          <Image
-            src={Logo}
-            alt="Housinn logo"
-            width={0}
-            height={0}
-            className={`w-auto h-12 ${isDefaultScheme ? "lg:h-16" : "lg:h-14"}`}
-          />
+          {isDefaultScheme ? (
+            <Image
+              src={LogoWhite}
+              alt="Housinn logo"
+              width={0}
+              height={0}
+              className={`w-auto h-12 ${
+                isDefaultScheme ? "lg:h-16" : "lg:h-14"
+              }`}
+            />
+          ) : (
+            <Image
+              src={Logo}
+              alt="Housinn logo"
+              width={0}
+              height={0}
+              className={`w-auto h-12 ${
+                isDefaultScheme ? "lg:h-16" : "lg:h-14"
+              }`}
+            />
+          )}
         </Link>
 
         <div className="flex justify-end items-center gap-4">
-       
           {loading ? (
             <SkeletonLoader /> // Display the skeleton loader while checking authentication
           ) : isLoggedIn ? (
@@ -117,14 +129,14 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
                     : "border-primary text-primary"
                 } p-1 rounded-full flex gap-2  justify-center items-center`}
               >
-               <img
-                    src={image}
-                    className="w-7 h-7  rounded-full"
-                    alt="profile"
-                    onError={(e) => {
-                      e.currentTarget.src = "/icons/profile.svg";
-                    }}
-                  />
+                <img
+                  src={image}
+                  className="w-7 h-7  rounded-full"
+                  alt="profile"
+                  onError={(e) => {
+                    e.currentTarget.src = "/icons/profile.svg";
+                  }}
+                />
                 <motion.div
                   animate={{ rotate: dropdownOpen ? 180 : 0 }}
                   transition={{ duration: 0.3 }}

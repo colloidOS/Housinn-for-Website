@@ -10,6 +10,8 @@ import { tagData } from "@/data/navbar";
 const UserNavbar: React.FC<UserNavbarProps> = ({ className }) => {
   const pathname = usePathname();
   const currentPath = pathname?.split("/")[2];
+  console.log(pathname)
+  console.log(currentPath)
 
   // Get user data from the AuthContext
   const { user } = useAuth();
@@ -39,12 +41,13 @@ const UserNavbar: React.FC<UserNavbarProps> = ({ className }) => {
             ))}
           </ul>
           <Link href={`/`} className="pl-10 sm:p-0">
+
             <Image
               src={Logo}
               alt="Housinn logo"
               width={0}
               height={0}
-              className={`w-auto  h-12 lg:h-14`}
+              className={`w-auto text-white h-12 lg:h-14`}
             />
           </Link>
           <div className="flex gap-5 ">
