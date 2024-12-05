@@ -72,7 +72,7 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
   return (
     <Wrapper disablePadding>
       <nav
-        className={`w-full grid grid-cols-2 sm:grid-cols-3 items-center justify-between relative z-0 `}
+        className={`w-full grid grid-cols-2 sm:grid-cols-3 items-center justify-between relative z-10 `}
       >
         <ul
           className={`sm:flex gap-2 ${
