@@ -36,7 +36,7 @@ import Sanrealtor from "./Sanrealtor.svg";
 import Profile from "./profile.svg";
 import Government from "./government.svg";
 import Verified from "./verified.svg";
-
+import LogoWhite from "./Group 200.svg";
 export {
   FilterArrow,
   FilterArrow2,
@@ -75,5 +75,6 @@ export {
   Sanrealtor,
   Profile,
   Government,
-  Verified
+  Verified,
+  LogoWhite,
 };
