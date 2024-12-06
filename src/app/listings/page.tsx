@@ -6,13 +6,13 @@ import Wrapper from "@/components/ui/Wrapper";
 const MyListings: React.FC = () => {
   return (
     <div>
-      <Navbar colorScheme="alternate" />
+      <Navbar heroAnimated colorScheme="alternate" />
       <Wrapper disablePadding >
         <ListingsPage
           getRoute="/posts"
           dataRoute="posts"
           pageTitle="Listings"
-          className="md:px-8"
+          className="md:px-8 pb-8"
         />
       </Wrapper>
     </div>
