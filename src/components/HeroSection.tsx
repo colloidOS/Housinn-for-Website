@@ -2,8 +2,15 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Search from "../../public/icons/search.svg";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
-const HeroSection = () => {
+interface HeroSectionProps {
+  onHeroAnimationComplete: () => void; // Callback prop
+}
+
+const HeroSection: React.FC<HeroSectionProps> = ({
+  onHeroAnimationComplete,
+}) => {
   const [query, setQuery] = useState("");
   const router = useRouter();
 
@@ -19,11 +26,27 @@ const HeroSection = () => {
     }
   };
 
+  const text = "Africa’s Innovative Property Marketplace".split(" ");
+
   return (
-    <div className="flex relative flex-col items-center justify-center w-full gap-[67px] h-screen text-center text-white z-10">
-      <h1 className="text-5xl font-bold sm:text-[64px] leading-[60px] sm:leading-[87px] text-center max-w-[1000px] sm:font-semibold">
-        Africa’s Innovative Property Marketplace
-      </h1>
+    <div className="flex relative flex-col items-center justify-center w-full gap-[67px] h-[70vh] md:h-[85vh] text-center text-white z-0">
+      <motion.h1 className="max-w-[1000px] text-5xl font-semibold sm:font-bold sm:text-[64px] leading-[60px] sm:leading-[87px] ">
+        {text.map((word, index) => (
+          <motion.span
+            key={index}
+            initial={{ opacity: 0, y: 10 }} // Slight fade and vertical motion
+            animate={{ opacity: 1, y: 0 }} // Fully visible and aligned
+            transition={{
+              duration: 0.4, // Duration of each word animation
+              delay: index * 0.1, // Sequential delay based on word index
+            }}
+            onAnimationComplete={onHeroAnimationComplete}
+            className="inline-block mx-3 text-center  sm:font-semibold" // Styling for spacing between words
+          >
+            {word}
+          </motion.span>
+        ))}
+      </motion.h1>
       <div className="relative flex w-full justify-center sm:px-0 px-4">
         <input
           type="search"
