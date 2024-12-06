@@ -18,7 +18,6 @@ import ImageSection from "./ImageSection";
 import ImageGallery from "./ImageGallery";
 import Navbar from "@/components/Navbar";
 
-
 interface ListingDetailProps {
   listing: Listings;
 }
@@ -26,7 +25,7 @@ interface ListingDetailProps {
 const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
   const [showGallery, setShowGallery] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
- 
+
   const [currentImage, setCurrentImage] = useState<string | null>(null);
   const capitalizeFirstLetter = (str: string) => {
     if (!str) return str; // Return if the string is empty
@@ -118,15 +117,15 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
 
   return (
     <div className="w-full min-h-screen">
-      <Navbar colorScheme="alternate" />
-    
+      <Navbar heroAnimated colorScheme="alternate" />
+
       <div className=" justify-between min-h-[90vh] w-full flex flex-col gap-5 py-2 px-2 md:px-4 md:pb-2">
         <ImageSection
           images={listing.images}
           title={listing.title}
           openGallery={openGallery}
         />
-         
+
         <div className="flex flex-col xl:flex-row justify-between w-full gap-x-4 gap-y-4 md:gap-y-8   px-2">
           <div className=" flex flex-col flex-1 gap-4 md:gap-5">
             <div className="flex flex-col gap-2">
