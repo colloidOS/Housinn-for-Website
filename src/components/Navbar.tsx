@@ -142,7 +142,7 @@ const Navbar: React.FC<NavbarProps> = ({heroAnimated ,colorScheme = "default" })
                   className="w-7 h-7  rounded-full"
                   alt="profile"
                   onError={(e) => {
-                    e.currentTarget.src = "/icons/profile.svg";
+                    e.currentTarget.src = "/icons/user-profile.svg";
                   }}
                 />
                 <motion.div
