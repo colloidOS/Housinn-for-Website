@@ -213,8 +213,7 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listing }) => {
               className="relative w-full max-w-3xl"
               onClick={(e) => e.stopPropagation()} // Prevents closing when clicking inside the content
             >
-              <div className="flex items-center justify-between p-4">
-                <h2 className="text-white">Image</h2>
+              <div className="flex items-center justify-end p-4">
                 <button onClick={closeGallery} className="text-white">
                   Close
                 </button>
