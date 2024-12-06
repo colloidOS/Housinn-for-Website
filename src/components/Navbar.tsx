@@ -15,10 +15,11 @@ import SkeletonLoader from "./SkeletonLoader";
 import Wrapper from "./ui/Wrapper";
 
 interface NavbarProps {
+  heroAnimated: boolean;
   colorScheme?: "default" | "alternate";
 }
 
-const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
+const Navbar: React.FC<NavbarProps> = ({heroAnimated ,colorScheme = "default" }) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true); // Loading state
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
@@ -71,7 +72,14 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
 
   return (
     <Wrapper disablePadding>
-      <nav
+      <motion.nav
+      initial={{ opacity: 0, y: -50 }}
+      animate={heroAnimated ? { opacity: 1, y: 0 } : {}}
+      transition={{
+        duration: 0.5,
+        delay: 0.1, // Additional delay if needed after HeroSection
+        ease: "easeOut",
+      }}
         className={`w-full grid grid-cols-2 sm:grid-cols-3 items-center justify-between relative z-10 `}
       >
         <ul
@@ -83,7 +91,7 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
             <Link
               key={tag.tag}
               href={`/listings?tag=${tag.tag}`} // Use href directly
-              className={`text-base font-semibold transition-all p-2.5 duration-500 ease-in-out ${
+              className={`text-base font-semibold transition-all p-2.5 duration-500 ease-in-out text-white ${
                 isDefaultScheme ? "hover:text-primary " : "hover:text-black"
               }`}
             >
@@ -188,7 +196,7 @@ const Navbar: React.FC<NavbarProps> = ({ colorScheme = "default" }) => {
             </div>
           )}
         </div>
-      </nav>
+      </motion.nav>
     </Wrapper>
   );
 };
