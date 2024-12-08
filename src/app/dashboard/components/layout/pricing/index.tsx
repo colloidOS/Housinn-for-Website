@@ -33,7 +33,7 @@ function Subscription() {
           </div>
         </div>
       </div>
-      <button className="w-full rounded-md py-[11px] font-semibold focus:outline-none text-secondary flex justify-center items-center bg-white">
+      <button className="w-full rounded-md py-[11px] font-semibold focus:outline-none text-secondary hover:bg-gray-300 duration-300 flex justify-center items-center bg-white">
         <Link href={`/dashboard/pricing`} className="w-full">
           View Plans
         </Link>

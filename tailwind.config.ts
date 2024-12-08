@@ -90,6 +90,7 @@ const config: Config = {
         "custom-negative-shadow": "0px 2px 20px 0px rgba(0, 0, 0, 0.5)",
         review: "3px 3px 31px -9px #00000040",
         "get-our-app": "2px -2px 41px -11px #00000040",
+        "chart-shadow": "0px 0px 3.61px 0.61px rgba(0, 0, 0, 0.1)",
       },
       borderRadius: {
         lg: "var(--radius)",

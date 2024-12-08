@@ -94,7 +94,11 @@ const AuthPage = () => {
         Object.entries(userData).forEach(([key, value]) => {
           document.cookie = `${key}=${value}; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT`;
         });
-        window.location.href = "/";
+        if (userData.userType === "individual") {
+          window.location.href = "/";
+        } else {
+          window.location.href = "/dashboard";
+        }
       } else {
         response = await api.post("/auth/register", data);
 
@@ -157,10 +161,7 @@ const AuthPage = () => {
             <>
               {signInFields.map((field) => (
                 <div key={field.id} className="mb-3 text-left">
-                  <label
-                    htmlFor={field.id}
-                    className="text-sm font-semibold"
-                  >
+                  <label htmlFor={field.id} className="text-sm font-semibold">
                     {field.label}
                     {errors[field.name] && (
                       <span className="text-red-600 ml-2 text-sm">
@@ -181,7 +182,6 @@ const AuthPage = () => {
                       placeholder={field.placeholder}
                       className="w-full  px-2 py-2 placeholder:text-sm border border-white-300 rounded  focus:outline focus:outline-primary"
                     />
-                    
                     {field.name === "password" && (
                       <span
                         className="absolute right-2 top-[20%] cursor-pointer"
@@ -266,7 +266,13 @@ const AuthPage = () => {
                 </div>
               </div>
               <div className="flex items-start gap-2 pt-8 text-sm text-left">
-                <input required type="checkbox" name="" id="" className="mt-1" />
+                <input
+                  required
+                  type="checkbox"
+                  name=""
+                  id=""
+                  className="mt-1"
+                />
                 <p>
                   {" "}
                   I agree to the{" "}
