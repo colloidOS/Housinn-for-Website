@@ -18,7 +18,7 @@ export default function AdminLayout({
 
       <div className="flex flex-1">
         {/* Sidebar: Sticky and positioned below the navbar */}
-        <div className="sticky top-20 z-10 h-[calc(100vh-5rem)] bg-gray-100">
+        <div className="sticky top-[72px] z-10 h-[calc(100vh-4.5rem)] bg-gray-100">
           {" "}
           {/* Adjust top based on navbar height */}
           <SettingsSidebar />
