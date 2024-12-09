@@ -25,7 +25,7 @@ import { useAuth } from "@/context/AuthContext";
 function UpdateListing() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const id = "674469b0f57ef47424e444f6";
+  const id = "6706dc31435d42ec41ecd05f";
   const { user, setUser } = useAuth();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<UpdateListings>({
@@ -179,27 +179,36 @@ function UpdateListing() {
     e.preventDefault();
     setLoading(true);
     const formDataToSend: FormDataToSend = {
-        
-       
-        bedroom: formData.bedroom,
-        bathroom: formData.bathroom,
-      
-      };
-      const formDataToSendInstance = new FormData();
-      Object.keys(formDataToSend).forEach((key) => {
-        if (formDataToSend[key as keyof FormDataToSend] !== undefined && formDataToSend[key as keyof FormDataToSend] !== null) {
-          formDataToSendInstance.append(key, formDataToSend[key as keyof FormDataToSend] as string);
-        }
-      });
-    console.log("Prepared formData for submission:");
-   
+      bedroom: formData.bedroom,
+      bathroom: formData.bathroom,
+      title: formData.title,
+      state: formData.state,
+      city: formData.city,
+      price: formData.price,
+      type: formData.type,
+      address: formData.address,
     
+    };
+    const formDataToSendInstance = new FormData();
+    Object.keys(formDataToSend).forEach((key) => {
+      if (
+        formDataToSend[key as keyof FormDataToSend] !== undefined &&
+        formDataToSend[key as keyof FormDataToSend] !== null
+      ) {
+        formDataToSendInstance.append(
+          key,
+          formDataToSend[key as keyof FormDataToSend] as string
+        );
+      }
+    });
+    console.log("Prepared formData for submission:");
+
     try {
-        console.log("updateformdatatosend", formDataToSend);
+      console.log("updateformdatatosend", formDataToSend);
       await api.put(`/posts/${id}`, formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
-            "Authorization": `Bearer ${user?.token}`
+          Authorization: `Bearer ${user?.token}`,
         },
       });
       toast.success("Listing updated successfully!");
