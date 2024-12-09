@@ -8,18 +8,21 @@ import {
   sideItems,
   textVariants,
 } from "@/data/navbar"; // assuming this contains all items
-import { Bell, ChevronDown, ChevronUp, Heart, User } from "lucide-react";
+import { ChevronUp } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { motion } from "framer-motion";
 import SkeletonLoader from "./SkeletonLoader";
 import Wrapper from "./ui/Wrapper";
 
 interface NavbarProps {
-  heroAnimated: boolean;
+  heroAnimated?: boolean;
   colorScheme?: "default" | "alternate";
 }
 
-const Navbar: React.FC<NavbarProps> = ({heroAnimated ,colorScheme = "default" }) => {
+const Navbar: React.FC<NavbarProps> = ({
+  heroAnimated,
+  colorScheme = "default",
+}) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true); // Loading state
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
@@ -73,13 +76,13 @@ const Navbar: React.FC<NavbarProps> = ({heroAnimated ,colorScheme = "default" })
   return (
     <Wrapper disablePadding>
       <motion.nav
-      initial={{ opacity: 0, y: -50 }}
-      animate={heroAnimated ? { opacity: 1, y: 0 } : {}}
-      transition={{
-        duration: 0.5,
-        delay: 0.1, // Additional delay if needed after HeroSection
-        ease: "easeOut",
-      }}
+        initial={{ opacity: 0, y: -50 }}
+        animate={heroAnimated ? { opacity: 1, y: 0 } : {}}
+        transition={{
+          duration: 0.5,
+          delay: 0.1, // Additional delay if needed after HeroSection
+          ease: "easeOut",
+        }}
         className={`w-full grid grid-cols-2 sm:grid-cols-3 items-center justify-between relative z-10 `}
       >
         <ul
@@ -142,7 +145,7 @@ const Navbar: React.FC<NavbarProps> = ({heroAnimated ,colorScheme = "default" })
                   className="w-7 h-7  rounded-full"
                   alt="profile"
                   onError={(e) => {
-                    e.currentTarget.src = "/icons/profile.svg";
+                    e.currentTarget.src = "/icons/user-profile.svg";
                   }}
                 />
                 <motion.div

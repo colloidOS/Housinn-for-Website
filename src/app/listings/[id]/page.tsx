@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation"; // Use useParams for dynamic routing in App Router
 import ListingDetail from "./components/ListingDetail";
 import api from "../../../lib/api";
-import { TailSpin } from "react-loader-spinner";
 import { toast } from "sonner";
 import axios from "axios";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -22,7 +21,6 @@ const ListingDetailPage: React.FC = () => {
       try {
         const response = await api.get(`/posts/${id}`);
         setListing(response.data.data);
-        console.log("dfghtrd", response);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           const errorMessage = error.response?.data?.message || error.message;
@@ -40,14 +38,6 @@ const ListingDetailPage: React.FC = () => {
     <div className=" w-full">
       {loading ? (
         <div className="flex flex-col  w-full p-2 gap-2">
-          {/* <TailSpin
-            visible={true}
-            height="80"
-            width="80"
-            color="#002A50"
-            ariaLabel="tail-spin-loading"
-            radius="1"
-          /> */}
           <Skeleton className="h-[10vh] w-full rounded-[14px]" />
           <Skeleton className="rounded-[14px] h-[40vh] md:h-[45vh] lg:h-[50vh] w-full" />
 

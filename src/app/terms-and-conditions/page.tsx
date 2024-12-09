@@ -6,7 +6,7 @@ import TermsAndConditions from "./components/TermsAndConditions";
 const TermsAndConditionsPage = () => {
   return (
     <div>
-      <Navbar colorScheme="alternate" />
+      <Navbar heroAnimated colorScheme="alternate" />
       <TermsAndConditions />
     </div>
   );
