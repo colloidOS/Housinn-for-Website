@@ -7,7 +7,7 @@ import PrivacyPolicy from "./components/PrivacyPolicy";
 const PrivacyPolicyPage = () => {
   return (
     <div>
-      <Navbar colorScheme="alternate" />
+      <Navbar heroAnimated colorScheme="alternate" />
       <PrivacyPolicy/>
     </div>
   );
