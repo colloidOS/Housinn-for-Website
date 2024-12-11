@@ -8,7 +8,10 @@ type Column<T> = {
   label: string;
   hidden?: boolean; // Optional property for hidden columns
 };
-const ListingSort: React.FC<ListingsSortProps> = ({ listings }) => {
+const ListingSort: React.FC<ListingsSortProps> = ({
+  listings,
+  useMyListings = false,
+}) => {
   const [sortConfig, setSortConfig] = useState<{
     key: keyof Listings;
     direction: "asc" | "desc";
@@ -66,7 +69,7 @@ const ListingSort: React.FC<ListingsSortProps> = ({ listings }) => {
     { key: "beds", label: "Bed" },
     { key: "baths", label: "Bath" },
     { key: "listed", label: "Date", hidden: true }, // Add hidden flag for responsive design
-    { key: "isSaved", label: "Fav" },
+    { key: "isSaved", label: useMyListings ? "Opt" : "Fav" },
   ];
 
   return (
@@ -99,7 +102,11 @@ const ListingSort: React.FC<ListingsSortProps> = ({ listings }) => {
       </thead>
       <tbody>
         {sortedListings.map((listing) => (
-          <ListingTable key={listing.id} listing={listing} />
+          <ListingTable
+            key={listing.id}
+            listing={listing}
+            useMyListings={useMyListings}
+          />
         ))}
       </tbody>
     </table>

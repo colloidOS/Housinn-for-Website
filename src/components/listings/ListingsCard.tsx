@@ -24,7 +24,6 @@ const ListingCard: React.FC<ListingsCardProps> = ({
 }) => {
   const router = useRouter();
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
-
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
   const { deleteListing, loading } = useDeleteListing(listing.id);
@@ -177,17 +176,17 @@ const ListingCard: React.FC<ListingsCardProps> = ({
         )}
         {dropdownOpen && (
           <div
-            className="absolute right-1 -bottom-20 bg-white border shadow-lg rounded-md text-sm z-10"
+            className="absolute right-1 -bottom-20  bg-white border shadow-lg rounded-[7px] text-sm z-10"
             onClick={(e) => e.stopPropagation()} // Prevent menu clicks from triggering card click
           >
             <button
-              className="block w-full px-4 py-2 hover:bg-gray-100 text-left"
+              className="block transition-colors duration-500 w-full px-4 py-2 hover:bg-secondary hover:text-white text-left"
               onClick={handleUpdate}
             >
               Update
             </button>
             <button
-              className="block w-full px-4 py-2 hover:bg-gray-100 text-left"
+              className="block w-full px-4 py-2 transition-colors duration-500 hover:bg-red-700 hover:text-white text-left"
               onClick={handleDelete}
             >
               Delete

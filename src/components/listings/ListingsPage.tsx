@@ -230,7 +230,7 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
                 exit={{ opacity: 0 }}
                 transition={{ duration: 1 }} // Smooth transition timing
               >
-                <ListingSort listings={listings} />
+                <ListingSort listings={listings}   useMyListings={useMyListings}/>
               </motion.div>
             </AnimatePresence>
           ) : (

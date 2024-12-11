@@ -71,9 +71,12 @@ export interface ListingsFilterProps {
 }
 export interface ListingsTableProps {
   listing: Listing;
+  useMyListings?: boolean;
 }
 export interface ListingsSortProps {
   listings: Listing[]; // Receive listings as prop
+  useMyListings?: boolean;
+  openModal?: (listingId: string) => void;
 }
 export interface ListingsProps {
   shouldSlice?: boolean;
