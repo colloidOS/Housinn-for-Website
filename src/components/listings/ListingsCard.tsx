@@ -12,7 +12,9 @@ import {
 import { useRouter } from "next/navigation";
 import { ListingsCardProps } from "@/types";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
-import { EllipsisIcon} from "lucide-react";
+import { EllipsisIcon } from "lucide-react";
+import { useDeleteListing } from "@/hooks/useDeleteListing";
+import ConfirmationModal from "./ui/ConfirmationModal";
 
 // Combined Listing Card Component
 const ListingCard: React.FC<ListingsCardProps> = ({
@@ -20,10 +22,12 @@ const ListingCard: React.FC<ListingsCardProps> = ({
   onSave,
   isSaved,
   useMyListings = false,
+  openModal,
 }) => {
   const router = useRouter();
   const [dropdownVisible, setDropdownVisible] = useState(false);
-
+  const [isModalOpen, setModalOpen] = useState(false);
+  const { deleteListing, loading } = useDeleteListing(listing.id);
   const toggleDropdown = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent triggering the card click
     setDropdownVisible((prev) => !prev);
@@ -34,11 +38,19 @@ const ListingCard: React.FC<ListingsCardProps> = ({
   };
 
   const handleDelete = () => {
-    console.log("Delete clicked for listing:", listing.id);
-    // Add your delete logic here
+    setModalOpen(true);
   };
-  const handleCardClick = () => {
-    router.push(`/listings/${listing.id}`);
+
+  const confirmDelete = async () => {
+    await deleteListing();
+    setModalOpen(false);
+  };
+  const handleCardClick = (e: React.MouseEvent) => {
+    if (isModalOpen) {
+      e.stopPropagation(); // Stop event from propagating to prevent navigation
+    } else {
+      router.push(`/listings/${listing.id}`);
+    }
   };
   // console.log("listingtag", listing.category)
   const getCategoryStyle = () => {
@@ -170,29 +182,6 @@ const ListingCard: React.FC<ListingsCardProps> = ({
           <p className="text-gray-500 text-xs">{listing.cityState}</p>
         </div>
 
-        {/* {listing.beds && listing.baths ? (
-          <div className="flex  gap-3 text-gray-500 text-xs">
-            {" "}
-            {listing.beds > 0 ? (
-              <div className="flex gap-1">
-                <Image src={Bed} alt="Bed icon" width={15} height={15} />
-                {listing.beds} Beds
-              </div>
-            ) : (
-              ""
-            )}
-            {listing.baths > 0 ? (
-              <div className="flex gap-1">
-                <Image src={Bath} alt="Bath icon" width={15} height={15} />
-                {listing.baths} Baths
-              </div>
-            ) : (
-              ""
-            )}
-          </div>
-        ) : (
-          ""
-        )} */}
         <div className="flex  gap-3 text-gray-500 text-xs">
           <div className="flex gap-1">
             <Image src={Bed} alt="Bed icon" width={15} height={15} />
@@ -217,6 +206,13 @@ const ListingCard: React.FC<ListingsCardProps> = ({
           </p>
         </div>
       </div>
+      <ConfirmationModal
+        isOpen={isModalOpen}
+        onClose={() => setModalOpen(false)}
+        onConfirm={confirmDelete}
+        title="Delete Listing"
+        message={`Are you sure you want to delete the listing titled "${listing.title}"?`}
+      />
     </div>
   );
 };

@@ -60,6 +60,7 @@ export interface ListingsCardProps {
   onSave: (id: string) => void;
   isSaved: boolean;
   useMyListings?: boolean;
+  openModal?: (listingId: string) => void; // Add this line
 }
 
 export interface ListingsFilterProps {

@@ -45,7 +45,7 @@ function Dashboard() {
             moved or deleted. Please check the URL, or return to the homepage to
             explore our site.
           </p>
-          
+
           <p className="text-gray-500 text-center mt-10">
             If you need assistance, please{" "}
             <a
