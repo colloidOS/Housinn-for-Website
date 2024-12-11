@@ -15,6 +15,7 @@ import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { EllipsisIcon } from "lucide-react";
 import { useDeleteListing } from "@/hooks/useDeleteListing";
 import ConfirmationModal from "./ui/ConfirmationModal";
+import { useModal } from "@/context/ModalContext";
 
 // Combined Listing Card Component
 const ListingCard: React.FC<ListingsCardProps> = ({
@@ -22,7 +23,6 @@ const ListingCard: React.FC<ListingsCardProps> = ({
   onSave,
   isSaved,
   useMyListings = false,
-  openModal,
 }) => {
   const router = useRouter();
   const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -32,19 +32,39 @@ const ListingCard: React.FC<ListingsCardProps> = ({
     e.stopPropagation(); // Prevent triggering the card click
     setDropdownVisible((prev) => !prev);
   };
-
+  const { openModal, closeModal } = useModal();
   const handleUpdate = () => {
     router.push(`/dashboard/update-listing?id=${listing.id}`);
   };
 
   const handleDelete = () => {
-    setModalOpen(true);
+    openModal(
+      <div>
+        <h2 className="text-lg font-semibold mb-4">Delete Listing</h2>
+        <p className="text-sm text-gray-700 mb-6">
+          Are you sure you want to delete the listing titled "{listing.title}"?
+        </p>
+        <div className="flex justify-end gap-4">
+          <button
+            className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
+            onClick={closeModal}
+          >
+            Cancel
+          </button>
+          <button
+            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+            onClick={() => {
+              deleteListing();
+              closeModal();
+            }}
+          >
+            Confirm
+          </button>
+        </div>
+      </div>
+    );
   };
 
-  const confirmDelete = async () => {
-    await deleteListing();
-    setModalOpen(false);
-  };
   const handleCardClick = (e: React.MouseEvent) => {
     if (isModalOpen) {
       e.stopPropagation(); // Stop event from propagating to prevent navigation
@@ -206,13 +226,6 @@ const ListingCard: React.FC<ListingsCardProps> = ({
           </p>
         </div>
       </div>
-      <ConfirmationModal
-        isOpen={isModalOpen}
-        onClose={() => setModalOpen(false)}
-        onConfirm={confirmDelete}
-        title="Delete Listing"
-        message={`Are you sure you want to delete the listing titled "${listing.title}"?`}
-      />
     </div>
   );
 };

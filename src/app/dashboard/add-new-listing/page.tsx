@@ -204,10 +204,6 @@ function AddNewListing() {
   };
   const router = useRouter();
 
-  const handleNavigate = () => {
-    router?.push("/dashboard");
-  };
-
   const { user } = useAuth();
 
   useEffect(() => {

@@ -12,6 +12,7 @@ import "../styles/nprogress.css";
 import { useRouter } from "next/navigation";
 import { metadata } from "./metadata";
 import axios from "axios";
+import { ModalProvider } from "@/context/ModalContext";
 
 const sans = Open_Sans({ subsets: ["latin"] });
 
@@ -79,7 +80,7 @@ export default function RootLayout({
       </head>
       <body className={`${sans.className} w-full`}>
         <AuthProvider>
-          {children}
+          <ModalProvider>{children}</ModalProvider>
         </AuthProvider>
         <Toaster position="top-right" expand={false} richColors />
       </body>
