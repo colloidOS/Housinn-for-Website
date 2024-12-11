@@ -160,7 +160,7 @@ const Navbar: React.FC<NavbarProps> = ({
                 <motion.div
                   initial="closed"
                   animate="open"
-                  exit="closed" // Optional, if you want to add exit animation
+                  exit="closed" 
                   variants={dropdownVariants}
                   className={`absolute right-0 mt-2 w-48 ${
                     isDefaultScheme ? "bg-white" : "bg-primary"

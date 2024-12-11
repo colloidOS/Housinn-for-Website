@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image"; // Import for Next.js optimized image handling
 import {
   PhAddress,
   Bed,
   Bath,
-  Feet,
   Camera,
-  Menu,
   Government,
 } from "../../../public/icons";
 import { useRouter } from "next/navigation";
@@ -14,7 +12,7 @@ import { ListingsCardProps } from "@/types";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { EllipsisIcon } from "lucide-react";
 import { useDeleteListing } from "@/hooks/useDeleteListing";
-import ConfirmationModal from "./ui/ConfirmationModal";
+
 import { useModal } from "@/context/ModalContext";
 
 // Combined Listing Card Component
@@ -25,18 +23,36 @@ const ListingCard: React.FC<ListingsCardProps> = ({
   useMyListings = false,
 }) => {
   const router = useRouter();
-  const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
+
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
   const { deleteListing, loading } = useDeleteListing(listing.id);
   const toggleDropdown = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent triggering the card click
-    setDropdownVisible((prev) => !prev);
+    setDropdownOpen(!dropdownOpen);
   };
+
   const { openModal, closeModal } = useModal();
   const handleUpdate = () => {
     router.push(`/dashboard/update-listing?id=${listing.id}`);
   };
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setDropdownOpen(false);
+      }
+    };
 
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
   const handleDelete = () => {
     openModal(
       <div>
@@ -140,12 +156,11 @@ const ListingCard: React.FC<ListingsCardProps> = ({
         </div>
         {useMyListings ? (
           <span
+            ref={dropdownRef}
             onClick={toggleDropdown}
-            className="text-secondary p-1 bg-white rounded-full place-items-center text-xs absolute bottom-1 right-1"
-            style={{
-              transform: dropdownVisible ? "rotate(90deg)" : "rotate(0deg)",
-              transition: "transform 0.2s",
-            }}
+            className={`${
+              dropdownOpen ? "rotate-90" : "rotate-0"
+            } duration-500 transition-all text-secondary p-1 bg-white rounded-full place-items-center text-xs absolute bottom-1 right-1`}
           >
             <EllipsisIcon className="h-4 w-4" />
           </span>
@@ -160,7 +175,7 @@ const ListingCard: React.FC<ListingsCardProps> = ({
             {isSaved ? <FaHeart /> : <FaRegHeart />}
           </span>
         )}
-        {dropdownVisible && (
+        {dropdownOpen && (
           <div
             className="absolute right-1 -bottom-20 bg-white border shadow-lg rounded-md text-sm z-10"
             onClick={(e) => e.stopPropagation()} // Prevent menu clicks from triggering card click
