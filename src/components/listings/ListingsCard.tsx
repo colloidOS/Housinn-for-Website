@@ -98,9 +98,9 @@ const ListingCard: React.FC<ListingsCardProps> = ({
             onClick={(e) => {
               e.stopPropagation();
             }}
-            className="text-secondary p-1 bg-white rounded-full place-items-center text-xs absolute bottom-1 right-3"
+            className="text-secondary  p-1 bg-white rounded-full place-items-center text-xs absolute bottom-1 right-1"
           >
-            <EllipsisVertical />
+            <EllipsisVertical className="h-4 w-4" />
           </span>
         ) : (
           <span
