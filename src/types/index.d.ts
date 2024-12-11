@@ -59,6 +59,7 @@ export interface ListingsCardProps {
   listing: Listing;
   onSave: (id: string) => void;
   isSaved: boolean;
+  useMyListings?: boolean;
 }
 
 export interface ListingsFilterProps {
@@ -86,6 +87,7 @@ export interface ListingsPageProps {
   pageTitle: string; // Title of the page
   className?: string;
   noListingsMessage?: string;
+  useMyListings?: boolean;
 }
 
 export interface AddNewListings {
@@ -103,7 +105,6 @@ export interface AddNewListings {
   category: string;
   address: string;
   landmark: string;
-
 }
 export interface FormDataToSend {
   title?: string;
@@ -119,7 +120,6 @@ export interface FormDataToSend {
 }
 
 export interface UpdateListings {
-  
   title?: string;
   images: File[]; // Array of files for images
   state: string;
@@ -137,7 +137,6 @@ export interface UpdateListings {
     desc: string;
   };
 }
-
 
 export interface ListingsProps {
   shouldSlice?: boolean;

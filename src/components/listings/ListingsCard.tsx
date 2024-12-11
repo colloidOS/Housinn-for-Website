@@ -13,12 +13,14 @@ import { useRouter } from "next/navigation";
 import { ListingsCardProps } from "@/types";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { Span } from "next/dist/trace";
+import { EllipsisVertical } from "lucide-react";
 
 // Combined Listing Card Component
 const ListingCard: React.FC<ListingsCardProps> = ({
   listing,
   onSave,
   isSaved,
+  useMyListings = false,
 }) => {
   const router = useRouter();
 
@@ -91,15 +93,26 @@ const ListingCard: React.FC<ListingsCardProps> = ({
           <Image src={Camera} alt="Camera" width={15} height={15} />
           <p className="text-white text-xs">{listing.imageLength}</p>
         </div>
-        <span
-          onClick={(e) => {
-            e.stopPropagation();
-            onSave(listing.id); // Trigger save/unsave action
-          }}
-          className="  text-secondary  p-1 bg-white rounded-full place-items-center text-xs absolute bottom-1 right-1"
-        >
-          {isSaved ? <FaHeart /> : <FaRegHeart />}
-        </span>
+        {useMyListings ? (
+          <span
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+            className="text-secondary p-1 bg-white rounded-full place-items-center text-xs absolute bottom-1 right-3"
+          >
+            <EllipsisVertical />
+          </span>
+        ) : (
+          <span
+            onClick={(e) => {
+              e.stopPropagation();
+              onSave(listing.id); // Trigger save/unsave action
+            }}
+            className="text-secondary p-1 bg-white rounded-full place-items-center text-xs absolute bottom-1 right-1"
+          >
+            {isSaved ? <FaHeart /> : <FaRegHeart />}
+          </span>
+        )}
       </div>
 
       <div className="py-2 lg:py-4 mb-2 flex flex-col gap-[6px] lg:gap-3 px-3 lg:px-5">

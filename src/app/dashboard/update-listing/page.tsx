@@ -181,13 +181,13 @@ function UpdateListing() {
     const formDataToSend: FormDataToSend = {
       bedroom: formData.bedroom,
       bathroom: formData.bathroom,
+      category: formData.category,
       title: formData.title,
       state: formData.state,
       city: formData.city,
       price: formData.price,
       type: formData.type,
       address: formData.address,
-    
     };
     const formDataToSendInstance = new FormData();
     Object.keys(formDataToSend).forEach((key) => {

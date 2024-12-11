@@ -16,7 +16,7 @@ import { useSearchParams } from "next/navigation";
 const ListingsPageContent: React.FC<ListingsPageProps> = ({
   getRoute,
   dataRoute,
-
+  useMyListings = false,
   pageTitle,
   className = "",
   noListingsMessage = "No listings available",
@@ -31,8 +31,6 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
     return false; // Default to grid view if localStorage is not available
   });
   const [filters, setFilters] = useState<FilterValues>({}); // Correctly typed filters
-
-
 
   const tag = searchParams.get("tag");
   useEffect(() => {
@@ -63,7 +61,6 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
         (filters.type ?? activeTag ?? "").toLowerCase()
       );
     }
-  
 
     if (filters.bedroom)
       queryParams.append("bedroom", filters.bedroom.toLocaleLowerCase());
@@ -167,7 +164,6 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
               alt="Grid view"
               width={0}
               height={0}
-              
               className="cursor-pointer w-21 h-11"
             />
           ) : (
@@ -252,6 +248,7 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
                     listing={listing}
                     onSave={() => handleSave(listing.id, listing.isSaved)}
                     isSaved={listing.isSaved}
+                    useMyListings={useMyListings}
                   />
                 ))}
               </motion.div>
@@ -262,9 +259,12 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
     </div>
   );
 };
-const ListingsPage: React.FC<ListingsPageProps> = (props) => (
+const ListingsPage: React.FC<ListingsPageProps> = ({
+  useMyListings = false, // Default value
+  ...props
+}) => (
   <Suspense fallback={<div>Loading...</div>}>
-    <ListingsPageContent {...props} />
+    <ListingsPageContent {...props} useMyListings={useMyListings} />
   </Suspense>
 );
 
