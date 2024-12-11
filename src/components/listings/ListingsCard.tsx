@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image"; // Import for Next.js optimized image handling
 import {
   PhAddress,
@@ -12,8 +12,7 @@ import {
 import { useRouter } from "next/navigation";
 import { ListingsCardProps } from "@/types";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
-import { Span } from "next/dist/trace";
-import { EllipsisVertical } from "lucide-react";
+import { EllipsisIcon} from "lucide-react";
 
 // Combined Listing Card Component
 const ListingCard: React.FC<ListingsCardProps> = ({
@@ -23,7 +22,21 @@ const ListingCard: React.FC<ListingsCardProps> = ({
   useMyListings = false,
 }) => {
   const router = useRouter();
+  const [dropdownVisible, setDropdownVisible] = useState(false);
 
+  const toggleDropdown = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent triggering the card click
+    setDropdownVisible((prev) => !prev);
+  };
+
+  const handleUpdate = () => {
+    router.push(`/dashboard/update-listing?id=${listing.id}`);
+  };
+
+  const handleDelete = () => {
+    console.log("Delete clicked for listing:", listing.id);
+    // Add your delete logic here
+  };
   const handleCardClick = () => {
     router.push(`/listings/${listing.id}`);
   };
@@ -95,12 +108,14 @@ const ListingCard: React.FC<ListingsCardProps> = ({
         </div>
         {useMyListings ? (
           <span
-            onClick={(e) => {
-              e.stopPropagation();
+            onClick={toggleDropdown}
+            className="text-secondary p-1 bg-white rounded-full place-items-center text-xs absolute bottom-1 right-1"
+            style={{
+              transform: dropdownVisible ? "rotate(90deg)" : "rotate(0deg)",
+              transition: "transform 0.2s",
             }}
-            className="text-secondary  p-1 bg-white rounded-full place-items-center text-xs absolute bottom-1 right-1"
           >
-            <EllipsisVertical className="h-4 w-4" />
+            <EllipsisIcon className="h-4 w-4" />
           </span>
         ) : (
           <span
@@ -112,6 +127,25 @@ const ListingCard: React.FC<ListingsCardProps> = ({
           >
             {isSaved ? <FaHeart /> : <FaRegHeart />}
           </span>
+        )}
+        {dropdownVisible && (
+          <div
+            className="absolute right-1 -bottom-20 bg-white border shadow-lg rounded-md text-sm z-10"
+            onClick={(e) => e.stopPropagation()} // Prevent menu clicks from triggering card click
+          >
+            <button
+              className="block w-full px-4 py-2 hover:bg-gray-100 text-left"
+              onClick={handleUpdate}
+            >
+              Update
+            </button>
+            <button
+              className="block w-full px-4 py-2 hover:bg-gray-100 text-left"
+              onClick={handleDelete}
+            >
+              Delete
+            </button>
+          </div>
         )}
       </div>
 

@@ -25,7 +25,7 @@ import { useAuth } from "@/context/AuthContext";
 function UpdateListing() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const id = "6706dc31435d42ec41ecd05f";
+  const id = searchParams.get("id");
   const { user, setUser } = useAuth();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<UpdateListings>({
