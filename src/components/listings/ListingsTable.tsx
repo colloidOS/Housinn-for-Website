@@ -16,7 +16,7 @@ const ListingTable: React.FC<ListingsTableProps> = ({
   const [isSaved, setIsSaved] = useState(listing.isSaved); // Track saved state locally
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
-  const { deleteListing, loading } = useDeleteListing(listing.id);
+  const { deleteListing, deleteLoading } = useDeleteListing(listing.id);
   const toggleDropdown = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent triggering the card click
     setDropdownOpen(!dropdownOpen);
@@ -120,7 +120,9 @@ const ListingTable: React.FC<ListingsTableProps> = ({
             } duration-500 transition-all bg-white rounded-full text-xs `}
           >
             <EllipsisIcon
-              className={`${dropdownOpen ? "rotate-90" : "rotate-0"} duration-500 transition-all h-4 w-4`}
+              className={`${
+                dropdownOpen ? "rotate-90" : "rotate-0"
+              } duration-500 transition-all h-4 w-4`}
             />
           </span>
         ) : (

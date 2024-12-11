@@ -189,6 +189,7 @@ function AddNewListing() {
         },
       });
       toast.success("Post created successfully!");
+      // router.push("/dashboard/listings");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorMessage = error.response?.data?.message || error.message;
@@ -210,7 +211,7 @@ function AddNewListing() {
     // Simulate a delay while checking authentication status
     const timer = setTimeout(() => {
       if (user?.userType === "individual") {
-        router?.push('/');
+        router?.push("/");
       }
 
       return () => clearTimeout(timer);

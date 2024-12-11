@@ -5,22 +5,24 @@ import api from "@/lib/api";
 import { useRouter } from "next/router";
 
 export const useDeleteListing = (id: string | null) => {
-  const [loading, setLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   const deleteListing = async () => {
     if (!id) return;
 
     try {
-      setLoading(true);
+      setDeleteLoading(true);
       await api.delete(`/posts/${id}`);
       toast.success("Listing deleted successfully!");
+      setDeleteLoading(false);
     } catch (error) {
       console.error("Delete Error:", error);
       toast.error("Failed to delete listing.");
     } finally {
-      setLoading(false);
+    
+      console.log("deleteloadingforhook", deleteLoading);
     }
   };
 
-  return { deleteListing, loading };
+  return { deleteListing, deleteLoading };
 };

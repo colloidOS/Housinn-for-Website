@@ -31,7 +31,7 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
     return false; // Default to grid view if localStorage is not available
   });
   const [filters, setFilters] = useState<FilterValues>({}); // Correctly typed filters
-
+  const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
   const tag = searchParams.get("tag");
   useEffect(() => {
     if (tag) {
@@ -90,6 +90,9 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
     dataRoute,
     searchTerm
   );
+  const handleLoadingChange = (loadingState: boolean) => {
+    setDeleteLoading(loadingState);
+  };
 
   const saveListing = useSaveListing(listings, setListings);
   const handleSave = (id: string, isSaved: boolean) => {
@@ -119,6 +122,16 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
   useEffect(() => {
     localStorage.removeItem("viewMode");
   }, []);
+  useEffect(() => {
+    console.log("Fetched listings:", listings);
+  }, [listings]);
+   useEffect(() => {
+    console.log("Loading state changed:", loading);
+  }, [loading]);
+
+  useEffect(() => {
+    console.log("DeleteLoading state changed:", deleteLoading);
+  }, [deleteLoading]);
 
   return (
     <div className={` ${className || ""}`}>
@@ -178,7 +191,7 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
         </button>
       </div>
 
-      {loading ? (
+      {loading || deleteLoading ? (
         isListView ? ( // Check if in list view
           <motion.div
             className="grid grid-cols-1 gap-1"
@@ -230,7 +243,10 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
                 exit={{ opacity: 0 }}
                 transition={{ duration: 1 }} // Smooth transition timing
               >
-                <ListingSort listings={listings}   useMyListings={useMyListings}/>
+                <ListingSort
+                  listings={listings}
+                  useMyListings={useMyListings}
+                />
               </motion.div>
             </AnimatePresence>
           ) : (
@@ -249,6 +265,7 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
                     onSave={() => handleSave(listing.id, listing.isSaved)}
                     isSaved={listing.isSaved}
                     useMyListings={useMyListings}
+                    onLoadingChange={handleLoadingChange}
                   />
                 ))}
               </motion.div>

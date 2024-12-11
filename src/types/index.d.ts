@@ -61,6 +61,7 @@ export interface ListingsCardProps {
   isSaved: boolean;
   useMyListings?: boolean;
   openModal?: (listingId: string) => void; // Add this line
+  onLoadingChange?: (deleteLoading: boolean) => void;
 }
 
 export interface ListingsFilterProps {

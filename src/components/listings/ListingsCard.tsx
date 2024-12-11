@@ -21,17 +21,23 @@ const ListingCard: React.FC<ListingsCardProps> = ({
   onSave,
   isSaved,
   useMyListings = false,
+  onLoadingChange,
 }) => {
   const router = useRouter();
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
-  const { deleteListing, loading } = useDeleteListing(listing.id);
+  const { deleteListing, deleteLoading } = useDeleteListing(listing.id);
   const toggleDropdown = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent triggering the card click
     setDropdownOpen(!dropdownOpen);
   };
-
+  useEffect(() => {
+    onLoadingChange?.(deleteLoading); // Notify parent when loading state changes
+  }, [deleteLoading, onLoadingChange]);
+  useEffect(() => {
+    console.log("Delete state changed:", deleteLoading);
+  }, [deleteLoading]);
   const { openModal, closeModal } = useModal();
   const handleUpdate = () => {
     router.push(`/dashboard/update-listing?id=${listing.id}`);
