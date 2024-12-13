@@ -122,6 +122,11 @@ export interface FormDataToSend {
   price?: string | number;
   category?: string;
   address?: string;
+  postDetail?: {
+    amenities: string[];
+    desc: string;
+  };
+  desc: string;
 }
 
 export interface UpdateListings {
