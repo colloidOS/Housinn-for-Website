@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { toast } from "sonner";
-
 import api from "@/lib/api";
-import { useRouter } from "next/router";
 
 export const useDeleteListing = (id: string | null) => {
   const [deleteLoading, setDeleteLoading] = useState(false);
@@ -11,16 +9,20 @@ export const useDeleteListing = (id: string | null) => {
     if (!id) return;
 
     try {
-      setDeleteLoading(true);
       await api.delete(`/posts/${id}`);
       toast.success("Listing deleted successfully!");
-      setDeleteLoading(false);
     } catch (error) {
       console.error("Delete Error:", error);
       toast.error("Failed to delete listing.");
     } finally {
-    
-      console.log("deleteloadingforhook", deleteLoading);
+      setDeleteLoading(true); // Set loading to true immediately
+      console.log("Before timeout: deleteLoading =", deleteLoading); // May still show the previous value
+      
+      // Delay setting to false by 2 seconds
+      setTimeout(() => {
+        setDeleteLoading(false);
+        console.log("After timeout: deleteLoading =", deleteLoading); // Will reflect the updated value on re-render
+      }, 2000);
     }
   };
 

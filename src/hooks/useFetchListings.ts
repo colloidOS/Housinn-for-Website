@@ -7,7 +7,8 @@ import { toast } from "sonner";
 const useFetchListings = (
   endpoint: string,
   dataRoute: string,
-  searchTerm?: string
+  searchTerm?: string,
+  deleteLoading?: boolean 
 ) => {
   const [listings, setListings] = useState<Listings[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -63,7 +64,7 @@ const useFetchListings = (
     };
 
     fetchListings();
-  }, [endpoint, searchTerm]);
+  }, [endpoint, searchTerm, deleteLoading]);
 
   return { listings, setListings, loading, error };
 };

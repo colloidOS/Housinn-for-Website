@@ -11,6 +11,7 @@ type Column<T> = {
 const ListingSort: React.FC<ListingsSortProps> = ({
   listings,
   useMyListings = false,
+  onLoadingChange,
 }) => {
   const [sortConfig, setSortConfig] = useState<{
     key: keyof Listings;
@@ -106,6 +107,7 @@ const ListingSort: React.FC<ListingsSortProps> = ({
             key={listing.id}
             listing={listing}
             useMyListings={useMyListings}
+            onLoadingChange={onLoadingChange}
           />
         ))}
       </tbody>

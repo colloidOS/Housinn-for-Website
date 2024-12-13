@@ -88,7 +88,8 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
   const { listings, loading, setListings } = useFetchListings(
     constructGetRoute(), // Pass dynamically constructed route
     dataRoute,
-    searchTerm
+    searchTerm,
+    deleteLoading
   );
   const handleLoadingChange = (loadingState: boolean) => {
     setDeleteLoading(loadingState);
@@ -122,16 +123,6 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
   useEffect(() => {
     localStorage.removeItem("viewMode");
   }, []);
-  useEffect(() => {
-    console.log("Fetched listings:", listings);
-  }, [listings]);
-   useEffect(() => {
-    console.log("Loading state changed:", loading);
-  }, [loading]);
-
-  useEffect(() => {
-    console.log("DeleteLoading state changed:", deleteLoading);
-  }, [deleteLoading]);
 
   return (
     <div className={` ${className || ""}`}>
@@ -191,7 +182,7 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
         </button>
       </div>
 
-      {loading || deleteLoading ? (
+      {loading ? (
         isListView ? ( // Check if in list view
           <motion.div
             className="grid grid-cols-1 gap-1"
@@ -246,6 +237,7 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
                 <ListingSort
                   listings={listings}
                   useMyListings={useMyListings}
+                  onLoadingChange={handleLoadingChange}
                 />
               </motion.div>
             </AnimatePresence>

@@ -11,6 +11,7 @@ import { EllipsisIcon } from "lucide-react";
 const ListingTable: React.FC<ListingsTableProps> = ({
   listing,
   useMyListings,
+  onLoadingChange,
 }) => {
   const router = useRouter();
   const [isSaved, setIsSaved] = useState(listing.isSaved); // Track saved state locally
@@ -22,7 +23,9 @@ const ListingTable: React.FC<ListingsTableProps> = ({
     setDropdownOpen(!dropdownOpen);
     console.log("triggered");
   };
-
+  useEffect(() => {
+    onLoadingChange?.(deleteLoading); // Notify parent when loading state changes
+  }, [deleteLoading, onLoadingChange]);
   const { openModal, closeModal } = useModal();
   const handleUpdate = () => {
     router.push(`/dashboard/update-listing?id=${listing.id}`);
