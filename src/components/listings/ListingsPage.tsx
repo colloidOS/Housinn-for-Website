@@ -16,7 +16,7 @@ import { useSearchParams } from "next/navigation";
 const ListingsPageContent: React.FC<ListingsPageProps> = ({
   getRoute,
   dataRoute,
-
+  useMyListings = false,
   pageTitle,
   className = "",
   noListingsMessage = "No listings available",
@@ -31,9 +31,7 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
     return false; // Default to grid view if localStorage is not available
   });
   const [filters, setFilters] = useState<FilterValues>({}); // Correctly typed filters
-
-
-
+  const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
   const tag = searchParams.get("tag");
   useEffect(() => {
     if (tag) {
@@ -63,7 +61,6 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
         (filters.type ?? activeTag ?? "").toLowerCase()
       );
     }
-  
 
     if (filters.bedroom)
       queryParams.append("bedroom", filters.bedroom.toLocaleLowerCase());
@@ -91,8 +88,12 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
   const { listings, loading, setListings } = useFetchListings(
     constructGetRoute(), // Pass dynamically constructed route
     dataRoute,
-    searchTerm
+    searchTerm,
+    deleteLoading
   );
+  const handleLoadingChange = (loadingState: boolean) => {
+    setDeleteLoading(loadingState);
+  };
 
   const saveListing = useSaveListing(listings, setListings);
   const handleSave = (id: string, isSaved: boolean) => {
@@ -167,7 +168,6 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
               alt="Grid view"
               width={0}
               height={0}
-              
               className="cursor-pointer w-21 h-11"
             />
           ) : (
@@ -234,7 +234,11 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
                 exit={{ opacity: 0 }}
                 transition={{ duration: 1 }} // Smooth transition timing
               >
-                <ListingSort listings={listings} />
+                <ListingSort
+                  listings={listings}
+                  useMyListings={useMyListings}
+                  onLoadingChange={handleLoadingChange}
+                />
               </motion.div>
             </AnimatePresence>
           ) : (
@@ -252,6 +256,8 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
                     listing={listing}
                     onSave={() => handleSave(listing.id, listing.isSaved)}
                     isSaved={listing.isSaved}
+                    useMyListings={useMyListings}
+                    onLoadingChange={handleLoadingChange}
                   />
                 ))}
               </motion.div>
@@ -262,9 +268,12 @@ const ListingsPageContent: React.FC<ListingsPageProps> = ({
     </div>
   );
 };
-const ListingsPage: React.FC<ListingsPageProps> = (props) => (
+const ListingsPage: React.FC<ListingsPageProps> = ({
+  useMyListings = false, // Default value
+  ...props
+}) => (
   <Suspense fallback={<div>Loading...</div>}>
-    <ListingsPageContent {...props} />
+    <ListingsPageContent {...props} useMyListings={useMyListings} />
   </Suspense>
 );
 

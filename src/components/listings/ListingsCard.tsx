@@ -1,29 +1,97 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image"; // Import for Next.js optimized image handling
 import {
   PhAddress,
   Bed,
   Bath,
-  Feet,
   Camera,
-  Menu,
   Government,
 } from "../../../public/icons";
 import { useRouter } from "next/navigation";
 import { ListingsCardProps } from "@/types";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
-import { Span } from "next/dist/trace";
+import { EllipsisIcon } from "lucide-react";
+import { useDeleteListing } from "@/hooks/useDeleteListing";
+
+import { useModal } from "@/context/ModalContext";
 
 // Combined Listing Card Component
 const ListingCard: React.FC<ListingsCardProps> = ({
   listing,
   onSave,
   isSaved,
+  useMyListings = false,
+  onLoadingChange,
 }) => {
   const router = useRouter();
+  const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const { deleteListing, deleteLoading } = useDeleteListing(listing.id);
+  const toggleDropdown = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent triggering the card click
+    setDropdownOpen(!dropdownOpen);
+  };
+  useEffect(() => {
+    onLoadingChange?.(deleteLoading); // Notify parent when loading state changes
+  }, [deleteLoading, onLoadingChange]);
+  useEffect(() => {
+    console.log("Delete state changed:", deleteLoading);
+  }, [deleteLoading]);
+  const { openModal, closeModal } = useModal();
+  const handleUpdate = () => {
+    router.push(`/dashboard/update-listing?id=${listing.id}`);
+  };
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setDropdownOpen(false);
+      }
+    };
 
-  const handleCardClick = () => {
-    router.push(`/listings/${listing.id}`);
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+  const handleDelete = () => {
+    openModal(
+      <div>
+        <h2 className="text-lg font-semibold mb-4">Delete Listing</h2>
+        <p className="text-sm text-gray-700 mb-6">
+          Are you sure you want to delete the listing titled "{listing.title}"?
+        </p>
+        <div className="flex justify-end gap-4">
+          <button
+            className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
+            onClick={closeModal}
+          >
+            Cancel
+          </button>
+          <button
+            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+            onClick={() => {
+              deleteListing();
+              closeModal();
+            }}
+          >
+            Confirm
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+  const handleCardClick = (e: React.MouseEvent) => {
+    if (isModalOpen) {
+      e.stopPropagation(); // Stop event from propagating to prevent navigation
+    } else {
+      router.push(`/listings/${listing.id}`);
+    }
   };
   // console.log("listingtag", listing.category)
   const getCategoryStyle = () => {
@@ -91,15 +159,46 @@ const ListingCard: React.FC<ListingsCardProps> = ({
           <Image src={Camera} alt="Camera" width={15} height={15} />
           <p className="text-white text-xs">{listing.imageLength}</p>
         </div>
-        <span
-          onClick={(e) => {
-            e.stopPropagation();
-            onSave(listing.id); // Trigger save/unsave action
-          }}
-          className="  text-secondary  p-1 bg-white rounded-full place-items-center text-xs absolute bottom-1 right-1"
-        >
-          {isSaved ? <FaHeart /> : <FaRegHeart />}
-        </span>
+        {useMyListings ? (
+          <span
+            ref={dropdownRef}
+            onClick={toggleDropdown}
+            className={`${
+              dropdownOpen ? "rotate-90" : "rotate-0"
+            } duration-500 transition-all text-secondary p-1 bg-white rounded-full place-items-center text-xs absolute bottom-1 right-1`}
+          >
+            <EllipsisIcon className="h-4 w-4" />
+          </span>
+        ) : (
+          <span
+            onClick={(e) => {
+              e.stopPropagation();
+              onSave(listing.id); // Trigger save/unsave action
+            }}
+            className="text-secondary p-1 bg-white rounded-full place-items-center text-xs absolute bottom-1 right-1"
+          >
+            {isSaved ? <FaHeart /> : <FaRegHeart />}
+          </span>
+        )}
+        {dropdownOpen && (
+          <div
+            className="absolute right-1 -bottom-20  bg-white border shadow-lg rounded-[7px] text-sm z-10"
+            onClick={(e) => e.stopPropagation()} // Prevent menu clicks from triggering card click
+          >
+            <button
+              className="block transition-colors duration-500 w-full px-4 py-2 hover:bg-secondary hover:text-white text-left"
+              onClick={handleUpdate}
+            >
+              Update
+            </button>
+            <button
+              className="block w-full px-4 py-2 transition-colors duration-500 hover:bg-red-700 hover:text-white text-left"
+              onClick={handleDelete}
+            >
+              Delete
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="py-2 lg:py-4 mb-2 flex flex-col gap-[6px] lg:gap-3 px-3 lg:px-5">
@@ -123,29 +222,6 @@ const ListingCard: React.FC<ListingsCardProps> = ({
           <p className="text-gray-500 text-xs">{listing.cityState}</p>
         </div>
 
-        {/* {listing.beds && listing.baths ? (
-          <div className="flex  gap-3 text-gray-500 text-xs">
-            {" "}
-            {listing.beds > 0 ? (
-              <div className="flex gap-1">
-                <Image src={Bed} alt="Bed icon" width={15} height={15} />
-                {listing.beds} Beds
-              </div>
-            ) : (
-              ""
-            )}
-            {listing.baths > 0 ? (
-              <div className="flex gap-1">
-                <Image src={Bath} alt="Bath icon" width={15} height={15} />
-                {listing.baths} Baths
-              </div>
-            ) : (
-              ""
-            )}
-          </div>
-        ) : (
-          ""
-        )} */}
         <div className="flex  gap-3 text-gray-500 text-xs">
           <div className="flex gap-1">
             <Image src={Bed} alt="Bed icon" width={15} height={15} />

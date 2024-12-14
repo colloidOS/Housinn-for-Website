@@ -7,9 +7,8 @@ import Upload from "../../../../public/icons/upload.svg";
 import api from "../../../lib/api";
 import Select, { MultiValue } from "react-select";
 
-import { AddNewListings, FormDataToSend, UpdateListings } from "@/types";
+import { FormDataToSend, UpdateListings } from "@/types";
 import { toast } from "sonner";
-import axios from "axios";
 import { TailSpin } from "react-loader-spinner";
 import {
   FormFieldWrapper,
@@ -24,8 +23,9 @@ import { useAuth } from "@/context/AuthContext";
 
 function UpdateListing() {
   const router = useRouter();
+
   const searchParams = useSearchParams();
-  const id = "674469b0f57ef47424e444f6";
+  const id = searchParams.get("id");
   const { user, setUser } = useAuth();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<UpdateListings>({
@@ -57,7 +57,7 @@ function UpdateListing() {
         console.log("updatedata", data.data);
         const updateData = data.data;
 
-        // Map amenities from API response to { value, label } format
+       
         const mappedAmenities =
           updateData.postDetail.amenities.map((amenity: string) => ({
             value: amenity,
@@ -85,10 +85,23 @@ function UpdateListing() {
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+
+    if (name in formData.postDetail) {
+      // Update nested object for postDetail
+      setFormData((prevState) => ({
+        ...prevState,
+        postDetail: {
+          ...prevState.postDetail,
+          [name]: value,
+        },
+      }));
+    } else {
+      // Update top-level state
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
   };
 
   const handleAmenitiesChange = (
@@ -102,16 +115,15 @@ function UpdateListing() {
   };
   const handleRemoveFile = (index: number) => {
     setFormData((prevState) => {
-      // Convert FileList to an array
-      const newImages = Array.from(prevState.images); // No need for null check now
-      // Remove the image at the specified index
+      const newImages = [...prevState.images];
       newImages.splice(index, 1);
       return {
         ...prevState,
-        images: newImages.length > 0 ? newImages : [], // Return an empty array if no images left
+        images: newImages,
       };
     });
   };
+  
   const handleStateChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const state = e.target.value;
     setFormData((prevState) => ({
@@ -179,31 +191,41 @@ function UpdateListing() {
     e.preventDefault();
     setLoading(true);
     const formDataToSend: FormDataToSend = {
-        
-       
-        bedroom: formData.bedroom,
-        bathroom: formData.bathroom,
-      
-      };
-      const formDataToSendInstance = new FormData();
-      Object.keys(formDataToSend).forEach((key) => {
-        if (formDataToSend[key as keyof FormDataToSend] !== undefined && formDataToSend[key as keyof FormDataToSend] !== null) {
-          formDataToSendInstance.append(key, formDataToSend[key as keyof FormDataToSend] as string);
-        }
-      });
+      bedroom: formData.bedroom,
+      bathroom: formData.bathroom,
+      category: formData.category,
+      title: formData.title,
+      state: formData.state,
+      city: formData.city,
+      price: formData.price,
+      type: formData.type,
+      address: formData.address,
+      desc: formData.postDetail.desc,
+    };
+    const formDataToSendInstance = new FormData();
+    Object.keys(formDataToSend).forEach((key) => {
+      if (
+        formDataToSend[key as keyof FormDataToSend] !== undefined &&
+        formDataToSend[key as keyof FormDataToSend] !== null
+      ) {
+        formDataToSendInstance.append(
+          key,
+          formDataToSend[key as keyof FormDataToSend] as string
+        );
+      }
+    });
     console.log("Prepared formData for submission:");
-   
-    
+
     try {
-        console.log("updateformdatatosend", formDataToSend);
-      await api.put(`/posts/${id}`, formDataToSend, {
+      console.log("updateformdatatosend", formDataToSend);
+      await api.patch(`/posts/${id}`, formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
-            "Authorization": `Bearer ${user?.token}`
+          Authorization: `Bearer ${user?.token}`,
         },
       });
       toast.success("Listing updated successfully!");
-      router.push("/dashboard");
+      router.push("/dashboard/listings");
     } catch (error) {
       console.error("Update Error:", error);
       toast.error("Failed to update listing.");
@@ -396,7 +418,7 @@ function UpdateListing() {
           <div className="flex flex-col gap-1 col-span-2  w-full">
             <label className="text-sm font-semibold">Description</label>
             <textarea
-              name="description"
+              name="desc"
               className="p-2 w-full h-28 resize-none border border-gray-300 rounded-md"
               value={formData.postDetail.desc}
               required
@@ -404,58 +426,55 @@ function UpdateListing() {
             ></textarea>
           </div>
         </SectionWrapper>
-        <section className="flex flex-col gap-8 items-center w-full">
+        <section className="flex flex-col gap-8 items-center w-full border-secondary border-2 border-dashed rounded-md p-4">
           <h2 className="text-lg font-bold text-center text-primary">
             Photos and Videos of Property
           </h2>
+
+          {/* Display uploaded images */}
+          {formData.images && formData.images.length > 0 ? (
+            <div className="flex flex-wrap gap-4 w-full justify-center">
+              {Array.from(formData.images).map((file, idx) => (
+                <div key={idx} className="relative w-24 h-24">
+                  <img
+                    src={
+                      typeof file === "string"
+                        ? file
+                        : URL.createObjectURL(file)
+                    }
+                    alt={`Uploaded media ${idx + 1}`}
+                    className="w-full h-full object-cover rounded-md"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveFile(idx)}
+                    className="absolute -top-2 -right-2 bg-red-600 text-white py-0.5 px-2 rounded-full"
+                  >
+                    &times;
+                  </button>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-center max-w-[80%]">
+              Drag your documents, photos, or videos here to start uploading
+            </p>
+          )}
+
+          {/* Dropzone for adding new files */}
           <div
-            className="flex flex-col py-4 w-full gap-4 justify-center items-center border-secondary border-2 border-dashed rounded-md"
+            className="flex flex-col py-4 w-full gap-4 justify-center items-center "
             onDrop={handleDrop}
             onDragOver={(e) => e.preventDefault()}
           >
             <Image src={Upload} width={42} height={42} alt="Upload Icon" />
-            <span>
-              {formData.images ? (
-                <div className="flex flex-col items-center justify-center gap-7 w-full">
-                  <span className="text-base">Images:</span>
-                  <div className="flex gap-4">
-                    {Array.from(formData.images).map((file, idx) => {
-                      if (file instanceof File) {
-                        // Ensure it's a File object
-                        return (
-                          <div className="relative" key={idx}>
-                            <img
-                              src={URL.createObjectURL(file)} // Create a URL for the image
-                              alt={`uploaded-image-${idx}`} // Provide a unique alt text
-                              className="w-24 h-24 object-cover rounded-md" // Adjust styles as needed
-                            />
-                            <button
-                              onClick={() => handleRemoveFile(idx)} // Pass the index to the remove function
-                              className="absolute -top-3 -right-1 text-black rounded-full "
-                            >
-                              &times; {/* "X" character */}
-                            </button>
-                          </div>
-                        );
-                      }
-                      return null; // Skip invalid files
-                    })}
-                  </div>
-                </div>
-              ) : (
-                <p className="text-center max-w-80">
-                  Drag your documents, photos, or videos here to start uploading
-                </p>
-              )}
-            </span>
-
             <p>OR</p>
             <input
               type="file"
               id="fileUpload"
               accept=".jpg,.jpeg,.mp4"
               className="hidden"
-              multiple // Allow multiple file uploads
+              multiple
               onChange={handleFileChange}
             />
             <label
@@ -470,6 +489,7 @@ function UpdateListing() {
             </span>
           </div>
         </section>
+
         <Button
           type="submit"
           disabled={loading}

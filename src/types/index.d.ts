@@ -59,19 +59,26 @@ export interface ListingsCardProps {
   listing: Listing;
   onSave: (id: string) => void;
   isSaved: boolean;
+  useMyListings?: boolean;
+  openModal?: (listingId: string) => void; // Add this line
+  onLoadingChange?: (deleteLoading: boolean) => void;
 }
 
 export interface ListingsFilterProps {
   activeTag: string;
   constructGetRoute: (filters: FilterValues) => void;
   onChange: (tag: string) => void;
-  // applyFilters: (filters: Record<string, any>) => void; // Add this line
 }
 export interface ListingsTableProps {
   listing: Listing;
+  useMyListings?: boolean;
+  onLoadingChange?: (deleteLoading: boolean) => void;
 }
 export interface ListingsSortProps {
   listings: Listing[]; // Receive listings as prop
+  useMyListings?: boolean;
+  openModal?: (listingId: string) => void;
+  onLoadingChange?: (deleteLoading: boolean) => void;
 }
 export interface ListingsProps {
   shouldSlice?: boolean;
@@ -86,6 +93,7 @@ export interface ListingsPageProps {
   pageTitle: string; // Title of the page
   className?: string;
   noListingsMessage?: string;
+  useMyListings?: boolean;
 }
 
 export interface AddNewListings {
@@ -103,7 +111,6 @@ export interface AddNewListings {
   category: string;
   address: string;
   landmark: string;
-
 }
 export interface FormDataToSend {
   title?: string;
@@ -116,10 +123,14 @@ export interface FormDataToSend {
   price?: string | number;
   category?: string;
   address?: string;
+  postDetail?: {
+    amenities: string[];
+    desc: string;
+  };
+  desc: string;
 }
 
 export interface UpdateListings {
-  
   title?: string;
   images: File[]; // Array of files for images
   state: string;
@@ -137,7 +148,6 @@ export interface UpdateListings {
     desc: string;
   };
 }
-
 
 export interface ListingsProps {
   shouldSlice?: boolean;
