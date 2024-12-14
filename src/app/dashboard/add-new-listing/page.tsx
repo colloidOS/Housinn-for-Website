@@ -189,7 +189,7 @@ function AddNewListing() {
         },
       });
       toast.success("Post created successfully!");
-      // router.push("/dashboard/listings");
+      router.push("/dashboard/listings");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorMessage = error.response?.data?.message || error.message;

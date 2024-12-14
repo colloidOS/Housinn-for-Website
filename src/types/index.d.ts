@@ -68,7 +68,6 @@ export interface ListingsFilterProps {
   activeTag: string;
   constructGetRoute: (filters: FilterValues) => void;
   onChange: (tag: string) => void;
-  // applyFilters: (filters: Record<string, any>) => void; // Add this line
 }
 export interface ListingsTableProps {
   listing: Listing;
