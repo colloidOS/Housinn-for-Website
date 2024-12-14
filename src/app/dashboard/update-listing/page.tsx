@@ -23,6 +23,7 @@ import { useAuth } from "@/context/AuthContext";
 
 function UpdateListing() {
   const router = useRouter();
+  
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const { user, setUser } = useAuth();
