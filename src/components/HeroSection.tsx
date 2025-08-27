@@ -64,7 +64,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           <Image src={Search} width={18} height={18} alt="search-icon" />
         </button>
       </div>
-      <p className="flex items-center gap-4 opacity-90 pt-5 sm:pt-16 text-xs sm:text-base">
+      {/* <p className="flex items-center gap-4 opacity-90 pt-5 sm:pt-16 text-xs sm:text-base">
         {" "}
         <Image
           src={LogoWhite}
@@ -83,7 +83,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
             className={`w-auto h-10 sm:h-14 `}
           />
         </a>
-      </p>
+      </p> */}
     </div>
   );
 };

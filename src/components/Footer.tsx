@@ -20,7 +20,7 @@ const Footer: React.FC = () => {
               agents, collaborating with real estate companies, and managing
               properties for owners.
             </p>
-            <span className="text-white/70 flex gap-4 pt-6 items-center">
+            {/* <span className="text-white/70 flex gap-4 pt-6 items-center">
               Housinn is now partnered with{" "}
               <a href="https://fastercapital.com" target="_blank">
                 <img
@@ -31,7 +31,7 @@ const Footer: React.FC = () => {
                   className={`w-auto h-8 `}
                 />
               </a>
-            </span>
+            </span> */}
           </div>
           <div className="flex flex-col gap-5 flex-1 ">
             <h1 className="font-semibold text-2xl">Contact Us</h1>
