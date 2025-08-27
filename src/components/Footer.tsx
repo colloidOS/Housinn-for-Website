@@ -20,11 +20,28 @@ const Footer: React.FC = () => {
               agents, collaborating with real estate companies, and managing
               properties for owners.
             </p>
+            <span className="text-white/70 flex gap-4 pt-6 items-center">
+              Housinn is now partnered with{" "}
+              <a href="https://fastercapital.com" target="_blank">
+                <img
+                  src="https://fastercapital.com/images/logo/logo.png"
+                  alt="Housinn logo"
+                  width={0}
+                  height={0}
+                  className={`w-auto h-8 `}
+                />
+              </a>
+            </span>
           </div>
           <div className="flex flex-col gap-5 flex-1 ">
             <h1 className="font-semibold text-2xl">Contact Us</h1>
             {contactDetails.map((item, index) => (
-              <a href={item.href || "#"} target="_blank" key={index} rel="noopener noreferrer">
+              <a
+                href={item.href || "#"}
+                target="_blank"
+                key={index}
+                rel="noopener noreferrer"
+              >
                 <div className="flex items-center gap-3">
                   <Image src={item.src} width={21} height={21} alt={item.alt} />
                   <p>{item.text}</p>

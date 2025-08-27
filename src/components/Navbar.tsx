@@ -94,8 +94,8 @@ const Navbar: React.FC<NavbarProps> = ({
             <Link
               key={tag.tag}
               href={`/listings?tag=${tag.tag}`} // Use href directly
-              className={`text-base font-semibold transition-all p-2.5 duration-500 ease-in-out text-white ${
-                isDefaultScheme ? "hover:text-primary " : "hover:text-black"
+              className={`text-base font-semibold transition-all p-2.5 duration-500 ease-in-out text- ${
+                isDefaultScheme ? "hover:text-primary text-white" : "hover:text-black text-primary"
               }`}
             >
               {tag.name}
@@ -191,8 +191,8 @@ const Navbar: React.FC<NavbarProps> = ({
                 className={`${
                   isDefaultScheme
                     ? "bg-primary text-white hover:bg-transparent hover:text-primary border-primary "
-                    : "bg-white text-primary hover:bg-primary hover:text-white border-white"
-                } px-6 py-3 rounded-xl border duration-500 transition-all ease-in-out`}
+                    : " hover:bg-primary hover:text-white border-white"
+                } bg-primary text-white px-6 py-3 rounded-xl border duration-500 transition-all ease-in-out`}
               >
                 <Link href={`/auth/`}>Sign in</Link>
               </button>
