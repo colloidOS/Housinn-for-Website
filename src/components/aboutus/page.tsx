@@ -13,12 +13,15 @@ const AboutUs = () => {
         <div className="flex flex-col gap-8 md:gap-12">
           <div className="flex flex-col gap-5 ">
             <h3 className="text-[32px] font-semibold">About Us</h3>
-            <p className="text-base lg:text-lg max-w-[620px] text-wrap">
+            <p className="text-sm lg:text-lg max-w-[620px] text-wrap">
               At Housinn, we're dedicated to making your property search
               effortless and enjoyable. Whether it's a cozy house, modern
-              apartment, or expansive land, we're here to guide you. With a
-              passion for real estate and a commitment to exceptional service,
-              Housinn is your ultimate destination for all your property needs.
+              apartment, or expansive land, we're here to guide you.
+            </p>
+            <p className="text-base lg:text-base max-w-[620px] text-white-300 text-wrap">
+              Housinn has been accepted into the EquityPilot program of 
+              <a href="https://fastercapital.com" className="underline text-blue-400 ml-1">FasterCapital</a> and is
+              seeking a capital of $150,000
             </p>
           </div>
           <div className="flex justify-between md:justify-start gap-4 size">
